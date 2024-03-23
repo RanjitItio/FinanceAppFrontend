@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import { Link } from 'react-router-dom';
 
 
 function WelcomeSection(){
@@ -16,8 +17,8 @@ function WelcomeSection(){
              </h4>
              <p style={{marginLeft: "4rem", color:"white"}}>Dashboard &gt; <b>Overview</b></p>
 
-                <button type="button" className="btn mt-3 selected-btn" style={{marginLeft: "3.5rem", color:"white"}}>Overview</button>
-                <button type="button" className="btn mt-3 text-secondary-btn">Transaction</button>
+                <Link to='/' type="button" className="btn mt-3 selected-btn" style={{marginLeft: "3.5rem", color:"white"}}>Overview</Link>
+                <Link type="button" className="btn mt-3 text-secondary-btn" to='/transaction'>Transaction</Link>
                 <button type="button" className="btn mt-3 text-secondary-btn">Statitics</button>
                 <hr style={{ width: "18rem", backgroundColor: "grey", height: "1px", marginTop: "10px", marginLeft: "3.5rem"}} className="green-line"></hr>
 
