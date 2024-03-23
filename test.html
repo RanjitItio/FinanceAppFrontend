@@ -1,0 +1,405 @@
+<div class="page__body">
+    <div class="container page__container">
+      <!-- dashboard-->
+      <div class="dashboard">
+        <div class="dashboard__row">
+          <div class="dashboard__col">
+            <!-- card-->
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">Total Balance
+                  <div class="tooltip tooltipstered">
+                    <svg class="icon icon-info-circle">
+                      <use xlink:href="#icon-info-circle"></use>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card__right">
+                  <!-- drop-->
+                  <div class="drop drop_small js-drop selected">
+                    <div class="drop__head js-drop-head">
+                      <div class="drop__image"><img src="img/content/master-card.svg" alt=""></div>
+                      <div class="drop__title js-drop-title">**** 7189</div>
+                      <div class="drop__icon">
+                        <svg class="icon icon-arrow-down">
+                          <use xlink:href="#icon-arrow-down"></use>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="drop__body js-drop-body"><a class="drop__option js-drop-option selected" href="#">
+                        <div class="drop__image"><img src="img/content/master-card.svg" alt=""></div>
+                        <div class="drop__text js-drop-text">**** 7189</div></a><a class="drop__option js-drop-option" href="#">
+                        <div class="drop__image"><img src="img/content/visa.svg" alt=""></div>
+                        <div class="drop__text js-drop-text">**** 4234</div></a><a class="drop__option js-drop-option" href="#">
+                        <div class="drop__image"><img src="img/content/master-card.svg" alt=""></div>
+                        <div class="drop__text js-drop-text">**** 1231</div></a><a class="drop__option js-drop-option" href="#">
+                        <div class="drop__image"><img src="img/content/visa.svg" alt=""></div>
+                        <div class="drop__text js-drop-text">**** 5643</div></a></div>
+                    <input class="drop__input js-drop-input" type="hidden" name="card" value="**** 7189">
+                  </div>
+                </div>
+              </div>
+              <div class="card__price">$12,456,315
+                <svg class="icon icon-eye">
+                  <use xlink:href="#icon-eye"></use>
+                </svg>
+              </div>
+              <div class="card__btns"><a class="button card__button js-popup-open" href="#popup-transfer" data-type="inline" data-effect="mfp-zoom-in">
+                  <svg class="icon icon-transfer">
+                    <use xlink:href="#icon-transfer"></use>
+                  </svg><span>Transfer</span></a><a class="button card__button js-popup-open" href="#popup-receive" data-type="inline" data-effect="mfp-zoom-in">
+                  <svg class="icon icon-receive">
+                    <use xlink:href="#icon-receive"></use>
+                  </svg><span>Receive</span></a></div>
+            </div>
+            <!-- card-->
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">My Pocket Plans
+                  <div class="tooltip tooltipstered">
+                    <svg class="icon icon-info-circle">
+                      <use xlink:href="#icon-info-circle"></use>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card__right"> <a class="card__more" href="#">See more
+                    <svg class="icon icon-arrow-thick-right">
+                      <use xlink:href="#icon-arrow-thick-right"></use>
+                    </svg></a></div>
+              </div>
+              <!-- plans-->
+              <div class="plans">
+                <div class="plans__list">
+                  <div class="plans__item">
+                    <div class="plans__preview"><img src="img/content/car.png" alt=""></div>
+                    <div class="plans__title">New Car</div>
+                    <div class="plans__price">$5.000,00</div>
+                  </div>
+                  <div class="plans__item">
+                    <div class="plans__preview"><img src="img/content/console.png" alt=""></div>
+                    <div class="plans__title">New Console</div>
+                    <div class="plans__price">$1.324,22</div>
+                  </div>
+                  <div class="plans__item">
+                    <div class="plans__preview"><img src="img/content/money.png" alt=""></div>
+                    <div class="plans__title">Savings</div>
+                    <div class="plans__price">$3.094,56</div>
+                  </div>
+                  <div class="plans__item">
+                    <div class="plans__preview"><img src="img/content/wedding-dress.png" alt=""></div>
+                    <div class="plans__title">Wedding Dress</div>
+                    <div class="plans__price">$1191,68</div>
+                  </div>
+                </div>
+                <div class="plans__foot">
+                  <button class="plans__more">Load more
+                    <svg class="icon icon-arrow-thick-down">
+                      <use xlink:href="#icon-arrow-thick-down"></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard__col">
+            <!-- card-->
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">Expense Category
+                  <div class="tooltip tooltipstered">
+                    <svg class="icon icon-info-circle">
+                      <use xlink:href="#icon-info-circle"></use>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card__right">
+                  <!-- drop-->
+                  <div class="drop drop_small js-drop selected">
+                    <div class="drop__head js-drop-head">
+                      <div class="drop__title js-drop-title">Monthly</div>
+                      <div class="drop__icon">
+                        <svg class="icon icon-arrow-down">
+                          <use xlink:href="#icon-arrow-down"></use>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="drop__body js-drop-body"><a class="drop__option js-drop-option selected" href="#">
+                        <div class="drop__text js-drop-text">Monthly</div></a><a class="drop__option js-drop-option" href="#">
+                        <div class="drop__text js-drop-text">Annually</div></a></div>
+                  </div>
+                </div>
+              </div>
+              <!-- pie-->
+              <div class="pie">
+                <div class="pie__inner">
+                  <div class="pie__chart" id="expense-category" style="min-height: 203.7px;"><div id="apexcharts1qeqxqjnk" class="apexcharts-canvas apexcharts1qeqxqjnk apexcharts-theme-light" style="width: 270px; height: 203.7px;"><svg id="SvgjsSvg3390" width="270" height="203.70000000000002" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG3392" class="apexcharts-inner apexcharts-graphical" transform="translate(35.5, 0)"><defs id="SvgjsDefs3391"><clipPath id="gridRectMask1qeqxqjnk"><rect id="SvgjsRect3394" width="207" height="225" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMask1qeqxqjnk"></clipPath><clipPath id="nonForecastMask1qeqxqjnk"></clipPath><clipPath id="gridRectMarkerMask1qeqxqjnk"><rect id="SvgjsRect3395" width="205" height="227" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG3396" class="apexcharts-pie"><g id="SvgjsG3397" transform="translate(0, 0) scale(1)"><circle id="SvgjsCircle3398" r="64.43414634146342" cx="100.5" cy="100.5" fill="transparent"></circle><g id="SvgjsG3399" class="apexcharts-slices"><g id="SvgjsG3400" class="apexcharts-series apexcharts-pie-series" seriesName="Subscribed" rel="1" data:realIndex="0"><path id="SvgjsPath3401" d="M 100.5 8.45121951219511 A 92.04878048780489 92.04878048780489 0 0 1 175.5329999375876 153.8200422885998 L 153.0230999563113 137.82402960201986 A 64.43414634146342 64.43414634146342 0 0 0 100.5 36.06585365853658 L 100.5 8.45121951219511 z" fill="rgba(49,176,153,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-0" index="0" j="0" data:angle="125.39840924804885" data:startAngle="0" data:strokeWidth="2" data:value="1400.54" data:pathOrig="M 100.5 8.45121951219511 A 92.04878048780489 92.04878048780489 0 0 1 175.5329999375876 153.8200422885998 L 153.0230999563113 137.82402960201986 A 64.43414634146342 64.43414634146342 0 0 0 100.5 36.06585365853658 L 100.5 8.45121951219511 z" stroke="#ffffff"></path></g><g id="SvgjsG3402" class="apexcharts-series apexcharts-pie-series" seriesName="Taxs" rel="2" data:realIndex="1"><path id="SvgjsPath3403" d="M 175.5329999375876 153.8200422885998 A 92.04878048780489 92.04878048780489 0 0 1 34.64553324331908 164.81304064873078 L 54.40187327032336 145.51912845411152 A 64.43414634146342 64.43414634146342 0 0 0 153.0230999563113 137.82402960201986 L 175.5329999375876 153.8200422885998 z" fill="rgba(231,133,77,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-1" index="0" j="1" data:angle="100.28004795137211" data:startAngle="125.39840924804885" data:strokeWidth="2" data:value="1120" data:pathOrig="M 175.5329999375876 153.8200422885998 A 92.04878048780489 92.04878048780489 0 0 1 34.64553324331908 164.81304064873078 L 54.40187327032336 145.51912845411152 A 64.43414634146342 64.43414634146342 0 0 0 153.0230999563113 137.82402960201986 L 175.5329999375876 153.8200422885998 z" stroke="#ffffff"></path></g><g id="SvgjsG3404" class="apexcharts-series apexcharts-pie-series" seriesName="Taxsx2" rel="3" data:realIndex="2"><path id="SvgjsPath3405" d="M 34.64553324331908 164.81304064873078 A 92.04878048780489 92.04878048780489 0 0 1 22.263080782824403 52.002964413304284 L 45.73415654797709 66.552075089313 A 64.43414634146342 64.43414634146342 0 0 0 54.40187327032336 145.51912845411152 L 34.64553324331908 164.81304064873078 z" fill="rgba(198,84,104,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-2" index="0" j="2" data:angle="76.11524246780442" data:startAngle="225.67845719942096" data:strokeWidth="2" data:value="850.11" data:pathOrig="M 34.64553324331908 164.81304064873078 A 92.04878048780489 92.04878048780489 0 0 1 22.263080782824403 52.002964413304284 L 45.73415654797709 66.552075089313 A 64.43414634146342 64.43414634146342 0 0 0 54.40187327032336 145.51912845411152 L 34.64553324331908 164.81304064873078 z" stroke="#ffffff"></path></g><g id="SvgjsG3406" class="apexcharts-series apexcharts-pie-series" seriesName="Others" rel="4" data:realIndex="3"><path id="SvgjsPath3407" d="M 22.263080782824403 52.002964413304284 A 92.04878048780489 92.04878048780489 0 0 1 100.48393445716196 8.451220914178208 L 100.48875412001338 36.06585463992475 A 64.43414634146342 64.43414634146342 0 0 0 45.73415654797709 66.552075089313 L 22.263080782824403 52.002964413304284 z" fill="rgba(77,129,231,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-3" index="0" j="3" data:angle="58.20630033277456" data:startAngle="301.7936996672254" data:strokeWidth="2" data:value="650.09" data:pathOrig="M 22.263080782824403 52.002964413304284 A 92.04878048780489 92.04878048780489 0 0 1 100.48393445716196 8.451220914178208 L 100.48875412001338 36.06585463992475 A 64.43414634146342 64.43414634146342 0 0 0 45.73415654797709 66.552075089313 L 22.263080782824403 52.002964413304284 z" stroke="#ffffff"></path></g></g></g></g><line id="SvgjsLine3408" x1="0" y1="0" x2="201" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine3409" x1="0" y1="0" x2="201" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG3393" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend"></div></div></div>
+                  <div class="pie__box">
+                    <div class="pie__info">100%</div>
+                    <div class="pie__text">Data Recorded</div>
+                  </div>
+                </div>
+                <div class="pie__legend">
+                  <div class="pie__item">
+                    <div class="pie__color" style="background-color: #31B099"></div>
+                    <div class="pie__title">Subscribed (34.8%)</div>
+                    <div class="pie__value">$1400.54</div>
+                  </div>
+                  <div class="pie__item">
+                    <div class="pie__color" style="background-color: #E7854D"></div>
+                    <div class="pie__title">Taxs (27.9%)</div>
+                    <div class="pie__value">$1120.0</div>
+                  </div>
+                  <div class="pie__item">
+                    <div class="pie__color" style="background-color: #C65468"></div>
+                    <div class="pie__title">Taxs 2 (21.1%)</div>
+                    <div class="pie__value">$850.11</div>
+                  </div>
+                  <div class="pie__item">
+                    <div class="pie__color" style="background-color: #4D81E7"></div>
+                    <div class="pie__title">Others (16.2%)</div>
+                    <div class="pie__value">$650.09</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="dashboard__line"> 
+              <div class="dashboard__cell">
+                <!-- card-->
+                <div class="card card_analysis">
+                  <div class="card__head">
+                    <div class="card__title">Income Analysis
+                      <div class="tooltip tooltipstered">
+                        <svg class="icon icon-info-circle">
+                          <use xlink:href="#icon-info-circle"></use>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- analysis-->
+                  <div class="analysis">
+                    <div class="analysis__details">
+                      <div class="analysis__box">
+                        <div class="analysis__price">$8,527,224</div>
+                        <div class="analysis__line">
+                          <div class="indicator">
+                            <svg class="icon icon-arrow-thick-right">
+                              <use xlink:href="#icon-arrow-thick-right"></use>
+                            </svg>+3.1%
+                          </div>VS This Month
+                        </div>
+                      </div>
+                    </div>
+                    <div class="analysis__drop">
+                      <!-- drop-->
+                      <div class="drop drop_small js-drop selected">
+                        <div class="drop__head js-drop-head">
+                          <div class="drop__title js-drop-title">Monthly</div>
+                          <div class="drop__icon">
+                            <svg class="icon icon-arrow-down">
+                              <use xlink:href="#icon-arrow-down"></use>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="drop__body js-drop-body"><a class="drop__option js-drop-option selected" href="#">
+                            <div class="drop__text js-drop-text">Monthly</div></a><a class="drop__option js-drop-option" href="#">
+                            <div class="drop__text js-drop-text">Annually</div></a></div>
+                      </div>
+                    </div>
+                    <div class="analysis__chart analysis__chart_income">
+                      <div id="income-analysis"><div id="apexcharts4wywhhmy" class="apexcharts-canvas apexcharts4wywhhmy apexcharts-theme-light" style="width: 356px; height: 140px;"><svg id="SvgjsSvg3410" width="356" height="140" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG3412" class="apexcharts-inner apexcharts-graphical" transform="translate(34.55000305175781, 10)"><defs id="SvgjsDefs3411"><linearGradient id="SvgjsLinearGradient3416" x1="0" y1="0" x2="0" y2="1"><stop id="SvgjsStop3417" stop-opacity="0.4" stop-color="rgba(216,227,240,0.4)" offset="0"></stop><stop id="SvgjsStop3418" stop-opacity="0.5" stop-color="rgba(190,209,230,0.5)" offset="1"></stop><stop id="SvgjsStop3419" stop-opacity="0.5" stop-color="rgba(190,209,230,0.5)" offset="1"></stop></linearGradient><clipPath id="gridRectMask4wywhhmy"><rect id="SvgjsRect3421" width="325.4499969482422" height="97.96823312759399" x="-2" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMask4wywhhmy"></clipPath><clipPath id="nonForecastMask4wywhhmy"></clipPath><clipPath id="gridRectMarkerMask4wywhhmy"><rect id="SvgjsRect3422" width="325.4499969482422" height="101.96823312759399" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><rect id="SvgjsRect3420" width="0" height="97.96823312759399" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke-dasharray="3" fill="url(#SvgjsLinearGradient3416)" class="apexcharts-xcrosshairs" y2="97.96823312759399" filter="none" fill-opacity="0.9"></rect><g id="SvgjsG3435" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG3436" class="apexcharts-xaxis-texts-g" transform="translate(0, -6)"><text id="SvgjsText3438" font-family="Manrope, sans-serif" x="40.18124961853027" y="124.96823312759399" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-xaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3439">Jan</tspan><title>Jan</title></text><text id="SvgjsText3441" font-family="Manrope, sans-serif" x="120.54374885559082" y="124.96823312759399" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-xaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3442">Feb</tspan><title>Feb</title></text><text id="SvgjsText3444" font-family="Manrope, sans-serif" x="200.90624809265137" y="124.96823312759399" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-xaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3445">Mar</tspan><title>Mar</title></text><text id="SvgjsText3447" font-family="Manrope, sans-serif" x="281.2687473297119" y="124.96823312759399" text-anchor="middle" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-xaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3448">Apr</tspan><title>Apr</title></text></g></g><g id="SvgjsG3469" class="apexcharts-grid"><g id="SvgjsG3470" class="apexcharts-gridlines-horizontal"><line id="SvgjsLine3472" x1="0" y1="0" x2="321.4499969482422" y2="0" stroke="#dce4e8" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3473" x1="0" y1="19.593646625518797" x2="321.4499969482422" y2="19.593646625518797" stroke="#dce4e8" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3474" x1="0" y1="39.187293251037595" x2="321.4499969482422" y2="39.187293251037595" stroke="#dce4e8" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3475" x1="0" y1="58.78093987655639" x2="321.4499969482422" y2="58.78093987655639" stroke="#dce4e8" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3476" x1="0" y1="78.37458650207519" x2="321.4499969482422" y2="78.37458650207519" stroke="#dce4e8" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3477" x1="0" y1="97.96823312759399" x2="321.4499969482422" y2="97.96823312759399" stroke="#dce4e8" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line></g><g id="SvgjsG3471" class="apexcharts-gridlines-vertical"></g><line id="SvgjsLine3479" x1="0" y1="97.96823312759399" x2="321.4499969482422" y2="97.96823312759399" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line><line id="SvgjsLine3478" x1="0" y1="1" x2="0" y2="97.96823312759399" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line></g><g id="SvgjsG3423" class="apexcharts-bar-series apexcharts-plot-series"><g id="SvgjsG3424" class="apexcharts-series" rel="1" seriesName="IncomexAnalysis" data:realIndex="0"><path id="SvgjsPath3428" d="M 23.305124778747558 97.96823312759399L 23.305124778747558 29.3904699382782Q 23.305124778747558 29.3904699382782 23.305124778747558 29.3904699382782L 57.05737445831299 29.3904699382782Q 57.05737445831299 29.3904699382782 57.05737445831299 29.3904699382782L 57.05737445831299 29.3904699382782L 57.05737445831299 97.96823312759399L 57.05737445831299 97.96823312759399z" fill="rgba(231,133,77,0.85)" fill-opacity="1" stroke-opacity="1" stroke-linecap="round" stroke-width="0" stroke-dasharray="0" class="apexcharts-bar-area" index="0" clip-path="url(#gridRectMask4wywhhmy)" pathTo="M 23.305124778747558 97.96823312759399L 23.305124778747558 29.3904699382782Q 23.305124778747558 29.3904699382782 23.305124778747558 29.3904699382782L 57.05737445831299 29.3904699382782Q 57.05737445831299 29.3904699382782 57.05737445831299 29.3904699382782L 57.05737445831299 29.3904699382782L 57.05737445831299 97.96823312759399L 57.05737445831299 97.96823312759399z" pathFrom="M 23.305124778747558 97.96823312759399L 23.305124778747558 97.96823312759399L 57.05737445831299 97.96823312759399L 57.05737445831299 97.96823312759399L 57.05737445831299 97.96823312759399L 57.05737445831299 97.96823312759399L 57.05737445831299 97.96823312759399L 23.305124778747558 97.96823312759399" cy="29.3904699382782" cx="103.6676240158081" j="0" val="7000" barHeight="68.57776318931579" barWidth="33.75224967956543"></path><path id="SvgjsPath3430" d="M 103.6676240158081 97.96823312759399L 103.6676240158081 39.187293251037595Q 103.6676240158081 39.187293251037595 103.6676240158081 39.187293251037595L 137.41987369537352 39.187293251037595Q 137.41987369537352 39.187293251037595 137.41987369537352 39.187293251037595L 137.41987369537352 39.187293251037595L 137.41987369537352 97.96823312759399L 137.41987369537352 97.96823312759399z" fill="rgba(231,133,77,0.85)" fill-opacity="1" stroke-opacity="1" stroke-linecap="round" stroke-width="0" stroke-dasharray="0" class="apexcharts-bar-area" index="0" clip-path="url(#gridRectMask4wywhhmy)" pathTo="M 103.6676240158081 97.96823312759399L 103.6676240158081 39.187293251037595Q 103.6676240158081 39.187293251037595 103.6676240158081 39.187293251037595L 137.41987369537352 39.187293251037595Q 137.41987369537352 39.187293251037595 137.41987369537352 39.187293251037595L 137.41987369537352 39.187293251037595L 137.41987369537352 97.96823312759399L 137.41987369537352 97.96823312759399z" pathFrom="M 103.6676240158081 97.96823312759399L 103.6676240158081 97.96823312759399L 137.41987369537352 97.96823312759399L 137.41987369537352 97.96823312759399L 137.41987369537352 97.96823312759399L 137.41987369537352 97.96823312759399L 137.41987369537352 97.96823312759399L 103.6676240158081 97.96823312759399" cy="39.187293251037595" cx="184.03012325286863" j="1" val="6000" barHeight="58.780939876556396" barWidth="33.75224967956543"></path><path id="SvgjsPath3432" d="M 184.03012325286863 97.96823312759399L 184.03012325286863 9.7968233127594Q 184.03012325286863 9.7968233127594 184.03012325286863 9.7968233127594L 217.78237293243407 9.7968233127594Q 217.78237293243407 9.7968233127594 217.78237293243407 9.7968233127594L 217.78237293243407 9.7968233127594L 217.78237293243407 97.96823312759399L 217.78237293243407 97.96823312759399z" fill="rgba(231,133,77,0.85)" fill-opacity="1" stroke-opacity="1" stroke-linecap="round" stroke-width="0" stroke-dasharray="0" class="apexcharts-bar-area" index="0" clip-path="url(#gridRectMask4wywhhmy)" pathTo="M 184.03012325286863 97.96823312759399L 184.03012325286863 9.7968233127594Q 184.03012325286863 9.7968233127594 184.03012325286863 9.7968233127594L 217.78237293243407 9.7968233127594Q 217.78237293243407 9.7968233127594 217.78237293243407 9.7968233127594L 217.78237293243407 9.7968233127594L 217.78237293243407 97.96823312759399L 217.78237293243407 97.96823312759399z" pathFrom="M 184.03012325286863 97.96823312759399L 184.03012325286863 97.96823312759399L 217.78237293243407 97.96823312759399L 217.78237293243407 97.96823312759399L 217.78237293243407 97.96823312759399L 217.78237293243407 97.96823312759399L 217.78237293243407 97.96823312759399L 184.03012325286863 97.96823312759399" cy="9.7968233127594" cx="264.3926224899292" j="2" val="9000" barHeight="88.17140981483459" barWidth="33.75224967956543"></path><path id="SvgjsPath3434" d="M 264.3926224899292 97.96823312759399L 264.3926224899292 48.984116563796995Q 264.3926224899292 48.984116563796995 264.3926224899292 48.984116563796995L 298.1448721694946 48.984116563796995Q 298.1448721694946 48.984116563796995 298.1448721694946 48.984116563796995L 298.1448721694946 48.984116563796995L 298.1448721694946 97.96823312759399L 298.1448721694946 97.96823312759399z" fill="rgba(231,133,77,0.85)" fill-opacity="1" stroke-opacity="1" stroke-linecap="round" stroke-width="0" stroke-dasharray="0" class="apexcharts-bar-area" index="0" clip-path="url(#gridRectMask4wywhhmy)" pathTo="M 264.3926224899292 97.96823312759399L 264.3926224899292 48.984116563796995Q 264.3926224899292 48.984116563796995 264.3926224899292 48.984116563796995L 298.1448721694946 48.984116563796995Q 298.1448721694946 48.984116563796995 298.1448721694946 48.984116563796995L 298.1448721694946 48.984116563796995L 298.1448721694946 97.96823312759399L 298.1448721694946 97.96823312759399z" pathFrom="M 264.3926224899292 97.96823312759399L 264.3926224899292 97.96823312759399L 298.1448721694946 97.96823312759399L 298.1448721694946 97.96823312759399L 298.1448721694946 97.96823312759399L 298.1448721694946 97.96823312759399L 298.1448721694946 97.96823312759399L 264.3926224899292 97.96823312759399" cy="48.984116563796995" cx="344.7551217269897" j="3" val="5000" barHeight="48.984116563796995" barWidth="33.75224967956543"></path><g id="SvgjsG3426" class="apexcharts-bar-goals-markers" style="pointer-events: none"><g id="SvgjsG3427" className="apexcharts-bar-goals-groups"></g><g id="SvgjsG3429" className="apexcharts-bar-goals-groups"></g><g id="SvgjsG3431" className="apexcharts-bar-goals-groups"></g><g id="SvgjsG3433" className="apexcharts-bar-goals-groups"></g></g></g><g id="SvgjsG3425" class="apexcharts-datalabels" data:realIndex="0"></g></g><line id="SvgjsLine3480" x1="0" y1="0" x2="321.4499969482422" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine3481" x1="0" y1="0" x2="321.4499969482422" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line><g id="SvgjsG3482" class="apexcharts-yaxis-annotations"></g><g id="SvgjsG3483" class="apexcharts-xaxis-annotations"></g><g id="SvgjsG3484" class="apexcharts-point-annotations"></g></g><g id="SvgjsG3449" class="apexcharts-yaxis" rel="0" transform="translate(10.550003051757812, 0)"><g id="SvgjsG3450" class="apexcharts-yaxis-texts-g"><text id="SvgjsText3452" font-family="Manrope, sans-serif" x="20" y="11.5" text-anchor="end" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-yaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3453">10k</tspan><title>10k</title></text><text id="SvgjsText3455" font-family="Manrope, sans-serif" x="20" y="31.093646625518797" text-anchor="end" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-yaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3456">8k</tspan><title>8k</title></text><text id="SvgjsText3458" font-family="Manrope, sans-serif" x="20" y="50.687293251037595" text-anchor="end" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-yaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3459">6k</tspan><title>6k</title></text><text id="SvgjsText3461" font-family="Manrope, sans-serif" x="20" y="70.28093987655639" text-anchor="end" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-yaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3462">4k</tspan><title>4k</title></text><text id="SvgjsText3464" font-family="Manrope, sans-serif" x="20" y="89.87458650207519" text-anchor="end" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-yaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3465">2k</tspan><title>2k</title></text><text id="SvgjsText3467" font-family="Manrope, sans-serif" x="20" y="109.46823312759399" text-anchor="end" dominant-baseline="auto" font-size="12px" font-weight="400" fill="#acb5bb" class="apexcharts-text apexcharts-yaxis-label " style="font-family: Manrope, sans-serif;"><tspan id="SvgjsTspan3468">0</tspan><title>0</title></text></g></g><g id="SvgjsG3413" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend" style="max-height: 70px;"></div></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard__cell">
+                <!-- card-->
+                <div class="card card_analysis">
+                  <div class="card__head">
+                    <div class="card__title">Expense Analysis
+                      <div class="tooltip tooltipstered">
+                        <svg class="icon icon-info-circle">
+                          <use xlink:href="#icon-info-circle"></use>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- analysis-->
+                  <div class="analysis">
+                    <div class="analysis__details">
+                      <div class="analysis__box">
+                        <div class="analysis__price">$2,056,123</div>
+                        <div class="analysis__line">
+                          <div class="indicator negative">
+                            <svg class="icon icon-arrow-thick-right">
+                              <use xlink:href="#icon-arrow-thick-right"></use>
+                            </svg>-2.1%
+                          </div>VS This Month
+                        </div>
+                      </div>
+                    </div>
+                    <div class="analysis__drop">
+                      <!-- drop-->
+                      <div class="drop drop_small js-drop selected">
+                        <div class="drop__head js-drop-head">
+                          <div class="drop__title js-drop-title">Monthly</div>
+                          <div class="drop__icon">
+                            <svg class="icon icon-arrow-down">
+                              <use xlink:href="#icon-arrow-down"></use>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="drop__body js-drop-body"><a class="drop__option js-drop-option selected" href="#">
+                            <div class="drop__text js-drop-text">Monthly</div></a><a class="drop__option js-drop-option" href="#">
+                            <div class="drop__text js-drop-text">Annually</div></a></div>
+                      </div>
+                    </div>
+                    <div class="analysis__chart analysis__chart_expense">
+                      <div id="expense-analysis"><div id="apexchartscg3ya4yd" class="apexcharts-canvas apexchartscg3ya4yd apexcharts-theme-light" style="width: 346px; height: 140px;"><svg id="SvgjsSvg3485" width="346" height="140" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG3487" class="apexcharts-inner apexcharts-graphical" transform="translate(7, -5)"><defs id="SvgjsDefs3486"><clipPath id="gridRectMaskcg3ya4yd"><rect id="SvgjsRect3492" width="340" height="133" x="-3.5" y="-1.5" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMaskcg3ya4yd"></clipPath><clipPath id="nonForecastMaskcg3ya4yd"></clipPath><clipPath id="gridRectMarkerMaskcg3ya4yd"><rect id="SvgjsRect3493" width="381" height="178" x="-24" y="-24" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><linearGradient id="SvgjsLinearGradient3507" x1="0" y1="0" x2="0" y2="1"><stop id="SvgjsStop3508" stop-opacity="0.7" stop-color="rgba(77,129,231,0.7)" offset="0"></stop><stop id="SvgjsStop3509" stop-opacity="0.9" stop-color="rgba(255,255,255,0.9)" offset="0.95"></stop><stop id="SvgjsStop3510" stop-opacity="0.9" stop-color="rgba(255,255,255,0.9)" offset="1"></stop></linearGradient></defs><line id="SvgjsLine3491" x1="0" y1="0" x2="0" y2="130" stroke="#b6b6b6" stroke-dasharray="3" stroke-linecap="butt" class="apexcharts-xcrosshairs" x="0" y="0" width="1" height="130" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1"></line><g id="SvgjsG3513" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG3514" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"></g></g><g id="SvgjsG3522" class="apexcharts-grid"><g id="SvgjsG3523" class="apexcharts-gridlines-horizontal" style="display: none;"><line id="SvgjsLine3525" x1="0" y1="0" x2="333" y2="0" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3526" x1="0" y1="21.666666666666668" x2="333" y2="21.666666666666668" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3527" x1="0" y1="43.333333333333336" x2="333" y2="43.333333333333336" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3528" x1="0" y1="65" x2="333" y2="65" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3529" x1="0" y1="86.66666666666667" x2="333" y2="86.66666666666667" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3530" x1="0" y1="108.33333333333334" x2="333" y2="108.33333333333334" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line><line id="SvgjsLine3531" x1="0" y1="130" x2="333" y2="130" stroke="#e0e0e0" stroke-dasharray="0" stroke-linecap="butt" class="apexcharts-gridline"></line></g><g id="SvgjsG3524" class="apexcharts-gridlines-vertical" style="display: none;"></g><line id="SvgjsLine3533" x1="0" y1="130" x2="333" y2="130" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line><line id="SvgjsLine3532" x1="0" y1="1" x2="0" y2="130" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line></g><g id="SvgjsG3494" class="apexcharts-area-series apexcharts-plot-series"><g id="SvgjsG3495" class="apexcharts-series" seriesName="ExpensexAnalysis" data:longestSeries="true" rel="1" data:realIndex="0"><path id="SvgjsPath3511" d="M 0 130L 0 65L 83.25 108.33333333333326L 166.5 21.666666666666515L 249.75 65L 333 21.666666666666515L 333 130M 333 21.666666666666515z" fill="url(#SvgjsLinearGradient3507)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="0" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskcg3ya4yd)" pathTo="M 0 130L 0 65L 83.25 108.33333333333326L 166.5 21.666666666666515L 249.75 65L 333 21.666666666666515L 333 130M 333 21.666666666666515z" pathFrom="M -1 1581.6666666666667L -1 1581.6666666666667L 83.25 1581.6666666666667L 166.5 1581.6666666666667L 249.75 1581.6666666666667L 333 1581.6666666666667"></path><path id="SvgjsPath3512" d="M 0 65L 83.25 108.33333333333326L 166.5 21.666666666666515L 249.75 65L 333 21.666666666666515" fill="none" fill-opacity="1" stroke="rgba(77,129,231,0.85)" stroke-opacity="1" stroke-linecap="butt" stroke-width="3" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskcg3ya4yd)" pathTo="M 0 65L 83.25 108.33333333333326L 166.5 21.666666666666515L 249.75 65L 333 21.666666666666515" pathFrom="M -1 1581.6666666666667L -1 1581.6666666666667L 83.25 1581.6666666666667L 166.5 1581.6666666666667L 249.75 1581.6666666666667L 333 1581.6666666666667"></path><g id="SvgjsG3496" class="apexcharts-series-markers-wrap" data:realIndex="0"><g id="SvgjsG3498" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskcg3ya4yd)"><circle id="SvgjsCircle3499" r="4" cx="0" cy="65" class="apexcharts-marker no-pointer-events wek45djn0g" stroke="#4d81e7" fill="#ffffff" fill-opacity="1" stroke-width="3" stroke-opacity="0.9" rel="0" j="0" index="0" default-marker-size="4"></circle><circle id="SvgjsCircle3500" r="4" cx="83.25" cy="108.33333333333326" class="apexcharts-marker no-pointer-events w1twj5czt" stroke="#4d81e7" fill="#ffffff" fill-opacity="1" stroke-width="3" stroke-opacity="0.9" rel="1" j="1" index="0" default-marker-size="4"></circle></g><g id="SvgjsG3501" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskcg3ya4yd)"><circle id="SvgjsCircle3502" r="4" cx="166.5" cy="21.666666666666515" class="apexcharts-marker no-pointer-events wls7unl7t" stroke="#4d81e7" fill="#ffffff" fill-opacity="1" stroke-width="3" stroke-opacity="0.9" rel="2" j="2" index="0" default-marker-size="4"></circle></g><g id="SvgjsG3503" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskcg3ya4yd)"><circle id="SvgjsCircle3504" r="4" cx="249.75" cy="65" class="apexcharts-marker no-pointer-events wcqpjqier" stroke="#4d81e7" fill="#ffffff" fill-opacity="1" stroke-width="3" stroke-opacity="0.9" rel="3" j="3" index="0" default-marker-size="4"></circle></g><g id="SvgjsG3505" class="apexcharts-series-markers" clip-path="url(#gridRectMarkerMaskcg3ya4yd)"><circle id="SvgjsCircle3506" r="4" cx="333" cy="21.666666666666515" class="apexcharts-marker no-pointer-events wmccwcx5y" stroke="#4d81e7" fill="#ffffff" fill-opacity="1" stroke-width="3" stroke-opacity="0.9" rel="4" j="4" index="0" default-marker-size="4"></circle></g></g></g><g id="SvgjsG3497" class="apexcharts-datalabels" data:realIndex="0"></g></g><line id="SvgjsLine3534" x1="0" y1="0" x2="333" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine3535" x1="0" y1="0" x2="333" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line><g id="SvgjsG3536" class="apexcharts-yaxis-annotations"></g><g id="SvgjsG3537" class="apexcharts-xaxis-annotations"></g><g id="SvgjsG3538" class="apexcharts-point-annotations"></g></g><rect id="SvgjsRect3490" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect><g id="SvgjsG3520" class="apexcharts-yaxis" rel="0" transform="translate(-8, 0)"><g id="SvgjsG3521" class="apexcharts-yaxis-texts-g"></g></g><g id="SvgjsG3488" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend" style="max-height: 70px;"></div></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard__col">
+            <div class="dashboard__card">
+              <!-- card-->
+              <div class="card">
+                <div class="card__head">
+                  <div class="card__title">Recent Activity
+                    <div class="tooltip tooltipstered">
+                      <svg class="icon icon-info-circle">
+                        <use xlink:href="#icon-info-circle"></use>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="card__right"> <a class="card__more" href="#">See more
+                      <svg class="icon icon-arrow-thick-right">
+                        <use xlink:href="#icon-arrow-thick-right"></use>
+                      </svg></a></div>
+                </div>
+                <!-- activity-->
+                <div class="activity">
+                  <div class="activity__item">
+                    <div class="activity__logo"><img src="img/content/figma.png" alt=""></div>
+                    <div class="activity__details">
+                      <div class="activity__line">
+                        <div class="activity__title">Figma Pro</div>
+                        <div class="activity__price">-$23.21</div>
+                      </div>
+                      <div class="activity__line">
+                        <div class="activity__description">Subscriptions</div>
+                        <div class="activity__time">15/02/22 - 12.34</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="activity__item">
+                    <div class="activity__logo"><img src="img/content/adobe.png" alt=""></div>
+                    <div class="activity__details">
+                      <div class="activity__line">
+                        <div class="activity__title">Adobe Collection</div>
+                        <div class="activity__price">-$50.21</div>
+                      </div>
+                      <div class="activity__line">
+                        <div class="activity__description">Subscriptions</div>
+                        <div class="activity__time">14/02/22 - 8.55</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="activity__item">
+                    <div class="activity__logo"><img src="img/content/fiver-inter.png" alt=""></div>
+                    <div class="activity__details">
+                      <div class="activity__line">
+                        <div class="activity__title">Fiver Inter</div>
+                        <div class="activity__price">+$100.00</div>
+                      </div>
+                      <div class="activity__line">
+                        <div class="activity__description">Receive</div>
+                        <div class="activity__time">11/02/22 - 13.33</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="activity__item">
+                    <div class="activity__logo"><img src="img/content/starbucks.png" alt=""></div>
+                    <div class="activity__details">
+                      <div class="activity__line">
+                        <div class="activity__title">Starbucks</div>
+                        <div class="activity__price">-$50.00</div>
+                      </div>
+                      <div class="activity__line">
+                        <div class="activity__description">Transfer</div>
+                        <div class="activity__time">02/02/22 - 9.15</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="dashboard__card">
+              <!-- card-->
+              <div class="card">
+                <div class="card__head">
+                  <div class="card__title">Currency
+                    <div class="tooltip tooltipstered">
+                      <svg class="icon icon-info-circle">
+                        <use xlink:href="#icon-info-circle"></use>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="card__right"> 
+                    <div class="card__box">
+                      <div class="card__number">1</div>
+                      <!-- drop-->
+                      <div class="drop drop_medium js-drop selected">
+                        <div class="drop__head js-drop-head">
+                          <div class="drop__title js-drop-title">USD</div>
+                          <div class="drop__icon">
+                            <svg class="icon icon-arrow-down">
+                              <use xlink:href="#icon-arrow-down"></use>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="drop__body js-drop-body"><a class="drop__option js-drop-option selected" href="#">
+                            <div class="drop__text js-drop-text">USD</div></a><a class="drop__option js-drop-option" href="#">
+                            <div class="drop__text js-drop-text">EUR</div></a><a class="drop__option js-drop-option" href="#">
+                            <div class="drop__text js-drop-text">CNY</div></a><a class="drop__option js-drop-option" href="#">
+                            <div class="drop__text js-drop-text">JPY</div></a></div>
+                        <input class="drop__input js-drop-input" type="hidden" name="currency" value="USD">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- currency-->
+                <div class="currency">
+                  <div class="currency__item">
+                    <div class="currency__logo"><img src="img/content/rupiah.png" alt=""></div>
+                    <div class="currency__details">
+                      <div class="currency__title">Rupiah</div>
+                      <div class="currency__price">15425,15</div>
+                      <div class="currency__description">IDR</div>
+                    </div>
+                  </div>
+                  <div class="currency__item">
+                    <div class="currency__logo"><img src="img/content/euro.png" alt=""></div>
+                    <div class="currency__details">
+                      <div class="currency__title">Euro</div>
+                      <div class="currency__price">0,95</div>
+                      <div class="currency__description">EUR</div>
+                    </div>
+                  </div>
+                  <div class="currency__item">
+                    <div class="currency__logo"><img src="img/content/chinese-yuan.png" alt=""></div>
+                    <div class="currency__details">
+                      <div class="currency__title">Chinese Yuan</div>
+                      <div class="currency__price">7,06</div>
+                      <div class="currency__description">CNY</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

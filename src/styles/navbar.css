@@ -1,0 +1,43 @@
+.logo__icon {
+    color: white;
+    font-size: 30px;
+}
+
+.logo {
+    color: white;
+    font-size: 30px;
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: white;
+}
+
+.nav__item_space {
+    margin-right: 58px;
+}
+
+/* .search-input {
+    border-radius: 20px;
+} */
+
+.search-icon {
+    background: none;
+    border: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 3;
+    border-radius: 0 20px 20px 0;
+    color: white;
+}
+
+.notification_profile {
+    width: 40px;
+    height: 40px;
+}
+
+.profile_image {
+    max-width: 100%;
+    max-height: 100%;
+}

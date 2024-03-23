@@ -1,0 +1,14 @@
+.transfer_receiver_btn {
+  max-width: 10.5rem;
+  height: 3rem;
+  background-color: #00C9A7;
+  border-radius: 10px;
+  color: white;
+}
+
+
+.card__body_margin {
+  max-width: 25rem;
+  border-radius: 20px;
+  overflow: hidden;
+}
