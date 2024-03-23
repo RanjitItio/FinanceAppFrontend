@@ -6,6 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 
+
 function Navbar() {
     return (
         <>
@@ -56,7 +57,7 @@ function Navbar() {
 
                 <form className="d-flex" role="search">
                     <div className="input-group">
-                        <input className="form-control me-5" type="search" placeholder="Search" aria-label="Search" style={{borderRadius: "20px"}}/>
+                        <input className="form-control me-5" type="search" placeholder="Search anything here" aria-label="Search" style={{borderRadius: "20px"}} />
                         <span className="input-group-text search-icon" >
                             <i className="bi bi-search"></i>
                         </span>

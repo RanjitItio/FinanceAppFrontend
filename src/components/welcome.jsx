@@ -19,7 +19,7 @@ function WelcomeSection(){
 
                 <Link to='/' type="button" className="btn mt-3 selected-btn" style={{marginLeft: "3.5rem", color:"white"}}>Overview</Link>
                 <Link type="button" className="btn mt-3 text-secondary-btn" to='/transaction'>Transaction</Link>
-                <button type="button" className="btn mt-3 text-secondary-btn">Statitics</button>
+                <Link to='/statitics' type="button" className="btn mt-3 text-secondary-btn">Statitics</Link>
                 <hr style={{ width: "18rem", backgroundColor: "grey", height: "1px", marginTop: "10px", marginLeft: "3.5rem"}} className="green-line"></hr>
 
         </div>

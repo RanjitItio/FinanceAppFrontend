@@ -85,15 +85,14 @@ function TransactionTable() {
             </div>
 
             <br></br>
+            
             <table className="table table-hover">
                 <thead className="table-secondary">
                     <tr>
                         <th scope="col">
                             <div className="form-check">
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                {/* <label className="form-check-label" for="flexCheckDefault">
-                                    Default checkbox
-                                </label> */}
+                              
                             </div>
                         </th>
                         <th scope="col">Invoice</th>
@@ -111,9 +110,7 @@ function TransactionTable() {
                         <th scope="row">
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                {/* <label className="form-check-label" for="flexCheckDefault">
-                                    Default checkbox
-                                </label> */}
+                               
                             </div>
                         </th>
 
@@ -178,9 +175,7 @@ function TransactionTable() {
                         <th scope="row">
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                {/* <label className="form-check-label" for="flexCheckDefault">
-                                    
-                                </label> */}
+                               
                             </div>
                         </th>
                        <td><b>B12341</b></td>
@@ -211,9 +206,7 @@ function TransactionTable() {
                         <th scope="row">
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                {/* <label className="form-check-label" for="flexCheckDefault">
-                                    
-                                </label> */}
+                               
                             </div>
                         </th>
                        <td><b>B12341</b></td>
@@ -245,9 +238,7 @@ function TransactionTable() {
                         <th scope="row">
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                {/* <label className="form-check-label" for="flexCheckDefault">
-                                    
-                                </label> */}
+                              
                             </div>
                         </th>
                        <td><b>B12341</b></td>
@@ -279,9 +270,7 @@ function TransactionTable() {
                         <th scope="row">
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                {/* <label className="form-check-label" for="flexCheckDefault">
-                                    
-                                </label> */}
+                              
                             </div>
                         </th>
                        <td><b>B12341</b></td>
@@ -310,6 +299,7 @@ function TransactionTable() {
                     </tr>
                 </tbody>
             </table>
+            
 
             <hr />
             <nav aria-label="Page navigation">
