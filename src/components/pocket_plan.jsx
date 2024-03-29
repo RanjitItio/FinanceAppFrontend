@@ -5,42 +5,57 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 function PocketPlan() {
     return (
-        <div className="card mt-3 shadow" style={{width: "25.5rem", height:"25rem"}}>
+        <div className="card mt-2 shadow" >
             <div className="card-body">
                 <h5 className="card-title"><b>My Pocket Plans</b></h5>
                 &nbsp;
-                
-                <div className="card" style={{width: "11rem", height:"8rem", display: "inline-block"}}>
-                    <div className="card-body">
-                        <h5 className="card-title">Card title1</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <div className="row">
+                    <div className="col">
+                        <div className="card rounded-4 shadow" style={{maxWidth: "18rem"}}>
+                        <div className="card-body" style={{overflow: "auto", maxHeight: "100px"}}>
+                            <h5 className="card-title">New Car</h5>
+                            <h6 className="card-subtitle mb-2 text-muted">$1191,68</h6>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div className="col">
+                        <div className="card rounded-4 shadow" style={{maxWidth: "18rem"}}>
+                        <div className="card-body" style={{overflow: "auto", maxHeight: "100px"}}>
+                            <h5 className="card-title">New Console</h5>
+                            <h6 className="card-subtitle mb-2 text-muted">$3.094,56</h6>
+                        </div>
+                        </div>
                     </div>
                 </div>
 
-                &nbsp;&nbsp;&nbsp;
-                <div className="card" style={{width: "11rem", height:"8rem", display: "inline-block"}}>
-                    <div className="card-body">
-                        <h5 className="card-title">Card title</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">Card subtitle2</h6>
+                &nbsp;
+                <div className="row">
+                    <div className="col">
+                        <div className="card rounded-4 shadow" style={{maxWidth: "18rem"}}>
+                        <div className="card-body" style={{overflow: "auto", maxHeight: "100px"}}>
+                            <h5 className="card-title">Savings</h5>
+                            <h6 className="card-subtitle mb-2 text-muted">$1.324,22</h6>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div className="col">
+                        <div className="card rounded-4 shadow" style={{maxWidth: "18rem"}}>
+                        <div className="card-body" style={{overflow: "auto", maxHeight: "100px"}}>
+                            <h5 className="card-title">Wedding</h5>
+                            <h6 className="card-subtitle mb-2 text-muted">$5.000,00</h6>
+                        </div>
+                        </div>
                     </div>
                 </div>
-
-                
-                <div className="card mt-3" style={{width: "11rem", height:"8rem", display: "inline-block"}}>
-                    <div className="card-body">
-                        <h5 className="card-title">Card title3</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">Card subtitle3</h6>
+                &nbsp;
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-outline-primary">Load More</button>
                     </div>
                 </div>
-
-                &nbsp;&nbsp;&nbsp;
-
-                <div className="card" style={{width: "11rem", height:"8rem", display: "inline-block"}}>
-                    <div className="card-body">
-                        <h5 className="card-title">Card title4</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    </div>
-                </div>
+              
 
             </div>
         </div>

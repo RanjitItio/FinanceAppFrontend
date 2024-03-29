@@ -1,9 +1,9 @@
 .transfer_receiver_btn {
-  max-width: 10.5rem;
-  height: 3rem;
+  width: 9rem;
   background-color: #00C9A7;
   border-radius: 10px;
   color: white;
+  justify-content: center;
 }
 
 

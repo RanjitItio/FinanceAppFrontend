@@ -8,7 +8,6 @@ import IncomeAnalysis from './IncomeAnalysis';
 import ExpenseAnalysis from './ExpenseAnalysis';
 import RecentActivity from './recent_activity';
 import Currency from './currency';
-import WelcomeSection from './welcome';
 
 
 
@@ -16,32 +15,40 @@ import WelcomeSection from './welcome';
 function Dashboard() {
     return (
         <>
-         <WelcomeSection />
-
-        <div style={{ position: 'absolute', top: '18rem', left: '4.2rem' }}>
-            <TotalBalance />
-            <PocketPlan></PocketPlan>
-                <span style={{marginRight: "20px"}}>&nbsp;</span>
-            <RecentActivity />
-        </div>
-
-        <div style={{ position: 'absolute', top: '18rem', left: '31rem' }}>
-            <ExpenseCategory />
-
-            <div className="d-flex justify-content-start mt-3">
-                <div className="mr-3">
-                    <IncomeAnalysis />
+         {/* <WelcomeSection /> */}
+         {/* style={{ position: 'absolute', top: '18rem', left: '4.2rem' }} */}
+         {/* <div className="container-fluid"> */}
+         
+            <div className="row">
+                <div className="col-md-4 col-sm-12 col-lg-4 col-xs-12">
+                    <TotalBalance />
+                    <div className="row">
+                        <div className="col my-2">
+                            <PocketPlan />
+                        </div>
+                    </div>
                 </div>
-                    <span style={{marginRight: "20px"}}>&nbsp;</span>
-                <div>
-                    <ExpenseAnalysis />
+                <div className="col-md-8 col-sm-12 col-lg-8 col-xs-12">
+                    <ExpenseCategory />
+                    <div className="row">
+                        <div className="col-md-6 col-sm-12 col-lg-6 col-xs-12 my-2">
+                            <IncomeAnalysis />
+                        </div>
+                        <div className="col-md-6 col-sm-12 col-lg-6 col-xs-12 my-2">
+                            <ExpenseAnalysis />
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div style={{ position: 'absolute', top: '39.5rem', left: '15rem' }}>
-                <Currency />    
+            <div className="row">
+                <div className="col-md-6 col-sm-12 col-lg-6 col-xs-12 my-2">
+                    <RecentActivity />
+                </div>
+                <div className="col-md-6 col-sm-12 col-lg-6 col-xs-12 my-2">
+                    <Currency /> 
+                </div>
             </div>
-        </div>
 
         </>
 

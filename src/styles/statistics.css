@@ -1,0 +1,17 @@
+.inline-items {
+    display: flex;
+    align-items: center;
+}
+
+.badge {
+    display: inline-block;
+}
+
+.card-text {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.balance-statitics {
+    display: inline-block;
+}

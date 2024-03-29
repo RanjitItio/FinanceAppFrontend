@@ -1,0 +1,23 @@
+@media (min-width: 360px) {
+    .fs-md-4 {
+        font-size: 15px; 
+    }
+}
+
+@media (min-width: 768px) {
+    .fs-md-4 {
+        font-size: 10px; 
+    }
+}
+
+@media (min-width: 992px) {
+    .fs-lg-5 {
+        font-size: 10px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .fs-xl-6 {
+        font-size: 18px; 
+    }
+}
