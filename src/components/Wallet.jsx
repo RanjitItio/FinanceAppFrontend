@@ -3,6 +3,7 @@ import ScrollBar from './Scrollbar';
 import Currency from './currency';
 import Cards from './Card';
 import BalanceAnalytics from './BalanceAnalytics';
+import AddNewCard from './AddCard';
 
 
 
@@ -16,9 +17,12 @@ function Wallet() {
                 <TotalBalance />
                 <div className="col my-3">
                     <div className="card shadow">
-                        <div className="card-body"style={{ overflow: "auto"}} >
+                            <h5 className='mx-3 my-3'><b>Card Lists</b></h5><br />
+                        <div className="card-body"style={{ overflow: "auto", maxHeight: "31rem"}} >
                             <Cards maxCards={3} />
                         </div>
+                        <button className="btn btn-light mb-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><b>Add new card</b></button>  
+                       <AddNewCard />
                     </div>
                 </div>
             </div>
@@ -37,7 +41,7 @@ function Wallet() {
                     <div className="col-md-7 col-lg-7 col-sm-12 col-xs-12">
                         <div className="card shadow">
                             <div className="card-body">
-                                <h5 className="card-title">Quick transfer</h5>
+                                <h5 className="card-title"><b>Quick transfer</b></h5>
                                 <ScrollBar />
                             </div>
                         </div>

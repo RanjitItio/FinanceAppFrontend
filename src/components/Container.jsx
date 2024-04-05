@@ -4,13 +4,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 function Container(props) {
     return(
-        <div className='container-fluid'>
+        <div className='container-fluid' style={{ position: 'absolute', zIndex: '1', top: '18rem'}}>
                 {props.children}
         </div>
     )
 }
 
 
-export default Container;
 
-// style={{zIndex: "1", position: "absolute",top: "19rem", left: "5rem" }}
+export default Container;

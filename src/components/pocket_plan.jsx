@@ -50,9 +50,9 @@ function PocketPlan() {
                     </div>
                 </div>
                 &nbsp;
-                <div class="row justify-content-center">
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-outline-primary">Load More</button>
+                <div className="row justify-content-center">
+                    <div className="col-auto">
+                        <button type="button" className="btn btn-outline-primary">Load More</button>
                     </div>
                 </div>
               

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from "react-router-dom";
 
 
 
@@ -8,70 +9,25 @@ function Cards({maxCards}) {
 
     const cards = [
         {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
+            title: "Visa Card",
+            card_no: "**** **** ****6758",
+            name_tile: "Name",
+            name: "Ranjit Kumar Sahoo"
         },
         {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
+            title: "Visa Card",
+            card_no: "**** **** ****6547",
+            name_tile: "Name",
+            name: "Manjesh Kumar Yadav"
+           
         },
         {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
-        },
-        {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
-        },
-        {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
-        },
-        {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
-        },
-        {
-            title: "",
-            subtitle: "",
-            text: "",
-            links: [
-                {label: "Card link", URL: "#"},
-                {label: "Card link", URL: "#"}
-            ]
-        },
-       
-        
+            title: "Visa Card",
+            card_no: "**** **** ****1245",
+            name_tile: "Name",
+            name: "Mohan Kumar"
+            
+        }
         
     ];
 
@@ -80,16 +36,20 @@ function Cards({maxCards}) {
     return (
         <>
         {visibleCards.map((card, index) => (
-           
-            <div className="card my-2" style={{backgroundColor: ""}} key={index}>
-            <div className="card-body">
-                <h5 className="card-title" >{card.title}</h5>
-                <h6 className="card-subtitle mb-2 text-muted" >{card.subtitle}</h6>
-                <p className="card-text" >{card.text}</p>
-                <a href="#" className="card-link">Card link</a>
-                <a href="#" className="card-link">Another link</a>
-            </div>
-            </div>
+            <Link to="/wallet/card-update" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card my-2" style={{backgroundColor: "#22c1c3", color: "white"}} key={index}>
+                <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                        <h6 className="card-title" >{card.title}</h6>
+                        <h5 className="card-title" ><b>{card.title}</b></h5>
+                    </div>&nbsp;
+                    <h6 className="card-subtitle mb-2" ><b>{card.card_no}</b></h6>
+
+                    <p className="card-text" >{card.name_tile}</p><br/>
+                    <p className="card-text" >{card.name}</p>
+                </div>
+                </div>
+            </Link>
         ))}
 
             {!showCards && cards.length > maxCards && (

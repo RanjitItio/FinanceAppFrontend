@@ -5,6 +5,7 @@ import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import '../styles/navbar.css'
+import { Link } from 'react-router-dom';
 
 
 
@@ -49,56 +50,59 @@ function ScrollBar () {
   return (
     <>
     <Carousel afterChange={onChange} slidesToShow={5} slidesToScroll={5} infinite={true} swipeToSlide={true} draggable ref={carouselRef}>
-      <div>
+      
       <Space direction="vertical" size={16} className='mx-2 my-5' >
-            <Avatar size={64} icon={<UserOutlined />} src='' style={contentStyle} />
-        </Space>
-      </div>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />} src='' style={contentStyle} />
+        </Link>
+      </Space>
+      
 
-      <div>
-        <Space direction="vertical" size={16} className='mx-2 my-5'>
-            <Avatar size={64} icon={<UserOutlined />} style={contentStyle} />
-        </Space>
-      </div>
-      <div>
-        <Space direction="vertical" size={16} className='mx-2 my-5'>
-            <Avatar size={64} icon={<UserOutlined />} style={contentStyle} />
-        </Space>
-      </div>
-      <div>
-        <Space direction="vertical" size={16} className='mx-2 my-5'>
-            <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
-        </Space>
-      </div>
-      <div>
-        <Space direction="vertical" size={16} className='mx-2 my-5'>
-            <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
-        </Space>
-      </div>
-      <div>
-        <Space direction="vertical" size={16} className='mx-2 my-5'>
-            <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
-        </Space>
-      </div>
-      <div>
-        <Space direction="vertical" size={16} className='mx-2 my-5'>
-            <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
-        </Space>
-      </div>
+      
+      <Space direction="vertical" size={16} className='mx-2 my-5'>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />} style={contentStyle} />
+        </Link>
+      </Space>
+    
+      <Space direction="vertical" size={16} className='mx-2 my-5'>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />} style={contentStyle} />
+        </Link>
+      </Space>
+    
+      <Space direction="vertical" size={16} className='mx-2 my-5'>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
+        </Link>
+      </Space>
+    
+      <Space direction="vertical" size={16} className='mx-2 my-5'>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
+        </Link>
+      </Space>
+  
+      <Space direction="vertical" size={16} className='mx-2 my-5'>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
+        </Link>
+      </Space>
+    
+      <Space direction="vertical" size={16} className='mx-2 my-5'>
+        <Link>
+          <Avatar size={64} icon={<UserOutlined />}  style={contentStyle}/>
+        </Link>
+      </Space>
     </Carousel>
-
-    <div style={{ textAlign: 'center', marginTop: '5px' }}>
-      <Button onClick={scrollToPrev} style={{ marginRight: '10px' }}>Previous</Button>
-      <Button onClick={scrollToNext}>Next</Button>
-    </div>
 
     <div className="d-flex justify-content-between">
       <Input
-        className='w-75 my-2'
+        className='w-75 my-0'
         placeholder="Enter the amount"
         prefix={<UserOutlined className="site-form-item-icon" />}
         suffix={
-          <Tooltip title="Extra information">
+          <Tooltip title="Donot enter decimal value">
             <InfoCircleOutlined
               style={{
                 color: 'rgba(0,0,0,.45)',
@@ -107,9 +111,16 @@ function ScrollBar () {
           </Tooltip>
         }
       />
+      
       <button type="button" className="btn btn-sm btn-primary rounded-3">
-      <b><i className="bi bi-send" style={{color: "white"}}></i></b> &nbsp;
-      <b>Send</b></button>
+        <b><i className="bi bi-send" style={{color: "white"}}></i></b> &nbsp;
+        <b>Send</b></button>
+    </div>
+
+
+    <div style={{ textAlign: 'center', marginTop: '2px' }}>
+      <Button onClick={scrollToPrev} style={{ marginRight: '10px' }}>{'<'}</Button>
+      <Button onClick={scrollToNext}>{'>'}</Button>
     </div>
     </>
   );

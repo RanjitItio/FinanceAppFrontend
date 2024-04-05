@@ -1,24 +1,94 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
+// import { useState, useEffect } from 'react';
+// import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import '../styles/dashboard.css';
-import TotalBalance from './total_balance';
-import ExpenseCategory from './Expense';
-import PocketPlan from './pocket_plan';
-import IncomeAnalysis from './IncomeAnalysis';
-import ExpenseAnalysis from './ExpenseAnalysis';
-import RecentActivity from './recent_activity';
-import Currency from './currency';
+import '../styles/dashboard.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import TotalBalance from './total_balance'
+import ExpenseCategory from './Expense'
+import PocketPlan from './pocket_plan'
+import IncomeAnalysis from './IncomeAnalysis'
+import ExpenseAnalysis from './ExpenseAnalysis'
+import RecentActivity from './recent_activity'
+import Currency from './currency'
+// import KYCForm from './Authentication/KYCForm'
+
+
+
+
 
 
 
 
 function Dashboard() {
+    // const [showkycForm, setShowkycForm] = useState(false);
+    // const [showApprovalMessage, setShowApprovalMessage] = useState(false);
+
+    // Fetch data from URL
+    // const location = useLocation();
+    // const searchParams = new URLSearchParams(location.search);
+    // const registrationFormData = Object.fromEntries(searchParams.entries())
+    // console.log(registrationFormData)
+    // const isRegisterPage = searchParams.get('register') === 'True';
+    // const navigate = useNavigate();
+    
+    // useEffect(() => {
+    //   if(isRegisterPage){
+    //     setShowkycForm(true);
+    //   }
+    //   return () => {
+    //     console.log('did not match any of the condition')
+    //   }
+    // }, [isRegisterPage])
+    
+
+    // const handleKYCForm = ()=> {
+    //     setShowkycForm(false);
+    //     setShowApprovalMessage(true);
+
+    //     setTimeout(() => {
+    //         setShowApprovalMessage(false)
+    //     }, 5000);
+
+    //     navigate('', {replace: true});
+    // }
+
     return (
         <>
          {/* <WelcomeSection /> */}
          {/* style={{ position: 'absolute', top: '18rem', left: '4.2rem' }} */}
          {/* <div className="container-fluid"> */}
+            {/* {showkycForm && !formData && <Register setFormData={setFormData} />} */}
+            {/* {showkycForm && (
+                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">KYC Form</h5>
+                        </div>
+                        <div className="modal-body">
+                                <KYCForm closeKYCForm={handleKYCForm} registrationFormData={registrationFormData} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            )}
+
+            {showApprovalMessage && (
+                <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Form Submission Report</h5>
+                        </div>
+                        <div className="modal-body">
+                        <p class="text-success">Your form has been submitted successfully please wait for Admin Approval</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            )} */}
          
+        <div>
             <div className="row">
                 <div className="col-md-4 col-sm-12 col-lg-4 col-xs-12">
                     <TotalBalance />
@@ -49,6 +119,8 @@ function Dashboard() {
                     <Currency /> 
                 </div>
             </div>
+
+        </div>
 
         </>
 

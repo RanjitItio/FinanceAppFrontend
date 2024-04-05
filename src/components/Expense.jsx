@@ -8,19 +8,19 @@ function ExpenseCategory(){
             <div className="card-body">
                 <div className="d-flex justify-content-between">
                     <h5 className="card-title"><b>Expense Category</b></h5>
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div className="btn-group">
+                    <button type="button" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         Duration
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Monthly</a></li>
-                        <li><a class="dropdown-item" href="#">Anually</a></li>
+                    <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Monthly</a></li>
+                        <li><a className="dropdown-item" href="#">Anually</a></li>
                     </ul>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-lg col-md">
-                        <img src="../src/images/expense_category.jpg" alt="" class="img-fluid img-large-device" />
+                        <img src="../src/images/expense_category.jpg" alt="" className="img-fluid img-large-device" />
                     </div>
                 </div>
                 {/* <img src="../src/images/expense_category.jpg" alt="" className='img-fluid' /> */}

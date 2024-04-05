@@ -88,7 +88,7 @@ function PageNavbar() {
                      </li>                 
 
                      <li className="nav-item ms-4 me-4">
-                         <Link className="nav-link active" to='/' >Settings</Link>
+                         <Link className="nav-link active" to='/settings' >Settings</Link>
                      </li>
 
                      <li className="nav-item ms-4 me-4">

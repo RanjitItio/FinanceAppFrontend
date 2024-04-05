@@ -46,7 +46,7 @@ function TotalBalance() {
                   &nbsp;
                   <i className="bi bi-box-arrow-in-up"></i>
                </a>
-               
+               &nbsp;
                <a className="btn p-2 transfer_receiver_btn" href="#" role="button" >
                   <b>Receive</b>
                      &nbsp;
