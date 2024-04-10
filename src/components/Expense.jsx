@@ -1,11 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../styles/expense.css'
+import React from 'react';
+import OnSeriesItemClick from './Charts/PieChart';
+
 
 
 function ExpenseCategory(){
+    
     return (
         <div className="card shadow card__body">
-            <div className="card-body">
+            <div className="card-body" style={{overflow: "auto", maxHeight: "18rem"}}>
                 <div className="d-flex justify-content-between">
                     <h5 className="card-title"><b>Expense Category</b></h5>
                     <div className="btn-group">
@@ -18,12 +22,12 @@ function ExpenseCategory(){
                     </ul>
                     </div>
                 </div>
+
                 <div className="row">
-                    <div className="col-lg col-md">
-                        <img src="../src/images/expense_category.jpg" alt="" className="img-fluid img-large-device" />
+                    <div className="col-md-12">
+                        <OnSeriesItemClick />
                     </div>
                 </div>
-                {/* <img src="../src/images/expense_category.jpg" alt="" className='img-fluid' /> */}
             </div>
         </div>
 

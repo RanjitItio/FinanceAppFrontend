@@ -1,5 +1,6 @@
 import React from "react";
 import '../styles/balance_analytics.css'
+import GridDemo from "./Charts/LineChart";
 
 
 function BalanceAnalytics() {
@@ -27,7 +28,8 @@ function BalanceAnalytics() {
             </div>   
             &nbsp;       
             <div className="overflow-auto" style={{maxHeight: "300px"}}>
-                <img src="../src/images/barinvestchart.jpg" alt="Bar Chart" className='img-fluid' />
+                <GridDemo />
+                {/* <img src="../src/images/barinvestchart.jpg" alt="Bar Chart" className='img-fluid' /> */}
             </div>
         </>
     );

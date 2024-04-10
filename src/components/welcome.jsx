@@ -18,9 +18,9 @@ function WelcomeSection(){
                 </span>
              </h4>
              <p style={{marginLeft: "4rem", color:"white"}}>Dashboard &gt; <b>Overview</b></p>
-                <Link to='/' type="button" className="btn mt-3 " style={{marginLeft: "3.5rem", color:"white"}}>Overview</Link>
-                <Link type="button" className="btn mt-3 text-secondary-btn" to='/transaction'>Transaction</Link>
-                <Link to='/statitics' type="button" className="btn mt-3 text-secondary-btn">Statitics</Link> 
+                <Link to='/' type="button" className="btn mt-3 " style={{marginLeft: "3.5rem", color:"whitesmoke"}}>Overview</Link>
+                <Link type="button" className="btn mt-3 text-secondary-btn" to='/transaction' style={{color: 'white'}}>Transaction</Link>
+                <Link to='/statistics/' type="button" className="btn mt-3 text-secondary-btn" style={{color: 'white'}}>Statitics</Link> 
                <hr style={{ width: "18rem", backgroundColor: "grey", height: "1px", marginTop: "9px", marginLeft: "3.5rem"}} className="green-line"></hr>
 
         </div>

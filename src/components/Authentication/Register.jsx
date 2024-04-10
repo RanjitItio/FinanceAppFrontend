@@ -15,7 +15,8 @@ function Register() {
     const navigate = useNavigate();
 
     const initialFormData = Object.freeze({
-		username: '',
+		first_name: '',
+        last_name: '',
         contact_number: '',
 		email: '',
 		password: '',
@@ -24,6 +25,7 @@ function Register() {
     
     const [formData, updateFormData] = useState(initialFormData);
     const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('');
 
 
     const handleChange = (e) => {
@@ -41,23 +43,33 @@ function Register() {
     const handleSubmit = async (e) => {
 		e.preventDefault();
         let validationError = [];
+        // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
 		// console.log(formData);
 
         if (!formData.email) {
-            validationError.push("Please fill the Email");
+            validationError.push("Please fill your Email Address");
         }
-        else if (!formData.username) {
-            validationError.push("Please fill the Username");
+        else if (!formData.last_name) {
+            validationError.push("Please fill your Last Name");
+        }
+        else if (!formData.first_name) {
+            validationError.push("Please fill your First Name");
         }
         else if (!formData.contact_number) {
             validationError.push("Please fill the contact number");
         }
-        else if (formData.contact_number.length < 9) {
-            validationError.push("Mobile number should be of 10 digit");   
+        else if (formData.contact_number.length < 10) {
+            validationError.push("Mobile number must contain 10 digits");   
         }
         else if (!formData.password) {
             validationError.push("Please fillup the password");
         }
+        else if (formData.password.length < 10) {
+            validationError.push("Password must contain at least 10 characters");
+        }
+        // else if (!passwordRegex.test(formData.password)) {
+        //     validationError.push("Password must contain at least 10 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+        // }
         else if (!formData.confirm_password) {
             validationError.push("Please fillup the confirm password");
         }
@@ -70,12 +82,15 @@ function Register() {
             return;
         } else{
             setError(''); 
+            setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
             const queryString = new URLSearchParams(filteredFormData).toString();
             // console.log(queryString)
-            navigate(`/kyc?${queryString}`);
+            setTimeout(() => {
+                navigate(`/kyc?${queryString}`);
+            }, 3000);
         }
         
-        // await axiosInstance.post(`userauthentication/user/register`, {
+        // await axiosInstance.post(`register/`, {
         //     email: formData.email,
         //     username: formData.username,
         //     password: formData.password,
@@ -102,27 +117,32 @@ function Register() {
                        {/* Form Start */}
                         <form method='post'>
 
-                            <div className="form-outline mb-4">
-                                <input type="text" id="username" name='username' className="form-control form-control-lg" required onChange={handleChange} value={formData.username}/>
-                                <label className="form-label" htmlFor="username">Your Name</label>
+                            <div className="form-outline mb-2">
+                                <input type="text" id="username" name='first_name' className="form-control form-control-lg" required onChange={handleChange} />
+                                <label className="form-label" htmlFor="username">First Name</label>
                             </div>
 
-                            <div className="form-outline mb-4">
+                            <div className="form-outline mb-2">
+                                <input type="text" id="username" name='last_name' className="form-control form-control-lg" required onChange={handleChange} />
+                                <label className="form-label" htmlFor="username">Last Name</label>
+                            </div>
+
+                            <div className="form-outline mb-2">
                                 <input type="number" id="contact_number" name='contact_number' className="form-control form-control-lg" required onChange={handleChange} value={formData.contact_number} />
                                 <label className="form-label" htmlFor="contact_number">Mobile No.</label>
                             </div>
 
-                            <div className="form-outline mb-4">
+                            <div className="form-outline mb-2">
                                 <input type="email" id="email" name='email' className="form-control form-control-lg"  required  onChange={handleChange} value={formData.email} />
                                 <label className="form-label" htmlFor="email">Your Email</label>
                             </div>
 
-                            <div className="form-outline mb-4">
+                            <div className="form-outline mb-2">
                                 <input type="password" id="password" name='password' className="form-control form-control-lg" required onChange={handleChange} />
                                 <label className="form-label" htmlFor="form3Example4cg">Password</label>
                             </div>
 
-                            <div className="form-outline mb-4">
+                            <div className="form-outline mb-2">
                                 <input type="password" id="confirm_password" name='confirm_password' className="form-control form-control-lg" required onChange={handleChange} />
                                 <label className="form-label" htmlFor="confirm_password">Confirm password</label>
                             </div>
@@ -133,6 +153,7 @@ function Register() {
                             </div>
 
                             {error &&  <p className="text-danger">{error}</p>}
+                            {successMessage && <p className="text-success">{successMessage}</p>}
 
                             &nbsp;
                             <div className="form-check d-flex justify-content-center mb-5">

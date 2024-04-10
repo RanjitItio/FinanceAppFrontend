@@ -1,6 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import '../styles/statistics.css'
+import OnSeriesItemClick from './Charts/PieChart'
+import SimpleBarChart from './Charts/BarChart'
+import GridDemo from './Charts/LineChart'
 
 
 // style={{ position:"absolute", top: "18rem", left: "5rem", zIndex: "1", right: "2rem"}}
@@ -26,8 +29,7 @@ function Statistics(){
                                 <p className="card-text">VS This Month</p>
                             </div>
                             &nbsp;
-                            <img src="../src/images/BarChart.png" alt="Image" sizes="" srcSet="" className='img-fluid' />
-                        
+                            <SimpleBarChart />                        
                     </div>
                     </div>  
                 </div>
@@ -47,7 +49,8 @@ function Statistics(){
                             <p className="card-text">VS This Month</p>
                         </div>
                         &nbsp;
-                        <img src="../src/images/graph.png" alt="Image" sizes="" srcSet="" className='img-fluid' />
+                        <GridDemo />
+                        {/* <img src="../src/images/graph.png" alt="Image" sizes="" srcSet="" className='img-fluid' /> */}
                     </div>
                     </div>
                 </div>
@@ -72,7 +75,8 @@ function Statistics(){
                             </div>
                         </div>
 
-                        <img src="../src/images/graph.png" alt="Image" sizes="" srcSet="" className='img-fluid' />
+                        <GridDemo />
+                        {/* <img src="../src/images/graph.png" alt="Image" sizes="" srcSet="" className='img-fluid' /> */}
 
                     </div>
                     </div>
@@ -100,8 +104,7 @@ function Statistics(){
                                 </ul>
                             </div>
                         </div>
-
-                        <img src="../src/images/piechart.png" alt="Image" sizes="" srcSet="" className='img-fluid' />
+                        <OnSeriesItemClick />
                     </div>
                     </div>
                 </div>

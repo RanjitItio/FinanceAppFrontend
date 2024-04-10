@@ -20,37 +20,7 @@ import Currency from './currency'
 
 
 function Dashboard() {
-    // const [showkycForm, setShowkycForm] = useState(false);
-    // const [showApprovalMessage, setShowApprovalMessage] = useState(false);
-
-    // Fetch data from URL
-    // const location = useLocation();
-    // const searchParams = new URLSearchParams(location.search);
-    // const registrationFormData = Object.fromEntries(searchParams.entries())
-    // console.log(registrationFormData)
-    // const isRegisterPage = searchParams.get('register') === 'True';
-    // const navigate = useNavigate();
     
-    // useEffect(() => {
-    //   if(isRegisterPage){
-    //     setShowkycForm(true);
-    //   }
-    //   return () => {
-    //     console.log('did not match any of the condition')
-    //   }
-    // }, [isRegisterPage])
-    
-
-    // const handleKYCForm = ()=> {
-    //     setShowkycForm(false);
-    //     setShowApprovalMessage(true);
-
-    //     setTimeout(() => {
-    //         setShowApprovalMessage(false)
-    //     }, 5000);
-
-    //     navigate('', {replace: true});
-    // }
 
     return (
         <>

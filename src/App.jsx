@@ -16,7 +16,9 @@ import Login from './components/Authentication/Login'
 import ForgotPassword from './components/Authentication/ForgotPassword'
 import UserLogout from './components/Authentication/Logout'
 import KYCForm from './components/Authentication/KYCForm'
-
+import KYCSubmissionReport from './components/Authentication/KYCSubmission'
+import PaymentInformation from './components/Payment/PaymentInfo'
+import StepWisePaymentForm from './components/Payment/StepForm'
 
 
 
@@ -32,6 +34,10 @@ function App() {
             <Route exact path='/signout/' element={<UserLogout />}></Route>
             <Route exact path='/forgot-password/' element={<ForgotPassword />}></Route>
             <Route exact path='/kyc/' element={<KYCForm />}></Route>
+            <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
+            <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
+            <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
+
             <Route exact path='*' element={
               <>
                   <PageNavbar />
