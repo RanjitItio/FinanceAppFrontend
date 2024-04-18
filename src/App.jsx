@@ -2,23 +2,26 @@ import PageNavbar from './components/Navbar'
 import Dashboard from './components/Dashboard'
 import Transaction from './components/Transaction'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Statistics from './components/Statitics'
-import WelcomeSection from './components/welcome'
-import Container from './components/Container'
-import Wallet from './components/Wallet'
-import CardUpdate from './components/CardUpdate'
-import Settings from './components/Setting'
-import Preferences from './components/Preference'
-import PasswordReset from './components/PasswordReset'
-import FAQs from './components/FAQs'
-import Register from './components/Authentication/Register'
-import Login from './components/Authentication/Login'
-import ForgotPassword from './components/Authentication/ForgotPassword'
-import UserLogout from './components/Authentication/Logout'
-import KYCForm from './components/Authentication/KYCForm'
-import KYCSubmissionReport from './components/Authentication/KYCSubmission'
-import PaymentInformation from './components/Payment/PaymentInfo'
-import StepWisePaymentForm from './components/Payment/StepForm'
+import Statistics from './components/Statitics';
+import WelcomeSection from './components/welcome';
+import Container from './components/Container';
+import Wallet from './components/Wallet';
+import CardUpdate from './components/CardUpdate';
+import Settings from './components/Setting';
+import Preferences from './components/Preference';
+import PasswordReset from './components/PasswordReset';
+import FAQs from './components/FAQs';
+import Register from './components/Authentication/Register';
+import Login from './components/Authentication/Login';
+import ForgotPassword from './components/Authentication/ForgotPassword';
+import UserLogout from './components/Authentication/Logout';
+import KYCForm from './components/Authentication/KYCForm';
+import KYCSubmissionReport from './components/Authentication/KYCSubmission';
+import PaymentInformation from './components/Payment/PaymentInfo';
+import StepWisePaymentForm from './components/Payment/StepForm';
+import CryptoFiat from './components/CryptoFiat/CryptoFiat';
+
+
 
 
 
@@ -37,6 +40,7 @@ function App() {
             <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
             <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
             <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
+            <Route exact path='/crypto-fiat/' element={<CryptoFiat />}></Route>
 
             <Route exact path='*' element={
               <>
