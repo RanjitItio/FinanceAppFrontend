@@ -43,65 +43,127 @@ function Register() {
     const handleSubmit = async (e) => {
 		e.preventDefault();
         let validationError = [];
-        // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
 		// console.log(formData);
 
-        if (!formData.email) {
-            validationError.push("Please fill your Email Address");
-        }
-        else if (!formData.last_name) {
-            validationError.push("Please fill your Last Name");
-        }
-        else if (!formData.first_name) {
-            validationError.push("Please fill your First Name");
-        }
-        else if (!formData.contact_number) {
-            validationError.push("Please fill the contact number");
-        }
-        else if (formData.contact_number.length < 10) {
-            validationError.push("Mobile number must contain 10 digits");   
-        }
-        else if (!formData.password) {
-            validationError.push("Please fillup the password");
-        }
-        else if (formData.password.length < 10) {
-            validationError.push("Password must contain at least 10 characters");
-        }
-        // else if (!passwordRegex.test(formData.password)) {
-        //     validationError.push("Password must contain at least 10 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+        // if (!formData.email) {
+        //     validationError.push("Please fill your Email Address");
         // }
-        else if (!formData.confirm_password) {
-            validationError.push("Please fillup the confirm password");
-        }
-        else if (formData.password !== formData.confirm_password) {
-            validationError.push("Password did not match please correct the password");
-        }
+        // else if (!formData.last_name) {
+        //     validationError.push("Please fill your Last Name");
+        // }
+        // else if (!formData.first_name) {
+        //     validationError.push("Please fill your First Name");
+        // }
+        // else if (!formData.contact_number) {
+        //     validationError.push("Please fill the contact number");
+        // }
+        // else if (formData.contact_number.length < 10) {
+        //     validationError.push("Mobile number must contain 10 digits");   
+        // }
+        // else if (!formData.password) {
+        //     validationError.push("Please fillup the password");
+        // }
+        // else if (formData.password.length < 10) {
+        //     validationError.push("Password must contain at least 10 characters");
+        // }
+        // // else if (!passwordRegex.test(formData.password)) {
+        // //     validationError.push("Password must contain at least 10 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+        // // }
+        // else if (!formData.confirm_password) {
+        //     validationError.push("Please fillup the confirm password");
+        // }
+        // else if (formData.password !== formData.confirm_password) {
+        //     validationError.push("Password did not match please correct the password");
+        // }
 
-        if (validationError.length > 0) {
-            setError(validationError.join(''));
-            return;
-        } else{
-            setError(''); 
-            setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
-            const queryString = new URLSearchParams(filteredFormData).toString();
-            // console.log(queryString)
-            setTimeout(() => {
-                navigate(`/kyc?${queryString}`);
-            }, 3000);
-        }
+        // if (validationError.length > 0) {
+        //     setError(validationError.join(''));
+        //     return;
+        // } else{
+        //     setError(''); 
+        //     setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
+        //     const queryString = new URLSearchParams(filteredFormData).toString();
+        //     // console.log(queryString)
+            // setTimeout(() => {
+            //     // navigate(`/kyc?${queryString}`);
+            // }, 3000);
+        // }
         
-        // await axiosInstance.post(`register/`, {
-        //     email: formData.email,
-        //     username: formData.username,
-        //     password: formData.password,
-        // })
-        // .then((res) => {
-        //     // history.push('/login');
-        //     console.log(res);
-        //     console.log(res.data);
-        // });
+        await axiosInstance.post(`api/v1/user/register/`, {
+            firstname: formData.first_name,
+            lastname: formData.last_name,
+            phoneno: formData.contact_number,
+            email: formData.email,
+            password: formData.password,
+            password1: formData.confirm_password,
+            is_merchent: true
+        })
+        .then((res) => {
+            if(res.status == 201) {
+                setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
+                const queryString = new URLSearchParams(filteredFormData).toString();
+                setTimeout(() => {
+                    navigate(`/kyc?${queryString}`);
+                }, 3000);
+            }
+            // else if (res.status == 400){
+            //     setError(res.data.msg);
+            //     console.log(res.data.msg)
+            // }
+             else if(res.data.msg == `${formData.email} already exists`) {
+                console.log('Message:', "User already exists");
+             }
+             else if (!res.ok){
+                console.log(res);
+             }else{
+                setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
+                const queryString = new URLSearchParams(filteredFormData).toString();
+                setTimeout(() => {
+                    navigate(`/kyc?${queryString}`);
+                }, 3000);
+                console.log(res);
+                console.log(res.data);
+            }
+        })
+        .catch((error) => {
+            // console.error('Error', error.response)
+            if (error.response.status == 400) {
+                setError(error.response.data.msg)
+            }
+        });
 
+        // fetch("http://127.0.0.1:8000/api/v1/user/register/", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         firstname: formData.first_name,
+        //         lastname: formData.last_name,
+        //         phoneno: formData.contact_number,
+        //         email: formData.email,
+        //         password: formData.password,
+        //         password1: formData.password1
+        //     }),
+        // })
+        // .then(response => {
+        //     if (!response.ok) {
+        //         console.log(response)
+        //         throw new Error('Network response was not ok');
+        //     }
+            
+        //     return response.json();
+        // })
+        // .then(data => {
+        //     console.log('Success:', data);
+        // })
+        // .catch(error => {
+        //     console.error('Error:', error);
+        // })
 	};
+
+
 
     return(
         <>

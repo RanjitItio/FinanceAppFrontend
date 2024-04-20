@@ -20,12 +20,26 @@ import KYCSubmissionReport from './components/Authentication/KYCSubmission';
 import PaymentInformation from './components/Payment/PaymentInfo';
 import StepWisePaymentForm from './components/Payment/StepForm';
 import CryptoFiat from './components/CryptoFiat/CryptoFiat';
+import React from "react";
+import Box from '@mui/material/Box';
+import UpperNavbar from './components/UpNavbar';
+import LeftNavbar from './components/LeftNavbar';
 
 
 
 
 
 function App() {
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   return (
       <div>
@@ -40,9 +54,8 @@ function App() {
             <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
             <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
             <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
-            <Route exact path='/crypto-fiat/' element={<CryptoFiat />}></Route>
 
-            <Route exact path='*' element={
+            {/* <Route exact path='*' element={
               <>
                   <PageNavbar />
                   <WelcomeSection />
@@ -63,11 +76,24 @@ function App() {
               </>
             }>
 
-            </Route>
-                
+            </Route> */}
+
+            <Route exact path='*' element={
+              <>
+               <Box sx={{ display: 'flex' }}>
+                  <UpperNavbar handleDrawerOpen={handleDrawerOpen} open={open} />
+                  <LeftNavbar handleDrawerClose={handleDrawerClose} open={open} />
+
+                    <Routes>
+                      <Route exact path='/crypto-fiat/' element={<CryptoFiat open={open} />}></Route>
+                    </Routes>
+                </Box>
+              </>
+            }>
+            </Route> 
           </Routes>
         </Router>
-
+        
       </div>
   
 

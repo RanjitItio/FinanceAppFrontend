@@ -3,7 +3,7 @@
 
 
 
-export default function CryptoFiatTabs({CryptoContent}) {
+export default function CryptoFiatTabs({CryptoContent, FiatDashboard}) {
   
   return (
     <>
@@ -27,7 +27,7 @@ export default function CryptoFiatTabs({CryptoContent}) {
                <CryptoContent />
             </div>
             <div className="tab-pane fade" id="fiat" role="tabpanel" aria-labelledby="fiat-tab">
-               Fiat
+               <FiatDashboard />
             </div>
         </div>
 </>

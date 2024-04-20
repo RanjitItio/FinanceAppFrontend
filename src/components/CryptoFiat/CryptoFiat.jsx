@@ -1,17 +1,20 @@
 import CryptoContent from "./Crypto"
-import CryptoNavbar from "./CryptoNav"
+import FiatDashboard from "./Fiat/FiatBoard";
 import CryptoFiatTabs from "./Tabs"
+import {Main, DrawerHeader} from '../Content';
 
 
 
 
 
-export default function CryptoFiat() {
+export default function CryptoFiat({open}) {
     return (
         <>
-        <CryptoNavbar />
-        <CryptoFiatTabs  CryptoContent={CryptoContent} />
+            <Main open={open}>
+            <DrawerHeader />
+                <CryptoFiatTabs  CryptoContent={CryptoContent} FiatDashboard={FiatDashboard} />
+            </Main>
         </>
     )
 }
-// 
+
