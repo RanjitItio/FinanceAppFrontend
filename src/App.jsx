@@ -55,7 +55,7 @@ function App() {
             <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
             <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
 
-            {/* <Route exact path='*' element={
+            <Route exact path='*' element={
               <>
                   <PageNavbar />
                   <WelcomeSection />
@@ -76,9 +76,9 @@ function App() {
               </>
             }>
 
-            </Route> */}
+            </Route>
 
-            <Route exact path='*' element={
+            <Route exact path='/user/*' element={
               <>
                <Box sx={{ display: 'flex' }}>
                   <UpperNavbar handleDrawerOpen={handleDrawerOpen} open={open} />

@@ -94,7 +94,7 @@ function PageNavbar() {
                      </li>
 
                      <li className="nav-item ms-4 me-4">
-                         <Link className="nav-link active" to='/crypto-fiat/' >Fiat/Crypto</Link>
+                         <Link className="nav-link active" to='/user/crypto-fiat/' >Fiat/Crypto</Link>
                      </li>
 
                      <li className="nav-item ms-4 me-4">
