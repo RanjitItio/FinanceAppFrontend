@@ -37,7 +37,7 @@ function KYCForm() {
    const navigate = useNavigate();
    const Searchparams = new URLSearchParams(location.search);
    const registrationFormData = Object.fromEntries(Searchparams.entries())
-   console.log(registrationFormData)
+//    console.log(registrationFormData)
 
    const handleChange = (e)=> {
         UpdateFormData({
@@ -50,7 +50,7 @@ function KYCForm() {
 
         e.preventDefault();
         let validationError = [];
-        console.log(formData);
+        // console.log(formData);
 
         // if (!formData.first_name) {
         //     validationError.push("Please fill your First Name");

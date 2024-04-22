@@ -2,6 +2,21 @@ import BasicSparkLine from "./InsideTableChart"
 
 
 
+
+function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+  
+  const rows = [
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+    createData('Cupcake', 305, 3.7, 67, 4.3),
+    createData('Gingerbread', 356, 16.0, 49, 3.9),
+  ];
+
+
+
 const CurrencyMarketValue = [
     {
         curency_name: 'Bitcoin',
@@ -28,10 +43,12 @@ const CurrencyMarketValue = [
 
 
 export default function MarketValueCard() {
+   
+
     return(
         <>
-        <div className="table-responsive-sm" >
-            <table responsive  className="table table-hover align-middle">
+        <div className='' style={{overflowX: 'auto', width: '100vw', maxWidth: '100%'}} >
+            <table responsive  className="table table-hover align-middle" style={{ width: '100%', tableLayout: 'auto' }}>
                 <caption>List of Currency values</caption>
                 <thead>
                     <tr>
@@ -46,7 +63,6 @@ export default function MarketValueCard() {
                         </th>
                         <th scope="col" className="text-muted">
                             Statitics
-                          
                         </th>
                         <th scope="col" className="text-muted">
                             Exchnages
@@ -85,6 +101,67 @@ export default function MarketValueCard() {
                 </tbody>
             </table >
             </div>
+{/* 
+<div style={{overflowX: 'auto', maxWidth: '200px'}}>
+  <table style={{ }}>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+    </tr>
+    <tr>
+      <td>Jill</td>
+      <td>Smith</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <td>Eve</td>
+      <td>Jackson</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+    </tr>
+    <tr>
+      <td>Adam</td>
+      <td>Johnson</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+    </tr>
+  </table>
+</div> */}
 
           
         </>
