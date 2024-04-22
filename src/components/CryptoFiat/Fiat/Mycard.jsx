@@ -4,19 +4,19 @@
 
 export default function FiatMyCard() {
     return (
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">My Card</h5>
+        <div className="card">
+            <div className="card-body">
+                <h5 className="card-title">My Card</h5>
                 <div className="d-flex justify-content-between">
                     <div className="my-2">
-                        <h6 class="card-subtitle mb-2 text-muted">
-                        <i class="bi bi-credit-card"></i>&nbsp;
+                        <h6 className="card-subtitle mb-2 text-muted">
+                        <i className="bi bi-credit-card"></i>&nbsp;
                             429 **** *** 963
                         </h6>
                     </div>
 
                     <button type="submit" className="btn btn-primary d-none d-sm-none d-xs-none d-md-inline d-lg-inline" style={{maxHeight: '35px'}}>Add Card</button>
-                    <a href="" className="btn btn-primary d-md-none d-lg-none"><i class="bi bi-plus-lg"></i></a>
+                    <a href="" className="btn btn-primary d-md-none d-lg-none"><i className="bi bi-plus-lg"></i></a>
                 </div>
 
 
@@ -26,7 +26,7 @@ export default function FiatMyCard() {
                         <div className="card-body">
                             <div className="d-flex justify-content-between">
                                 <h6 className="card-title" >VISA</h6>
-                                <i class="bi bi-three-dots-vertical"></i>
+                                <i className="bi bi-three-dots-vertical"></i>
                             </div>&nbsp;
 
                             <h6 className="card-subtitle d-flex justify-content-around">

@@ -44,7 +44,7 @@ export default function CryptoContent() {
 
                     <div className="row mx-1 my-2">
                         <div className="card" >
-                            <div className="card-body">
+                            <div className="card-body" >
                                 <h5 className="card-title"><b>Market Value</b></h5>
                                     <MarketValueCard />
                             </div>

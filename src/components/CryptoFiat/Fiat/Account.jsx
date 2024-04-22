@@ -4,7 +4,7 @@
 
 export default function FiatAccount() {
     return (
-        <div className="card" style={{backgroundColor: '#e4e4e4'}}>
+        <div className="card" style={{backgroundColor: '#95b02f'}}>
             <div className="card-body">
 
                 <div className="d-flex justify-content-between">
@@ -34,23 +34,23 @@ export default function FiatAccount() {
                 <div className='d-flex justify-content-center'>
                     <div className='d-none d-sm-none d-md-inline d-lg-inline'>
                         <button type="button" className="btn btn-light mx-1">
-                            <i class="bi bi-arrow-down"></i>&nbsp;
+                            <i className="bi bi-arrow-down"></i>&nbsp;
                             Receive
                         </button>
                         <button type="button" className="btn btn-light mx-1">
-                            <i class="bi bi-plus-lg"></i>&nbsp;
+                            <i className="bi bi-plus-lg"></i>&nbsp;
                             Add
                         </button>
                         <button type="button" className="btn btn-light mx-1">
-                        <i class="bi bi-arrow-up"></i>&nbsp;
+                        <i className="bi bi-arrow-up"></i>&nbsp;
                             Send
                         </button>
                         <button type="button" className="btn btn-light mx-1">
-                            <i class="bi bi-arrows"></i>&nbsp;
+                            <i className="bi bi-arrows"></i>&nbsp;
                             Convert
                         </button>
                         <button type="button" className="btn btn-light mx-1">
-                            <i class="bi bi-three-dots-vertical"></i>&nbsp;
+                            <i className="bi bi-three-dots-vertical"></i>&nbsp;
                             More
                         </button>
                     </div>
@@ -60,22 +60,22 @@ export default function FiatAccount() {
                 <div className='d-flex justify-content-center '>
                     <div className='d-sm-inline d-md-none'>
                         <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i class="bi bi-arrow-down"></i>
+                            <i className="bi bi-arrow-down"></i>
                         </a>
 
                         <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i class="bi bi-plus-lg"></i>
+                            <i className="bi bi-plus-lg"></i>
                         </a>
                         <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i class="bi bi-arrow-up"></i>
-                        </a>
-
-                        <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i class="bi bi-arrows"></i>
+                            <i className="bi bi-arrow-up"></i>
                         </a>
 
                         <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i class="bi bi-three-dots-vertical"></i>&nbsp;
+                            <i className="bi bi-arrows"></i>
+                        </a>
+
+                        <a className='btn btn-light' style={{marginRight: '1px'}}>
+                            <i className="bi bi-three-dots-vertical"></i>&nbsp;
                         </a>
                     </div>
                 </div>
