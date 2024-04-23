@@ -1,7 +1,12 @@
 import {Main, DrawerHeader} from '../Content';
 import Avatar from '@mui/material/Avatar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from '@mui/material/Button';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import DeleteIcon from '@mui/icons-material/Delete';
+import CallMadeIcon from '@mui/icons-material/CallMade';
+import CallReceivedIcon from '@mui/icons-material/CallReceived';
+import IconButton from '@mui/material/IconButton';
+
 
 
 
@@ -13,7 +18,7 @@ export default function UserDashboard({open}) {
         <>
          <Main open={open}>
          <DrawerHeader />
-
+         
         <div className="container">
             <div className="row">
                 <div className="col-lg-8 col-md-8 col-xl-8 col-sm-12 col-xs-12">
@@ -24,17 +29,34 @@ export default function UserDashboard({open}) {
                         sx={{ width: 60, height: 60 }} 
                         />
                         <div className='mx-1 my-1'>
-                            <h1><b>Ranjit Kumar</b></h1>
-                            <p className='my-1'>Welcome here is a brief summary of your account.</p>
+                            <h1 className='fs-3'><b>Ranjit Kumar</b></h1>
+                            <p className='my-1 text-muted'>Welcome here is a brief summary of your account.</p>
                         </div>
                     </div>
                 </div>
-
-                <div className="col-lg-4 col-md-4 col-xl-4 col-sm-6 col-xs-6">
-                    <button type="button" className="btn btn-primary">Deposit Money</button>
-                    <button type="button" className="btn btn-primary mx-2">Withdraw Money</button>
+                
+                <div className="col-lg-4 col-md-4 col-xl-4 col-sm-12 col-xs-12 ">
+                    
+                    <Button variant="outlined" startIcon={<CallReceivedIcon />} className='mb-1'>
+                        Deposite
+                    </Button>
+                    <Button variant="outlined" startIcon={<CallMadeIcon />} sx={{marginLeft: '2px'}} className='mb-1'>
+                        Transfer
+                    </Button>
                 </div>
 
+            </div>
+
+            {/* Dashboard Cards  */}
+            <div className="row">
+                <div className="col"></div>
+                <div className="col"></div>
+                <div className="col"></div>
+            </div>
+            <div className="row">
+                <div className="col"></div>
+                <div className="col"></div>
+                <div className="col"></div>
             </div>
          </div>
 

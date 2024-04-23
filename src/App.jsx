@@ -58,6 +58,7 @@ function App() {
             <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
             <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
             <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
+            {/* <Route exact path='/dash-board/' element={<UserDashboard open={open} />}></Route> */}
 
             <Route exact path='*' element={
               <>

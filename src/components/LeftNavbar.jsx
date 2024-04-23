@@ -19,10 +19,10 @@ import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomi
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
-import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
-import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+// import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
+// import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
+// import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+// import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
@@ -30,12 +30,12 @@ import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import NorthOutlinedIcon from '@mui/icons-material/NorthOutlined';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined';
-import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
-import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
-import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
-import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';
-import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
-import FingerprintOutlinedIcon from '@mui/icons-material/FingerprintOutlined';
+// import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+// import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
+// import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
+// import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';
+// import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
+// import FingerprintOutlinedIcon from '@mui/icons-material/FingerprintOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
 
 
@@ -44,52 +44,37 @@ import GoogleIcon from '@mui/icons-material/Google';
 
 const NavContent = [
   { text: 'Dashboard', subItems: [
-    {text: 'Dashboard', icon: <DashboardCustomizeOutlinedIcon />, url: '/'}
+    {text: 'Dashboard', icon: <DashboardCustomizeOutlinedIcon />, url: '/user/crypto-fiat/'},
+    // {text: 'Crypto', icon: <DashboardCustomizeOutlinedIcon />, url: '/user/crypto-fiat/'}
   ],
   icon: <DashboardCustomizeOutlinedIcon />
 },
 
-  { text: 'Users', subItems: [
-    {text:'Users', icon: <Person2OutlinedIcon />, url: '/admin/users/'},
-    {text: 'Merchants', icon: <StorefrontOutlinedIcon />, url: '/admin/merchant/'}, 
-    {text: 'Admins', icon: <SupervisorAccountOutlinedIcon />, url: '/admin/admin-user/'}, 
+  { text: 'Transactions', subItems: [
+    {text:'Transactions', icon: <Person2OutlinedIcon />, url: '/user/crypto-fiat/'},
+    {text: 'Deposit Money', icon: <StorefrontOutlinedIcon />, url: '/user/crypto-fiat/'}, 
+    {text: 'Send Money', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
+    {text: 'Request Money', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
+    {text: 'Exchange Money', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
+    {text: 'Withdrawls', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
   ],
   icon: <AccountCircleOutlinedIcon />},
 
-  { text: 'Transactions', subItems: [
-    {text: 'All Transactions', icon: <HistoryOutlinedIcon />, url: '/admin/all-transaction/'},
-    {text: 'Deposits', icon: <NorthOutlinedIcon />, url: '/admin/deposits/'},
-    {text: 'Withdrawls', icon: <ArrowDownwardOutlinedIcon />, url: '/admin/withdrawls/'},
-    {text: 'Transfers', icon: <SwapHorizOutlinedIcon />, url: '/admin/transfers/'},
-    {text: 'Currency Exchange', icon: <PaymentsOutlinedIcon />, url: '/admin/exchanges/'},
-    {text: 'Request Payments', icon: <CalculateOutlinedIcon />, url: '/admin/request-payments/'},
-    {text: 'Merchant Payment', icon: <PaymentsOutlinedIcon />, url: '/admin/merchant-payments/'},
-    {text: 'Crypto Sent', icon: <KeyboardDoubleArrowRightOutlinedIcon />, url: '/admin/crypto-sent-transactions/'},
-    {text: 'Crypto Received', icon: <KeyboardDoubleArrowLeftOutlinedIcon />, url: "/admin/crypto-received-transactions"},
+  { text: 'Others', subItems: [
+    {text: 'Disputes', icon: <HistoryOutlinedIcon />, url: '/user/crypto-fiat/'},
+    {text: 'Tickets', icon: <NorthOutlinedIcon />, url: '/user/crypto-fiat/'},
+    {text: 'Profile', icon: <ArrowDownwardOutlinedIcon />, url: '/user/crypto-fiat/'},
+    {text: 'Verifications', icon: <SwapHorizOutlinedIcon />, url: '/user/crypto-fiat/'},
   ],
   icon: <ReceiptLongOutlinedIcon />},
 
-  { text: 'Revenues', subItems: [
-    {text: 'Revenues', icon: <AccountBalanceOutlinedIcon />, url: 'https://cssgradient.io/'},],
+  { text: 'ADDONS', subItems: [
+    {text: 'Crypto Exchange', icon: <AccountBalanceOutlinedIcon />, url: '/user/crypto-fiat/'},
+    {text: 'Investments', icon: <AccountBalanceOutlinedIcon />, url: '/user/crypto-fiat/'},
+    ],
     icon: <AccountBalanceOutlinedIcon />
   },
-  { text: 'Disputes', subItems: [
-    {text: 'Disputes', icon: <ConfirmationNumberOutlinedIcon />, url: 'https://cssgradient.io/'},],
-    icon: <ConfirmationNumberOutlinedIcon />
-  },
-  { text: 'Tickets', subItems: [
-    {text: 'Tickets', icon: <LocalActivityOutlinedIcon />, url: 'https://cssgradient.io/'}],
-    icon: <LocalActivityOutlinedIcon />
-  },
-  { text: 'Activity Logs', subItems: [
-    {text: 'Activity Logs', icon: <RemoveRedEyeOutlinedIcon />, url: 'https://cssgradient.io/'}],
-    icon: <RemoveRedEyeOutlinedIcon />
-  },
-  { text: 'Verifications', subItems: [
-    {text: 'Identity Verification', icon: <FingerprintOutlinedIcon />, url: 'https://cssgradient.io/'}, 
-    {text: 'Address Verification', icon: <ContactsOutlinedIcon />, url: 'https://cssgradient.io/'}],
-    icon: <VerifiedOutlinedIcon /> 
-  }
+
 ];
 
 

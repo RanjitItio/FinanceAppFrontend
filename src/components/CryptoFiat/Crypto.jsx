@@ -14,7 +14,7 @@ export default function CryptoContent() {
 
     return (
         <>
-        <div className="container-fluid">
+        <div className="container">
             <div className="row">
                 {/* First Column */}
                 <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
@@ -43,12 +43,12 @@ export default function CryptoContent() {
 
 
                     <div className="row mx-1 my-2">
-                        {/* <div className="card" >
-                            <div className="card-body"  > */}
+                        <div className="card" >
+                            <div className="card-body"  >
                                 <h5 className="card-title"><b>Market Value</b></h5>
                                     <MarketValueCard />
-                            {/* </div>
-                        </div>  */}
+                            </div>
+                        </div> 
                     </div>
                 </div>
 

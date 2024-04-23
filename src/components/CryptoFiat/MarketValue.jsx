@@ -48,7 +48,7 @@ export default function MarketValueCard() {
     return(
         <>
         <div className='' style={{overflowX: 'auto', width: '100vw', maxWidth: '100%'}} >
-            <table responsive  className="table table-hover align-middle" style={{ width: '100%', tableLayout: 'auto' }}>
+            <table  className="table table-hover align-middle" style={{ width: '100%', tableLayout: 'auto' }}>
                 <caption>List of Currency values</caption>
                 <thead>
                     <tr>

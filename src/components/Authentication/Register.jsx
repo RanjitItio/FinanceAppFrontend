@@ -158,7 +158,6 @@ function Register() {
         <div className="flex-[50%] bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center justify-center">
         <img src="https://script.viserlab.com/paymenthub/assets/images/frontend/login_register/641872cda99f91679323853.png" alt="Logo" className="h-80 w-80 drop-shadow-2xl " />
         
-      
         </div>
   
         {/* Second flex container with a green color palette */}
@@ -167,7 +166,7 @@ function Register() {
           <div className="col-span-1 shadow-2xl p-4 rounded-md">
             <div className='col-span-1  rounded-full'>
               <center>
-            <p className='text-7xl' ><RiUser3Line/>  </p>
+            <p className='text-7xl'><RiUser3Line/>  </p>
             <h2 className="text-2xl font-semibold mb-4 "> Sign Up</h2>
               </center>
             </div>
@@ -265,6 +264,7 @@ function Register() {
           </div>        
         </div>
       </div>
+
 
 {/*         
         <section className="vh-100 bg-image" style={{backgroundImage: "url('/src/images/signupbg.jpg')"}}>
