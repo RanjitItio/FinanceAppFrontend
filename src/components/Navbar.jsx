@@ -98,6 +98,14 @@ function PageNavbar() {
                      </li>
 
                      <li className="nav-item ms-4 me-4">
+                         <Link className="nav-link active" to='/signup/' >Signup</Link>
+                     </li>
+
+                     <li className="nav-item ms-4 me-4">
+                         <Link className="nav-link active" to='/signin/'>Signin</Link>
+                     </li>
+
+                     <li className="nav-item ms-4 me-4">
                          <Link className="nav-link active" to='/' >Help & Center</Link>
                      </li>
                 </ul>

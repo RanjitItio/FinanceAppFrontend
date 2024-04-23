@@ -24,6 +24,9 @@ import React from "react";
 import Box from '@mui/material/Box';
 import UpperNavbar from './components/UpNavbar';
 import LeftNavbar from './components/LeftNavbar';
+import UserDashboard from './components/UserDashboard/Dashboard';
+
+
 
 
 
@@ -87,6 +90,7 @@ function App() {
 
                     <Routes>
                       <Route exact path='/crypto-fiat/' element={<CryptoFiat open={open} />}></Route>
+                      <Route exact path='/dash-board/' element={<UserDashboard open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

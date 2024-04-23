@@ -1,11 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    // "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    // "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    // "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    './public/**/*.html',
+    './src/components/Authentication/**/*.{js,jsx,ts,tsx,vue}',
   ],
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  purge: ['./src/components/Authentication/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
     extend: {},
   },
