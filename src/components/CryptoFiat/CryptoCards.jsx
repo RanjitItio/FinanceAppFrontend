@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react'
 import { Carousel } from 'antd';
 import axios from 'axios';
 import CryptoIcons from '../../../cryptoicons';
-import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import Skeleton from '@mui/material/Skeleton';
 
 
 
@@ -36,14 +36,14 @@ export default function CryptoCards() {
         });
             setCryptoData(response.data);
             setLoading(false);
-            console.log(response.data)
+            // console.log(response.data)
         } catch (error) {
             // console.error('Error fetching data:', error);
             console.log(console.error.response)
         }
       };
 
-      timedelay = setTimeout(fetchData, 300)
+      timedelay = setTimeout(fetchData, 100)
 
       return ()=> clearTimeout(timedelay);
 
@@ -73,7 +73,9 @@ export default function CryptoCards() {
     <>
    {loading ? (
     <Box sx={{ width: '100%' }}>
-        <LinearProgress />
+        <Skeleton />
+        <Skeleton animation="wave" />
+        <Skeleton animation={false} />
     </Box>
    ): (
     <Carousel {...carouselSettings} >

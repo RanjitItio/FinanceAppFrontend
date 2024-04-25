@@ -46,7 +46,7 @@ export default function CryptoContent() {
                         <div className="card" >
                             <div className="card-body"  >
                                 <h5 className="card-title"><b>Market Value</b></h5>
-                                    <MarketValueCard />
+                                    {/* <MarketValueCard /> */}
                             </div>
                         </div> 
                     </div>
