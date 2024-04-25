@@ -1,0 +1,29 @@
+
+.ant-carousel .slick-dots li.slick-active button {
+    background-color: #007bff;
+  }
+
+
+
+
+  .ant-carousel .slick-dots {
+    position: absolute;
+    bottom: 10px; /* Adjust the bottom position of the dots */
+    width: 100%; /* Ensure dots cover the full width */
+    display: flex;
+    justify-content: center;
+    list-style: none;
+  }
+  
+  /* Custom styles for dots */
+  /* .ant-carousel .slick-dots li {
+    margin: 0 4px; 
+  } */
+
+/* 
+  .ant-carousel .slick-dots li button {
+    width: 8px; 
+    height: 8px; 
+    background-color: #ccc; 
+    border: none; 
+  } */

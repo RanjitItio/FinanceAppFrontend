@@ -27,9 +27,9 @@ export default function CryptoContent() {
                     <div className="row">
                         {/* First Column */}
                         <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
-                            <div className="card shadow-lg" >
+                            <div className="card shadow-lg" style={{height: '22rem'}} >
                                 <div className="card-body">
-                                    <h5 className="card-title"><b>Your Balance</b></h5>
+                                    <h5 className="card-title my-4"><b>Your Balance</b></h5>
                                         <TotalBalanceChart />
                                 </div>
                             </div> 

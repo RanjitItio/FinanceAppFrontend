@@ -179,7 +179,7 @@ function Register() {
               <input
                 type="text"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Username"
+                placeholder="First Name"
                 name='first_name'
                 onChange={handleChange} 
               />
@@ -190,7 +190,7 @@ function Register() {
               <input
                 type="text"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Email"
+                placeholder="Last Name"
                 name='last_name'
                 onChange={handleChange}
               />
@@ -260,7 +260,7 @@ function Register() {
           <p className='font-extralight'> <Link to={'/forgot-password/'}> Forget password</Link></p>
           </div>
         </div>
-            
+
           </div>        
         </div>
       </div>

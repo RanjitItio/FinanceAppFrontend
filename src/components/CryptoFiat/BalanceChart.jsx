@@ -2,10 +2,11 @@ import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
 
 const data = [
-  { value: 5, label: 'Bitcoin' },
+  { value: 5, label: 'Bitcoin'  },
   { value: 10, label: 'Etherium' },
   { value: 15, label: 'Binance' },
   { value: 20, label: 'Polkstar' },
@@ -20,14 +21,13 @@ const StyledText = styled('text')(({ theme }) => ({
   fill: theme.palette.text.primary,
   textAnchor: 'middle',
   dominantBaseline: 'central',
-  fontSize: 20,
+
 }));
 
 const StyledNumber = styled('text')(({ theme }) => ({
   fill: theme.palette.text.primary,
   textAnchor: 'middle',
   dominantBaseline: 'central',
-  fontSize: 20,
   fontWeight: 'bold'
 }));
 
@@ -37,12 +37,15 @@ function PieCenterLabel({label, amount }) {
   return (
     <>
     <StyledText x={left + width / 2} y={top + height / 2.5}>
-      {label}
+      {label} 
+      
     </StyledText>
 
     <StyledNumber x={left + width / 2} y={top + height / 1.7}>
       {amount}
     </StyledNumber>
+
+   
     </>
   );
 }
@@ -58,6 +61,10 @@ export default function TotalBalanceChart() {
       amount={balanceValue}
       >
      </PieCenterLabel>
+
+     
     </PieChart>
+
+
   );
 }
