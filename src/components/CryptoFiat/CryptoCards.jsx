@@ -67,24 +67,6 @@ export default function CryptoCards() {
         speed: 1400,
       };
 
-  
-    // useEffect(() => {
-    //     const loadImage = async (icon) => {
-    //       const image = new Image();
-    //       image.src = icon.url;
-    //       await image.decode(); 
-    //       return icon;
-    //     };
-    
-    //     const loadImages = async () => {
-    //       const loaders = await Promise.all(CryptoIcons.map(loadImage));
-    //       setImageLoader(loaders);
-    //     };
-
-
-    //     loadImages();
-    //   }, []);
-
 
 
     return (
