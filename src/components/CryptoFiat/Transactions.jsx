@@ -48,17 +48,12 @@ const RecentTransactions = [
 ]
 
 
-export default function Transactions() {
+export default function Transactions({CryptoData, initialCryptoConversion}) {
 
     const [selectedItem1, setSelectedItem1] = useState('BTC');
     const [selectedItem2, setSelectedItem2] = useState('ETH');
-    const [firstconvertData, setFirstconvertData] = useState('')
-    const [secondconvertData, setSecondconvertData] = useState('1')
     const [convertedValue, setConvertedValue] = useState(0)
     const [inputValue, setInputValue] = useState('1');
-
-
-    const API_KEY = '34EB65AE-B800-438F-B09D-24D745B17D0C'
     
 
     const handleInputChange = (event) => {
@@ -78,31 +73,6 @@ export default function Transactions() {
         setSelectedItem1(selectedItem2);
         setSelectedItem2(temp);
     }
-    
-    let timeID; 
-
-    timeID = setTimeout(() => {
-        const firstfetch = async()=> {
-            const dropdown2 = selectedItem2;
-            
-            try{
-                const response = await axios.get(`https://rest.coinapi.io/v1/assets/${dropdown2}`,{
-                   headers: {
-                    'X-CoinAPI-Key': API_KEY
-                   },
-                });
-                // console.log(response.data)
-                // price = parseFloat(response.data[0].price_usd)
-                // setConvertedValue(response.data[0].price_usd)
-                
-            } catch(error) {
-                console.error(console.error.response)
-            }
-        };
-
-        firstfetch();
-
-    }, 700);
 
     
     
@@ -111,65 +81,30 @@ export default function Transactions() {
        const dropdown1 = selectedItem1;
        const dropdown2 = selectedItem2;
 
-     
-        const fetchdata1 = async()=> {
-            try{
-                const response1 = await axios.get(`https://rest.coinapi.io/v1/assets/${dropdown1}`,{
-                   headers: {
-                    'X-CoinAPI-Key': API_KEY
-                   },
-                });
-                // console.log(response1.data)
-                setFirstconvertData(response1.data[0].price_usd);
-            } catch(error) {
-                console.error(console.error.response)
-            }
-        };
+       let first_Crypto_value_in_usd;
+       let second_Crypto_value_in_usd;
+       
+       CryptoData.forEach(asset => {
+        if(asset.asset_id == dropdown1){
+            first_Crypto_value_in_usd = parseFloat(asset.price_usd)
+        }
+        if(asset.asset_id == dropdown2){
+            second_Crypto_value_in_usd = parseFloat(asset.price_usd)
+        }
+    });
 
-        const fetchdata2 = async()=> {
-            try{
-                const response2 = await axios.get(`https://rest.coinapi.io/v1/assets/${dropdown2}`, {
-                    headers: {
-                        'X-CoinAPI-Key': API_KEY
-                    },
-                });
-                // console.log(response2.data)
-                setSecondconvertData(response2.data[0].price_usd);
-            }catch(error) {
-               console.error(console.error.response)
-            }
-        };
+        if (first_Crypto_value_in_usd !== undefined && second_Crypto_value_in_usd !== undefined) {
+            const input = inputValue;
+            const inputMultiplication = parseFloat(first_Crypto_value_in_usd) * parseFloat(input);
 
-
-        setTimeout(() => {
-            fetchdata1();
-            setTimeout(() => {
-                fetchdata2();
-           }, 400);
-        }, 100);
-
-        
-    
-    setTimeout(() => {
-        const input = inputValue;
-        
-        const firstValue = parseFloat(firstconvertData) * parseFloat(input);
-        const secondValue = parseFloat(secondconvertData);
-        
-
-        if (!isNaN(firstValue) && !isNaN(secondValue) && secondValue !== 0) {
-            const finalValue  = firstValue / secondValue
-            setConvertedValue(finalValue);
-            
-    } else {
-        console.error("Error: Unable to convert string values to numbers or divide by zero.");
+            const FinalConversionValue = inputMultiplication / second_Crypto_value_in_usd;
+            setConvertedValue(FinalConversionValue);
+            // console.log(convertedValue)
+        } else {
+            console.log("Error: One or both selected cryptocurrencies not found");
+        }
     }
 
-    }, 500);
-    
-
-    }
-      
 
     return (
         <>
@@ -203,10 +138,10 @@ export default function Transactions() {
                         >
                             <Dropdown.Item eventKey="BTC">BTC</Dropdown.Item>
                             <Dropdown.Item eventKey="ETH">ETH</Dropdown.Item>
-                            <Dropdown.Item eventKey="DC">PLN</Dropdown.Item>
-                            <Dropdown.Item eventKey="DC">DOGE</Dropdown.Item>
-                            <Dropdown.Item eventKey="DC">LTC</Dropdown.Item>
-                            <Dropdown.Item eventKey="DC">VEN</Dropdown.Item>
+                            <Dropdown.Item eventKey="PLN">PLN</Dropdown.Item>
+                            <Dropdown.Item eventKey="DOGE">DOGE</Dropdown.Item>
+                            <Dropdown.Item eventKey="LTC">LTC</Dropdown.Item>
+                            <Dropdown.Item eventKey="VEN">VEN</Dropdown.Item>
                         </DropdownType>
                     ))}
                     </div>
@@ -220,7 +155,8 @@ export default function Transactions() {
             <div className="card mb-3">
                 <div className="card-body">
                     <div className="d-flex justify-content-between">
-                        <h6 className="card-subtitle my-1"><b>{convertedValue.toFixed(5)}</b></h6>
+                        <h6 className="card-subtitle my-1"><b>
+                            {convertedValue ? convertedValue.toFixed(5) : initialCryptoConversion.toFixed(5)}</b></h6>
                         {[SplitButton].map((DropdownType, idx) => (
                             <DropdownType
                                 as={ButtonGroup}
@@ -233,10 +169,10 @@ export default function Transactions() {
                             >
                                 <Dropdown.Item eventKey="BTC">BTC</Dropdown.Item>
                                 <Dropdown.Item eventKey="ETH">ETH</Dropdown.Item>
-                                <Dropdown.Item eventKey="DC">PLN</Dropdown.Item>
-                                <Dropdown.Item eventKey="DC">DOGE</Dropdown.Item>
-                                <Dropdown.Item eventKey="DC">LTC</Dropdown.Item>
-                                <Dropdown.Item eventKey="DC">VEN</Dropdown.Item>
+                                <Dropdown.Item eventKey="PLN">PLN</Dropdown.Item>
+                                <Dropdown.Item eventKey="DOGE">DOGE</Dropdown.Item>
+                                <Dropdown.Item eventKey="LTC">LTC</Dropdown.Item>
+                                <Dropdown.Item eventKey="VEN">VEN</Dropdown.Item>
                             </DropdownType>
                         ))}
                     </div>
