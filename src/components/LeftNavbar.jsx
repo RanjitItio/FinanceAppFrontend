@@ -47,13 +47,13 @@ import StorageIcon from '@mui/icons-material/Storage';
 const NavContent = [
   { text: 'DASHBOARD', subItems: [
     {text: 'Dashboard', icon: <DashboardCustomizeOutlinedIcon />, url: '/'},
-    {text: 'Wallets', icon: <DashboardCustomizeOutlinedIcon />, url: '/'}
+    // {text: 'Wallets', icon: <DashboardCustomizeOutlinedIcon />, url: '/'}
   ],
   icon: ''
 },
 
   { text: 'TRANSACTIONS', subItems: [
-    {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/'},
+    {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/transactions/'},
     {text: 'Deposit Money', icon: <AddCardIcon />, url: '/'}, 
     {text: 'Send Money', icon: <SendIcon />, url: '/'}, 
     {text: 'Request Money', icon: <SwapCallsIcon />, url: '/'}, 

@@ -116,7 +116,7 @@ const TransactionData = [
 
 export default function Transactions({open}) {
     const [boxOpen, setBoxOpen] = useState(false);
-    const [isfilterItem, setFilterItem] = useState(true);
+    const [isfilterItem, setFilterItem] = useState(false);
 
       
     const handleClickOpen = () => {
