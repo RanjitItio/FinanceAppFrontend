@@ -25,6 +25,9 @@ import Box from '@mui/material/Box';
 import UpperNavbar from './components/UpNavbar';
 import LeftNavbar from './components/LeftNavbar';
 import UserDashboard from './components/UserDashboard/Dashboard';
+import Transactions from './components/Transactions/Transaction';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 // import 'dotenv/config';
 
 
@@ -60,9 +63,8 @@ function App() {
             <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
             <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
             <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
-            {/* <Route exact path='/dash-board/' element={<UserDashboard open={open} />}></Route> */}
 
-            <Route exact path='*' element={
+            {/* <Route exact path='*' element={
               <>
                   <PageNavbar />
                   <WelcomeSection />
@@ -83,17 +85,17 @@ function App() {
               </>
             }>
 
-            </Route>
+            </Route> */}
 
-            <Route exact path='/user/*' element={
+            <Route exact path='*' element={
               <>
                <Box sx={{ display: 'flex' }}>
                   <UpperNavbar handleDrawerOpen={handleDrawerOpen} open={open} />
                   <LeftNavbar handleDrawerClose={handleDrawerClose} open={open} />
 
                     <Routes>
-                      <Route exact path='/crypto-fiat/' element={<CryptoFiat open={open} />}></Route>
-                      <Route exact path='/dash-board/' element={<UserDashboard open={open} />}></Route>
+                      <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
+                      <Route exact path='/transactions/' element={<Transactions open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

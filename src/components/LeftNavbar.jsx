@@ -19,10 +19,6 @@ import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomi
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
-// import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
-// import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
-// import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-// import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
@@ -30,56 +26,59 @@ import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import NorthOutlinedIcon from '@mui/icons-material/NorthOutlined';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined';
-// import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
-// import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
-// import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
-// import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';
-// import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
-// import FingerprintOutlinedIcon from '@mui/icons-material/FingerprintOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AddCardIcon from '@mui/icons-material/AddCard';
+import SendIcon from '@mui/icons-material/Send';
+import SwapCallsIcon from '@mui/icons-material/SwapCalls';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import MessageIcon from '@mui/icons-material/Message';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import SettingsIcon from '@mui/icons-material/Settings';
+import RotateRightIcon from '@mui/icons-material/RotateRight';
+import StorageIcon from '@mui/icons-material/Storage';
 
 
 
 
 
 const NavContent = [
-  { text: 'Dashboard', subItems: [
-    {text: 'Dashboard', icon: <DashboardCustomizeOutlinedIcon />, url: '/user/crypto-fiat/'},
-    // {text: 'Crypto', icon: <DashboardCustomizeOutlinedIcon />, url: '/user/crypto-fiat/'}
+  { text: 'DASHBOARD', subItems: [
+    {text: 'Dashboard', icon: <DashboardCustomizeOutlinedIcon />, url: '/'},
+    {text: 'Wallets', icon: <DashboardCustomizeOutlinedIcon />, url: '/'}
   ],
-  icon: <DashboardCustomizeOutlinedIcon />
+  icon: ''
 },
 
-  { text: 'Transactions', subItems: [
-    {text:'Transactions', icon: <Person2OutlinedIcon />, url: '/user/crypto-fiat/'},
-    {text: 'Deposit Money', icon: <StorefrontOutlinedIcon />, url: '/user/crypto-fiat/'}, 
-    {text: 'Send Money', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
-    {text: 'Request Money', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
-    {text: 'Exchange Money', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
-    {text: 'Withdrawls', icon: <SupervisorAccountOutlinedIcon />, url: '/user/crypto-fiat/'}, 
+  { text: 'TRANSACTIONS', subItems: [
+    {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/'},
+    {text: 'Deposit Money', icon: <AddCardIcon />, url: '/'}, 
+    {text: 'Send Money', icon: <SendIcon />, url: '/'}, 
+    {text: 'Request Money', icon: <SwapCallsIcon />, url: '/'}, 
+    {text: 'Exchange Money', icon: <CurrencyExchangeIcon />, url: '/'}, 
+    {text: 'Withdrawls', icon: <PaymentsIcon />, url: '/'}, 
   ],
-  icon: <AccountCircleOutlinedIcon />},
+  icon:''},
 
-  { text: 'Others', subItems: [
-    {text: 'Disputes', icon: <HistoryOutlinedIcon />, url: '/user/crypto-fiat/'},
-    {text: 'Tickets', icon: <NorthOutlinedIcon />, url: '/user/crypto-fiat/'},
-    {text: 'Profile', icon: <ArrowDownwardOutlinedIcon />, url: '/user/crypto-fiat/'},
-    {text: 'Verifications', icon: <SwapHorizOutlinedIcon />, url: '/user/crypto-fiat/'},
+  { text: 'OTHERS', subItems: [
+    {text: 'Disputes', icon: <MessageIcon />, url: '/'},
+    {text: 'Tickets', icon: <ConfirmationNumberIcon />, url: '/'},
+    {text: 'Profile', icon: <AccountBoxIcon />, url: '/'},
+    {text: 'Verifications', icon: <SettingsIcon />, url: '/'},
   ],
-  icon: <ReceiptLongOutlinedIcon />},
+  icon: ''},
 
   { text: 'ADDONS', subItems: [
-    {text: 'Crypto Exchange', icon: <AccountBalanceOutlinedIcon />, url: '/user/crypto-fiat/'},
-    {text: 'Investments', icon: <AccountBalanceOutlinedIcon />, url: '/user/crypto-fiat/'},
+    {text: 'Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
+    {text: 'Investments', icon: <StorageIcon />, url: '/'},
     ],
-    icon: <AccountBalanceOutlinedIcon />
+    icon: ''
   },
 
 ];
 
-
-const Configurations = ['Currencies', 'Crypto Provider', 'Templates', 'Settings', 'System Update']
-const Addons = ['Agent', 'Crypto Exchange', 'Investment', 'Addon Manager', 'Cache Clear']
 
 
 const drawerWidth = 240;
@@ -114,6 +113,7 @@ export default function LeftNavbar({handleDrawerClose, open}) {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+            // backgroundColor: '#0f3785'
           },
         }}
         variant="persistent"
@@ -133,20 +133,20 @@ export default function LeftNavbar({handleDrawerClose, open}) {
           <React.Fragment key={item.text}>
             <ListItem disablePadding>
               <ListItemButton onClick={() => handleClick(index)} >
-                <ListItemIcon style={{color: '#e7ebf2'}}>
+                {/* <ListItemIcon style={{color: '#e7ebf2'}}>
                   {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.text} />
-                  {dropDown[index] ? <ExpandLess /> : <ExpandMore />}
+                </ListItemIcon> */}
+                <ListItemText primary={item.text} style={{color: 'orange'}} />
+                  {/* {dropDown[index] ? <ExpandLess /> : <ExpandMore />} */}
               </ListItemButton>
             </ListItem>
            
-            <Collapse in={dropDown[index]} timeout="auto" unmountOnExit >
+            {/* <Collapse in={dropDown[index]} timeout="auto" unmountOnExit > */}
               <List component="div" disablePadding >
                 {item.subItems.map((subItem, subIndex) => (
                   <ListItem key={subIndex} disablePadding >
                     <ListItemButton component="a" href={subItem.url} rel="noopener noreferrer">
-                    <ListItemIcon style={{ marginLeft: '1rem', color: 'white' }}>
+                    <ListItemIcon style={{ color: 'white' }}>
                       {subItem.icon}
                     </ListItemIcon>
                       <ListItemText primary={subItem.text} />
@@ -154,13 +154,13 @@ export default function LeftNavbar({handleDrawerClose, open}) {
                   </ListItem>
                 ))}
               </List>
-            </Collapse>
+            {/* </Collapse> */}
         </React.Fragment>
       ))}
         </List>
-        <Divider/>
+        {/* <Divider/> */}
 
-        <List style={{backgroundColor: '#0f3785', color: '#e7ebf2'}}>
+        {/* <List style={{backgroundColor: '#0f3785', color: '#e7ebf2'}}>
           {Configurations.map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
@@ -171,10 +171,10 @@ export default function LeftNavbar({handleDrawerClose, open}) {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
-        <Divider />
+        </List> */}
+        {/* <Divider /> */}
 
-        <List style={{backgroundColor: '#0f3785', color: 'white'}}>
+        {/* <List style={{backgroundColor: '#0f3785', color: 'white'}}>
           {Addons.map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
@@ -185,7 +185,7 @@ export default function LeftNavbar({handleDrawerClose, open}) {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
     </>
   )

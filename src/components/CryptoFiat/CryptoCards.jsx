@@ -41,7 +41,7 @@ export default function CryptoCards({CryptoData, loading}) {
     <Box sx={{ width: '100%' }}>
         <Skeleton />
         <Skeleton animation="wave" />
-        <Skeleton animation={'wave'} />
+        <Skeleton animation={'pulse'} />
     </Box>
    ): (
     <Carousel {...carouselSettings} >

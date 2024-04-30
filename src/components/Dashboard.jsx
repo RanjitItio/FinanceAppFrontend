@@ -1,8 +1,6 @@
 // import { useState, useEffect } from 'react';
 // import { useLocation, useNavigate } from 'react-router-dom';
-import 'bootstrap-icons/font/bootstrap-icons.css'
 import '../styles/dashboard.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import TotalBalance from './total_balance'
 import ExpenseCategory from './Expense'
 import PocketPlan from './pocket_plan'
