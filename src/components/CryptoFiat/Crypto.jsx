@@ -22,31 +22,31 @@ export default function CryptoContent() {
     const [initialCryptoConversion, setInitialCryptoConversion] = useState(0)
 
 
-    // useEffect(()=> {
-    //     let timedelay;
+    useEffect(()=> {
+        let timedelay;
 
-    //     const fetchData = async ()=> {
-    //         try {
-    //             const cryptos = 'BTC;ETH;PLN;LTC;VEN;XRP;NMC;USDT;DOGE;PPC;TRC;NVC;ORO;TOR;BRIT;BTS;NXT;MUE;KST;SONG;NAV;RICE;GEO;RED;MTLMC;TIT;CRAVE;FONZ;LUX;AIB;BTX;DRZ;HBN;BSTY;BITSD;LOG;CRW;ORB;IRL;MARS;GUN;UNO;DGB;XVG;FUNK;XMG;SAK;AC;8BIT;TES;BCF;ANI;DUO;PLC;SHA;$PAC;QRK;SJW;LEA;MOTO;FJC;SOON;ADC;BNX;V;UNIC;TTC;HYP;CTO;CFC;TEK;WDC;BLC;GDC;HYPER;MEC;CRE;WC;TRI;RBY;EUC;PAK;BLK;TRK;SKC;PRIME;VRC;CANN;INFX;START;CAPT;I0C;ZEIT;CLAM;XDC;CDN;EMC;ISL;XPM;BTCS;BOLI;VGC;GCN;SLG;MBL;BTA;NOTE;SMLY;WBB;EPC;AUR;CAP;CB;SXC;NKA;NYAN;BTB;EGC;EMD;CV2;CORG;DGC;BURST;EVO;BUCKS;XLM;GRC;PND;MINT;RBT;BKCAT;EVIL;ANTI;KLC;BITCNY;UIS;BAC;FCT;UNB;BVC;CBX;REV;NTRN;SKR;TRUMP;BIT;DASH;BLZ;GMX;DAO;ARG;FUN;VTC;BCN;OMNI;BLOCK;VIA;POT;IFC;SYNC;SWM;MAID;GAP;BITS;XUSD;INDEX;DSH;RVR;XDN;XCP;CURE;MMC;ARCH;MCN;XVC;SILK;CUBE;BXC;XTP;SMC;PENG;MEOW;POP;KRB;LBC;EL;CLOAK'
-    //             const response = await axios.get(`https://rest.coinapi.io/v1/assets/${cryptos}/`,{
-    //             headers: {
-    //                 'X-CoinAPI-Key': API_KEY
-    //             },
-    //         });
-    //             setCryptoData(response.data);
-    //             setLoading(false);
-    //             // console.log(response.data)
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //             // console.log(console.error.response)
-    //         }
-    //     };
+        const fetchData = async ()=> {
+            try {
+                const cryptos = 'BTC;ETH;PLN;LTC;VEN;XRP;NMC;USDT;DOGE;PPC;TRC;NVC;ORO;TOR;BRIT;BTS;NXT;MUE;KST;SONG;NAV;RICE;GEO;RED;MTLMC;TIT;CRAVE;FONZ;LUX;AIB;BTX;DRZ;HBN;BSTY;BITSD;LOG;CRW;ORB;IRL;MARS;GUN;UNO;DGB;XVG;FUNK;XMG;SAK;AC;8BIT;TES;BCF;ANI;DUO;PLC;SHA;$PAC;QRK;SJW;LEA;MOTO;FJC;SOON;ADC;BNX;V;UNIC;TTC;HYP;CTO;CFC;TEK;WDC;BLC;GDC;HYPER;MEC;CRE;WC;TRI;RBY;EUC;PAK;BLK;TRK;SKC;PRIME;VRC;CANN;INFX;START;CAPT;I0C;ZEIT;CLAM;XDC;CDN;EMC;ISL;XPM;BTCS;BOLI;VGC;GCN;SLG;MBL;BTA;NOTE;SMLY;WBB;EPC;AUR;CAP;CB;SXC;NKA;NYAN;BTB;EGC;EMD;CV2;CORG;DGC;BURST;EVO;BUCKS;XLM;GRC;PND;MINT;RBT;BKCAT;EVIL;ANTI;KLC;BITCNY;UIS;BAC;FCT;UNB;BVC;CBX;REV;NTRN;SKR;TRUMP;BIT;DASH;BLZ;GMX;DAO;ARG;FUN;VTC;BCN;OMNI;BLOCK;VIA;POT;IFC;SYNC;SWM;MAID;GAP;BITS;XUSD;INDEX;DSH;RVR;XDN;XCP;CURE;MMC;ARCH;MCN;XVC;SILK;CUBE;BXC;XTP;SMC;PENG;MEOW;POP;KRB;LBC;EL;CLOAK'
+                const response = await axios.get(`https://rest.coinapi.io/v1/assets/${cryptos}/`,{
+                headers: {
+                    'X-CoinAPI-Key': API_KEY
+                },
+            });
+                setCryptoData(response.data);
+                setLoading(false);
+                // console.log(response.data)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                // console.log(console.error.response)
+            }
+        };
 
-    //   timedelay = setTimeout(fetchData, 10)
+      timedelay = setTimeout(fetchData, 200)
 
-    //   return ()=> clearTimeout(timedelay);
+      return ()=> clearTimeout(timedelay);
 
-    // }, []);
+    }, []);
 
 
     useEffect(() => {
@@ -67,6 +67,7 @@ export default function CryptoContent() {
             if (Bitcoin_value_in_usd && Etherium_value_in_usd) {
                 const EtheriumperBitcoin = parseFloat(Bitcoin_value_in_usd) / parseFloat(Etherium_value_in_usd);
                 setInitialCryptoConversion(EtheriumperBitcoin);
+                console.log(EtheriumperBitcoin)
 
             } else {
                 console.log("Error: Bitcoin or Ethereum price not found");

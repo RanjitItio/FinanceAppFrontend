@@ -54,8 +54,8 @@ const NavContent = [
 
   { text: 'TRANSACTIONS', subItems: [
     {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/transactions/'},
-    {text: 'Deposit Money', icon: <AddCardIcon />, url: '/'}, 
-    {text: 'Send Money', icon: <SendIcon />, url: '/'}, 
+    {text: 'Deposit Money', icon: <AddCardIcon />, url: '/deposit/'}, 
+    {text: 'Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
     {text: 'Request Money', icon: <SwapCallsIcon />, url: '/'}, 
     {text: 'Exchange Money', icon: <CurrencyExchangeIcon />, url: '/'}, 
     {text: 'Withdrawls', icon: <PaymentsIcon />, url: '/'}, 

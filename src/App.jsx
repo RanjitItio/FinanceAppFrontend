@@ -1,7 +1,6 @@
 import PageNavbar from './components/Navbar'
 import Dashboard from './components/Dashboard'
 import Transaction from './components/Transaction'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Statistics from './components/Statitics';
 import WelcomeSection from './components/welcome';
 import Container from './components/Container';
@@ -10,7 +9,9 @@ import CardUpdate from './components/CardUpdate';
 import Settings from './components/Setting';
 import Preferences from './components/Preference';
 import PasswordReset from './components/PasswordReset';
-import FAQs from './components/FAQs';
+// import FAQs from './components/FAQs';
+// import UserDashboard from './components/UserDashboard/Dashboard';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Register from './components/Authentication/Register';
 import Login from './components/Authentication/Login';
 import ForgotPassword from './components/Authentication/ForgotPassword';
@@ -24,11 +25,11 @@ import React from "react";
 import Box from '@mui/material/Box';
 import UpperNavbar from './components/UpNavbar';
 import LeftNavbar from './components/LeftNavbar';
-import UserDashboard from './components/UserDashboard/Dashboard';
 import Transactions from './components/Transactions/Transaction';
+import DepositForm from './components/Transactions/Deposit';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-// import 'dotenv/config';
+import SendMoneyForm from './components/Transactions/SendMoney';
 
 
 
@@ -96,6 +97,8 @@ function App() {
                     <Routes>
                       <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
                       <Route exact path='/transactions/' element={<Transactions open={open} />}></Route>
+                      <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
+                      <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
                     </Routes>
                 </Box>
               </>
