@@ -328,7 +328,7 @@ export default function SendMoneyForm({open}) {
     <Main open={open}>
     <DrawerHeader />
 
-    <Paper elevation={8}  sx={{height: '150', display: 'flex', justifyContent: 'center', border: '1px solid #808080', marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '80%'}}}>
+    <Paper elevation={8}  sx={{height: '150%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '80%'}}}>
       
     <Box sx={{ width: {xs: '100%', sm: '40%'}, marginTop: {xs: '40px', sm: '1rem'}, }}>
       <p className='fs-3 d-flex justify-content-center'>Send Money</p> <br />
