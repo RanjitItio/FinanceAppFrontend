@@ -1,22 +1,19 @@
-import { useState } from 'react';
-
-
+import { useState, useEffect } from 'react';
+import axiosInstance from './axios';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 const KYCForm = () => {
-  const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
-  const [basicDetails, setBasicDetails] = useState({
+  const initialFormData = Object.freeze({
     firstName: '',
     lastName: '',
     dob: '',
     gender: '',
     maritalStatus: '',
-  });
-
-  const [contactDetails, setContactDetails] = useState({
     email: '',
     phoneNumber: '',
     address: '',
@@ -25,15 +22,19 @@ const KYCForm = () => {
     zipCode: '',
     stateOrUt: '',
     country: '',
-  });
-
-  const [personalDetails, setPersonalDetails] = useState({
     nationality: '',
     idType: '',
     idNumber: '',
     idExpiryDate: '',
-    document: null,
-  });
+    document: '',
+    user_id: '',
+  })
+
+  const [step, setStep] = useState(1);
+  const [formData, updateFormData] = useState(initialFormData);
+  const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('');
+
 
   const nextStep = () => {
     setStep(step + 1);
@@ -43,29 +44,153 @@ const KYCForm = () => {
     setStep(step - 1);
   };
 
-  const handleChange = (e, section) => {
-    const { name, value, files } = e.target;
-    const details = { ...section };
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
 
-    if (files) {
-      details[name] = files[0];
-    } else {
-      details[name] = value;
-    }
+    const first_name = urlParams.get('first_name') || '';
+    const last_name  = urlParams.get('last_name') || '';
+    const contact_no = urlParams.get('contact_number') || '';
+    const email      = urlParams.get('email') || '';
+    const user_ID    = urlParams.get('user_id') || '';
 
-    switch (section) {
-      case 'basic':
-        setBasicDetails(details);
-        break;
-      case 'contact':
-        setContactDetails(details);
-        break;
-      case 'personal':
-        setPersonalDetails(details);
-        break;
-      default:
-        break;
-    }
+    updateFormData({
+      firstName: first_name,
+      lastName: last_name,
+      phoneNumber: contact_no,
+      email: email,
+      dob: '',
+      gender: '',
+      maritalStatus: '',
+      address: '',
+      landmark: '',
+      city: '',
+      zipCode: '',
+      stateOrUt: '',
+      country: '',
+      nationality: '',
+      idType: '',
+      idNumber: '',
+      idExpiryDate: '',
+      document: '',
+      user_id: user_ID
+    })
+   
+  }, [])
+  
+  // Submit Data
+  const handleFormSubmit = async (e)=> {
+    // console.log(typeof(formData.firstName))
+      
+
+    // let validationError = [];
+
+    // if (formData.firstName == '') {
+    //     validationError.push("Please fill your First Name");
+    // }else if (formData.lastName == ''){
+    //     validationError.push("Please fill your Last Name");
+    // }else if (formData.dob == ''){
+    //     validationError.push("Please fill your Date of Birth");
+    // } else if (formData.gender) {
+    //     validationError.push("Please select your Gender");
+    // }else if (formData.maritalStatus) {
+    //     validationError.push("Please select your Marital Status");
+    // }else if (formData.email) {
+    //     validationError.push("Please fill your email Address");
+    // }else if (formData.phoneNumber) {
+    //     validationError.push("Please fill your Phone number");
+    // }else if (formData.address) {
+    //     validationError.push("Please fill your Address");
+    // }else if (formData.landmark) {
+    //     validationError.push("Please type your Landmark name");
+    // }else if (formData.city) {
+    //     validationError.push("Please fill your city name");
+    // }else if (formData.zipCode) {
+    //     validationError.push("Please fill your Zipcode");
+    // }else if (formData.stateOrUt) {
+    //     validationError.push("Please fill your State or UT");
+    // }else if (formData.country) {
+    //     validationError.push("Please fill your Country Name");
+    // }else if (formData.nationality) {
+    //     validationError.push("Please type your Nationality");
+    // }else if (formData.idType) {
+    //     validationError.push("Please select your ID Type");
+    // }else if (formData.idNumber) {
+    //     validationError.push("Please type your ID Number");
+    // }else if (formData.idExpiryDate) {
+    //     validationError.push("Please fill in ID Expiry Date");
+    // }
+
+    // if (validationError.length > 0) {
+    //   setError(validationError.join(''));
+    //   return;
+    // } else{
+    //   setError(''); 
+    // } 
+    //     await axiosInstance.post(`api/v1/user/kyc/`,{
+    //       user_id: formData.user_id,
+    //       firstname: formData.firstName ,
+    //       lastname: formData.lastName,
+    //       dateofbirth: formData.dob,
+    //       gander: formData.gender,
+    //       marital_status: formData.maritalStatus,
+    //       email: formData.email,
+    //       phoneno: formData.phoneNumber,
+    //       address: formData.address,
+    //       landmark: formData.landmark,
+    //       city: formData.city,
+    //       zipcode: formData.zipCode,
+    //       state: formData.stateOrUt,
+    //       country: formData.country,
+    //       nationality: formData.nationality,
+    //       id_type: formData.idType,
+    //       id_number: formData.idNumber,
+    //       id_expiry_date: formData.idExpiryDate,
+    //       uploaddocument: 'none'
+    //     }).then((res) => {
+    //           // console.log(res.data)
+    //           if(res.status == 200) {
+    //               setSuccessMessage(`Kyc has been submitted successfully `)
+    //               const queryString = new URLSearchParams({'first_name':formData.firstName, 'last_name':formData.lastName});
+    //               setTimeout(() => {
+    //                 navigate(`/kyc-submission-report?${queryString}`);
+    //             }, 2000);
+    //           }
+    //       }).catch((error)=> {
+    //         console.log(error.response)
+    //       });
+  }
+  
+
+  const handleChange = (e) => {
+    updateFormData({
+			...formData,
+			// Trimming any whitespace
+			[e.target.name]: e.target.value.trim(),
+		});
+
+    // const { name, value, files } = e.target;
+    // const details = { ...section };
+    // console.log(details)
+    
+    // if (files) {
+    //   details[name] = files[0];
+    // } else {
+    //   details[name] = value;
+    // }
+
+    // switch (section) {
+    //   case 'basic':
+    //     setBasicDetails(details);
+    //     break;
+    //   case 'contact':
+    //     setContactDetails(details);
+    //     break;
+    //   case 'personal':
+    //     setPersonalDetails(details);
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
   
   
@@ -81,8 +206,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="firstName"
-                  value={basicDetails.firstName}
-                  onChange={(e) => handleChange(e, 'basic')}
+                  value={formData.firstName}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -91,8 +216,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="lastName"
-                  value={basicDetails.lastName}
-                  onChange={(e) => handleChange(e, 'basic')}
+                  value={formData.lastName}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -101,8 +226,8 @@ const KYCForm = () => {
                 <input
                   type="date"
                   name="dob"
-                  value={basicDetails.dob}
-                  onChange={(e) => handleChange(e, 'basic')}
+                  value={formData.dob}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -110,8 +235,8 @@ const KYCForm = () => {
                 <label className="block text-sm font-medium text-gray-700">Gender</label>
                 <select
                   name="gender"
-                  value={basicDetails.gender}
-                  onChange={(e) => handleChange(e, 'basic')}
+                  value={formData.gender}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 >
                   <option value="">Select Gender</option>
@@ -124,8 +249,8 @@ const KYCForm = () => {
                 <label className="block text-sm font-medium text-gray-700">Marital Status</label>
                 <select
                   name="maritalStatus"
-                  value={basicDetails.maritalStatus}
-                  onChange={(e) => handleChange(e, 'basic')}
+                  value={formData.maritalStatus}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 >
                   <option value="">Select Marital Status</option>
@@ -152,8 +277,8 @@ const KYCForm = () => {
                 <input
                   type="email"
                   name="email"
-                  value={contactDetails.email}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.email}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -162,8 +287,8 @@ const KYCForm = () => {
                 <input
                   type="tel"
                   name="phoneNumber"
-                  value={contactDetails.phoneNumber}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -172,8 +297,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="address"
-                  value={contactDetails.address}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.address}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -182,8 +307,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="landmark"
-                  value={contactDetails.landmark}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.landmark}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -192,8 +317,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="city"
-                  value={contactDetails.city}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.city}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -202,8 +327,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="zipCode"
-                  value={contactDetails.zipCode}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.zipCode}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -212,8 +337,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="stateOrUt"
-                  value={contactDetails.stateOrUt}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.stateOrUt}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -222,8 +347,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="country"
-                  value={contactDetails.country}
-                  onChange={(e) => handleChange(e, 'contact')}
+                  value={formData.country}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -244,8 +369,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="nationality"
-                  value={personalDetails.nationality}
-                  onChange={(e) => handleChange(e, 'personal')}
+                  value={formData.nationality}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -253,8 +378,8 @@ const KYCForm = () => {
                 <label className="block text-sm font-medium text-gray-700">ID Type</label>
                 <select
                   name="idType"
-                  value={personalDetails.idType}
-                  onChange={(e) => handleChange(e, 'personal')}
+                  value={formData.idType}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 >
                   <option value="">Select ID Type</option>
@@ -269,8 +394,8 @@ const KYCForm = () => {
                 <input
                   type="text"
                   name="idNumber"
-                  value={personalDetails.idNumber}
-                  onChange={(e) => handleChange(e, 'personal')}
+                  value={formData.idNumber}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -279,8 +404,8 @@ const KYCForm = () => {
                 <input
                   type="date"
                   name="idExpiryDate"
-                  value={personalDetails.idExpiryDate}
-                  onChange={(e) => handleChange(e, 'personal')}
+                  value={formData.idExpiryDate}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
@@ -289,15 +414,16 @@ const KYCForm = () => {
                 <input
                   type="file"
                   name="document"
-                  onChange={(e) => handleChange(e, 'personal')}
+                  onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
             </div>
             <div className="flex justify-between mt-6">
               <button onClick={prevStep} className="bg-gray-400 text-white p-2 rounded-md mr-2">Previous</button>
-              <button className="bg-blue-500 text-white p-2 rounded-md">Submit</button>
+              <button className="bg-blue-500 text-white p-2 rounded-md" onClick={handleFormSubmit}>Submit</button>
             </div>
+            {error &&  <p className="text-danger">{error}</p>}
           </div>
         );
       default:
@@ -318,8 +444,8 @@ const KYCForm = () => {
             <span className="text-xs text-gray-500">Step {step} of 3</span>
             <span className="text-xs text-gray-500">Progress: {(step - 1) * 33.33}%</span>
           </div>
-          <div class="w-full bg-gray-200 rounded-full dark:bg-gray-200">
-            <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full " style={{ width: `${(step - 1) * 33.33}%` }}> Progress: {(step - 1) * 33.33}%</div>
+          <div className="w-full bg-gray-200 rounded-full dark:bg-gray-200">
+            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full " style={{ width: `${(step - 1) * 33.33}%` }}> Progress: {(step - 1) * 33.33}%</div>
           </div>
         </div>
         {renderStep()}

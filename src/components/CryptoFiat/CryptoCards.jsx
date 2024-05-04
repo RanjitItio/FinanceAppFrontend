@@ -57,13 +57,12 @@ export default function CryptoCards({CryptoData, loading}) {
                         className="d-flex align-items-center justify-content-center rounded-circle"
                         style={{ width: "45px", height: "45px", backgroundColor: 'item.coin_color' }}
                       >
-                        {CryptoIcons.map((icon, index)=> (
+                        {/* {CryptoIcons.map((icon, index)=> (
                             <div key={index}>
                                 {!imageLoader && <CircularProgress />}
                             <img src={icon.asset_id == item.asset_id ? icon.url : 'icon' } alt={''} style={{ display: imageLoader ? 'block' : 'none' }} onLoad={() => setImageLoader(true)} />
                             </div>
-                        ))}
-                        
+                        ))} */}
                         {/* <i className="bi bi-currency-bitcoin" style={{ color: "green", fontSize: "20px" }}></i> */}
                       </div>
                       &nbsp;

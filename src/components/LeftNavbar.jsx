@@ -9,23 +9,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import React from 'react';
 import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
-import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
-import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
-import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
-import NorthOutlinedIcon from '@mui/icons-material/NorthOutlined';
-import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
-import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AddCardIcon from '@mui/icons-material/AddCard';
@@ -72,6 +57,8 @@ const NavContent = [
 
   { text: 'ADDONS', subItems: [
     {text: 'Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
+    {text: 'Crypto Buy', icon: <RotateRightIcon />, url: '/crypto-buy/'},
+    {text: 'Crypto Sell', icon: <RotateRightIcon />, url: '/crypto-sell/'},
     {text: 'Investments', icon: <StorageIcon />, url: '/'},
     ],
     icon: ''
@@ -160,32 +147,9 @@ export default function LeftNavbar({handleDrawerClose, open}) {
         </List>
         {/* <Divider/> */}
 
-        {/* <List style={{backgroundColor: '#0f3785', color: '#e7ebf2'}}>
-          {Configurations.map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon style={{color: '#e7ebf2'}}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
-        {/* <Divider /> */}
+        
 
-        {/* <List style={{backgroundColor: '#0f3785', color: 'white'}}>
-          {Addons.map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon style={{color: 'white'}}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
+       
       </Drawer>
     </>
   )

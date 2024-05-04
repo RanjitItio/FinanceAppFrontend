@@ -9,7 +9,7 @@ import CardUpdate from './components/CardUpdate';
 import Settings from './components/Setting';
 import Preferences from './components/Preference';
 import PasswordReset from './components/PasswordReset';
-// import FAQs from './components/FAQs';
+import FAQs from './components/FAQs';
 // import UserDashboard from './components/UserDashboard/Dashboard';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Register from './components/Authentication/Register';
@@ -30,6 +30,9 @@ import DepositForm from './components/Transactions/Deposit';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import SendMoneyForm from './components/Transactions/SendMoney';
+import CryptoBuy from './components/CryptoTransactions/CryptoBuy';
+import CryptoSell from './components/CryptoTransactions/CryptoSell';
+
 
 
 
@@ -65,7 +68,7 @@ function App() {
             <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
             <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
 
-            {/* <Route exact path='*' element={
+            {/* <Route exact path='user/*' element={
               <>
                   <PageNavbar />
                   <WelcomeSection />
@@ -99,6 +102,8 @@ function App() {
                       <Route exact path='/transactions/' element={<Transactions open={open} />}></Route>
                       <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
                       <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
+                      <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
+                      <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

@@ -83,10 +83,9 @@ function Register() {
             return;
         } else{
             setError(''); 
-           
         }
-        
-        await axiosInstance.post(`api/v1/user/register/`, {
+
+      await axiosInstance.post(`api/v1/user/register/`, {
             firstname: formData.first_name,
             lastname: formData.last_name,
             phoneno: formData.contact_number,
@@ -96,7 +95,27 @@ function Register() {
             is_merchent: true
         })
         .then((res) => {
+            // console.log(res.data.msg)
+            const response_msg = res.data.msg;
+            const match = response_msg.match(/\d+$/);
+            if (match) {
+              const user_ID = parseInt(match[0])
+              console.log("Last number:", user_ID);
+            } else {
+              console.log("No number found at the end of the string.");
+            }
+
             if(res.status == 201) {
+                const response_msg = res.data.msg;
+                const match = response_msg.match(/\d+$/);
+                if (match) {
+                  const user_ID = parseInt(match[0])
+                  filteredFormData.user_id = user_ID;
+                  // console.log("User:", user_ID);
+                } else {
+                  console.log("No number found at the end of the string.");
+                }
+
                 setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
                 const queryString = new URLSearchParams(filteredFormData).toString();
                 setTimeout(() => {
