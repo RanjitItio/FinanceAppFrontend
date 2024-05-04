@@ -12,10 +12,8 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
-import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
-// import Textarea from './TextArea';
 import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -28,68 +26,97 @@ import StepLabel from '@mui/material/StepLabel';
 
 
 
-function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmount, setError, error}) {
+function Form1({...props}) {
 
     const [totalFee, setTotalFee] = React.useState('')
   
-    const handleCurrencyChange = (event)=> {
-      setCurrency(event.target.value)
+    const handleUserSendCurrencyChange = (event)=> {
+      props.setUserSendCurrency(event.target.value)
   
       if(!event.target.value) {
-        setError('Please fill all the above fields')
+        props.setError('Please fill all the above fields')
       }else {
-        setError('')
+        props.setError('')
   
         localStorage.setItem('UsersendMoneyCurrency', event.target.value)
-        const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+        const expirationTime = 5 * 60 * 1000;// 10 minutes in milliseconds
   
         setTimeout(() => {
           localStorage.removeItem('UsersendMoneyCurrency')
       }, expirationTime);
   
       }
-    }
+    };
+
+    const handleUserGetCurrencyChange = (event)=> {
+      props.setUserGetCurrency(event.target.value)
   
-    const handleEmailChange = (event)=> {
-      setUsersemail(event.target.value)
       if(!event.target.value) {
-        setError('Please fill all the above fields')
+        props.setError('Please fill all the above fields')
       }else {
-        setError('')
-        localStorage.setItem('usersEmail', event.target.value)
+        props.setError('')
   
-        const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+        localStorage.setItem('UserGetMoneyCurrency', event.target.value)
+        const expirationTime = 5 * 60 * 1000;// 10 minutes in milliseconds
   
         setTimeout(() => {
-            localStorage.removeItem('usersEmail')
-        }, expirationTime);
-      }
-    }
+          localStorage.removeItem('UserGetMoneyCurrency')
+      }, expirationTime);
   
-    const handleAmountChange = (event)=> {
-      setAmount(event.target.value)
-      if(!event.target.value) {
-        setError('Please fill all the above fields')
+      }
+    };
+  
+  
+    const handleUserSendAmountChange = (event)=> {
+      const value = event.target.value;
+      props.setUserSendAmount(value);
+      // console.log(value)
+
+      if(!value) {
+        props.setError('Please fill all the above fields')
       } else {
-        setError('')
+        props.setError('')
   
         localStorage.setItem('userSendMoneyAmount', event.target.value)
   
-        const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+        const expirationTime = 5 * 60 * 1000;// 10 minutes in milliseconds
   
         setTimeout(() => {
           localStorage.removeItem('userSendMoneyAmount')
       }, expirationTime);
   
       }
+    };
+
+    const handleUserGetAmountChange = (event)=> {
+      const value = event.target.value
+      props.setUserGetAmount(value)
+
+      if(!value) {
+        props.setError('Please fill all the above fields')
+      } else {
+        props.setError('')
+  
+        localStorage.setItem('userGetMoneyAmount', event.target.value)
+  
+        const expirationTime = 5 * 60 * 1000;// 10 minutes in milliseconds
+  
+        setTimeout(() => {
+          localStorage.removeItem('userGetMoneyAmount')
+      }, expirationTime);
+        }
     }
   
     useEffect(() => {
-      if(amount) {
-        const TotalFeeAmount = (((amount / 100) * 2.5) + 3)
-        setTotalFee(TotalFeeAmount)
-      }
-    }, [amount])
+      setTimeout(() => {
+        const value = props.userSendAmount;
+        if(value) {
+          const TotalFeeAmount = (((props.userSendAmount / 100) * 2.5) + 3)
+          setTotalFee(TotalFeeAmount)
+        }
+      }, 2000);
+
+    }, [props.userSendAmount]);
 
   
     return(
@@ -104,25 +131,25 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
                 <FormControl sx={{ m: 1, minWidth: 100, width: '99%' }} >
                 <TextField
                     hiddenLabel
-                    id="amount-field"
+                    id="send-amount-field"
                     // variant="filled"
                     size="small"
-                    value={amount}
+                    value={props.userSendAmount}
                     placeholder='Amount'
                     sx={{width: '95%'}}
-                    onChange={handleAmountChange}
+                    onChange={handleUserSendAmountChange}
                 />
                 </FormControl>
             </Grid>
             <Grid item xs={12} lg={5}>
             <FormControl sx={{ m: 1, minWidth: 120, width: {xs: '95%', sm: '90%'} }} size="small">
-                <InputLabel id="currency-label">Currency</InputLabel>
+                <InputLabel id="send-currency-label">Currency</InputLabel>
                 <Select
-                    labelId="currency-label"
-                    id="currency-label"
-                    value={currency}
+                    labelId="send-currency-label"
+                    id="send-currency-label"
+                    value={`${props.userSendcurrency}`}
                     label="USD"
-                    onChange={handleCurrencyChange}
+                    onChange={handleUserSendCurrencyChange}
                 >
                     <MenuItem value="">
                     <em>None</em>
@@ -149,10 +176,10 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
                     id="you-get-field"
                     // variant="outlined"
                     size="small"
-                    value={amount}
+                    value={props.userGetAmount}
                     placeholder='You Get'
                     sx={{width: '95%'}}
-                    onChange={handleAmountChange}
+                    onChange={handleUserGetAmountChange}
                 />
                 </FormControl>
             </Grid>
@@ -163,58 +190,65 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
                 <Select
                     labelId="get-currency-label"
                     id="get-currency-label"
-                    value={currency}
+                    value={props.userGetcurrency}
                     label="USD"
-                    onChange={handleCurrencyChange}
+                    onChange={handleUserGetCurrencyChange}
                 >
                     <MenuItem value="">
                     <em>None</em>
                     </MenuItem>
-                    <MenuItem value={'USD'}>LTC</MenuItem>
-                    <MenuItem value={'EUR'}>ETH</MenuItem>
-                    <MenuItem value={'INR'}>DOGE</MenuItem>
-                    <MenuItem value={'GBP'}>BNB</MenuItem>
-                    <MenuItem value={'GBP'}>ADA</MenuItem>
-                    <MenuItem value={'GBP'}>SOL</MenuItem>
-                    <MenuItem value={'GBP'}>USDT</MenuItem>
-                    <MenuItem value={'GBP'}>XRP</MenuItem>
-                    <MenuItem value={'GBP'}>BTC</MenuItem>
+                    <MenuItem value={'LTC'}>LTC</MenuItem>
+                    <MenuItem value={'ETH'}>ETH</MenuItem>
+                    <MenuItem value={'DOGE'}>DOGE</MenuItem>
+                    <MenuItem value={'BNB'}>BNB</MenuItem>
+                    <MenuItem value={'ADA'}>ADA</MenuItem>
+                    <MenuItem value={'SOL'}>SOL</MenuItem>
+                    <MenuItem value={'USDT'}>USDT</MenuItem>
+                    <MenuItem value={'XRP'}>XRP</MenuItem>
+                    <MenuItem value={'BTC'}>BTC</MenuItem>
                 </Select>
-                <FormHelperText>Fee (2.5%+3) Total Fee: {totalFee}</FormHelperText>
+                {/* <FormHelperText>Fee (2.5%+3) Total Fee: {totalFee}</FormHelperText> */}
                 
             </FormControl>
             </Grid>
         </Grid>
-        {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
+          
+        {props.error && 
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+                {props.error} 
+            </Alert>
+        }
   
       </>
     )
   }
   
   
-  function Form2() {
-    const [localMail, setLocalMail] = React.useState('')
-    const [typedCurrency, setTypedCurrency] = React.useState('')
-    const [typedAmount, setTypedAmount] = React.useState('')
-    const [age, setAge] = React.useState('');
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
+function Form2() {
+    const [typedUserSendCurrency, setTypedUserSendCurrency] = React.useState('')
+    const [typedUserSendAmount, setTypedUserSendAmount] = React.useState('')
+    const [typedUserGetCurrency, setTypedUserGetCurrency] = React.useState('')
+    const [typedUserGetAmount, setTypedUserGetAmount] = React.useState('')
+    
   
     useEffect(()=> {
-      const StoredMail = localStorage.getItem('usersEmail');
-      const UserTypedAmount = localStorage.getItem('userSendMoneyAmount');
-      const UserTypedCurrency = localStorage.getItem('UsersendMoneyCurrency');
+      const userSendCurrency = localStorage.getItem('UsersendMoneyCurrency');
+      const userGetCurrency = localStorage.getItem('UserGetMoneyCurrency');
+      const UserTypedSendAmount = localStorage.getItem('userSendMoneyAmount');
+      const UserTypedGetAmount = localStorage.getItem('userGetMoneyAmount');
   
-      if(StoredMail) {
-        setLocalMail(StoredMail);
+      if(userSendCurrency) {
+        setTypedUserSendCurrency(userSendCurrency);
       }
-      if(UserTypedAmount) {
-        setTypedAmount(UserTypedAmount);
+      if(userGetCurrency) {
+        setTypedUserGetCurrency(userGetCurrency);
       }
-      if(UserTypedCurrency) {
-        setTypedCurrency(UserTypedCurrency);
+      if(UserTypedSendAmount) {
+        setTypedUserSendAmount(UserTypedSendAmount);
+      }
+      if(UserTypedGetAmount) {
+        setTypedUserGetAmount(UserTypedGetAmount);
       }
     }, [])
     
@@ -247,7 +281,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
         >
             <div style={{marginLeft: '10%', marginTop: '10%'}}>
                 <p>You Send</p>
-                <p><b>10.00 USD</b></p>
+                <p><b>{typedUserSendAmount}.00 {typedUserSendCurrency}</b></p>
                 <small>Fees ~ 2.5 USD</small>
             </div>
             
@@ -257,36 +291,42 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
                  position: 'absolute',
                  top: '39.3%',transform: 'translateY(-50%)',
             }}/> */}
-      <Paper elevation={3} sx={{
+        <Paper elevation={3} sx={{
             width: '40%', height: '7rem',
             backgroundColor: '#845EC2'
              }}
              >
             <div style={{marginLeft: '10%', marginTop: '10%', color: 'white'}}>
                 <p>You Send</p>
-                <p><b>10.00 USD</b></p>
+                <p><b>{typedUserGetAmount}.00 {typedUserGetCurrency}</b></p>
                 <small>Fees ~ 2.5 USD</small>
             </div> 
       </Paper>
     </Box>
 
     <FormControl sx={{ m: 1, minWidth: 120, width: '80%' , marginLeft: '10%', marginTop: '18px'}} size="small">
-      <InputLabel id="received-select-crypto-label">LTC Address</InputLabel>
+      <InputLabel id="received-select-crypto-label"> {typedUserGetCurrency} Address</InputLabel>
       <Select
         labelId="received-select-crypto-label"
         id="received-crypto-small"
-        value={age}
-        label="Age"
-        defaultValue='LTC Address'
-        onChange={handleChange}
+        value={`${typedUserGetCurrency}`}
+        label="Currency"
         readOnly
       >
-        {/* <MenuItem value="">
+        <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem> */}
+        <MenuItem value={'INR'}>INR</MenuItem>
+        <MenuItem value={'BTC'}>BTC</MenuItem>
+        <MenuItem value={'ETH'}>ETH</MenuItem>
+        <MenuItem value={'GBP'}>GBP</MenuItem>
+        <MenuItem value={'LTC'}>LTC</MenuItem>
+        <MenuItem value={'DOGE'}>DOGE</MenuItem>
+        <MenuItem value={'BNB'}>BNB</MenuItem>
+        <MenuItem value={'ADA'}>ADA</MenuItem>
+        <MenuItem value={'SOL'}>SOL</MenuItem>
+        <MenuItem value={'USDT'}>USDT</MenuItem>
+        <MenuItem value={'XRP'}>XRP</MenuItem>
       </Select>
     </FormControl>
 
@@ -299,10 +339,10 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
       <Select
         labelId="payment-select-method-label"
         id="payment-method-small"
-        value={age}
-        label="Age"
-        defaultValue='LTC Address'
-        onChange={handleChange}
+        value='bank'
+        label="payment method"
+        // defaultValue='LTC Address'
+        // onChange={handleChange}
       >
         <MenuItem value="">
           <em>None</em>
@@ -327,11 +367,12 @@ export default function CryptoBuy({open}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
-  const [currency, setCurrency] = React.useState('');
-  const [usersEmail, setUsersemail] = React.useState('');
-  const [amount, setAmount] = React.useState('');
+  const [userSendcurrency, setUserSendCurrency] = React.useState('');
+  const [userSendAmount, setUserSendAmount] = React.useState('');
+  const [userGetcurrency, setUserGetCurrency] = React.useState('');
+  const [userGetAmount, setUserGetAmount] = React.useState('');
   const [error, setError] = React.useState('');
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
 
   const totalSteps = () => {
@@ -358,12 +399,12 @@ export default function CryptoBuy({open}) {
           steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
 
-        // if (activeStep == 0) {
-        //   if (!currency || !amount || !usersEmail) {
-        //     setError('Please fill all the above fields');
-        //     return;
-        //   }
-        // }
+        if (activeStep == 0) {
+          if (!userSendcurrency || !userSendAmount || !userGetcurrency || !userGetAmount) {
+            setError('Please fill all the above fields');
+            return;
+          }
+        }
     setActiveStep(newActiveStep);
   };
 
@@ -377,21 +418,21 @@ export default function CryptoBuy({open}) {
 
   const handleComplete = () => {
     const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
+    // newCompleted[activeStep] = true;
+    // setCompleted(newCompleted);
 
-    // if (activeStep == 0) {
-    //   if (!currency || !amount || !usersEmail) {
-    //     setError('Please fill all the above fields');
-    //     return;
-    //   }else {
-    //     newCompleted[activeStep] = true;
-    //     setCompleted(newCompleted);
-    //   }
-    // } else {
-    //     newCompleted[activeStep] = true;
-    //     setCompleted(newCompleted);
-    // }
+    if (activeStep == 0) {
+      if (!userSendcurrency || !userSendAmount || !userGetcurrency || !userGetAmount) {
+        setError('Please fill all the above fields');
+        return;
+      }else {
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+      }
+    } else {
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+    }
     
  
   handleNext();
@@ -406,12 +447,14 @@ export default function CryptoBuy({open}) {
     switch(step){
       case 0:
         return <Form1
-        currency={currency}
-        setCurrency={setCurrency}
-        usersEmail={usersEmail}
-        setUsersemail={setUsersemail}
-        amount={amount}
-        setAmount={setAmount}
+        userSendcurrency={userSendcurrency}
+        setUserSendCurrency={setUserSendCurrency}
+        userSendAmount={userSendAmount}
+        setUserSendAmount={setUserSendAmount}
+        userGetcurrency={userGetcurrency}
+        setUserGetCurrency={setUserGetCurrency}
+        userGetAmount={userGetAmount}
+        setUserGetAmount={setUserGetAmount}
         error={error}
         setError={setError}
           />;
@@ -439,7 +482,8 @@ export default function CryptoBuy({open}) {
             backgroundColor: 'rgba( 255, 255, 255, 0.3 )',
             // backgroundColor: 'white',
             borderRadius: '20px',
-            backdropFilter: 'blur( 20px )'
+            backdropFilter: 'blur( 20px )',
+            boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff'
         }}
         elevation={24}>
       <p className='fs-3 d-flex justify-content-center'>Crypto Buy</p> <br />

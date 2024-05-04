@@ -27,6 +27,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Textarea from '../Transactions/TextArea';
 import Input from '@mui/material/Input';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Snackbar from '@mui/material/Snackbar';
 
 
 
@@ -34,68 +35,86 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 
 
-function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmount, setError, error}) {
+function Form1({...props}) {
 
     const [totalFee, setTotalFee] = React.useState('')
   
-    const handleCurrencyChange = (event)=> {
-      setCurrency(event.target.value)
+    const handleUserSendCurrencyChange = (event)=> {
+      props.setSendCurrency(event.target.value)
   
       if(!event.target.value) {
-        setError('Please fill all the above fields')
+        props.setError('Please fill all the above fields')
       }else {
-        setError('')
+        props.setError('')
   
-        localStorage.setItem('UsersendMoneyCurrency', event.target.value)
-        const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+        localStorage.setItem('CryptosellUserSendCurrency', event.target.value)
+        const expirationTime = 5 * 60 * 1000;// 10 minutes in milliseconds
   
         setTimeout(() => {
-          localStorage.removeItem('UsersendMoneyCurrency')
+          localStorage.removeItem('CryptosellUserSendCurrency')
       }, expirationTime);
   
       }
+    };
+
+    const handleUserGetCurrencyChange = (event)=> {
+      props.setGetCurrency(event.target.value)
+  
+      if(!event.target.value) {
+        props.setError('Please fill all the above fields')
+      }else {
+        props.setError('')
+      }
+
+      localStorage.setItem('CryptosellUserGetCurrency', event.target.value)
+      const expirationTime = 5 * 60 * 1000;// 5 minutes in milliseconds
+  
+      setTimeout(() => {
+          localStorage.removeItem('CryptosellUserGetCurrency')
+      }, expirationTime);
+
     }
   
-    const handleEmailChange = (event)=> {
-      setUsersemail(event.target.value)
+    const handleUserGetAmountChange = (event)=> {
+      props.updateUserGetAmount(event.target.value)
       if(!event.target.value) {
-        setError('Please fill all the above fields')
+        props.setError('Please fill all the above fields')
       }else {
-        setError('')
-        localStorage.setItem('usersEmail', event.target.value)
+        props.setError('')
+      }
+
+      localStorage.setItem('CryptosellUserGetAmount', event.target.value)
+      const expirationTime = 5 * 60 * 1000;// 5 minutes in milliseconds
   
-        const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+      setTimeout(() => {
+          localStorage.removeItem('CryptosellUserGetAmount')
+      }, expirationTime);
+    }
+   
+    const handleAmountChange = (event)=> {
+      props.setAmount(event.target.value)
+      // console.log(props.amount)
+      if(!event.target.value) {
+        props.setError('Please fill all the above fields')
+      } else {
+        props.setError('')
+  
+        localStorage.setItem('userCryptoAmountSend', event.target.value)
+  
+        const expirationTime = 5 * 60 * 1000;// 10 minutes in milliseconds
   
         setTimeout(() => {
-            localStorage.removeItem('usersEmail')
+          localStorage.removeItem('userCryptoAmountSend')
         }, expirationTime);
       }
     }
   
-    const handleAmountChange = (event)=> {
-      setAmount(event.target.value)
-      if(!event.target.value) {
-        setError('Please fill all the above fields')
-      } else {
-        setError('')
-  
-        localStorage.setItem('userSendMoneyAmount', event.target.value)
-  
-        const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
-  
-        setTimeout(() => {
-          localStorage.removeItem('userSendMoneyAmount')
-      }, expirationTime);
-  
-      }
-    }
-  
-    useEffect(() => {
-      if(amount) {
-        const TotalFeeAmount = (((amount / 100) * 2.5) + 3)
-        setTotalFee(TotalFeeAmount)
-      }
-    }, [amount])
+    // useEffect(() => {
+    //   if(amount) {
+    //     const TotalFeeAmount = (((amount / 100) * 2.5) + 3)
+    //     setTotalFee(TotalFeeAmount)
+    //   }
+    // }, [amount])
 
   
     return(
@@ -113,7 +132,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
                     id="amount-field"
                     // variant="filled"
                     size="small"
-                    value={amount}
+                    value={props.amount}
                     placeholder='Amount'
                     sx={{width: '95%'}}
                     onChange={handleAmountChange}
@@ -122,13 +141,13 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
             </Grid>
             <Grid item xs={12} lg={5}>
             <FormControl sx={{ m: 1, minWidth: 120, width: {xs: '95%', sm: '90%'} }} size="small">
-                <InputLabel id="currency-label">Currency</InputLabel>
+                <InputLabel id="send-currency-label">Currency</InputLabel>
                 <Select
-                    labelId="currency-label"
-                    id="currency-label"
-                    value={currency}
+                    labelId="send-currency-label"
+                    id="send-currency-label"
+                    value={props.sendCurrency}
                     label="USD"
-                    onChange={handleCurrencyChange}
+                    onChange={handleUserSendCurrencyChange}
                 >
                     <MenuItem value="">
                     <em>None</em>
@@ -155,23 +174,23 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
                     id="you-get-field"
                     // variant="outlined"
                     size="small"
-                    value={amount}
+                    value={props.userGetAmount}
                     placeholder='You Get'
                     sx={{width: '95%'}}
-                    onChange={handleAmountChange}
+                    onChange={handleUserGetAmountChange}
                 />
                 </FormControl>
             </Grid>
 
             <Grid item xs={12} lg={5}>
             <FormControl sx={{ m: 1, minWidth: 120, width: {xs: '95%', sm: '90%'} }} size="small">
-                <InputLabel id="currency-label">Currency</InputLabel>
+                <InputLabel id="get-currency-label">Currency</InputLabel>
                 <Select
                     labelId="get-currency-label"
                     id="get-currency-label"
-                    value={currency}
+                    value={props.getCurrency}
                     label="USD"
-                    onChange={handleCurrencyChange}
+                    onChange={handleUserGetCurrencyChange}
                 >
                     <MenuItem value="">
                     <em>None</em>
@@ -191,7 +210,8 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
             </FormControl>
             </Grid>
         </Grid>
-        {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
+  
+        {props.error && <Alert severity="error" >{props.error}</Alert>}
   
       </>
     )
@@ -199,30 +219,36 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
   
   
   function Form2() {
-    const [localMail, setLocalMail] = React.useState('')
-    const [typedCurrency, setTypedCurrency] = React.useState('')
-    const [typedAmount, setTypedAmount] = React.useState('')
+    const [userSendCurrency, UpdateUserSendCurrency] = React.useState('')
+    const [userSendAmount, updateUserSendAmount] = React.useState('')
+    const [userGetCurrency, updateUserGetCurrency] = React.useState('')
+    const [userGetAmount, updateUserGetAmount] = React.useState('')
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
         setAge(event.target.value);
     };
   
-    // useEffect(()=> {
-    //   const StoredMail = localStorage.getItem('usersEmail');
-    //   const UserTypedAmount = localStorage.getItem('userSendMoneyAmount');
-    //   const UserTypedCurrency = localStorage.getItem('UsersendMoneyCurrency');
+    useEffect(()=> {
+      const StoredLocalUserSendCurrency = localStorage.getItem('CryptosellUserSendCurrency');
+      const StoredLocalUserSendAmount = localStorage.getItem('userCryptoAmountSend');
+      const StoredLocalUserGetCurrency = localStorage.getItem('CryptosellUserGetCurrency');
+      const StoredLocalUserGetAmount = localStorage.getItem('CryptosellUserGetAmount');
   
-    //   if(StoredMail) {
-    //     setLocalMail(StoredMail);
-    //   }
-    //   if(UserTypedAmount) {
-    //     setTypedAmount(UserTypedAmount);
-    //   }
-    //   if(UserTypedCurrency) {
-    //     setTypedCurrency(UserTypedCurrency);
-    //   }
-    // }, [])
+      if(StoredLocalUserSendCurrency) {
+        UpdateUserSendCurrency(StoredLocalUserSendCurrency);
+      }
+      if(StoredLocalUserSendAmount) {
+        updateUserSendAmount(StoredLocalUserSendAmount);
+      }
+      if(StoredLocalUserGetCurrency) {
+        updateUserGetCurrency(StoredLocalUserGetCurrency);
+      }
+      if(StoredLocalUserGetAmount) {
+        updateUserGetAmount(StoredLocalUserGetAmount);
+      }
+      
+    }, [])
     
     
     return(
@@ -251,7 +277,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
         >
             <div style={{marginLeft: '10%', marginTop: '10%'}}>
                 <p>You Send</p>
-                <p><b>10.00 USD</b></p>
+                <p><b>{userSendAmount}.00 {userSendCurrency}</b></p>
                 <small>Fees ~ 2.5 USD</small>
             </div>
             
@@ -267,22 +293,22 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
              }}
              >
             <div style={{marginLeft: '10%', marginTop: '10%', color: 'white'}}>
-                <p>You Send</p>
-                <p><b>10.00 USD</b></p>
+                <p>You Get</p>
+                <p><b>{userGetAmount}.00 {userGetCurrency}</b></p>
                 <small>Fees ~ 2.5 USD</small>
             </div> 
       </Paper>
     </Box>
 
     <FormControl sx={{ m: 1, minWidth: 120, width: '80%' , marginLeft: '10%', marginTop: '18px'}} size="small">
-      <InputLabel id="received-select-crypto-label">LTC Address</InputLabel>
+      <InputLabel id="received-select-crypto-label">{userSendCurrency} Address</InputLabel>
       <Select
         labelId="received-select-crypto-label"
         id="received-crypto-small"
-        value={age}
+        value={userSendCurrency}
         label="Age"
-        defaultValue='LTC Address'
-        onChange={handleChange}
+        // defaultValue='LTC Address'
+        // onChange={handleChange}
         readOnly
       >
         {/* <MenuItem value="">
@@ -297,40 +323,40 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
     <Grid container sx={{marginLeft: '13%'}}>
         <Grid item xs={12} sm={12} md={5} sx={{marginTop: '8%'}}>
             <small>Please make payment</small>
-            <p className='fs-3'><b>0.00205 <span style={{color: '#845EC2'}}>LTC</span></b></p>
+            <p className='fs-3'><b>0.00205 <span style={{color: '#845EC2'}}>{userSendCurrency}</span></b></p>
             <small>To our merchant address below</small>
         </Grid>
+
         <Grid item xs={12} sm={12} md={7}>
              <QrCode2Icon sx={{fontSize: '30vh'}} />
         </Grid>
+
         <Grid item xs={12}>
-        <TextField id="outlined-basic" variant="outlined" size='small'
-        sx={{width: '80%'}}
-        readOnly
-        value={'werHBJKKjbjjJJNJN656hyBGFGCBJ6ugghv'}
-        InputProps={{
-            endAdornment: (
-                <IconButton edge="end" aria-label="location">
-                <ContentCopyIcon />
-                </IconButton>
-            ),
-            }}/>
+          <TextField id="outlined-basic" variant="outlined" size='small'
+          sx={{width: '80%'}}
+          readOnly
+          value={'werHBJKKjbjjJJNJN656hyBGFGCBJ6ugghv'}
+          InputProps={{
+              endAdornment: (
+                  <IconButton edge="end" aria-label="location">
+                  <ContentCopyIcon />
+                  </IconButton>
+              ),
+              }}/>
 
            <Textarea aria-label="minimum height" minRows={3} 
-                placeholder="Minimum 3 rows"
+                placeholder="Payment Details"
                 sx={{width: '80%', marginTop: '15px'}} />
 
             <TextField
                 type="file"
                 variant="outlined"
                 size='small'
-                inputProps={{ accept: 'image/*' }} // Specify the accepted file types
+                inputProps={{ accept: 'image/*' }}
                 sx={{ width: '80%', marginTop: '15px' }}
             />
         </Grid>
-
     </Grid>
-  
       </>
     )
   }
@@ -340,19 +366,20 @@ const steps = ['Setup Currency', 'Confirm Swap'];
 
 
 
+
 export default function CryptoSell({open}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
-  const [currency, setCurrency] = React.useState('');
-  const [usersEmail, setUsersemail] = React.useState('');
-  const [amount, setAmount] = React.useState('');
   const [error, setError] = React.useState('');
-  const navigate = useNavigate()
+  const [amount, setAmount] = React.useState('');
+  const [sendCurrency, setSendCurrency] = React.useState('');
+  const [getCurrency, setGetCurrency] = React.useState('');
+  const [userGetAmount, updateUserGetAmount] = React.useState('');
 
 
   const totalSteps = () => {
-    return steps.length;
+      return steps.length;
   };
 
   const completedSteps = () => {
@@ -375,12 +402,12 @@ export default function CryptoSell({open}) {
           steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
 
-        // if (activeStep == 0) {
-        //   if (!currency || !amount || !usersEmail) {
-        //     setError('Please fill all the above fields');
-        //     return;
-        //   }
-        // }
+        if (activeStep == 0) {
+          if (!sendCurrency || !getCurrency || !amount || !userGetAmount) {
+              setError('Please fill all the above fields');
+              return;
+          }
+        }
     setActiveStep(newActiveStep);
   };
 
@@ -394,24 +421,24 @@ export default function CryptoSell({open}) {
 
   const handleComplete = () => {
     const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
+    // newCompleted[activeStep] = true;
+    // setCompleted(newCompleted);
 
-    // if (activeStep == 0) {
-    //   if (!currency || !amount || !usersEmail) {
-    //     setError('Please fill all the above fields');
-    //     return;
-    //   }else {
-    //     newCompleted[activeStep] = true;
-    //     setCompleted(newCompleted);
-    //   }
-    // } else {
-    //     newCompleted[activeStep] = true;
-    //     setCompleted(newCompleted);
-    // }
+    if (activeStep == 0) {
+      if (!sendCurrency || !getCurrency || !amount || !userGetAmount) {
+        setError('Please fill all the above fields');
+        return;
+      }else {
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+      }
+    } else {
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+    }
     
  
-  handleNext();
+      handleNext();
   };
 
   const handleReset = () => {
@@ -423,14 +450,16 @@ export default function CryptoSell({open}) {
     switch(step){
       case 0:
         return <Form1
-        currency={currency}
-        setCurrency={setCurrency}
-        usersEmail={usersEmail}
-        setUsersemail={setUsersemail}
+        sendCurrency={sendCurrency}
+        setSendCurrency={setSendCurrency}
+        getCurrency={getCurrency}
+        setGetCurrency={setGetCurrency}
         amount={amount}
         setAmount={setAmount}
         error={error}
         setError={setError}
+        userGetAmount={userGetAmount}
+        updateUserGetAmount={updateUserGetAmount}
           />;
       case 1:
         return <Form2 />;
@@ -446,7 +475,7 @@ export default function CryptoSell({open}) {
     <Paper elevation={8}  
       sx={{height: '150%', display: 'flex', justifyContent: 'center', 
       border: '1px solid #808080', marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '80%'},
-      background: 'url("/formBackgroundImage.jpg")'
+      background: 'url("/formBackgroundImage.jpg")',
      }}
     >
       
@@ -456,7 +485,8 @@ export default function CryptoSell({open}) {
             backgroundColor: 'rgba( 255, 255, 255, 0.3 )',
             // backgroundColor: 'white',
             borderRadius: '20px',
-            backdropFilter: 'blur( 20px )'
+            backdropFilter: 'blur( 20px )',
+            boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff'
         }}
         elevation={24}>
       <p className='fs-3 d-flex justify-content-center'>Crypto Sell</p> <br />
