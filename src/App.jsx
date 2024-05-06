@@ -32,6 +32,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import SendMoneyForm from './components/Transactions/SendMoney';
 import CryptoBuy from './components/CryptoTransactions/CryptoBuy';
 import CryptoSell from './components/CryptoTransactions/CryptoSell';
+import RequestMoneyForm from './components/Transactions/RequestMoney';
+import ExchangeMoneyForm from './components/Transactions/ExchangeMoney';
+
 
 
 
@@ -104,6 +107,8 @@ function App() {
                       <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
                       <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
                       <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
+                      <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
+                      <Route exact path='/exchange-currency/' element={<ExchangeMoneyForm open={open} />}></Route>
                     </Routes>
                 </Box>
               </>
