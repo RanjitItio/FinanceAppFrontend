@@ -70,6 +70,7 @@ const NavContent = [
 
 const drawerWidth = 240;
 
+
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -85,6 +86,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function LeftNavbar({handleDrawerClose, open}) {
   const theme = useTheme();
   const [dropDown, setDropdown] = React.useState({});
+
 
 
   const handleClick = (index) => {
@@ -147,9 +149,7 @@ export default function LeftNavbar({handleDrawerClose, open}) {
         </List>
         {/* <Divider/> */}
 
-        
-
-       
+      
       </Drawer>
     </>
   )

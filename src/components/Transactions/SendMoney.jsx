@@ -99,6 +99,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
         You can also provide a note for reference.
       </small>
 
+    <div style={{marginLeft: '3%', marginRight: '3%'}}>
     <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
         <TextField
           hiddenLabel
@@ -156,6 +157,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
       <Textarea aria-label="minimum height" minRows={4} sx={{marginTop: '20px', width: '97%',m:1}} placeholder="Note" />
 
       {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
+      </div>
 
     </>
   )
@@ -191,28 +193,29 @@ function Form2() {
       if the recipient does not have an account, we will get them set up for free.
     </small>
 
-    <p className='d-flex justify-content-center' style={{color: '#3367ba'}} >Recipient</p>
-    <p className='d-flex justify-content-center'>{localMail}</p>
+    <div style={{marginLeft: '4%', marginRight: '4%', marginTop: '8%'}}>
+      <p className='d-flex justify-content-center' style={{color: '#3367ba'}} >Recipient</p>
+      <p className='d-flex justify-content-center'>{localMail}</p>
 
-    <div className="my-4">
-      <div className="d-flex justify-content-between">
-          <p>Transfer Amount</p> 
-          <p>{typedCurrency} {typedAmount}</p>
+      <div className="my-4">
+        <div className="d-flex justify-content-between">
+            <p>Transfer Amount</p> 
+            <p>{typedCurrency} {typedAmount}</p>
+        </div>
+        <hr className='mb-3'/>
       </div>
-      <hr className='mb-3'/>
-     </div>
 
-    <div className="d-flex justify-content-between">
-        <p>Fee</p> 
-        <p>{typedCurrency} 1.02</p>
+      <div className="d-flex justify-content-between">
+          <p>Fee</p> 
+          <p>{typedCurrency} 1.02</p>
+      </div>
+      <hr className='mb-4'/>
+
+      <div className="d-flex justify-content-between">
+        <p><b>Total</b></p> <p><b>{typedCurrency} 13.02</b></p>
+      </div>
+      <hr className='mb-4'/>
     </div>
-     <hr className='mb-4'/>
-
-    <div className="d-flex justify-content-between">
-      <p><b>Total</b></p> <p><b>{typedCurrency} 13.02</b></p>
-    </div>
-    <hr className='mb-4'/>
-
     </>
   )
 }
@@ -298,8 +301,9 @@ export default function SendMoneyForm({open}) {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
+    // setActiveStep(0);
+    // setCompleted({});
+    navigate('/')
   };
 
   const renderForms = (step) => {
@@ -320,16 +324,27 @@ export default function SendMoneyForm({open}) {
       default:
         return null;
     }
-  }
+  };
 
 
   return (
     <Main open={open}>
     <DrawerHeader />
 
-    <Paper elevation={8}  sx={{height: '150%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '80%'}}}>
+    {/* <Paper elevation={8}  sx={{height: '150%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '80%'}}}> */}
       
-    <Box sx={{ width: {xs: '100%', sm: '40%'}, marginTop: {xs: '40px', sm: '1rem'}, }}>
+    <Box sx={{ 
+              width: {xs: '100%', sm: '40%'}, 
+              marginTop: {xs: '40px', sm: '1rem'}, 
+              marginLeft: {xs: '0%', sm: '25%'},
+              // background: 'url("/formBackgroundImage.jpg")',
+              // backgroundColor: 'rgba( 255, 255, 255, 0.3 )',
+              backgroundColor: '#E5E4E2',
+              backdropFilter: 'blur( 20px )',
+              boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
+              borderRadius: '20px',
+              height: {xs:'100%', sm: '120%'}
+              }}>
       <p className='fs-3 d-flex justify-content-center'>Send Money</p> <br />
 
       <Stepper nonLinear activeStep={activeStep}>
@@ -352,7 +367,7 @@ export default function SendMoneyForm({open}) {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
+              <Button onClick={handleReset}>Dashboard</Button>
             </Box>
           </React.Fragment>
         ) : (
@@ -363,27 +378,31 @@ export default function SendMoneyForm({open}) {
             {renderForms(activeStep)}
 
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
+              {/* <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ mr: 1 }}
               >
                 Back
-              </Button>
+              </Button> */}
               <Box sx={{ flex: '1 1 auto' }}  />
               {/* sx={{ flex: '1 1 auto' }} */}
-              <Button onClick={handleNext} >
+              {/* <Button onClick={handleNext} >
                 Next
-              </Button>
+              </Button> */}
               {activeStep !== steps.length &&
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
                     Step {activeStep + 1} already completed
                   </Typography>
                 ) : (
-                  <Button onClick={handleComplete} variant='outlined'  sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF'}} >
-                   
+                  <Button onClick={handleComplete} variant='outlined'  
+                          sx={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.25)', 
+                                color: '#0081CF',
+                                marginRight: '2%'
+                              }}>
                     {completedSteps() === totalSteps() - 1
                       ? 'Confirm & Transfer'
                       : 'Confirm & Proceed'}
@@ -394,7 +413,7 @@ export default function SendMoneyForm({open}) {
         )}
       </div>
     </Box>
-    </Paper>
+    {/* </Paper> */}
 
     </Main>
 

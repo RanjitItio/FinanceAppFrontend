@@ -21,7 +21,7 @@ export default function CryptoCards({CryptoData, loading}) {
 
     for (let i = 0; i < CryptoData.length; i += 4) {
         chunkedData.push(CryptoData.slice(i, i + 4));
-    }
+    };
 
     
     const isSmallDevice = window.innerWidth <= 768;
@@ -49,7 +49,7 @@ export default function CryptoCards({CryptoData, loading}) {
         <div key={index}>
           <div className="row">
             {chunk.map((item, innerIndex) => (
-              <div className="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2" key={innerIndex}>
+              <div className="col-xs-12 col-sm-12 col-md-3 mb-2" key={innerIndex}>
                 <div className="card shadow" >
                   <div className="card-body">
                     <div className="d-flex justify-content-start">

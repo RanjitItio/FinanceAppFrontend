@@ -20,6 +20,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -120,6 +121,8 @@ function ExchangeMoneyForm1({...props}) {
             Enter your payer email address then add an amount with currency to request payment. You may add a note for reference.
       </small>
 
+      <div style={{marginLeft: '2%', marginRight: '0%'}}>
+
       <Grid container spacing={2} sx={{marginTop: '2%'}} >
         <Grid item xs={12} lg={5}>
             <FormControl size='small' sx={{marginLeft: {xs:'4%', lg: '8%'}, width:{xs:'90%', lg: '100%'}}}>
@@ -202,6 +205,7 @@ function ExchangeMoneyForm1({...props}) {
                 {props.error}
         </Alert>
         }
+    </div>
     </>
   )
 };
@@ -240,28 +244,30 @@ function ExchangeMoneyForm2() {
          Save time and exchange your currency at an attractive rate. You are just one click away to exchange your currency.
     </small>
 
-    <p className='text-primary d-flex justify-content-center'><b>Exchanged Amount</b></p>
-    <p className='d-flex justify-content-center mb-4'>{typedFromCurrency} {typedyourAmount}</p>
+    <div style={{marginLeft: '2%', marginRight: '1%'}}>
 
-    <div className='mx-4'>
-      <div className='d-flex justify-content-between mb-2'>
-        <p>Rate</p>
-        <p>{typedFromCurrency} 1 = {typedToCurrency} 0.75</p>
-      </div>
-      <hr className='mb-2' />
+      <p className='text-primary d-flex justify-content-center'><b>Exchanged Amount</b></p>
+      <p className='d-flex justify-content-center mb-4'>{typedFromCurrency} {typedyourAmount}</p>
 
-      <div className='d-flex justify-content-between mb-2'>
-        <p>Fee</p>
-        <p>{typedFromCurrency} 1.35</p>
-      </div>
-      <hr className='mb-2' />
+      <div className='mx-4'>
+        <div className='d-flex justify-content-between mb-2'>
+          <p>Rate</p>
+          <p>{typedFromCurrency} 1 = {typedToCurrency} 0.75</p>
+        </div>
+        <hr className='mb-2' />
 
-      <div className='d-flex justify-content-between mb-2'>
-        <p><b>Total</b></p>
-        <p><b>{typedFromCurrency} 291.35</b></p>
+        <div className='d-flex justify-content-between mb-2'>
+          <p>Fee</p>
+          <p>{typedFromCurrency} 1.35</p>
+        </div>
+        <hr className='mb-2' />
+
+        <div className='d-flex justify-content-between mb-2'>
+          <p><b>Total</b></p>
+          <p><b>{typedFromCurrency} 291.35</b></p>
+        </div>
       </div>
     </div>
-
     </>
   );
 };
@@ -278,6 +284,7 @@ export default function ExchangeMoneyForm({open}) {
   const [yourAmount, updateYourAmount] = React.useState('');
   const [convertedAmount, updateconvertedAmount] = React.useState('');
   const [error, setError] = React.useState('');
+  const navigate = useNavigate();
 
 
   const totalSteps = () => {
@@ -346,8 +353,9 @@ export default function ExchangeMoneyForm({open}) {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
+    // setActiveStep(0);
+    // setCompleted({});
+    navigate('/')
   };
 
   const renderForms = (step) => {
@@ -377,17 +385,21 @@ export default function ExchangeMoneyForm({open}) {
     <Main open={open}>
     <DrawerHeader />
 
-    <Paper elevation={8}  
+    {/* <Paper elevation={8}  
        sx={{height: '150%', display: 'flex', 
          justifyContent: 'center', border: '1px solid #808080', 
          marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '90%'}
-         }}>
+         }}> */}
       
-    <Box sx={{ width: {xs: '100%', sm: '80%', md: '80%', lg:'45%'}, 
+    <Box sx={{ width: {xs: '100%', sm: '80%', md: '45%'}, 
                marginTop: {xs: '40px', sm: '1rem'},
                borderRadius: '20px',
                backdropFilter: 'blur( 20px )',
-               boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff'
+               boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff',
+               marginLeft: {xs: '0%', sm: '25%'},
+              //  background: 'url("/formBackgroundImage.jpg")',
+              backgroundColor: '#E5E4E2',
+              height: {xs:'100%', sm: '120%'}
                 }}>
       <p className='fs-3 d-flex justify-content-center my-2'>Exchange Money</p> <br />
 
@@ -411,7 +423,7 @@ export default function ExchangeMoneyForm({open}) {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
+              <Button onClick={handleReset}>Dashboard</Button>
             </Box>
           </React.Fragment>
         ) : (
@@ -427,19 +439,19 @@ export default function ExchangeMoneyForm({open}) {
                       pt: 2,
                       marginLeft: '5%',
                       marginTop: '5%' }}>
-              <Button
+              {/* <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ mr: 1 }}
               >
                 Back
-              </Button>
+              </Button> */}
               <Box sx={{ flex: '1 1 auto' }}  />
               {/* sx={{ flex: '1 1 auto' }} */}
-              <Button onClick={handleNext} >
+              {/* <Button onClick={handleNext} >
                 Next
-              </Button>
+              </Button> */}
               {activeStep !== steps.length &&
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
@@ -449,7 +461,7 @@ export default function ExchangeMoneyForm({open}) {
                   <Button onClick={handleComplete} variant='outlined'  
                          sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF',
                             marginRight: {xs: '4%', lg: '3%'},
-                            width: {xs: '50%', lg: '40%'},
+                            width: {xs: '50%', lg: '50%'},
                             '@media (max-width: 500px)': {
                                 fontSize: '0.6rem' // Decrease font size on smaller screens
                             }
@@ -464,7 +476,7 @@ export default function ExchangeMoneyForm({open}) {
         )}
       </div>
     </Box>
-    </Paper>
+    {/* </Paper> */}
 
     </Main>
 

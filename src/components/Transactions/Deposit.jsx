@@ -20,6 +20,9 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 
 
+const steps = ['Create Deposit', 'Confirm your Deposit'];
+
+
 function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
 
   const handleCurrencyChange = (event)=> {
@@ -74,13 +77,15 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         payment methods. Fill the details correctly & the amount you want to deposit.
       </small>
 
+    <div style={{marginLeft: '5%', marginRight: '5%'}}>
+
     <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
         <InputLabel id="currency-label">USD</InputLabel>
         <Select
           labelId="currency-label"
           id="currency-select"
           value={currency}
-          label="Age"
+          label="Currency"
           onChange={handleCurrencyChange}
         >
           <MenuItem value="">
@@ -120,9 +125,11 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             <MenuItem value={10}>Stripe</MenuItem>
             <MenuItem value={20}>Bank</MenuItem>
             <MenuItem value={30}>Paypal</MenuItem>
-          </Select> 
+          </Select>
           {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
         </FormControl>
+
+      </div>
 
     </>
   )
@@ -147,30 +154,31 @@ function Form2() {
       Check your deposit information before confirmation.
     </small>
 
-    <div className="my-4">
-      <div className="d-flex justify-content-between">
-          <p>Deposit Amount Stripe</p> 
-          <p>{depositCurrency} {userDepositAmount}</p>
+    <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
+      <div className="my-4">
+        <div className="d-flex justify-content-between">
+            <p>Deposit Amount Stripe</p> 
+            <p>{depositCurrency} {userDepositAmount}</p>
+        </div>
+        <hr className='mb-3'/>
       </div>
-      <hr className='mb-3'/>
-     </div>
 
-    <div className="d-flex justify-content-between">
-        <p>Fee</p> 
-        <p>{depositCurrency} 1.02</p>
-    </div>
-     <hr className='mb-4'/>
+      <div className="d-flex justify-content-between">
+          <p>Fee</p> 
+          <p>{depositCurrency} 1.02</p>
+      </div>
+      <hr className='mb-4'/>
 
-    <div className="d-flex justify-content-between">
-      <p><b>Total</b></p> <p><b>{depositCurrency} 13.02</b></p>
+      <div className="d-flex justify-content-between">
+        <p><b>Total</b></p> <p><b>{depositCurrency} 13.02</b></p>
+      </div>
+      <hr className='mb-4'/>
     </div>
-    <hr className='mb-4'/>
 
     </>
   )
-}
+};
 
-const steps = ['Create Deposit', 'Confirm your Deposit'];
 
 
 
@@ -258,8 +266,10 @@ export default function DepositForm({open}) {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
+    // setActiveStep(0);
+    // setCompleted({});
+    navigate('/')
+
   };
 
   const renderForms = (step) => {
@@ -287,15 +297,29 @@ export default function DepositForm({open}) {
     <Main open={open}>
     <DrawerHeader />
 
-    <Paper elevation={24}  sx={{height: '120%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', width: {xs: '100%', sm: '85%'}, marginLeft: {xs: '0%', sm: '7%'}}}>
+    {/* <Paper elevation={24}  sx={{height: '120%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', width: {xs: '100%', sm: '85%'}, marginLeft: {xs: '0%', sm: '7%'}}}> */}
       
-    <Box sx={{ width: {xs: '100%', sm: '40%'}, marginTop: {xs: '40px', sm: '1rem'} }}>
+    <Box sx={{ 
+              width: {xs: '100%', sm: '40%'},
+              marginTop: {xs: '40px', sm: '1rem'},
+              marginLeft: {xs: '0%', sm: '25%'},
+              // background: 'url("/formBackgroundImage.jpg")',
+              backgroundColor: '#E5E4E2',
+              backdropFilter: 'blur( 20px )',
+              boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
+              borderRadius: '20px',
+              height: {xs:'100%', sm: '120%'}
+            }}
+       >
       <p className='fs-3 d-flex justify-content-center'>Deposit Money</p> <br />
 
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
-            <StepButton color="inherit" onClick={handleStep(index)}>
+            {/* <StepButton color="inherit" onClick={handleStep(index)}>
+                {label}
+            </StepButton> */}
+            <StepButton color="inherit">
                 {label}
             </StepButton>
           </Step> 
@@ -313,7 +337,8 @@ export default function DepositForm({open}) {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
+              {/* <Button onClick={handleReset}>Reset</Button> */}
+              <Button onClick={handleReset}>Go back to dashboard</Button>
             </Box>
           </React.Fragment>
         ) : (
@@ -324,25 +349,27 @@ export default function DepositForm({open}) {
             {renderForms(activeStep)}
 
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
+              {/* <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ mr: 1 }}
               >
                 Back
-              </Button>
+              </Button> */}
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleNext} sx={{ mr: 1 }}>
-                Next
-              </Button>
+              {/* <Button onClick={handleNext} sx={{ mr: 1 }}>
+                  Next
+              </Button> */}
               {activeStep !== steps.length &&
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
                     Step {activeStep + 1} already completed
                   </Typography>
                 ) : (
-                  <Button onClick={handleComplete}>
+                  <Button onClick={handleComplete} variant='outlined' 
+                    sx={{marginRight: '4%', marginTop: '3%'}}
+                  >
                     {completedSteps() === totalSteps() - 1
                       ? 'Confirm & Deposit'
                       : 'Confirm & Proceed'}
@@ -353,7 +380,7 @@ export default function DepositForm({open}) {
         )}
       </div>
     </Box>
-    </Paper>
+    {/* </Paper> */}
 
     </Main>
 

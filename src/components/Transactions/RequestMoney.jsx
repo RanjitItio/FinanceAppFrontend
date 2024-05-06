@@ -18,6 +18,7 @@ import Textarea from './TextArea';
 import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -225,6 +226,7 @@ export default function RequestMoneyForm({open}) {
   const [usersEmail, setUsersemail] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const [error, setError] = React.useState('');
+  const navigate = useNavigate();
 
 
   const totalSteps = () => {
@@ -293,8 +295,10 @@ export default function RequestMoneyForm({open}) {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
+    // setActiveStep(0);
+    // setCompleted({});
+    navigate('/')
+    
   };
 
   const renderForms = (step) => {
@@ -322,24 +326,31 @@ export default function RequestMoneyForm({open}) {
     <Main open={open}>
     <DrawerHeader />
 
-    <Paper elevation={8}  
+    {/* <Paper elevation={8}  
        sx={{height: '150%', display: 'flex', 
          justifyContent: 'center', border: '1px solid #808080', 
          marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '90%'}
-         }}>
+         }}> */}
       
     <Box sx={{ width: {xs: '100%', sm: '80%', md: '45%'}, 
                marginTop: {xs: '40px', sm: '1rem'},
                borderRadius: '20px',
                backdropFilter: 'blur( 20px )',
-               boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff'
+               boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff',
+               marginLeft: {xs: '0%', sm: '25%'},
+              //  background: 'url("/formBackgroundImage.jpg")',
+              backgroundColor: '#E5E4E2',
+              height: {xs:'100%', sm: '120%'}
                 }}>
       <p className='fs-3 d-flex justify-content-center my-2'>Request Money</p> <br />
 
       <Stepper nonLinear activeStep={activeStep} sx={{marginLeft: '4%'}}>
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
-            <StepButton color="inherit" onClick={handleStep(index)}>
+            {/* <StepButton color="inherit" onClick={handleStep(index)}>
+              {label}
+            </StepButton> */}
+            <StepButton color="inherit">
               {label}
             </StepButton>
           </Step>
@@ -356,7 +367,7 @@ export default function RequestMoneyForm({open}) {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
+              <Button onClick={handleReset}>Dashboard</Button>
             </Box>
           </React.Fragment>
         ) : (
@@ -371,19 +382,19 @@ export default function RequestMoneyForm({open}) {
                       flexDirection: 'row', 
                       pt: 2,
                       marginLeft: '5%' }}>
-              <Button
+              {/* <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ mr: 1 }}
               >
                 Back
-              </Button>
+              </Button> */}
               <Box sx={{ flex: '1 1 auto' }}  />
               {/* sx={{ flex: '1 1 auto' }} */}
-              <Button onClick={handleNext} >
+              {/* <Button onClick={handleNext} >
                 Next
-              </Button>
+              </Button> */}
               {activeStep !== steps.length &&
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
@@ -393,7 +404,7 @@ export default function RequestMoneyForm({open}) {
                   <Button onClick={handleComplete} variant='outlined'  
                          sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF',
                             marginRight: {xs: '4%', lg: '3%'},
-                            width: {xs: '50%', lg: '40%'},
+                            width: {xs: '50%', lg: '50%'},
                             '@media (max-width: 500px)': {
                                 fontSize: '0.6rem' // Decrease font size on smaller screens
                             }
@@ -408,7 +419,7 @@ export default function RequestMoneyForm({open}) {
         )}
       </div>
     </Box>
-    </Paper>
+    {/* </Paper> */}
 
     </Main>
 
