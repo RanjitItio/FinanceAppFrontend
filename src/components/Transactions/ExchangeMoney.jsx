@@ -31,55 +31,76 @@ function ExchangeMoneyForm1({...props}) {
 
   const [totalFee, setTotalFee] = React.useState('')
 
-  const handleCurrencyChange = (event)=> {
-    props.setCurrency(event.target.value)
+  const handleFromCurrencyChange = (event)=> {
+    props.updateFromCurrency(event.target.value)
 
     if(!event.target.value) {
       props.setError('Please fill all the above fields')
     }else {
       props.setError('')
 
-      localStorage.setItem('requestpaymentusercurrency', event.target.value)
-      const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+      const encoded_value = btoa(event.target.value)
+      localStorage.setItem('exchangepaymentfromcurrency', encoded_value)
+      const expirationTime = 2 * 60 * 1000;// 10 minutes in milliseconds
 
       setTimeout(() => {
-        localStorage.removeItem('requestpaymentusercurrency')
+        localStorage.removeItem('exchangepaymentfromcurrency')
         }, expirationTime);
-
     }
-  }
+  };
 
-  const handleEmailChange = (event)=> {
-    props.setUsersemail(event.target.value)
+  const handleToCurrencyChange = (event)=> {
+    props.updateToCurrency(event.target.value)
 
     if(!event.target.value) {
       props.setError('Please fill all the above fields')
     }else {
       props.setError('')
-      localStorage.setItem('requestpaymentuseremail', event.target.value)
 
-      const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+      const encoded_value = btoa(event.target.value)
+      localStorage.setItem('exchangepaymenttocurrency', encoded_value)
+      const expirationTime = 2 * 60 * 1000;// 10 minutes in milliseconds
 
       setTimeout(() => {
-          localStorage.removeItem('requestpaymentuseremail')
+        localStorage.removeItem('exchangepaymenttocurrency')
+        }, expirationTime);
+    }
+  };
+
+  const handleYouramountChange = (event)=> {
+    props.updateYourAmount(event.target.value)
+
+    if(!event.target.value) {
+      props.setError('Please fill all the above fields')
+    }else {
+      props.setError('')
+
+      const encoded_value = btoa(event.target.value)
+      localStorage.setItem('exchangepaymentyouramount', encoded_value)
+
+      const expirationTime = 2 * 60 * 1000;// 2 minutes in milliseconds
+
+      setTimeout(() => {
+          localStorage.removeItem('exchangepaymentyouramount')
       }, expirationTime);
     }
   };
 
-  const handleAmountChange = (event)=> {
-    props.setAmount(event.target.value)
+  const handleConvertedAmountChange = (event)=> {
+    props.updateconvertedAmount(event.target.value)
 
     if(!event.target.value) {
       props.setError('Please fill all the above fields')
     } else {
       props.setError('')
 
-      localStorage.setItem('requestmoneyuseramount', event.target.value)
+      const encoded_value = btoa(event.target.value)
+      localStorage.setItem('exchangepaymentconvertedamount', encoded_value)
 
-      const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+      const expirationTime = 2 * 60 * 1000;// 2 minutes in milliseconds
 
       setTimeout(() => {
-        localStorage.removeItem('requestmoneyuseramount')
+        localStorage.removeItem('exchangepaymentconvertedamount')
     }, expirationTime);
 
     }
@@ -106,9 +127,9 @@ function ExchangeMoneyForm1({...props}) {
                 <Select
                 labelId="from-balance-select-label"
                 id="from-balance-select"
-                // value={age}
+                value={props.fromCurrency}
                 label="Currency" 
-                // onChange={handleChange}
+                onChange={handleFromCurrencyChange}
                 >
                 <MenuItem value={'USD'}>USD</MenuItem>
                 <MenuItem value={"GBP"}>GBP</MenuItem>
@@ -134,13 +155,13 @@ function ExchangeMoneyForm1({...props}) {
                        sx={{ width:{xs:'90%', lg:'110%'}, 
                              marginLeft:{xs:'4%', lg:'-30%'}, 
                              marginTop:{xs:'-3%', lg: '0px'}}}>
-                <InputLabel id="to-balanceselect-label">Currency</InputLabel>
+                <InputLabel id="to-balance-select-label">Currency</InputLabel>
                 <Select
                 labelId="to-balance-select-label"
                 id="to-balance-select"
-                // value={age}
+                value={props.toCurrency}
                 label="Currency"
-                // onChange={handleChange}
+                onChange={handleToCurrencyChange}
                 >
                     <MenuItem value={"GBP"}>GBP</MenuItem>
                     <MenuItem value={"USD"}>USD</MenuItem>
@@ -158,16 +179,18 @@ function ExchangeMoneyForm1({...props}) {
                 variant="outlined" 
                 size='small' 
                 sx={{width: '90%', marginLeft: '3%'}}
+                onChange={handleYouramountChange}
                 />
-                <FormHelperText sx={{marginLeft:'10%'}}><b>To</b> Balance: (19,847 GBP)</FormHelperText>
+                <FormHelperText sx={{marginLeft:'5%'}}>Fee(0.12%+1) Total Fee: 1.96</FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
-            <TextField 
-                id="your-amount" 
-                label="Converted Amount" 
-                variant="outlined" 
-                size='small' 
+            <TextField
+                id="converted-amount"
+                label="Converted Amount"
+                variant="outlined"
+                size='small'
+                onChange={handleConvertedAmountChange}
                 sx={{width: '90%', marginLeft: '3%', marginTop: '5px'}}
                 />
         </Grid>
@@ -179,30 +202,34 @@ function ExchangeMoneyForm1({...props}) {
                 {props.error}
         </Alert>
         }
-
     </>
   )
-}
+};
+
 
 
 function ExchangeMoneyForm2() {
-  const [localStoredMail, setLocalStoredMail] = React.useState('')
-  const [typedCurrency, setTypedCurrency] = React.useState('')
-  const [typedAmount, setTypedAmount] = React.useState('')
+  const [typedFromCurrency, setTypedFromCurrency] = React.useState('')
+  const [typedyourAmount, settypedyourAmount] = React.useState('')
+  const [typedToCurrency, setTypedToCurrency] = React.useState('')
+  // const [typedAmount, setTypedAmount] = React.useState('')
 
   useEffect(()=> {
-        const StoredMail = localStorage.getItem('requestpaymentuseremail');
-        const UserTypedAmount = localStorage.getItem('requestmoneyuseramount');
-        const UserTypedCurrency = localStorage.getItem('requestpaymentusercurrency');
+        const StoredFromCurrency = localStorage.getItem('exchangepaymentfromcurrency');
+        const StoredYourAmount = localStorage.getItem('exchangepaymentyouramount');
+        const UserTypedToCurrency = localStorage.getItem('exchangepaymenttocurrency');
 
-    if(StoredMail) {
-        setLocalStoredMail(StoredMail);
+    if(StoredFromCurrency) {
+      const decodedFromcurrency = atob(StoredFromCurrency)
+      setTypedFromCurrency(decodedFromcurrency);
     }
-    if(UserTypedAmount) {
-      setTypedAmount(UserTypedAmount);
+    if(StoredYourAmount) {
+      const decoded_typedAmount = atob(StoredYourAmount)
+      settypedyourAmount(decoded_typedAmount);
     }
-    if(UserTypedCurrency) {
-      setTypedCurrency(UserTypedCurrency);
+    if(UserTypedToCurrency) {
+      const decod_value = atob(UserTypedToCurrency)
+      setTypedToCurrency(decod_value);
     }
   }, [])
   
@@ -210,19 +237,34 @@ function ExchangeMoneyForm2() {
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-4' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
-        Take a look before you send. Do not worry, 
-        if the recipient does not have an account, we will get them set up for free.
+         Save time and exchange your currency at an attractive rate. You are just one click away to exchange your currency.
     </small>
 
-    <p className='text-primary d-flex justify-content-center'><b>You are requesting money from</b></p>
-    <p className='d-flex justify-content-center mb-4'>{localStoredMail}</p>
+    <p className='text-primary d-flex justify-content-center'><b>Exchanged Amount</b></p>
+    <p className='d-flex justify-content-center mb-4'>{typedFromCurrency} {typedyourAmount}</p>
 
-    <p className='text-primary d-flex justify-content-center'><b>Amount</b></p>
-    <p className='d-flex justify-content-center mb-4'>{typedCurrency} {typedAmount}</p>
+    <div className='mx-4'>
+      <div className='d-flex justify-content-between mb-2'>
+        <p>Rate</p>
+        <p>{typedFromCurrency} 1 = {typedToCurrency} 0.75</p>
+      </div>
+      <hr className='mb-2' />
+
+      <div className='d-flex justify-content-between mb-2'>
+        <p>Fee</p>
+        <p>{typedFromCurrency} 1.35</p>
+      </div>
+      <hr className='mb-2' />
+
+      <div className='d-flex justify-content-between mb-2'>
+        <p><b>Total</b></p>
+        <p><b>{typedFromCurrency} 291.35</b></p>
+      </div>
+    </div>
 
     </>
-  )
-}
+  );
+};
 
 
 
@@ -231,9 +273,10 @@ export default function ExchangeMoneyForm({open}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
-  const [currency, setCurrency] = React.useState('');
-  const [usersEmail, setUsersemail] = React.useState('');
-  const [amount, setAmount] = React.useState('');
+  const [fromCurrency, updateFromCurrency] = React.useState('');
+  const [toCurrency, updateToCurrency] = React.useState('');
+  const [yourAmount, updateYourAmount] = React.useState('');
+  const [convertedAmount, updateconvertedAmount] = React.useState('');
   const [error, setError] = React.useState('');
 
 
@@ -262,7 +305,7 @@ export default function ExchangeMoneyForm({open}) {
         : activeStep + 1;
 
         if (activeStep == 0) {
-          if (!usersEmail || !currency || !amount) {
+          if (!fromCurrency || !toCurrency || !yourAmount || !convertedAmount) {
             setError('Please fill all the above fields');
             return;
           }
@@ -282,7 +325,7 @@ export default function ExchangeMoneyForm({open}) {
     const newCompleted = completed;
 
     if (activeStep == 0) {
-      if (!currency || !amount || !usersEmail) {
+      if (!fromCurrency || !toCurrency || !yourAmount || !convertedAmount) {
         setError('Please fill all the above fields');
         return;
       }else {
@@ -311,14 +354,16 @@ export default function ExchangeMoneyForm({open}) {
     switch(step){
       case 0:
         return <ExchangeMoneyForm1
-                usersEmail={usersEmail}
-                setUsersemail={setUsersemail}
+                fromCurrency={fromCurrency}
+                updateFromCurrency={updateFromCurrency}
+                toCurrency={toCurrency}
+                updateToCurrency={updateToCurrency}
+                yourAmount={yourAmount}
+                updateYourAmount={updateYourAmount}
+                convertedAmount={convertedAmount}
+                updateconvertedAmount={updateconvertedAmount}
                 error={error}
                 setError={setError}
-                amount={amount}
-                setAmount={setAmount}
-                currency={currency}
-                setCurrency={setCurrency}
             />;
       case 1:
         return <ExchangeMoneyForm2 />;
@@ -380,7 +425,8 @@ export default function ExchangeMoneyForm({open}) {
                 sx={{ display: 'flex', 
                       flexDirection: 'row', 
                       pt: 2,
-                      marginLeft: '5%' }}>
+                      marginLeft: '5%',
+                      marginTop: '5%' }}>
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
@@ -423,7 +469,7 @@ export default function ExchangeMoneyForm({open}) {
     </Main>
 
   );
-}
+};
 
 
 
