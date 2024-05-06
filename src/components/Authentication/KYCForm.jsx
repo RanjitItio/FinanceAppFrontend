@@ -28,7 +28,7 @@ const KYCForm = () => {
     idExpiryDate: '',
     document: '',
     user_id: '',
-  })
+  });
 
   const [step, setStep] = useState(1);
   const [formData, updateFormData] = useState(initialFormData);
@@ -72,94 +72,97 @@ const KYCForm = () => {
       idNumber: '',
       idExpiryDate: '',
       document: '',
-      user_id: user_ID
+      user_id: parseInt(user_ID)
     })
    
   }, [])
+
   
   // Submit Data
   const handleFormSubmit = async (e)=> {
     // console.log(typeof(formData.firstName))
       
 
-    // let validationError = [];
+    let validationError = [];
 
-    // if (formData.firstName == '') {
-    //     validationError.push("Please fill your First Name");
-    // }else if (formData.lastName == ''){
-    //     validationError.push("Please fill your Last Name");
-    // }else if (formData.dob == ''){
-    //     validationError.push("Please fill your Date of Birth");
-    // } else if (formData.gender) {
-    //     validationError.push("Please select your Gender");
-    // }else if (formData.maritalStatus) {
-    //     validationError.push("Please select your Marital Status");
-    // }else if (formData.email) {
-    //     validationError.push("Please fill your email Address");
-    // }else if (formData.phoneNumber) {
-    //     validationError.push("Please fill your Phone number");
-    // }else if (formData.address) {
-    //     validationError.push("Please fill your Address");
-    // }else if (formData.landmark) {
-    //     validationError.push("Please type your Landmark name");
-    // }else if (formData.city) {
-    //     validationError.push("Please fill your city name");
-    // }else if (formData.zipCode) {
-    //     validationError.push("Please fill your Zipcode");
-    // }else if (formData.stateOrUt) {
-    //     validationError.push("Please fill your State or UT");
-    // }else if (formData.country) {
-    //     validationError.push("Please fill your Country Name");
-    // }else if (formData.nationality) {
-    //     validationError.push("Please type your Nationality");
-    // }else if (formData.idType) {
-    //     validationError.push("Please select your ID Type");
-    // }else if (formData.idNumber) {
-    //     validationError.push("Please type your ID Number");
-    // }else if (formData.idExpiryDate) {
-    //     validationError.push("Please fill in ID Expiry Date");
-    // }
+    if (formData.firstName == '') {
+        validationError.push("Please fill your First Name");
+    }else if (formData.lastName == ''){
+        validationError.push("Please fill your Last Name");
+    }else if (formData.dob == ''){
+        validationError.push("Please fill your Date of Birth");
+    } else if (formData.gender == '') {
+        validationError.push("Please select your Gender");
+    }else if (formData.maritalStatus == '') {
+        validationError.push("Please select your Marital Status");
+    }else if (formData.email == '') {
+        validationError.push("Please fill your email Address");
+    }else if (formData.phoneNumber == '') {
+        validationError.push("Please fill your Phone number");
+    }else if (formData.address == '') {
+        validationError.push("Please fill your Address");
+    }else if (formData.landmark == '') {
+        validationError.push("Please type your Landmark name");
+    }else if (formData.city == '') {
+        validationError.push("Please fill your city name");
+    }else if (formData.zipCode == '') {
+        validationError.push("Please fill your Zipcode");
+    }else if (formData.stateOrUt == '') {
+        validationError.push("Please fill your State or UT");
+    }else if (formData.country == '') {
+        validationError.push("Please fill your Country Name");
+    }else if (formData.nationality == '') {
+        validationError.push("Please type your Nationality");
+    }else if (formData.idType == '') {
+        validationError.push("Please select your ID Type");
+    }else if (formData.idNumber == '') {
+        validationError.push("Please type your ID Number");
+    }else if (formData.idExpiryDate == '') {
+        validationError.push("Please fill in ID Expiry Date");
+    }
 
-    // if (validationError.length > 0) {
-    //   setError(validationError.join(''));
-    //   return;
-    // } else{
-    //   setError(''); 
-    // } 
-    //     await axiosInstance.post(`api/v1/user/kyc/`,{
-    //       user_id: formData.user_id,
-    //       firstname: formData.firstName ,
-    //       lastname: formData.lastName,
-    //       dateofbirth: formData.dob,
-    //       gander: formData.gender,
-    //       marital_status: formData.maritalStatus,
-    //       email: formData.email,
-    //       phoneno: formData.phoneNumber,
-    //       address: formData.address,
-    //       landmark: formData.landmark,
-    //       city: formData.city,
-    //       zipcode: formData.zipCode,
-    //       state: formData.stateOrUt,
-    //       country: formData.country,
-    //       nationality: formData.nationality,
-    //       id_type: formData.idType,
-    //       id_number: formData.idNumber,
-    //       id_expiry_date: formData.idExpiryDate,
-    //       uploaddocument: 'none'
-    //     }).then((res) => {
-    //           // console.log(res.data)
-    //           if(res.status == 200) {
-    //               setSuccessMessage(`Kyc has been submitted successfully `)
-    //               const queryString = new URLSearchParams({'first_name':formData.firstName, 'last_name':formData.lastName});
-    //               setTimeout(() => {
-    //                 navigate(`/kyc-submission-report?${queryString}`);
-    //             }, 2000);
-    //           }
-    //       }).catch((error)=> {
-    //         console.log(error.response)
-    //       });
+    if (validationError.length > 0) {
+      setError(validationError.join(''));
+      return;
+    } else{
+      setError(''); 
+    } 
+
+        await axiosInstance.post(`api/v1/user/kyc/`,{
+          user_id: formData.user_id,
+          firstname: formData.firstName ,
+          lastname: formData.lastName,
+          dateofbirth: formData.dob,
+          gander: formData.gender,
+          marital_status: formData.maritalStatus,
+          email: formData.email,
+          phoneno: formData.phoneNumber,
+          address: formData.address,
+          landmark: formData.landmark,
+          city: formData.city,
+          zipcode: formData.zipCode,
+          state: formData.stateOrUt,
+          country: formData.country,
+          nationality: formData.nationality,
+          id_type: formData.idType,
+          id_number: formData.idNumber,
+          id_expiry_date: formData.idExpiryDate,
+          uploaddocument: 'none'
+        }).then((res) => {
+              // console.log(res.data)
+              if(res.status == 200) {
+                  setSuccessMessage(`Kyc has been submitted successfully `)
+                  const queryString = new URLSearchParams({'first_name':formData.firstName, 'last_name':formData.lastName});
+                  setTimeout(() => {
+                    navigate(`/kyc-submission-report?${queryString}`);
+                }, 2000);
+              }
+          }).catch((error)=> {
+            console.log(error.response)
+          });
   }
   
+  console.log(formData)
 
   const handleChange = (e) => {
     updateFormData({

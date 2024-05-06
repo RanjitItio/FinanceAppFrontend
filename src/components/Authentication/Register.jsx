@@ -96,19 +96,10 @@ function Register() {
         })
         .then((res) => {
             // console.log(res.data.msg)
-            const response_msg = res.data.msg;
-            const match = response_msg.match(/\d+$/);
-            if (match) {
-              const user_ID = parseInt(match[0])
-              console.log("Last number:", user_ID);
-            } else {
-              console.log("No number found at the end of the string.");
-            }
-
             if(res.status == 201) {
                 const response_msg = res.data.msg;
                 const match = response_msg.match(/\d+$/);
-                if (match) {
+                if (response_msg) {
                   const user_ID = parseInt(match[0])
                   filteredFormData.user_id = user_ID;
                   // console.log("User:", user_ID);
