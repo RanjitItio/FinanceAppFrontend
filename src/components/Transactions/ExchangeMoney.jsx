@@ -23,6 +23,8 @@ import ImportExportIcon from '@mui/icons-material/ImportExport';
 
 
 
+const steps = ['Setup Money', 'Confirm Exchange Money'];
+
 
 
 function ExchangeMoneyForm1({...props}) {
@@ -222,7 +224,6 @@ function ExchangeMoneyForm2() {
   )
 }
 
-const steps = ['Start Transfer', 'Confirm Your Transfer'];
 
 
 
