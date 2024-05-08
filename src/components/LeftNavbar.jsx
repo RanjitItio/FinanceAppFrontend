@@ -24,6 +24,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import StorageIcon from '@mui/icons-material/Storage';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+
 
 
 
@@ -43,7 +45,9 @@ const NavContent = [
     {text: 'Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
     {text: 'Request Money', icon: <SwapCallsIcon />, url: '/request-payment/'}, 
     {text: 'Exchange Money', icon: <CurrencyExchangeIcon />, url: '/exchange-currency/'}, 
-    {text: 'Withdrawls', icon: <PaymentsIcon />, url: '/'}, 
+    {text: 'Withdrawal Money', icon: <PaymentsIcon />, url: '/payout-payment/'}, 
+    {text: 'Withdrawal List', icon: <FormatListBulletedIcon />, url: '/withdrawal-history/'}, 
+    {text: 'Withdrawal Settings', icon: <SettingsIcon />, url: '/withdrawal-settings/'}, 
   ],
   icon:''},
 

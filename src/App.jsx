@@ -34,6 +34,9 @@ import CryptoBuy from './components/CryptoTransactions/CryptoBuy';
 import CryptoSell from './components/CryptoTransactions/CryptoSell';
 import RequestMoneyForm from './components/Transactions/RequestMoney';
 import ExchangeMoneyForm from './components/Transactions/ExchangeMoney';
+import WithdrawalMoneyForm from './components/Withdraw/withdrawalmoney';
+import WithdrawalList from './components/Withdraw/withdrawallist';
+import WithdrawalSettings from './components/Withdraw/withdrawlsettings';
 
 
 
@@ -109,6 +112,9 @@ function App() {
                       <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
                       <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
                       <Route exact path='/exchange-currency/' element={<ExchangeMoneyForm open={open} />}></Route>
+                      <Route exact path='/payout-payment/' element={<WithdrawalMoneyForm open={open} />}></Route>
+                      <Route exact path='/withdrawal-history/' element={<WithdrawalList open={open} />}></Route>
+                      <Route exact path='/withdrawal-settings/' element={<WithdrawalSettings open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

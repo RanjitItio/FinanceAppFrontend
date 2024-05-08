@@ -13,10 +13,9 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
-import Paper from '@mui/material/Paper';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
+import axiosInstance from '../Authentication/axios';
 
 
 
@@ -122,9 +121,9 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Stripe</MenuItem>
-            <MenuItem value={20}>Bank</MenuItem>
-            <MenuItem value={30}>Paypal</MenuItem>
+            <MenuItem value={'Stripe'}>Stripe</MenuItem>
+            <MenuItem value={'Bank'}>Bank</MenuItem>
+            <MenuItem value={'Paypal'}>Paypal</MenuItem>
           </Select>
           {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
         </FormControl>
@@ -136,7 +135,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 }
 
 
-function Form2() {
+function Form2({...props}) {
   const [depositCurrency, setDepositCurrency] = React.useState('')
   const [userDepositAmount, setUserDepositAmount] = React.useState('')
 
@@ -147,7 +146,8 @@ function Form2() {
        const GetAmount = localStorage.getItem('UsersDepositAmount')
        setUserDepositAmount(GetAmount)
     }, [])
-
+    
+    console.log(props.error)
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-3'>
@@ -175,6 +175,8 @@ function Form2() {
       <hr className='mb-4'/>
     </div>
 
+    {props.error && <FormHelperText sx={{ color: 'red' }}>{props.error}</FormHelperText>}
+
     </>
   )
 };
@@ -183,6 +185,14 @@ function Form2() {
 
 
 export default function DepositForm({open}) {
+
+  const initialFormData = Object.freeze({
+		user_id: 19,
+    currency: 2,
+		payment_method: '',
+		note: '',
+	});
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
@@ -190,6 +200,7 @@ export default function DepositForm({open}) {
   const [paymentMethod, setPaymentMethod] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const [error, setError] = React.useState('');
+  const [formData, updateFormData] = React.useState(initialFormData);
   const navigate = useNavigate()
 
 
@@ -237,27 +248,47 @@ export default function DepositForm({open}) {
   const handleComplete = () => {
     const newCompleted = completed;
 
-
     if (activeStep == 0) {
       if (!currency || !amount || !paymentMethod) {
         setError('Please fill all the above fields');
         return;
       }else {
         setError('')
-
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
         handleNext();
-      }
+      };
     } else {
+      axiosInstance.post(`api/v1/user/deposit/`, {
+        user_id: formData.user_id,
+        currency: formData.currency,
+        amount: amount,
+        txdtype: paymentMethod,
+        note: 'Deposit Funds'
+      }).then((res)=> {
+
+        if(res.status == 200) {
+          console.log(res)
+          newCompleted[activeStep] = true;
+          setCompleted(newCompleted);
+          handleNext();
+        };
+
+      }).catch((error)=> {
+        console.log(error.response)
+        if(error.response.data.msg == 'Invalid currency'){
+            setError("Requested Currency is not available")
+        } else if(error.response.data.msg == 'Wallet not found') {
+            setError("Please create your wallet first")
+        }else if(error.response.data.msg == 'Error depositing funds') {
+            setError("Error while depositing money")
+        };
+      })
         
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-        handleNext();
-    }
+    };
+    console.log(amount)
 
     
-
     // if (completedSteps() === totalSteps()) {
     //    navigate('/')
     // }else {
@@ -286,7 +317,10 @@ export default function DepositForm({open}) {
         setError={setError}
           />;
       case 1:
-        return <Form2 />;
+        return <Form2 
+        error={error}
+        setError={setError}
+        />;
       default:
         return null;
     }
@@ -320,15 +354,15 @@ export default function DepositForm({open}) {
                 {label}
             </StepButton> */}
             <StepButton color="inherit">
-                {label}
+              {label}
             </StepButton>
-          </Step> 
+          </Step>
         ))}
       </Stepper>
       <div>
         {allStepsCompleted() ? (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
+            <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
               {/* All steps completed - you&apos;re finished */}
               <Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
@@ -348,7 +382,7 @@ export default function DepositForm({open}) {
 
             {renderForms(activeStep)}
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', marginRight: '27%' }}>
               {/* <Button
                 color="inherit"
                 disabled={activeStep === 0}

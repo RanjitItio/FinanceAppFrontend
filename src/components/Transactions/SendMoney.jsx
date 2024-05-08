@@ -13,12 +13,13 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
-import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
 import Textarea from './TextArea';
 import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import axiosInstance from '../Authentication/axios';
+
 
 
 
@@ -286,18 +287,44 @@ export default function SendMoneyForm({open}) {
       }else {
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
+        handleNext();
       }
     } else {
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-    }
+        axiosInstance.post(`api/v1/user/transfer_money/`, {
+          user_id: 3,
+          currency: 10,
+          amount: amount,
+          recivermail: usersEmail,
+          note: 'Transfer Money'
+        }).then((res)=> {
+
+          if(res.status == 200) {
+            console.log(res)
+            newCompleted[activeStep] = true;
+            setCompleted(newCompleted);
+            handleNext();
+          };
+
+        }).catch((error)=> {
+          console.log(error.response)
+
+          if(error.response.data.msg == 'Receiver user not found'){
+             setError("Receipient does not exists")
+          } else if (error.response.data.msg == 'Wallet not found'){
+            setError("Please create your wallet first")
+          } else if(error.response.data.msg == 'Insufficient balance') {
+             setError("Donot have sufficient balance")
+          };
+
+        });
+    };
     
   //   if (completedSteps() === totalSteps()) {
   //      navigate('/')
   //   }else {
   //     handleNext();
   //   }
-  handleNext();
+
   };
 
   const handleReset = () => {
