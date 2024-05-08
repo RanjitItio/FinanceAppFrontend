@@ -40,7 +40,7 @@ const TicketReply = () => {
     <Container fluid className="h-100 rounded-md justify-center border-light shadow-sm">
         <Row>
             <Col>
-            <Card style={{ width: '18rem' }} className='shadow-sm d-flex justify-center flex-column'>
+            <Card style={{ width: '20rem' }} className='shadow-lg m-5 justify-content-center'>
                 <Card.Header>Ticket Replies</Card.Header>
                 <Card.Body>
                     <Row>
@@ -75,13 +75,13 @@ const TicketReply = () => {
             </Card>
             </Col>
             <Col>
-      <Row className="bg-primary text-white p-3 shadow-sm rounded-md">
+      <Row className="bg-primary text-white p-3 shadow-lg rounded-md">
         <Col>
           <h2>Reply </h2>
         </Col>
       </Row>
       
-      <Row className="bg-light p-3">
+      <Row className="bg-light p-3 shadow-lg">
         <Col>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="messageInput" className="mb-3">
@@ -104,8 +104,8 @@ const TicketReply = () => {
       <Row className="h-100 overflow-auto p-3">
         <Col>
           {messages.map((message) => (
-            <div key={message.id} className={`mb-3 ${message.sender === 'You' ? 'text-end' : 'text-start'}`}>
-              <div className={`border p-3 rounded ${message.sender === 'You' ? 'bg-primary text-white' : 'bg-light'}`}>
+            <div key={message.id} className={`mb-3 ${message.sender === 'You' ? 'text-end' : 'text-start'} shadow-sm `}>
+              <div className={`border p-3 rounded ${message.sender === 'You' ? 'bg-primary text-white' : 'bg-light shadow-sm'}`}>
                 {message.text}
               </div>
               {message.attachment && (
