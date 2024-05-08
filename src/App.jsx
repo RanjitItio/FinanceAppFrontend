@@ -34,8 +34,9 @@ import CryptoBuy from './components/CryptoTransactions/CryptoBuy';
 import CryptoSell from './components/CryptoTransactions/CryptoSell';
 import RequestMoneyForm from './components/Transactions/RequestMoney';
 import ExchangeMoneyForm from './components/Transactions/ExchangeMoney';
-
-
+import Ticket from './components/Ticket/ticket';
+import AddTicket from './components/Ticket/addtickets';
+import TicketReply from './components/Ticket/ticketreply';
 
 
 
@@ -102,13 +103,16 @@ function App() {
 
                     <Routes>
                       <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
-                      <Route exact path='/transactions/' element={<Transactions open={open} />}></Route>
+                      <Route exact pticketsath='/transactions/' element={<Transactions open={open} />}></Route>
                       <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
                       <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
                       <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
                       <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
                       <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
                       <Route exact path='/exchange-currency/' element={<ExchangeMoneyForm open={open} />}></Route>
+                      <Route exact path='/tickets/' element={<Ticket open={open} />}></Route>
+                      <Route exact path='/tickets/add/' element={<AddTicket open={open} />}></Route>
+                      <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
                     </Routes>
                 </Box>
               </>
