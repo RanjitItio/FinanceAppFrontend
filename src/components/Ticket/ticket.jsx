@@ -93,7 +93,7 @@ export default function Ticket({open}) {
                 <p className='text-muted'>All Transactions</p>
                 <div className='d-flex align-items-center'>
                     <p className='text-muted'>ADD TICKET</p>&nbsp;
-                    <Button startIcon={<AddBox />} style={{backgroundColor: ''}} variant="outlined"></Button>
+                    <Button startIcon={<AddBox />} style={{backgroundColor: ''}} href='/tickets/add/' variant="outlined"></Button>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@ export default function Ticket({open}) {
                 
                 className='mb-2 shadow border border-secondary'
                 >
-                <ListItemButton>
+                <ListItemButton href='/tickets/reply/'>
                         <ListItemAvatar>
                             <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.Ticket_icon}</Avatar>
                         </ListItemAvatar>

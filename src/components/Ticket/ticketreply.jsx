@@ -37,8 +37,8 @@ const TicketReply = () => {
   return (
     <Main open={open}>
     <DrawerHeader />
-    <Container fluid className="h-100 rounded-md justify-center border-light shadow-sm">
-        <Row>
+    <Container fluid className="h-100 rounded-md justify-center border-light shadow-sm p-5">
+        <Row className='m-5'>
             <Col>
             <Card style={{ width: '20rem' }} className='shadow-lg m-5 justify-content-center'>
                 <Card.Header>Ticket Replies</Card.Header>
