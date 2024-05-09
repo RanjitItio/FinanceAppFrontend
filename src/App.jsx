@@ -35,8 +35,10 @@ import CryptoSell from './components/CryptoTransactions/CryptoSell';
 import RequestMoneyForm from './components/Transactions/RequestMoney';
 import ExchangeMoneyForm from './components/Transactions/ExchangeMoney';
 import Ticket from './components/Ticket/ticket';
+import Dispute from './components/Dispute/dispute';
 import AddTicket from './components/Ticket/addtickets';
 import TicketReply from './components/Ticket/ticketreply';
+import DisputeReply from './components/Dispute/disputereply';
 
 
 
@@ -113,6 +115,9 @@ function App() {
                       <Route exact path='/tickets/' element={<Ticket open={open} />}></Route>
                       <Route exact path='/tickets/add/' element={<AddTicket open={open} />}></Route>
                       <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
+                      <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
+                      <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
+                      <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

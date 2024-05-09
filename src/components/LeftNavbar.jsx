@@ -48,7 +48,7 @@ const NavContent = [
   icon:''},
 
   { text: 'OTHERS', subItems: [
-    {text: 'Disputes', icon: <MessageIcon />, url: '/'},
+    {text: 'Disputes', icon: <MessageIcon />, url: '/dispute/'},
     {text: 'Tickets', icon: <ConfirmationNumberIcon />, url: '/tickets/'},
     {text: 'Profile', icon: <AccountBoxIcon />, url: '/'},
     {text: 'Verifications', icon: <SettingsIcon />, url: '/'},
