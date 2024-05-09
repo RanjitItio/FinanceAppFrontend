@@ -11,6 +11,8 @@ import Preferences from './components/Preference';
 import PasswordReset from './components/PasswordReset';
 import FAQs from './components/FAQs';
 // import UserDashboard from './components/UserDashboard/Dashboard';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Register from './components/Authentication/Register';
 import Login from './components/Authentication/Login';
@@ -25,10 +27,8 @@ import React from "react";
 import Box from '@mui/material/Box';
 import UpperNavbar from './components/UpNavbar';
 import LeftNavbar from './components/LeftNavbar';
-import Transactions from './components/Transactions/Transaction';
+import AllTransactions from './components/Transactions/Transaction';
 import DepositForm from './components/Transactions/Deposit';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
 import SendMoneyForm from './components/Transactions/SendMoney';
 import CryptoBuy from './components/CryptoTransactions/CryptoBuy';
 import CryptoSell from './components/CryptoTransactions/CryptoSell';
@@ -37,6 +37,9 @@ import ExchangeMoneyForm from './components/Transactions/ExchangeMoney';
 import WithdrawalMoneyForm from './components/Withdraw/withdrawalmoney';
 import WithdrawalList from './components/Withdraw/withdrawallist';
 import WithdrawalSettings from './components/Withdraw/withdrawlsettings';
+import Ticket from './components/Ticket/ticket';
+import AddTicket from './components/Ticket/addtickets';
+import TicketReply from './components/Ticket/ticketreply';
 
 
 
@@ -105,7 +108,7 @@ function App() {
 
                     <Routes>
                       <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
-                      <Route exact path='/transactions/' element={<Transactions open={open} />}></Route>
+                      <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                       <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
                       <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
                       <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
@@ -115,6 +118,9 @@ function App() {
                       <Route exact path='/payout-payment/' element={<WithdrawalMoneyForm open={open} />}></Route>
                       <Route exact path='/withdrawal-history/' element={<WithdrawalList open={open} />}></Route>
                       <Route exact path='/withdrawal-settings/' element={<WithdrawalSettings open={open} />}></Route>
+                      <Route exact path='/tickets/' element={<Ticket open={open} />}></Route>
+                      <Route exact path='/tickets/add/' element={<AddTicket open={open} />}></Route>
+                      <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

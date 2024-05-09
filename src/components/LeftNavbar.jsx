@@ -53,7 +53,7 @@ const NavContent = [
 
   { text: 'OTHERS', subItems: [
     {text: 'Disputes', icon: <MessageIcon />, url: '/'},
-    {text: 'Tickets', icon: <ConfirmationNumberIcon />, url: '/'},
+    {text: 'Tickets', icon: <ConfirmationNumberIcon />, url: '/tickets/'},
     {text: 'Profile', icon: <AccountBoxIcon />, url: '/'},
     {text: 'Verifications', icon: <SettingsIcon />, url: '/'},
   ],

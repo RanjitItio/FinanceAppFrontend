@@ -118,7 +118,7 @@ const TransactionData = [
 ]
 
 
-export default function Transactions({open}) {
+export default function AllTransactions({open}) {
     const [boxOpen, setBoxOpen] = useState(false);
     const [isfilterItem, setFilterItem] = useState(false);
     const [dateRange, setDateRange] = useState('');
@@ -156,7 +156,6 @@ export default function Transactions({open}) {
         <>
          <Main open={open}>
             <DrawerHeader />
-
 
             <div className="d-flex justify-content-center">
                 <p className='fs-3'>TRANSACTIONS</p>
@@ -318,7 +317,7 @@ export default function Transactions({open}) {
                         <>
                             <span style={{color:transaction.status_icon_color}}>{transaction.status_icon}</span>
                             {transaction.currency}
-                            {/* <span>{transaction.currency_icon}</span> */}
+                            
                             <span>{transaction.amount}</span>
                         </>
                     }
@@ -330,7 +329,27 @@ export default function Transactions({open}) {
                 </ListItemButton>
                 </ListItem>
             ))}
-              {/* <ListItem disablePadding
+              
+            </List>
+
+            <div className="my-3">
+                <Pagination count={10} color="primary" />
+            </div>
+           
+
+        </Main>
+        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} />
+
+        </>
+    )
+};
+
+
+
+
+
+
+{/* <ListItem disablePadding
               secondaryAction={
                 <IconButton edge="end" aria-label="comments">
                     <ArrowRightIcon />
@@ -361,16 +380,3 @@ export default function Transactions({open}) {
                      sx={{flex: 'auto', textAlign: 'right'}} />
                 </ListItemButton>
               </ListItem> */}
-            </List>
-
-            <div className="my-3">
-                <Pagination count={10} color="primary" />
-            </div>
-           
-
-        </Main>
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} />
-
-        </>
-    )
-}
