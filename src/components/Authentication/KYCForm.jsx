@@ -162,7 +162,7 @@ const KYCForm = () => {
           });
   }
   
-  console.log(formData)
+  // console.log(formData)
 
   const handleChange = (e) => {
     updateFormData({

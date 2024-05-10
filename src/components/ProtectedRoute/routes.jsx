@@ -32,6 +32,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
+import Profile from "../Profile/profile";
 
 
 
@@ -110,6 +111,7 @@ const AuthRoutes = () => {
                           <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
                           <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
                           <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
+                          <Route exact path='/profile/' element={<Profile open={open} />}></Route>
                       </Routes>
                     </Box>
                   }></Route>

@@ -1,8 +1,7 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { useState } from 'react';
 import axiosInstance from './axios';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './tailwind.css';
 import { RiUser3Line } from "react-icons/ri";
 
@@ -55,15 +54,16 @@ function Login(){
 			.then((res) => {
                 if(res.status == 200) {
                     setSuccessMessage(`Login Successfull`)
-                    setTimeout(() => {
-                        navigate('/')
-                    }, 1000);
+                    navigate('/transactions/')
+                    // setTimeout(() => {
+                    //     navigate('/transactions/')
+                    // }, 3000);
                     localStorage.setItem('access_token', res.data.access_token);
                     localStorage.setItem('refresh_token', res.data.access_token);
                     axiosInstance.defaults.headers['Authorization'] =
                       'Bearer ' + localStorage.getItem('access_token');
                       
-                    console.log(res);
+                    // console.log(res);
                     // console.log(res.data);
                 }
             //  localStorage.clear();

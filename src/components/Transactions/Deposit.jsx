@@ -16,13 +16,19 @@ import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axiosInstance from '../Authentication/axios';
+import { useEffect } from 'react';
+
 
 
 
 const steps = ['Create Deposit', 'Confirm your Deposit'];
 
 
+
+
 function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
+
+  const [currencies, setCurrencies] = React.useState([])
 
   const handleCurrencyChange = (event)=> {
     setCurrency(event.target.value)
@@ -39,7 +45,8 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
           localStorage.removeItem('DepositCurrency')
       }, expirytime);
     }
-  }
+  };
+
 
   const handlePaymentMethodChange = (event)=> {
     setPaymentMethod(event.target.value)
@@ -57,7 +64,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         localStorage.removeItem('userdepositpaymentmethod')
       }, despositpaymethodexpirytime);
     }
-  }
+  };
 
   const handleAmountChange = (event)=> {
     setAmount(event.target.value)
@@ -74,8 +81,21 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         localStorage.removeItem('UsersDepositAmount')
       }, depositexpirytime);
     }
-  }
-//  console.log(error)
+  };
+
+    useEffect(() => {
+      axiosInstance.get(`api/v2/currency/`).then((res)=> {
+        // console.log(res.data.currencies)
+        if (res.data && res.data.currencies){
+            setCurrencies(res.data.currencies)
+            // console.log(currencies)
+        };
+      }).catch((error)=> {
+        console.log(error.response)
+      });
+
+    }, [])
+
 
 
   return(
@@ -99,11 +119,12 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={'EUR'}>EUR</MenuItem>
-          <MenuItem value={'GBR'}>INR</MenuItem>
-          <MenuItem value={'ETH'}>USD</MenuItem>
-          <MenuItem value={'BTC'}>CYN</MenuItem>
+          {currencies.map((currency)=> (
+              <MenuItem key={currency.id} value={currency.name}>{currency.name}</MenuItem>
+          ))};
+          
         </Select>
+        
         <FormHelperText>Fee (0.00+0.00) Total Fee: 0.00</FormHelperText>
       </FormControl>
 
@@ -148,7 +169,7 @@ function Form2({...props}) {
   const [depositCurrency, setDepositCurrency] = React.useState('')
   const [userDepositAmount, setUserDepositAmount] = React.useState('')
   const [userDepositPayMethod, setUserDepositPayMethod] = React.useState('')
-  const [amount, setTotalAmount] = React.useState('')
+  
 
 
   React.useEffect(() => {
@@ -169,15 +190,10 @@ function Form2({...props}) {
 
     }, [])
 
-  React.useEffect(() => {
-    if(userDepositAmount) {
-      const TotalAmount = (parseInt(userDepositAmount) + 0.00)
-      setTotalAmount(TotalAmount)
-    }
-  }, [userDepositAmount])
+  
 
     
-    console.log(props.error)
+    // console.log(props.error)
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-3'>
@@ -200,12 +216,12 @@ function Form2({...props}) {
       <hr className='mb-4'/>
 
       <div className="d-flex justify-content-between">
-        <p><b>Total</b></p> <p><b>{depositCurrency} {amount}</b></p>
+        <p><b>Total</b></p> <p><b>{depositCurrency} {props.totalAamount}</b></p>
       </div>
       <hr className='mb-4'/>
     </div>
 
-    {props.error && <FormHelperText sx={{ color: 'red' }}>{props.error}</FormHelperText>}
+    {props.error && <Alert severity="error">{props.error}</Alert>}
 
     </>
   )
@@ -216,13 +232,6 @@ function Form2({...props}) {
 
 export default function DepositForm({open}) {
 
-  const initialFormData = Object.freeze({
-		user_id: 19,
-    currency: 2,
-		payment_method: '',
-		note: '',
-	});
-
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
@@ -230,7 +239,7 @@ export default function DepositForm({open}) {
   const [paymentMethod, setPaymentMethod] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const [error, setError] = React.useState('');
-  const [formData, updateFormData] = React.useState(initialFormData);
+  const [totalAamount, setTotalAmount] = React.useState('')
   const navigate = useNavigate()
 
 
@@ -263,7 +272,7 @@ export default function DepositForm({open}) {
             setError('Please fill all the above fields');
             return;
           }
-        }
+        };
     setActiveStep(newActiveStep);
   };
 
@@ -290,35 +299,38 @@ export default function DepositForm({open}) {
       };
     } else {
       axiosInstance.post(`api/v1/user/deposit/`, {
-        user_id: formData.user_id,
-        currency: formData.currency,
-        amount: amount,
-        txdtype: paymentMethod,
-        note: 'Deposit Funds'
+        currency: currency,
+        deposit_amount: amount,
+        fee: 0.0,
+        total_amount: totalAamount,
+        payment_mode: paymentMethod
       }).then((res)=> {
-
-        if(res.status == 200) {
-          console.log(res)
+        // console.log(res)
+        if(res.data.msg == 'Deposit successful') {
           newCompleted[activeStep] = true;
           setCompleted(newCompleted);
           handleNext();
+        }else if(res.data.msg == 'Token has expired'){
+            setError("Session has expired please try to login")
+        } else if(res.data.msg == 'Invalid token') {
+            setError("Invalid Session please try to login")
         };
 
       }).catch((error)=> {
-        console.log(error.response)
+        // console.log(error.response)
         if(error.response.data.msg == 'Invalid currency'){
             setError("Requested Currency is not available")
         } else if(error.response.data.msg == 'Wallet not found') {
             setError("Please create your wallet first")
         }else if(error.response.data.msg == 'Error depositing funds') {
             setError("Error while depositing money")
+        }else if(error.response.data.message == 'Wallet not found') {
+            setError("Wallet is not available please create a wallet first")
         };
       })
-        
     };
-    console.log(amount)
-
     
+    // console.log(amount)
     // if (completedSteps() === totalSteps()) {
     //    navigate('/')
     // }else {
@@ -350,11 +362,40 @@ export default function DepositForm({open}) {
         return <Form2 
         error={error}
         setError={setError}
+        totalAamount={totalAamount}
         />;
       default:
         return null;
     }
-  }
+  };
+
+  React.useEffect(() => {
+    if(amount) {
+      const TotalAmount = (parseInt(amount) + 0.00)
+      setTotalAmount(TotalAmount)
+    }
+  }, [amount])
+
+  // const handleDepositSubmit = async ()=> {
+  //     try{
+  //         await axiosInstance.post(`api/v1/user/deposit/`, {
+  //           currency: currency,
+  //           deposit_amount: amount,
+  //           fee: 0.0,
+  //           total_amount: totalAamount,
+  //           payment_mode: paymentMethod
+  //         }).then((res)=> {
+  //           console.log(res)
+  //         })
+  //     } catch(error) {
+  //          console.log(error.response)
+  //     }
+  // };
+
+  // const handleConfirmDepositSubmit = ()=> {
+  //   handleDepositSubmit();
+  //   handleComplete();
+  // }
 
 
   return (
@@ -362,7 +403,6 @@ export default function DepositForm({open}) {
     <DrawerHeader />
 
     {/* <Paper elevation={24}  sx={{height: '120%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', width: {xs: '100%', sm: '85%'}, marginLeft: {xs: '0%', sm: '7%'}}}> */}
-      
     <Box sx={{ 
               width: {xs: '100%', sm: '40%'},
               marginTop: {xs: '40px', sm: '1rem'},

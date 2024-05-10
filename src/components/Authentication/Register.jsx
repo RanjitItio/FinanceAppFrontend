@@ -95,7 +95,7 @@ function Register() {
             is_merchent: true
         })
         .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             if(res.status == 201) {
                 const response_msg = res.data.msg;
                 const match = response_msg.match(/\d+$/);

@@ -10,7 +10,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ResponsiveDialog from './TransactionDetails';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -19,6 +19,8 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
+import axiosInstance from '../Authentication/axios';
+
 
 
 
@@ -125,6 +127,7 @@ export default function AllTransactions({open}) {
     const [transactionType, setTransactionType] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
     const [currency, setCurrency] = useState('');
+    const [transactionData, setTransactionData] = useState([]);
 
 
     const handleDateChange = (event) => {
@@ -151,6 +154,31 @@ export default function AllTransactions({open}) {
     const toggleFilterItemVisibility = () => {
         setFilterItem(!isfilterItem);
       };
+
+    useEffect(() => {
+        try{
+            axiosInstance.get(`api/v4/users/transactions/`).then((res)=> {
+                if(res.data.msg == "Token has expired"){
+                    console.log("Session has expired please try to login")
+                }else if (res.data.msg == "Invalid token"){
+                    console.log("Invalid Session please try to login")
+                } else if(res.data.msg == "Authentication Failed") {
+                    console.log("Authentication Failed please re login")
+                } else if (res.data.msg == "Unable to get the Transactions") {
+                    console.log("Server error")
+                };
+
+                if(res.data && res.data.all_transactions) {
+                    setTransactionData(res.data.all_transactions)
+                    // console.log(res.data)
+                };
+            })
+        }catch(error) {
+            console.log(error)
+        }
+       
+    }, [])
+    // console.log(transactionData)
 
     return (
         <>
@@ -292,6 +320,7 @@ export default function AllTransactions({open}) {
             </div>
 
             <List>
+            {/* {TransactionData.map((transaction, index) => ( */}
             {TransactionData.map((transaction, index) => (
                 <ListItem
                 key={index}
@@ -306,22 +335,26 @@ export default function AllTransactions({open}) {
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.txdcurrency}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
+                    // primary={transaction.txdmassage}
                     primary={transaction.title}
+                    // secondary={`Cash ${transaction.txddate} ${transaction.txdtime}`}
                     secondary={`Cash ${transaction.date} ${transaction.time}`}
                     />
                     <ListItemText
                     primary={
                         <>
                             <span style={{color:transaction.status_icon_color}}>{transaction.status_icon}</span>
+                            {/* {transaction.txdcurrency} */}
                             {transaction.currency}
-                            
+
                             <span>{transaction.amount}</span>
                         </>
                     }
                     secondary={
+                        // <span style={{ color: transaction.status_color }}>{transaction.txdstatus}</span>
                         <span style={{ color: transaction.status_color }}>{transaction.status}</span>
                     }
                     sx={{ flex: 'auto', textAlign: 'right' }}
