@@ -43,10 +43,19 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
   const handlePaymentMethodChange = (event)=> {
     setPaymentMethod(event.target.value)
+
     if(!event.target.value) {
       setError('Please fill all the above fields')
     }else {
       setError('')
+
+      localStorage.setItem('userdepositpaymentmethod', event.target.value)
+
+      const despositpaymethodexpirytime = 5 * 60 * 1000
+
+      setTimeout(() => {
+        localStorage.removeItem('userdepositpaymentmethod')
+      }, despositpaymethodexpirytime);
     }
   }
 
@@ -79,7 +88,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
     <div style={{marginLeft: '5%', marginRight: '5%'}}>
 
     <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
-        <InputLabel id="currency-label">USD</InputLabel>
+        <InputLabel id="currency-label">Currency</InputLabel>
         <Select
           labelId="currency-label"
           id="currency-select"
@@ -91,9 +100,9 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             <em>None</em>
           </MenuItem>
           <MenuItem value={'EUR'}>EUR</MenuItem>
-          <MenuItem value={'GBR'}>GBR</MenuItem>
-          <MenuItem value={'ETH'}>ETH</MenuItem>
-          <MenuItem value={'BTC'}>BTC</MenuItem>
+          <MenuItem value={'GBR'}>INR</MenuItem>
+          <MenuItem value={'ETH'}>USD</MenuItem>
+          <MenuItem value={'BTC'}>CYN</MenuItem>
         </Select>
         <FormHelperText>Fee (0.00+0.00) Total Fee: 0.00</FormHelperText>
       </FormControl>
@@ -138,14 +147,35 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 function Form2({...props}) {
   const [depositCurrency, setDepositCurrency] = React.useState('')
   const [userDepositAmount, setUserDepositAmount] = React.useState('')
+  const [userDepositPayMethod, setUserDepositPayMethod] = React.useState('')
+  const [amount, setTotalAmount] = React.useState('')
+
 
   React.useEffect(() => {
        const GetCurrency = localStorage.getItem('DepositCurrency')
-       setDepositCurrency(GetCurrency)
-
+       if(GetCurrency){
+          setDepositCurrency(GetCurrency)
+       }
+       
        const GetAmount = localStorage.getItem('UsersDepositAmount')
-       setUserDepositAmount(GetAmount)
+       if(GetAmount){
+          setUserDepositAmount(GetAmount)
+       };
+
+       const Getdepositpaymethod = localStorage.getItem('userdepositpaymentmethod')
+       if (Getdepositpaymethod) {
+          setUserDepositPayMethod(Getdepositpaymethod)
+       };
+
     }, [])
+
+  React.useEffect(() => {
+    if(userDepositAmount) {
+      const TotalAmount = (parseInt(userDepositAmount) + 0.00)
+      setTotalAmount(TotalAmount)
+    }
+  }, [userDepositAmount])
+
     
     console.log(props.error)
   return(
@@ -157,7 +187,7 @@ function Form2({...props}) {
     <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
       <div className="my-4">
         <div className="d-flex justify-content-between">
-            <p>Deposit Amount Stripe</p> 
+            <p>Deposit Amount {userDepositPayMethod}</p> 
             <p>{depositCurrency} {userDepositAmount}</p>
         </div>
         <hr className='mb-3'/>
@@ -165,12 +195,12 @@ function Form2({...props}) {
 
       <div className="d-flex justify-content-between">
           <p>Fee</p> 
-          <p>{depositCurrency} 1.02</p>
+          <p>{depositCurrency} 0.00</p>
       </div>
       <hr className='mb-4'/>
 
       <div className="d-flex justify-content-between">
-        <p><b>Total</b></p> <p><b>{depositCurrency} 13.02</b></p>
+        <p><b>Total</b></p> <p><b>{depositCurrency} {amount}</b></p>
       </div>
       <hr className='mb-4'/>
     </div>

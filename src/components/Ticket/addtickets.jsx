@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import {Main, DrawerHeader} from '../Content';
 import { Container, Form, Button } from 'react-bootstrap';
-
-
-
+import { TextField, MenuItem } from '@mui/material';
+import {Main, DrawerHeader} from '../Content';
 const priorities = ['Low', 'Normal', 'High'];
-
-
 
 const AddTicket = () => {
   const [topic, setTopic] = useState('');

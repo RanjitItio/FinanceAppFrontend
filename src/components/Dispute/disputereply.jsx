@@ -9,8 +9,7 @@ import {Main, DrawerHeader} from '../Content';
 const status = ['open', 'closed', 'in progress'];
 
 
-
-const TicketReply = () => {
+const DisputeReply = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [attachment, setAttachment] = useState(null);
@@ -45,54 +44,65 @@ const TicketReply = () => {
   return (
     <Main open={open}>
     <DrawerHeader />
-    <Container fluid className="h-100 rounded-md justify-center border-light shadow-sm p-5">
+    <Container fluid className="h-100 rounded-md justify-center border-light shadow-sm ">
+    <div className="d-flex justify-content-center">
+                <p className='fs-3'>DISPUTE</p>
+            </div>
+            <div className="d-flex justify-content-center">
+                <p className='text-muted'>Your conservations with admin relating problems</p>
+            </div>
+            <div className='d-flex justify-content-between' >
+                <p  className='text-muted'>BACK</p>
+                
+            </div>
+
         <Row className='m-5'>
             <Col>
-            <Card style={{ width: '20rem' }} className='shadow-lg m-5 justify-content-center'>
-                <Card.Header>Ticket Replies</Card.Header>
+            <Card style={{ width: '25rem' }} className='shadow-lg mx-5 justify-content-center'>
+                <Card.Header>Dispute Replies</Card.Header>
                 <Card.Body>
                     <Row>
-                        <Col>Ticket ID</Col>
-                        <Col> #hdghsv</Col>
+                        <Col><p className='text-sm text-muted'>Dispute ID : DIS-WUTUZP</p></Col>
+                        <Col> OPEN</Col>
                     </Row>
                     
                     <Card className='p-1 mt-2'>
-                        <h1 className='fs-6'>Subject</h1>
-                        <p>rute</p>
+                        <h1 className='fs-6 text-muted'>Title</h1>
+                        <p className='text-sm '>ADANI payment dispute</p>
                     </Card>
+                    <Row>
+                        <Col>
+                        <Card  className='p-1 mt-2'>
+                        <h1 className='fs-6 text-muted'>Claimant</h1>
+                        <p>Hindanbarg</p>
+                    </Card>
+                        </Col>
+                        <Col>
+                        
+                        <Card  className='p-1 mt-2'>
+                        <h1 className='fs-6 text-muted'>Defendant</h1>
+                        <p>Narendra Modi</p>
+                    </Card>
+                        </Col>
+                    </Row>
                     
 
                     <Card  className='p-1 mt-2'>
-                        <h1 className='fs-6'>Priority</h1>
-                        <p>Normal</p>
+                        <h1 className='fs-6 text-muted'>Transaction ID</h1>
+                        <p>#45sd54df4g5</p>
                     </Card>
                  
 
                     <Card  className='p-1 mt-2'>
-                        <h1 className='fs-6'>Time</h1>
+                        <h1 className='fs-6 text-muted'>Time</h1>
                         <p>08-05-2024 3:42 PM</p>
                     </Card>
         
 
-                    <Row  className='p-1 mt-2'>
-                        <Col>
-                        <Form.Group className="mb-3" controlId="priority">
-                          
-                          <Form.Select
-                            value={priority}
-                            onChange={(e) => setPriority(e.target.value)}
-                          >
-                            <option value="">Select status</option>
-                            {status.map((p) => (
-                              <option key={p} value={p.toLowerCase()}>
-                                {p}
-                              </option>
-                            ))}
-                          </Form.Select>
-                        </Form.Group>
-                        </Col>
-                        <Col><Button>submit</Button> </Col>
-                    </Row>
+                    <Card  className='p-1 mt-2'>
+                        <h1 className='fs-6 text-muted'>Reason</h1>
+                        <p>fake report provided</p>
+                    </Card>
                 </Card.Body>
                 
             </Card>
@@ -151,4 +161,4 @@ const TicketReply = () => {
   );
 };
 
-export default TicketReply;
+export default DisputeReply;

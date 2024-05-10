@@ -56,17 +56,17 @@ function Login(){
                 if(res.status == 200) {
                     setSuccessMessage(`Login Successfull`)
                     setTimeout(() => {
-                        navigate('/user/crypto-fiat/')
-                    }, 3000);
+                        navigate('/')
+                    }, 1000);
+                    localStorage.setItem('access_token', res.data.access_token);
+                    localStorage.setItem('refresh_token', res.data.access_token);
+                    axiosInstance.defaults.headers['Authorization'] =
+                      'Bearer ' + localStorage.getItem('access_token');
+                      
+                    console.log(res);
+                    // console.log(res.data);
                 }
             //  localStorage.clear();
-			// 	localStorage.setItem('access_token', res.data.access);
-			// 	localStorage.setItem('refresh_token', res.data.refresh);
-			// 	axiosInstance.defaults.headers['Authorization'] =
-			// 		'JWT ' + localStorage.getItem('access_token');
-			// 	history.push('/');
-				//console.log(res);
-				//console.log(res.data);
 			}).catch((error)=> {
                 // console.log(error.response.data.msg)
                 if (error.response.data.msg == 'Your account is not active. Please contact the administrator.'){
