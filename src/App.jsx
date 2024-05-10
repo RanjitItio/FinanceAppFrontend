@@ -39,7 +39,7 @@ import Dispute from './components/Dispute/dispute';
 import AddTicket from './components/Ticket/addtickets';
 import TicketReply from './components/Ticket/ticketreply';
 import DisputeReply from './components/Dispute/disputereply';
-
+import Profile from './components/Profile/profile';
 
 
 
@@ -105,7 +105,7 @@ function App() {
 
                     <Routes>
                       <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
-                      <Route exact pticketsath='/transactions/' element={<Transactions open={open} />}></Route>
+                      <Route exact path='/transactions/' element={<Transactions open={open} />}></Route>
                       <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
                       <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
                       <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
@@ -118,6 +118,7 @@ function App() {
                       <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
                       <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
                       <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
+                      <Route exact path='/profile/' element={<Profile open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

@@ -40,9 +40,20 @@ const TicketReply = () => {
     <Main open={open}>
     <DrawerHeader />
     <Container fluid className="h-100 rounded-md justify-center border-light shadow-sm p-5">
+    <div className="d-flex justify-content-center">
+          <p className='fs-3'>TICKET</p>
+        </div>
+        <div className="d-flex justify-content-center">
+          <p className='text-muted'>Ask support for any kinds of problem you face</p>
+        </div>
+        <div className='d-flex justify-content-between' >
+          <a href="/tickets/" className='text-muted'>BACK</a>
+          {/* <p className='text-muted' >BACK</p> */}
+
+        </div>
         <Row className='m-5'>
             <Col>
-            <Card style={{ width: '20rem' }} className='shadow-lg m-5 justify-content-center'>
+            <Card style={{ width: '25rem' }} className='shadow-lg mx-5 justify-content-center'>
                 <Card.Header>Ticket Replies</Card.Header>
                 <Card.Body>
                     <Row>
