@@ -54,15 +54,13 @@ function Login(){
 			.then((res) => {
                 if(res.status == 200) {
                     setSuccessMessage(`Login Successfull`)
-                    navigate('/transactions/')
-                    // setTimeout(() => {
-                    //     navigate('/transactions/')
-                    // }, 3000);
+                    setTimeout(() => {
+                        navigate('/')
+                    }, 1000);
                     localStorage.setItem('access_token', res.data.access_token);
                     localStorage.setItem('refresh_token', res.data.access_token);
                     axiosInstance.defaults.headers['Authorization'] =
                       'Bearer ' + localStorage.getItem('access_token');
-                      
                     // console.log(res);
                     // console.log(res.data);
                 }

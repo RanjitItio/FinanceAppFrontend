@@ -25,7 +25,6 @@ const steps = ['Create Deposit', 'Confirm your Deposit'];
 
 
 
-
 function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
 
   const [currencies, setCurrencies] = React.useState([])
@@ -119,8 +118,9 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {currencies.map((currency)=> (
-              <MenuItem key={currency.id} value={currency.name}>{currency.name}</MenuItem>
+
+          {currencies.map((curr)=> (
+              <MenuItem key={curr.id} value={curr.name}>{curr.name}</MenuItem>
           ))};
           
         </Select>
@@ -155,7 +155,8 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             <MenuItem value={'Bank'}>Bank</MenuItem>
             <MenuItem value={'Paypal'}>Paypal</MenuItem>
           </Select>
-          {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
+          &nbsp;
+          {error && <Alert severity="error">{error}</Alert>}
         </FormControl>
 
       </div>
@@ -298,6 +299,7 @@ export default function DepositForm({open}) {
         handleNext();
       };
     } else {
+      // console.log(currency)
       axiosInstance.post(`api/v1/user/deposit/`, {
         currency: currency,
         deposit_amount: amount,
@@ -306,26 +308,52 @@ export default function DepositForm({open}) {
         payment_mode: paymentMethod
       }).then((res)=> {
         // console.log(res)
+
         if(res.data.msg == 'Deposit successful') {
-          newCompleted[activeStep] = true;
-          setCompleted(newCompleted);
-          handleNext();
-        }else if(res.data.msg == 'Token has expired'){
+            newCompleted[activeStep] = true;
+            setCompleted(newCompleted);
+            handleNext();
+
+        } else if(res.data.msg == 'Token has expired'){
             setError("Session has expired please try to login")
+
         } else if(res.data.msg == 'Invalid token') {
             setError("Invalid Session please try to login")
+        } else {
+          setError('')
         };
 
       }).catch((error)=> {
-        // console.log(error.response)
+        console.log(error.response)
+
         if(error.response.data.msg == 'Invalid currency'){
             setError("Requested Currency is not available")
+
         } else if(error.response.data.msg == 'Wallet not found') {
-            setError("Please create your wallet first")
-        }else if(error.response.data.msg == 'Error depositing funds') {
+            setError("Donot have wallet please create your wallet")
+
+        } else if(error.response.data.msg == 'Error depositing funds') {
             setError("Error while depositing money")
-        }else if(error.response.data.message == 'Wallet not found') {
+
+        } else if(error.response.data.msg == 'Wallet not found') {
             setError("Wallet is not available please create a wallet first")
+
+        } else if(error.response.data.msg == 'Authentication Failed Please provide auth token') {
+            setError("Authentication Failed")
+
+        } else if(error.response.data.msg == 'Authentication Failed') {
+            setError("Authentication error")
+
+        } else if(error.response.data.msg == 'Currency error') {
+            setError("Error while fetching the value of currency")
+
+        } else if(error.response.data.msg == 'Wallet error') {
+            setError("Wallet error")
+
+        } else if(error.response.data.msg == 'Error depositing funds') {
+            setError("Server Error")
+        } else {
+            setError('')
         };
       })
     };

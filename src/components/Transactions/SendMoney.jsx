@@ -19,15 +19,16 @@ import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axiosInstance from '../Authentication/axios';
+import { error } from 'jquery';
 
 
 
 
 
 
-function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmount, setError, error}) {
+function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmount, setError, error, note, updateNote, totalFee}) {
 
-  const [totalFee, setTotalFee] = React.useState('')
+  const [currencies, setCurrencies] = React.useState([])
 
   const handleCurrencyChange = (event)=> {
     setCurrency(event.target.value)
@@ -79,18 +80,30 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
     }, expirationTime);
 
     }
-  }
+  };
 
+  const handleNoteChange = (event)=> {
+    updateNote(event.target.value)
+    if(!event.target.value) {
+      setError('Please fill all the above fields')
+    } else {
+      setError('')
+    };
+  };
+
+  //Get all the currency from API
   useEffect(() => {
-    if(amount) {
-      const TotalFeeAmount = (((amount / 100) * 2.5) + 3)
-      setTotalFee(TotalFeeAmount)
-    }
-  }, [amount])
-  
-  
+    axiosInstance.get(`api/v2/currency/`).then((res)=> {
+      // console.log(res.data.currencies)
+      if (res.data && res.data.currencies){
+          setCurrencies(res.data.currencies)
+          // console.log(currencies)
+      };
+    }).catch((error)=> {
+      console.log(error.response)
+    });
 
-
+  }, [])
 
 
   return(
@@ -129,10 +142,11 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={'USD'}>USD</MenuItem>
-              <MenuItem value={'EUR'}>EUR</MenuItem>
-              <MenuItem value={'INR'}>INR</MenuItem>
-              <MenuItem value={'GBP'}>GBP</MenuItem>
+
+              {currencies.map((curr)=> (
+              <MenuItem key={curr.id} value={curr.name}>{curr.name}</MenuItem>
+              ))};
+
             </Select>
             <FormHelperText>Fee (2.5%+3) Total Fee: {totalFee}</FormHelperText>
             {/* {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>} */}
@@ -155,9 +169,9 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
         </Grid>
       </Grid>
 
-      <Textarea aria-label="minimum height" minRows={4} sx={{marginTop: '20px', width: '97%',m:1}} placeholder="Note" />
+      <Textarea aria-label="minimum height" onChange={handleNoteChange} minRows={4} sx={{marginTop: '20px', width: '97%',m:1}} placeholder="Note" value={note} />
 
-      {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
+        {error && <Alert severity="error">{error}</Alert>}
       </div>
 
     </>
@@ -165,7 +179,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
 }
 
 
-function Form2() {
+function Form2({...props}) {
   const [localMail, setLocalMail] = React.useState('')
   const [typedCurrency, setTypedCurrency] = React.useState('')
   const [typedAmount, setTypedAmount] = React.useState('')
@@ -186,7 +200,7 @@ function Form2() {
     }
   }, [])
   
-  
+  // console.log(props.error)
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-4' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
@@ -208,15 +222,17 @@ function Form2() {
 
       <div className="d-flex justify-content-between">
           <p>Fee</p> 
-          <p>{typedCurrency} 1.02</p>
+          <p>{typedCurrency} {props.totalFee}</p>
       </div>
       <hr className='mb-4'/>
 
       <div className="d-flex justify-content-between">
-        <p><b>Total</b></p> <p><b>{typedCurrency} 13.02</b></p>
+        <p><b>Total</b></p> <p><b>{typedCurrency} {props.totalAamount}</b></p>
       </div>
       <hr className='mb-4'/>
     </div>
+
+    {props.error && <Alert severity="error">{props.error}</Alert>}
     </>
   )
 }
@@ -233,8 +249,12 @@ export default function SendMoneyForm({open}) {
   const [usersEmail, setUsersemail] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const [error, setError] = React.useState('');
+  const [totalAamount, setTotalAmount] = React.useState('')
+  const [note, updateNote] = React.useState('')
+  const [totalFee, setTotalFee] = React.useState('')
   const navigate = useNavigate()
 
+// console.log(error)
 
   const totalSteps = () => {
     return steps.length;
@@ -291,30 +311,65 @@ export default function SendMoneyForm({open}) {
       }
     } else {
         axiosInstance.post(`api/v1/user/transfer_money/`, {
-          user_id: 3,
-          currency: 10,
-          amount: amount,
+          currency: currency,
+          transfer_amount: amount,
           recivermail: usersEmail,
-          note: 'Transfer Money'
+          note: note,
+          fee: totalFee,
+          total_amount: totalAamount
         }).then((res)=> {
-
-          if(res.status == 200) {
-            console.log(res)
+          
+          // console.log(res)
+          if(res.data.msg == 'Transfer successfull') {
             newCompleted[activeStep] = true;
             setCompleted(newCompleted);
             handleNext();
           };
 
         }).catch((error)=> {
-          console.log(error.response)
+          console.log(error.response.data)
 
-          if(error.response.data.msg == 'Receiver user not found'){
-             setError("Receipient does not exists")
-          } else if (error.response.data.msg == 'Wallet not found'){
-            setError("Please create your wallet first")
-          } else if(error.response.data.msg == 'Insufficient balance') {
-             setError("Donot have sufficient balance")
-          };
+          if(error.response.data.msg == 'Authentication Failed Please provide auth token'){
+             setError("Authentication Failed")
+
+          } else if (error.response.data.msg == 'Token has expired'){
+            setError("Session has expired please try to login")
+
+          } else if(error.response.data.msg == 'Invalid token') {
+             setError("Invalid Session please try to login")
+
+          } else if(error.response.data.msg == 'Authentication Failed') {
+             setError("Authentication failed")
+
+          } else if(error.response.data.msg == 'Unable to identify Recipient') {
+             setError("Unable to locate receipient")
+
+          } else if(error.response.data.msg == 'Receipient not found please provide a valid email address') {
+             setError("Receipient mail does not exist")
+
+          } else if(error.response.data.msg == 'Currency error') {
+             setError("Not able to get the currency")
+
+          } else if(error.response.data.msg == 'Sender Wallet not found') {
+             setError("Sender do not have any wallet")
+
+          } else if(error.response.data.msg == 'Unable to locate user Wallet') {
+             setError("Unable to locate sender wallet")
+
+          } else if(error.response.data.msg == 'Recipient wallet not found') {
+             setError("Recipient do not have a wallet")
+
+          } else if(error.response.data.msg == 'Unable to locate recipient Wallet') {
+             setError("Recipient do not have a wallet")
+
+          } else if(error.response.data.msg == 'Cannot transfer to self') {
+             setError("Cannot transfer money to own account")
+
+          } else if(error.response.data.msg == 'Insufficient Funds') {
+             setError("Donot have Sufficient fund for this transaction")
+          } else {
+            setError('')
+          }
 
         });
     };
@@ -345,13 +400,36 @@ export default function SendMoneyForm({open}) {
         setAmount={setAmount}
         error={error}
         setError={setError}
+        note={note}
+        updateNote={updateNote}
+        totalFee={totalFee}
+        setTotalFee={setTotalFee}
           />;
       case 1:
-        return <Form2 />;
+        return <Form2 
+                error={error}
+                totalAamount={totalAamount}
+                totalFee={totalFee}
+               />;
       default:
         return null;
     }
   };
+
+  useEffect(() => {
+    if(amount) {
+      const TotalAmount = (parseInt(amount) + totalFee)
+      setTotalAmount(TotalAmount)
+    }
+  }, [amount, totalFee])
+
+
+  useEffect(() => {
+    if(amount) {
+      const TotalFeeAmount = (((amount / 100) * 2.5) + 3)
+      setTotalFee(TotalFeeAmount)
+    }
+  }, [amount])
 
 
   return (
