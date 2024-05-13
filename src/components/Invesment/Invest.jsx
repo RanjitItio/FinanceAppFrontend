@@ -56,10 +56,10 @@ const Invest = () => {
     switch (step) {
       case 1:
         return (
-          <div>
+          <div className="p-3">
             <Form.Group controlId="investmentPlan">
               <Form.Label>Choose Investment Plan:</Form.Label>
-              <Form.Control as="select" value={investmentPlan} onChange={handlePlanChange}>
+              <Form.Control as="select" value={investmentPlan}  onChange={handlePlanChange}>
                 <option value="">Select Plan</option>
                 <option value="Gold">Gold</option>
                 <option value="Silver">Silver</option>
@@ -105,25 +105,40 @@ const Invest = () => {
     <Main>
         <DrawerHeader/>
 
-    <Container className="d-flex justify-content-center">
-        <Card className=" py-5" style={{width: '25rem'}}>
+    <Container className="d-flex justify-content-center p-5">
+        <div className="  shadow " style={{width: '25rem'}}>
+            <div className="text-center p-5">
 
-      <Row className="justify-content-md-center">
-        <Col md={6}>
-          <Form>
+
+        <h1 className="fs-3" >INVESTMENT</h1>
+            step {step} / 3
+                
+        <h1 className="fs-5 text-bold">Fill Information</h1>
+        <p>You can invest on any plan using our popular payment methods or wallet.</p>
+            </div>
+
+
+      <Row className="justify-content-md-center p-2">
+        <Col md={12}>
+          <Form >
             {renderStepContent()}
-            <Button variant="primary" onClick={handlePrev} disabled={step === 1}>
+           <div className="d-flex gap-5">
+
+
+            <Button variant="primary" className="w-100" onClick={handlePrev} disabled={step === 1}>
               Previous
             </Button>{' '}
             {step < 3 ? (
-              <Button variant="primary" onClick={handleNext}>
+                <Button variant="primary" className="w-100" onClick={handleNext}>
                 Next
               </Button>
             ) : null}
+            </div>
+          
           </Form>
         </Col>
       </Row>
-      </Card>
+      </div>
 
     </Container>
     </Main>
