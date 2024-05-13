@@ -184,7 +184,7 @@ const Profile = () => {
                                 <h1 className="text-start text-sm  ">Use the QR code to easily handle your transactions.</h1>
                                 <h1 className="text-start text-xs text-muted">Supported format: jpeg, png, bmp, gif, or svg</h1>
                                 <Button variant="primary" className="mt-3"><PrintIcon />Print Code</Button>&nbsp;
-                                <Button variant="outline-success" className="mt-3">Upload Image</Button>
+                                <Button variant="outline-success" className="mt-3">Update Code</Button>
                                 <div className="py-5 px-3">
                                     <img src="https://via.placeholder.com/150" alt="QR Code" className="img-fluid" />
                                 </div>

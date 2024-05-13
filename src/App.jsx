@@ -32,6 +32,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import SendMoneyForm from './components/Transactions/SendMoney';
 import CryptoBuy from './components/CryptoTransactions/CryptoBuy';
 import CryptoSell from './components/CryptoTransactions/CryptoSell';
+import CryptoSwap from './components/CryptoTransactions/CryptoSwap';
 import RequestMoneyForm from './components/Transactions/RequestMoney';
 import ExchangeMoneyForm from './components/Transactions/ExchangeMoney';
 import Ticket from './components/Ticket/ticket';
@@ -40,7 +41,10 @@ import AddTicket from './components/Ticket/addtickets';
 import TicketReply from './components/Ticket/ticketreply';
 import DisputeReply from './components/Dispute/disputereply';
 import Profile from './components/Profile/profile';
-
+// import CryptoList from './components/CryptoExchange/cryptoexchangelist';
+import CryptoList from './components/CryptoExchange/cryptoexchangelist';
+import Plan from './components/Invesment/Plan';
+import Invest from './components/Invesment/Invest';
 
 
 
@@ -110,6 +114,7 @@ function App() {
                       <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
                       <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
                       <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
+                      <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route>
                       <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
                       <Route exact path='/exchange-currency/' element={<ExchangeMoneyForm open={open} />}></Route>
                       <Route exact path='/tickets/' element={<Ticket open={open} />}></Route>
@@ -119,6 +124,9 @@ function App() {
                       <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
                       <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
                       <Route exact path='/profile/' element={<Profile open={open} />}></Route>
+                      <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
+                      <Route exact path='/investment/plan/' element={<Plan open={open} />}></Route>
+                      <Route exact path='/investment/invest/' element={<Invest open={open} />}></Route>
                     </Routes>
                 </Box>
               </>

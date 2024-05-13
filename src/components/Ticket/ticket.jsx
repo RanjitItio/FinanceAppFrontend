@@ -5,9 +5,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
+
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
+
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ResponsiveDialog from '../Transactions/TransactionDetails';
 import { useState } from 'react';
