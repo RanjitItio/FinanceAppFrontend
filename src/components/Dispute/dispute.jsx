@@ -5,11 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
-import CircleIcon from '@mui/icons-material/Circle';
-import ResponsiveDialog from '../Transactions/TransactionDetails';
 import { useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
@@ -19,8 +15,6 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import { AddBox } from '@mui/icons-material';
 
 
 
@@ -218,10 +212,10 @@ export default function Dispute({open}) {
                   
                     <ListItemText>
                         <h1>{transaction.title}</h1>
-                        <spen>
+                        <span>
 
                     <p className='text-sm text-muted'>Dispute ID: {transaction.disputtid} . Defendant : {transaction.defendeant} | {transaction.date} {transaction.time}</p>
-                        </spen>
+                        </span>
                     <h1 className='text-sm text-muted'>Transaction id{transaction.transactionid}</h1>
                        
                     </ListItemText>
@@ -279,7 +273,7 @@ export default function Dispute({open}) {
            
 
         </Main>
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} />
+        {/* <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} /> */}
 
         </>
     )

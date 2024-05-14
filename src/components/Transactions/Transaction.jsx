@@ -122,6 +122,7 @@ const TransactionData = [
 ]
 
 
+
 export default function AllTransactions({open}) {
     const [boxOpen, setBoxOpen] = useState(false);
     const [isfilterItem, setFilterItem] = useState(false);
@@ -131,7 +132,9 @@ export default function AllTransactions({open}) {
     const [currency, setCurrency] = useState('');
     const [transactionData, setTransactionData] = useState([]);
     const [error, setError] = useState('');
-    const [specificTransaction, updateSpecificTransaction] = useState([]);
+    // const [specificTransaction, updateSpecificTransaction] = useState([]);
+    const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);
+
 
 
     const handleDateChange = (event) => {
@@ -339,7 +342,7 @@ export default function AllTransactions({open}) {
 
                 const handleTransactionClick = ()=> {
                     handleClickOpen();
-                    updateSpecificTransaction(transaction)
+                    updateSpecificTransactionDetails(transaction)
                 };
 
                 return(
@@ -427,7 +430,7 @@ export default function AllTransactions({open}) {
 
         </Main>
 
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransaction={specificTransaction} />
+        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
         
 
         </>

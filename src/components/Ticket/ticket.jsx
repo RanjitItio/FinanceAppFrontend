@@ -5,20 +5,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ResponsiveDialog from '../Transactions/TransactionDetails';
+// import ResponsiveDialog from '../Transactions/TransactionDetails';
 import { useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { AddBox } from '@mui/icons-material';
 
@@ -169,7 +161,7 @@ export default function Ticket({open}) {
            
 
         </Main>
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} />
+        {/* <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} /> */}
 
         </>
     )
