@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"
 import axiosInstance from "../../Authentication/axios"
-import { error } from "jquery"
 import { Link } from "react-router-dom";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 
 
@@ -18,7 +19,7 @@ export default function FiatAccount() {
                 updateUserWallet(res.data.user_wallet_data)
                 // console.log(res.data.user_wallet_data)
              } else if(res.data.msg == 'Token has expired') {
-                setError('Session has expired please login')
+                setError('Session has expired please login to view wallet balance')
 
              } else if (res.data.msg == 'Invalid token') {
                 setError('Invalid session please try to login')
@@ -74,17 +75,24 @@ export default function FiatAccount() {
                     </div>
                 </div>
 
-                {userWallet.map((wallet, index)=> (
-                    <React.Fragment key={index}>
-                        {selectedCurrency == wallet.currency && (
-                            <React.Fragment>
-                                <h2 className="d-flex justify-content-center my-2">{wallet.currency} {wallet.balance}</h2>
-                                <p className="d-flex justify-content-center text-muted">9090 7867 5467</p>
-                                <br />
+                {error ? (
+                    <Stack sx={{ width: '100%', marginBottom: '20px', marginTop: '10px'}}>
+                        <Alert severity="warning">{error}</Alert>
+                    </Stack>
+                ) : (
+                    userWallet.map((wallet, index)=> (
+                        <React.Fragment key={index}>
+                            {selectedCurrency == wallet.currency && (
+                                <React.Fragment>
+                                    <h2 className="d-flex justify-content-center my-2"><span className="mx-1">{wallet.currency}</span> <b>{wallet.balance}</b></h2>
+                                    <p className="d-flex justify-content-center text-muted">9090 7867 5467</p>
+                                    <br />
+                                </React.Fragment>
+                            )}
                             </React.Fragment>
-                        )}
-                    </React.Fragment>
-                ))}
+                        ))
+                    )}
+                
                 
                 {/* For large Device */}
                 <div className='d-flex justify-content-center'>
