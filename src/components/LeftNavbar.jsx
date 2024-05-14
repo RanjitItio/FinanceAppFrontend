@@ -63,6 +63,7 @@ const NavContent = [
     {text: 'Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
     {text: 'Crypto Buy', icon: <RotateRightIcon />, url: '/crypto-buy/'},
     {text: 'Crypto Sell', icon: <RotateRightIcon />, url: '/crypto-sell/'},
+    {text: 'Crypto Swap', icon: <RotateRightIcon />, url: '/crypto-swap/'},
     {text: 'Investments', icon: <StorageIcon />, url: '/'},
     ],
     icon: ''

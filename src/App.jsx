@@ -1,5 +1,4 @@
 import Wallet from './components/Wallet';
-import React from "react";
 import AuthProvider from './components/ProtectedRoute/authProvider';
 import AuthRoutes from './components/ProtectedRoute/routes';
 

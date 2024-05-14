@@ -33,7 +33,10 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
 import Profile from "../Profile/profile";
-
+import CryptoList from "../CryptoExchange/cryptoexchangelist";
+import Plan from "../Invesment/Plan";
+import Invest from "../Invesment/Invest";
+import CryptoSwap from "../CryptoTransactions/CryptoSwap";
 
 
 
@@ -112,6 +115,10 @@ const AuthRoutes = () => {
                           <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
                           <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
                           <Route exact path='/profile/' element={<Profile open={open} />}></Route>
+                          <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
+                          <Route exact path='/investment/plan/' element={<Plan open={open} />}></Route>
+                          <Route exact path='/investment/invest/' element={<Invest open={open} />}></Route>
+                          <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route>
                       </Routes>
                     </Box>
                   }></Route>

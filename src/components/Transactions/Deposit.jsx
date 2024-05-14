@@ -404,26 +404,7 @@ export default function DepositForm({open}) {
     }
   }, [amount])
 
-  // const handleDepositSubmit = async ()=> {
-  //     try{
-  //         await axiosInstance.post(`api/v1/user/deposit/`, {
-  //           currency: currency,
-  //           deposit_amount: amount,
-  //           fee: 0.0,
-  //           total_amount: totalAamount,
-  //           payment_mode: paymentMethod
-  //         }).then((res)=> {
-  //           console.log(res)
-  //         })
-  //     } catch(error) {
-  //          console.log(error.response)
-  //     }
-  // };
-
-  // const handleConfirmDepositSubmit = ()=> {
-  //   handleDepositSubmit();
-  //   handleComplete();
-  // }
+  
 
 
   return (

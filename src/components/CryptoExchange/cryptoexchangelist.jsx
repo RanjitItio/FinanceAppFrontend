@@ -1,17 +1,11 @@
-import {Main, DrawerHeader} from '../Content';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
+import { Main,DrawerHeader } from '../Content';
+
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ResponsiveDialog from './TransactionDetails';
-import { useEffect, useState } from 'react';
-import Pagination from '@mui/material/Pagination';
+// import ResponsiveDialog from './TransactionDetails';
+import { useState } from 'react';
+
 import { Button } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import FormControl from '@mui/material/FormControl';
@@ -19,10 +13,16 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
-import axiosInstance from '../Authentication/axios';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import HistoryIcon from '@mui/icons-material/History';
-import Alert from '@mui/material/Alert';
+
+// import { makeStyles } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from  '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from  '@mui/material/TableContainer';
+import TableHead from  '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from   '@mui/material/Paper';
+
 
 
 
@@ -120,18 +120,21 @@ const TransactionData = [
         currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
     },
 ]
+const rows = [
+    { date: '2024-05-10', txnId: '123456', type: 'Payment', sendAmount: '$100', getAmount: '$95', fee: '$5', status: 'Completed' },
+    { date: '2024-05-09', txnId: '789012', type: 'Withdrawal', sendAmount: '$200', getAmount: '$190', fee: '$10', status: 'Pending' },
+    // Add more rows as needed
+  ];
 
 
-export default function AllTransactions({open}) {
+export default function CryptoList({open}) {
     const [boxOpen, setBoxOpen] = useState(false);
     const [isfilterItem, setFilterItem] = useState(false);
     const [dateRange, setDateRange] = useState('');
     const [transactionType, setTransactionType] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
     const [currency, setCurrency] = useState('');
-    const [transactionData, setTransactionData] = useState([]);
-    const [error, setError] = useState('');
-    const [specificTransaction, updateSpecificTransaction] = useState([]);
+     
 
 
     const handleDateChange = (event) => {
@@ -159,47 +162,21 @@ export default function AllTransactions({open}) {
         setFilterItem(!isfilterItem);
       };
 
-    useEffect(() => {
-        try{
-            axiosInstance.get(`api/v4/users/transactions/`).then((res)=> {
-                if(res.data.msg == "Token has expired"){
-                    setError("Session has expired please try to login")
-                }else if (res.data.msg == "Invalid token"){
-                    setError("Invalid Session please try to login")
-                } else if(res.data.msg == "Authentication Failed") {
-                    setError("Authentication Failed please re login")
-                } else if (res.data.msg == "Unable to get the Transactions") {
-                    setError("Server error")
-                } else {
-                    setError('')
-                }
-
-                if(res.data && res.data.all_transactions) {
-                    setTransactionData(res.data.all_transactions)
-                    // console.log(res.data)
-                };
-            })
-        }catch(error) {
-            console.log(error)
-        }
-       
-    }, [])
-    // console.log(transactionData)
-
     return (
         <>
          <Main open={open}>
             <DrawerHeader />
 
+
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>TRANSACTIONS</p>
+                <p className='fs-3'>Crypto Exchange</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>History of transactions in your account</p>
+                <p className='text-muted'>List of all the payments you received from customers</p>
             </div>
             <br />
             <div className='d-flex justify-content-between'>
-                <p className='text-muted'>All Transactions</p>
+                <p className='text-muted'>All Crypto Exchange Transaction</p>
                 <div className='d-flex align-items-center'>
                     <p className='text-muted'>Filter</p>&nbsp;
                     <Button startIcon={<FilterListIcon />} style={{backgroundColor: ''}} variant="outlined" onClick={toggleFilterItemVisibility}></Button>
@@ -317,172 +294,48 @@ export default function AllTransactions({open}) {
                             <Button variant="text">Reset</Button>
                             <Button variant="contained">Apply Filter</Button>
                         </div>
+                        
                     </div>
                 </div>
                     
                 </>
                 )}
             </div>
-
-                {error ? (
-                    <Alert severity="warning">{error}</Alert>
-                ) : (
-        <List>
+            <TableContainer component={Paper}>
+      <Table aria-label="transaction table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Date</TableCell>
+            <TableCell>Tnx ID</TableCell>
+            <TableCell>Type</TableCell>
+            <TableCell>Send Amount</TableCell>
+            <TableCell>Get Amount</TableCell>
+            <TableCell>Fee</TableCell>
+            <TableCell>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.txnId}>
+              <TableCell component="th" scope="row">
+                {row.date}
+              </TableCell>
+              <TableCell>{row.txnId}</TableCell>
+              <TableCell>{row.type}</TableCell>
+              <TableCell>{row.sendAmount}</TableCell>
+              <TableCell>{row.getAmount}</TableCell>
+              <TableCell>{row.fee}</TableCell>
+              <TableCell>{row.status}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
            
-            {transactionData.map((transaction, index) => {
-        
-                const transactionDate = new Date(transaction.txddate);
-                const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
-
-                const transactionTime = new Date(transaction.txdtime);
-                const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
-
-                const handleTransactionClick = ()=> {
-                    handleClickOpen();
-                    updateSpecificTransaction(transaction)
-                };
-
-                return(
-       
-                <ListItem
-                key={index}
-                disablePadding
-                secondaryAction={
-                    <IconButton edge="end" aria-label="comments">
-                        <ArrowRightIcon />
-                    </IconButton>
-                }
-                onClick={handleTransactionClick}
-                className='mb-2 shadow border border-secondary'
-                >
-                <ListItemButton>
-                        <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.txdcurrency.symbol}</Avatar>
-                        </ListItemAvatar>
-                    <ListItemText
-                    primary={transaction.txdtype}
-                    secondary={`Cash ${formatDate} ${formattedTime}`}
-                    />
-                    <ListItemText
-                    primary={
-                        
-                        transaction.txdstatus == 'Pending' ? (
-                            <>
-                            
-                                <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
-                            
-                            </>
-
-                        ) : transaction.txdstatus == 'Success' ? (
-                            <>
-                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
-                            </>
-                            
-                        ) : transaction.txdstatus == 'Cancelled' ? (
-                            <>
-                                <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
-                            </>
-                        ) : (
-                            <>
-                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
-                            </>
-                        )
-                             
-                    }
-                    secondary={
-                        transaction.txdstatus == 'Pending' ? (
-                            <span style={{ color: 'orange' }}>{transaction.txdstatus}</span>
-
-                        ) : transaction.txdstatus == 'Success' ? (
-                            <span style={{ color: 'green' }}>{transaction.txdstatus}</span>
-
-                        ) : transaction.txdstatus === 'Cancelled' ? (
-                            <span style={{ color: 'red' }}>{transaction.txdstatus}</span>
-
-                        ) : (
-                            <span style={{ color: 'orange' }}>{transaction.txdstatus}</span>
-                        )
-                    }
-                    sx={{ flex: 'auto', textAlign: 'right' }}
-                    />
-                </ListItemButton>
-                </ListItem>
-                )
-                
-            })}
-            </List>
-        
-    )}
-            <div className="my-3">
-                <Pagination count={10} color="primary" />
-            </div>
 
         </Main>
-
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransaction={specificTransaction} />
-        
+        {/* <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} /> */}
 
         </>
     )
-};
-
-
-
-
-
-
-//Map the list Without any data from API
-// <List>
-//             {TransactionData.map((transaction, index) => (
-        
-//                 <ListItem
-//                 key={index}
-//                 disablePadding
-//                 secondaryAction={
-//                     <IconButton edge="end" aria-label="comments">
-//                         <ArrowRightIcon />
-//                     </IconButton>
-//                 }
-//                 onClick={handleClickOpen}
-//                 className='mb-2 shadow border border-secondary'
-//                 >
-//                 <ListItemButton>
-//                         <ListItemAvatar>
-//                             <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.txdcurrency.symbol}</Avatar>
-//                         </ListItemAvatar>
-//                     <ListItemText
-                
-//                     primary={transaction.title}
-                    
-//                     secondary={`Cash ${transaction.date} ${transaction.time}`}
-//                     />
-//                     <ListItemText
-//                     primary={
-//                         <>
-//                             <span style={{color:transaction.status_icon_color}}>{transaction.status_icon}</span> 
-                             
-//                             {transaction.txdcurrency}
-//                             {transaction.currency}
-
-//                             <span>{transaction.amount}</span>
-//                         </>
-//                     }
-//                     secondary={
-                        
-//                         <span style={{ color: transaction.status_color }}>{transaction.status}</span>
-//                     }
-//                     sx={{ flex: 'auto', textAlign: 'right' }}
-//                     />
-//                 </ListItemButton>
-//                 </ListItem>
-//             ))}
-              
-//             </List>
+}

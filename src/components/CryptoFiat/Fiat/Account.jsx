@@ -1,8 +1,56 @@
+import React, { useEffect, useState } from "react"
+import axiosInstance from "../../Authentication/axios"
+import { error } from "jquery"
+import { Link } from "react-router-dom";
 
 
 
 
 export default function FiatAccount() {
+    const [userWallet, updateUserWallet] = useState([]);
+    const [error, setError] = useState('');
+    const [selectedCurrency, setSelectedCurrency] = useState('USD');
+
+
+    useEffect(() => {
+        axiosInstance.get(`api/v3/user/wallet`).then((res)=> {
+             if(res.data.user_wallet_data) {
+                updateUserWallet(res.data.user_wallet_data)
+                // console.log(res.data.user_wallet_data)
+             } else if(res.data.msg == 'Token has expired') {
+                setError('Session has expired please login')
+
+             } else if (res.data.msg == 'Invalid token') {
+                setError('Invalid session please try to login')
+             }
+        }).catch((error)=> {
+            console.log(error.response)
+
+            if (error.response.data.msg == 'Authentication Failed Please provide auth token') {
+                setError("Authentication Failed")
+
+            } else if (error.response.data.msg == 'Authentication Failed')  {
+                setError("Authentication Failed")
+
+            } else if (error.response.data.msg == 'User Wallet not available') {
+                setError("User wallet is not available")
+
+            } else if(error.response.data.msg == 'Unable to get the Wallet of user') {
+                setError("Unable to locate users wallet")
+
+            } else if(error.response.data.msg == 'Server error') {
+                setError("Server Error")
+            }
+        });
+    }, [])
+
+
+    const handleCurrencyClick = (currency) => {
+        setSelectedCurrency(currency);
+    };
+    
+    // console.log(userWallet)
+    
     return (
         <div className="card" style={{backgroundColor: '#95b02f'}}>
             <div className="card-body">
@@ -11,25 +59,33 @@ export default function FiatAccount() {
                     <h5 className="card-title my-1">Accounts</h5>
 
                     <div className="btn-group " role="group" aria-label="Basic example">
-                        <button type="button" className="btn btn-light">
+                        <button type="button" className="btn btn-light" onClick={()=> handleCurrencyClick('EUR')}>
                             <i className="bi bi-currency-euro"></i>
                             <span className='d-none d-sm-inline'>Euro</span> 
                         </button>
-                        <button type="button" className="btn btn-light">
+                        <button type="button" className="btn btn-light" onClick={()=> handleCurrencyClick('USD')}>
                             <i className="bi bi-currency-dollar"></i>
                             <span className='d-none d-sm-inline'>USD</span>
                         </button>
-                        <button type="button" className="btn btn-light">
+                        <button type="button" className="btn btn-light" onClick={()=> handleCurrencyClick('INR')}>
                             <i className="bi bi-currency-rupee"></i>
                             <span className='d-none d-sm-inline'>INR</span>
                         </button>
                     </div>
                 </div>
 
-              
-                <h2 className="d-flex justify-content-center my-2">$56,707.89</h2>
-                <p className="d-flex justify-content-center text-muted">9090 7867 5467</p>
-
+                {userWallet.map((wallet, index)=> (
+                    <React.Fragment key={index}>
+                        {selectedCurrency == wallet.currency && (
+                            <React.Fragment>
+                                <h2 className="d-flex justify-content-center my-2">{wallet.currency} {wallet.balance}</h2>
+                                <p className="d-flex justify-content-center text-muted">9090 7867 5467</p>
+                                <br />
+                            </React.Fragment>
+                        )}
+                    </React.Fragment>
+                ))}
+                
                 {/* For large Device */}
                 <div className='d-flex justify-content-center'>
                     <div className='d-none d-sm-none d-md-inline d-lg-inline'>
@@ -37,18 +93,18 @@ export default function FiatAccount() {
                             <i className="bi bi-arrow-down"></i>&nbsp;
                             Receive
                         </button>
-                        <button type="button" className="btn btn-light mx-1">
+                        <Link className="btn btn-light mx-1" to={'/deposit/'}>
                             <i className="bi bi-plus-lg"></i>&nbsp;
                             Add
-                        </button>
-                        <button type="button" className="btn btn-light mx-1">
+                        </Link>
+                        <Link to={'/moneytransfer/'} className="btn btn-light mx-1">
                         <i className="bi bi-arrow-up"></i>&nbsp;
                             Send
-                        </button>
-                        <button type="button" className="btn btn-light mx-1">
+                        </Link>
+                        <Link to={'/exchange-currency/'} className="btn btn-light mx-1">
                             <i className="bi bi-arrows"></i>&nbsp;
                             Convert
-                        </button>
+                        </Link>
                         <button type="button" className="btn btn-light mx-1">
                             <i className="bi bi-three-dots-vertical"></i>&nbsp;
                             More
