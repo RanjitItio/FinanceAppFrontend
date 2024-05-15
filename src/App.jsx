@@ -9,12 +9,11 @@ import AuthRoutes from './components/ProtectedRoute/routes';
 function App() {
 
   return (
-      <>
+     
       <AuthProvider>
           <AuthRoutes />
       </AuthProvider>
-      </>
-  
+
   );
 };
 
