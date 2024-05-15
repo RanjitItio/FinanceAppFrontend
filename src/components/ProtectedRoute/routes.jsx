@@ -28,8 +28,8 @@ import WithdrawalSettings from "../Withdraw/withdrawlsettings";
 import Ticket from "../Ticket/ticket";
 import AddTicket from "../Ticket/addtickets";
 import TicketReply from "../Ticket/ticketreply";
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
 import Profile from "../Profile/profile";
@@ -89,7 +89,7 @@ const AuthRoutes = () => {
                     <Route exact path='/kyc/' element={<KYCForm />}></Route>
                     <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
                     <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
-                    <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route> 
+                    <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
 
                     
                   <Route exact path='*' element={
