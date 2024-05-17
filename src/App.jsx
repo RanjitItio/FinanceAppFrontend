@@ -1,12 +1,22 @@
 import Wallet from './components/Wallet';
 import AuthProvider from './components/ProtectedRoute/authProvider';
 import AuthRoutes from './components/ProtectedRoute/routes';
-
+// import { refreshAccessToken } from './components/Authentication/axios';
+import { useEffect } from 'react';
 
 
 
 
 function App() {
+
+//   useEffect(() => {
+//     const intervalId = setInterval(() => {
+//         refreshAccessToken();
+//     }, 5  * 1000); // 2 seconds
+
+    
+//     return () => clearInterval(intervalId);
+// }, []);
 
   return (
      

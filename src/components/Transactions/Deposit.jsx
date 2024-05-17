@@ -25,6 +25,7 @@ const steps = ['Create Deposit', 'Confirm your Deposit'];
 
 
 
+
 function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
 
   const [currencies, setCurrencies] = React.useState([])
@@ -306,6 +307,7 @@ export default function DepositForm({open}) {
         fee: 0.0,
         total_amount: totalAamount,
         payment_mode: paymentMethod
+
       }).then((res)=> {
         // console.log(res)
 
@@ -445,7 +447,8 @@ export default function DepositForm({open}) {
               {/* All steps completed - you&apos;re finished */}
               <Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
-                 Your Money has been deposited to your account successfully.
+                    Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
+                    We'll notify you once your deposit has been approved.
               </Alert>
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
