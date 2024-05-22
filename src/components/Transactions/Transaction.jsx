@@ -364,7 +364,7 @@ export default function AllTransactions({open}) {
                         </ListItemAvatar>
                     <ListItemText
                     primary={transaction.txdtype}
-                    secondary={`Cash ${formatDate} ${formattedTime}`}
+                    secondary={`Cash ${formatDate} ${transaction.txdtime}`}
                     />
                     <ListItemText
                     primary={
