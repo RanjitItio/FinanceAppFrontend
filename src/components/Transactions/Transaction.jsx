@@ -334,10 +334,11 @@ export default function AllTransactions({open}) {
            
             {transactionData.map((transaction, index) => {
         
-                const transactionDate = new Date(transaction.txddate);
+                const transactionDate = new Date(transaction.transaction.txddate);
+                
                 const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
 
-                const transactionTime = new Date(transaction.txdtime);
+                const transactionTime = new Date(transaction.transaction.txdtime);
                 const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
 
                 const handleTransactionClick = ()=> {
@@ -360,58 +361,58 @@ export default function AllTransactions({open}) {
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.txdcurrency.symbol}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency.symbol}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
-                    primary={transaction.txdtype}
-                    secondary={`Cash ${formatDate} ${transaction.txdtime}`}
+                    primary={transaction.transaction.txdtype}
+                    secondary={`Cash ${transaction.transaction.txddate} ${transaction.transaction.txdtime}`}
                     />
                     <ListItemText
                     primary={
                         
-                        transaction.txdstatus == 'Pending' ? (
+                        transaction.transaction.txdstatus == 'Pending' ? (
                             <>
                             
                                 <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
                             
                             </>
 
                         ) : transaction.txdstatus == 'Success' ? (
                             <>
                                 <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
                             </>
                             
                         ) : transaction.txdstatus == 'Cancelled' ? (
                             <>
                                 <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
                             </>
                         ) : (
                             <>
                                 <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.txdcurrency.name}</span>
-                                <span>{transaction.amount}</span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
                             </>
                         )
                              
                     }
                     secondary={
                         transaction.txdstatus == 'Pending' ? (
-                            <span style={{ color: 'orange' }}>{transaction.txdstatus}</span>
+                            <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
 
                         ) : transaction.txdstatus == 'Success' ? (
-                            <span style={{ color: 'green' }}>{transaction.txdstatus}</span>
+                            <span style={{ color: 'green' }}>{transaction.transaction.txdstatus}</span>
 
                         ) : transaction.txdstatus === 'Cancelled' ? (
-                            <span style={{ color: 'red' }}>{transaction.txdstatus}</span>
+                            <span style={{ color: 'red' }}>{transaction.transaction.txdstatus}</span>
 
                         ) : (
-                            <span style={{ color: 'orange' }}>{transaction.txdstatus}</span>
+                            <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
                         )
                     }
                     sx={{ flex: 'auto', textAlign: 'right' }}
