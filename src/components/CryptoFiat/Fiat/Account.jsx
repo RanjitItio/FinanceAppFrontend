@@ -60,15 +60,15 @@ export default function FiatAccount() {
                     <h5 className="card-title my-1">Accounts</h5>
 
                     <div className="btn-group " role="group" aria-label="Basic example">
-                        <button type="button" className="btn btn-light" onClick={()=> handleCurrencyClick('EUR')}>
+                        <button type="button" className={`btn btn-light ${selectedCurrency=='EUR' ? "active" : ""}`} onClick={()=> handleCurrencyClick('EUR')}>
                             <i className="bi bi-currency-euro"></i>
                             <span className='d-none d-sm-inline'>Euro</span> 
                         </button>
-                        <button type="button" className="btn btn-light" onClick={()=> handleCurrencyClick('USD')}>
+                        <button type="button" className={`btn btn-light ${selectedCurrency=='USD' ? "active" : ""}`} onClick={()=> handleCurrencyClick('USD')}>
                             <i className="bi bi-currency-dollar"></i>
                             <span className='d-none d-sm-inline'>USD</span>
                         </button>
-                        <button type="button" className="btn btn-light" onClick={()=> handleCurrencyClick('INR')}>
+                        <button type="button" className={`btn btn-light ${selectedCurrency=='INR' ? "active" : ""}`} onClick={()=> handleCurrencyClick('INR')}>
                             <i className="bi bi-currency-rupee"></i>
                             <span className='d-none d-sm-inline'>INR</span>
                         </button>
