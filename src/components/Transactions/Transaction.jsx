@@ -10,7 +10,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ResponsiveDialog from './TransactionDetails';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -19,6 +19,10 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
+import axiosInstance from '../Authentication/axios';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import HistoryIcon from '@mui/icons-material/History';
+import Alert from '@mui/material/Alert';
 
 
 
@@ -118,13 +122,19 @@ const TransactionData = [
 ]
 
 
-export default function Transactions({open}) {
+
+export default function AllTransactions({open}) {
     const [boxOpen, setBoxOpen] = useState(false);
     const [isfilterItem, setFilterItem] = useState(false);
     const [dateRange, setDateRange] = useState('');
     const [transactionType, setTransactionType] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
     const [currency, setCurrency] = useState('');
+    const [transactionData, setTransactionData] = useState([]);
+    const [error, setError] = useState('');
+    // const [specificTransaction, updateSpecificTransaction] = useState([]);
+    const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);
+
 
 
     const handleDateChange = (event) => {
@@ -152,11 +162,37 @@ export default function Transactions({open}) {
         setFilterItem(!isfilterItem);
       };
 
+    useEffect(() => {
+        try{
+            axiosInstance.get(`api/v4/users/transactions/`).then((res)=> {
+                if(res.data.msg == "Token has expired"){
+                    setError("Session has expired please try to login")
+                }else if (res.data.msg == "Invalid token"){
+                    setError("Invalid Session please try to login")
+                } else if(res.data.msg == "Authentication Failed") {
+                    setError("Authentication Failed please re login")
+                } else if (res.data.msg == "Unable to get the Transactions") {
+                    setError("Server error")
+                } else {
+                    setError('')
+                }
+
+                if(res.data && res.data.all_transactions) {
+                    setTransactionData(res.data.all_transactions)
+                    // console.log(res.data)
+                };
+            })
+        }catch(error) {
+            console.log(error)
+        }
+       
+    }, [])
+    // console.log(transactionData)
+
     return (
         <>
          <Main open={open}>
             <DrawerHeader />
-
 
             <div className="d-flex justify-content-center">
                 <p className='fs-3'>TRANSACTIONS</p>
@@ -284,7 +320,6 @@ export default function Transactions({open}) {
                             <Button variant="text">Reset</Button>
                             <Button variant="contained">Apply Filter</Button>
                         </div>
-                        
                     </div>
                 </div>
                     
@@ -292,85 +327,166 @@ export default function Transactions({open}) {
                 )}
             </div>
 
-            <List>
-            {TransactionData.map((transaction, index) => (
+                {error ? (
+                    <Alert severity="warning">{error}</Alert>
+                ) : (
+        <List>
+           
+            {transactionData.map((transaction, index) => {
+        
+                const transactionDate = new Date(transaction.transaction.txddate);
+                
+                const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
+
+                const transactionTime = new Date(transaction.transaction.txdtime);
+                const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
+
+                const handleTransactionClick = ()=> {
+                    handleClickOpen();
+                    updateSpecificTransactionDetails(transaction)
+                };
+
+                return(
+       
                 <ListItem
                 key={index}
                 disablePadding
                 secondaryAction={
                     <IconButton edge="end" aria-label="comments">
-                    {transaction.transaction_icon}
+                        <ArrowRightIcon />
                     </IconButton>
                 }
-                onClick={handleClickOpen}
+                onClick={handleTransactionClick}
                 className='mb-2 shadow border border-secondary'
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency.symbol}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
-                    primary={transaction.title}
-                    secondary={`Cash ${transaction.date} ${transaction.time}`}
+                    primary={transaction.transaction.txdtype}
+                    secondary={`Cash ${transaction.transaction.txddate} ${transaction.transaction.txdtime}`}
                     />
                     <ListItemText
                     primary={
-                        <>
-                            <span style={{color:transaction.status_icon_color}}>{transaction.status_icon}</span>
-                            {transaction.currency}
-                            {/* <span>{transaction.currency_icon}</span> */}
-                            <span>{transaction.amount}</span>
-                        </>
+                        
+                        transaction.transaction.txdstatus == 'Pending' ? (
+                            <>
+                            
+                                <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
+                            
+                            </>
+
+                        ) : transaction.txdstatus == 'Success' ? (
+                            <>
+                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
+                            </>
+                            
+                        ) : transaction.txdstatus == 'Cancelled' ? (
+                            <>
+                                <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
+                            </>
+                        ) : (
+                            <>
+                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                <span className='mx-1'>{transaction.currency.name}</span>
+                                <span>{transaction.transaction.amount}</span>
+                            </>
+                        )
+                             
                     }
                     secondary={
-                        <span style={{ color: transaction.status_color }}>{transaction.status}</span>
+                        transaction.txdstatus == 'Pending' ? (
+                            <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
+
+                        ) : transaction.txdstatus == 'Success' ? (
+                            <span style={{ color: 'green' }}>{transaction.transaction.txdstatus}</span>
+
+                        ) : transaction.txdstatus === 'Cancelled' ? (
+                            <span style={{ color: 'red' }}>{transaction.transaction.txdstatus}</span>
+
+                        ) : (
+                            <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
+                        )
                     }
                     sx={{ flex: 'auto', textAlign: 'right' }}
                     />
                 </ListItemButton>
                 </ListItem>
-            ))}
-              {/* <ListItem disablePadding
-              secondaryAction={
-                <IconButton edge="end" aria-label="comments">
-                    <ArrowRightIcon />
-                </IconButton>
-              }
-              onClick={handleClickOpen}
-              className='mb-2 shadow border border-secondary'
-              >
-                <ListItemButton>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CurrencyRupeeIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Exchange From" secondary="GBP 20-07-2024 6:19 PM" />
-                    <ListItemText
-                     primary={
-                        <>
-                            <ArrowDropUpIcon sx={{color: 'green'}}/>
-                            <CurrencyPoundIcon sx={{fontSize: 18}} />
-                            <span>75</span>
-                        </>
-                     }
-                     secondary={
-                        <span style={{color: 'green'}}>success</span>
-                        
-                     }
-                     sx={{flex: 'auto', textAlign: 'right'}} />
-                </ListItemButton>
-              </ListItem> */}
+                )
+                
+            })}
             </List>
-
+        
+    )}
             <div className="my-3">
                 <Pagination count={10} color="primary" />
             </div>
-           
 
         </Main>
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} />
+
+        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
+        
 
         </>
     )
-}
+};
+
+
+
+
+
+
+//Map the list Without any data from API
+// <List>
+//             {TransactionData.map((transaction, index) => (
+        
+//                 <ListItem
+//                 key={index}
+//                 disablePadding
+//                 secondaryAction={
+//                     <IconButton edge="end" aria-label="comments">
+//                         <ArrowRightIcon />
+//                     </IconButton>
+//                 }
+//                 onClick={handleClickOpen}
+//                 className='mb-2 shadow border border-secondary'
+//                 >
+//                 <ListItemButton>
+//                         <ListItemAvatar>
+//                             <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.txdcurrency.symbol}</Avatar>
+//                         </ListItemAvatar>
+//                     <ListItemText
+                
+//                     primary={transaction.title}
+                    
+//                     secondary={`Cash ${transaction.date} ${transaction.time}`}
+//                     />
+//                     <ListItemText
+//                     primary={
+//                         <>
+//                             <span style={{color:transaction.status_icon_color}}>{transaction.status_icon}</span> 
+                             
+//                             {transaction.txdcurrency}
+//                             {transaction.currency}
+
+//                             <span>{transaction.amount}</span>
+//                         </>
+//                     }
+//                     secondary={
+                        
+//                         <span style={{ color: transaction.status_color }}>{transaction.status}</span>
+//                     }
+//                     sx={{ flex: 'auto', textAlign: 'right' }}
+//                     />
+//                 </ListItemButton>
+//                 </ListItem>
+//             ))}
+              
+//             </List>

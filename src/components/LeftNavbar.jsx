@@ -24,6 +24,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import StorageIcon from '@mui/icons-material/Storage';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+
 
 
 
@@ -40,27 +42,45 @@ const NavContent = [
   { text: 'TRANSACTIONS', subItems: [
     {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/transactions/'},
     {text: 'Deposit Money', icon: <AddCardIcon />, url: '/deposit/'}, 
-    {text: 'Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
-    {text: 'Request Money', icon: <SwapCallsIcon />, url: '/request-payment/'}, 
-    {text: 'Exchange Money', icon: <CurrencyExchangeIcon />, url: '/exchange-currency/'}, 
-    {text: 'Withdrawls', icon: <PaymentsIcon />, url: '/'}, 
+    {text: '+Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
+    {text: '-Request Money', icon: <SwapCallsIcon />, url: '/request-payment/'}, 
+    {text: '-Exchange Money', icon: <CurrencyExchangeIcon />, url: '/exchange-currency/'}, 
+    {text: '-Withdrawal Money', icon: <PaymentsIcon />, url: '/payout-payment/'}, 
+    {text: '-Withdrawal List', icon: <FormatListBulletedIcon />, url: '/withdrawal-history/'}, 
+    {text: '-Withdrawal Settings', icon: <SettingsIcon />, url: '/withdrawal-settings/'}, 
   ],
   icon:''},
 
   { text: 'OTHERS', subItems: [
+<<<<<<< HEAD
     {text: 'Disputes', icon: <MessageIcon />, url: '/dispute/'},
     {text: 'Tickets', icon: <ConfirmationNumberIcon />, url: '/tickets/'},
     {text: 'Profile', icon: <AccountBoxIcon />, url: '/profile/'},
     {text: 'Verifications', icon: <SettingsIcon />, url: '/'},
+=======
+    {text: '-Disputes', icon: <MessageIcon />, url: '/dispute/'},
+    {text: '-Tickets', icon: <ConfirmationNumberIcon />, url: '/tickets/'},
+    {text: '-Profile', icon: <AccountBoxIcon />, url: '/profile/'},
+    {text: '-Verifications', icon: <SettingsIcon />, url: '/'},
+>>>>>>> 918fc62507cf25ce32ef439a27a76d9b65a16e84
   ],
   icon: ''},
 
   { text: 'ADDONS', subItems: [
+<<<<<<< HEAD
     {text: 'Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
     {text: 'Crypto Buy', icon: <RotateRightIcon />, url: '/crypto-buy/'},
     {text: 'Crypto Sell', icon: <RotateRightIcon />, url: '/crypto-sell/'},
     {text: 'Crypto Swap', icon: <RotateRightIcon />, url: '/crypto-swap/'},
     {text: 'Investments', icon: <StorageIcon />, url: '/'},
+=======
+    {text: '-Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
+    {text: '-Crypto Buy', icon: <RotateRightIcon />, url: '/crypto-buy/'},
+    {text: '-Crypto Sell', icon: <RotateRightIcon />, url: '/crypto-sell/'},
+    {text: '-Crypto Swap', icon: <RotateRightIcon />, url: '/crypto-swap/'},
+    {text: '-Investments', icon: <StorageIcon />, url: '/investment/invest/'},
+    {text: '-Investment Plans', icon: <StorageIcon />, url: '/investment/plan/'},
+>>>>>>> 918fc62507cf25ce32ef439a27a76d9b65a16e84
     ],
     icon: ''
   },

@@ -4,7 +4,7 @@ import TotalBalanceChart from './BalanceChart';
 import CryptoCards from './CryptoCards';
 import TrendingCrypto from './TrendingCrypto';
 import MarketValueCard from './MarketValue';
-import Transactions from './Transactions';
+import CryptoTransactions from './Transactions';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -121,7 +121,7 @@ export default function CryptoContent() {
                     <div className="card" >
                         <div className="card-body">
                             {/* <h5 className="card-title mb-2">Transaction</h5> */}
-                            <Transactions CryptoData={CryptoData} initialCryptoConversion={initialCryptoConversion} />
+                            <CryptoTransactions CryptoData={CryptoData} initialCryptoConversion={initialCryptoConversion} />
                         </div>
                     </div> 
                 </div>

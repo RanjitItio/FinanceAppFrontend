@@ -1,8 +1,7 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { useState } from 'react';
 import axiosInstance from './axios';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './tailwind.css';
 import { RiUser3Line } from "react-icons/ri";
 
@@ -54,19 +53,20 @@ function Login(){
 			})
 			.then((res) => {
                 if(res.status == 200) {
-                    setSuccessMessage(`Login Successfull`)
                     setTimeout(() => {
-                        navigate('/user/crypto-fiat/')
-                    }, 3000);
+                        // navigate('/')
+                        window.location.href = '/'
+                    }, 1000);
+
+                    setSuccessMessage(`Login Successfull`)
+                    localStorage.setItem('access_token', res.data.access_token);
+                    localStorage.setItem('refresh_token', res.data.access_token);
+                    axiosInstance.defaults.headers['Authorization'] =
+                      'Bearer ' + localStorage.getItem('access_token');
+                    // console.log(res);
+                    // console.log(res.data);
                 }
             //  localStorage.clear();
-			// 	localStorage.setItem('access_token', res.data.access);
-			// 	localStorage.setItem('refresh_token', res.data.refresh);
-			// 	axiosInstance.defaults.headers['Authorization'] =
-			// 		'JWT ' + localStorage.getItem('access_token');
-			// 	history.push('/');
-				//console.log(res);
-				//console.log(res.data);
 			}).catch((error)=> {
                 // console.log(error.response.data.msg)
                 if (error.response.data.msg == 'Your account is not active. Please contact the administrator.'){
@@ -148,7 +148,7 @@ function Login(){
           </form>
           <div className='cols col-span-1 flex justify-between items-center'>
 
-          <p className='font-extralight'>If you don't have any account <Link to={'/signup/'}>  Signup</Link></p>
+          <p className='font-extralight'>If you don-t have any account <Link to={'/signup/'}>  Signup</Link></p>
           <p className='font-extralight'> <Link to={'/forgot-password/'}> Forget password</Link></p>
           </div>
         </div>

@@ -13,9 +13,10 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
-import Paper from '@mui/material/Paper';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import axiosInstance from '../Authentication/axios';
+import { useEffect } from 'react';
 
 
 
@@ -23,7 +24,11 @@ import AlertTitle from '@mui/material/AlertTitle';
 const steps = ['Create Deposit', 'Confirm your Deposit'];
 
 
+
+
 function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
+
+  const [currencies, setCurrencies] = React.useState([])
 
   const handleCurrencyChange = (event)=> {
     setCurrency(event.target.value)
@@ -40,16 +45,26 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
           localStorage.removeItem('DepositCurrency')
       }, expirytime);
     }
-  }
+  };
+
 
   const handlePaymentMethodChange = (event)=> {
     setPaymentMethod(event.target.value)
+
     if(!event.target.value) {
       setError('Please fill all the above fields')
     }else {
       setError('')
+
+      localStorage.setItem('userdepositpaymentmethod', event.target.value)
+
+      const despositpaymethodexpirytime = 5 * 60 * 1000
+
+      setTimeout(() => {
+        localStorage.removeItem('userdepositpaymentmethod')
+      }, despositpaymethodexpirytime);
     }
-  }
+  };
 
   const handleAmountChange = (event)=> {
     setAmount(event.target.value)
@@ -66,8 +81,21 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         localStorage.removeItem('UsersDepositAmount')
       }, depositexpirytime);
     }
-  }
-//  console.log(error)
+  };
+
+    useEffect(() => {
+      axiosInstance.get(`api/v2/currency/`).then((res)=> {
+        // console.log(res.data.currencies)
+        if (res.data && res.data.currencies){
+            setCurrencies(res.data.currencies)
+            // console.log(currencies)
+        };
+      }).catch((error)=> {
+        console.log(error.response)
+      });
+
+    }, [])
+
 
 
   return(
@@ -80,7 +108,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
     <div style={{marginLeft: '5%', marginRight: '5%'}}>
 
     <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
-        <InputLabel id="currency-label">USD</InputLabel>
+        <InputLabel id="currency-label">Currency</InputLabel>
         <Select
           labelId="currency-label"
           id="currency-select"
@@ -91,11 +119,13 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={'EUR'}>EUR</MenuItem>
-          <MenuItem value={'GBR'}>GBR</MenuItem>
-          <MenuItem value={'ETH'}>ETH</MenuItem>
-          <MenuItem value={'BTC'}>BTC</MenuItem>
+
+          {currencies.map((curr)=> (
+              <MenuItem key={curr.id} value={curr.name}>{curr.name}</MenuItem>
+          ))};
+          
         </Select>
+        
         <FormHelperText>Fee (0.00+0.00) Total Fee: 0.00</FormHelperText>
       </FormControl>
 
@@ -122,11 +152,12 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Stripe</MenuItem>
-            <MenuItem value={20}>Bank</MenuItem>
-            <MenuItem value={30}>Paypal</MenuItem>
+            <MenuItem value={'Stripe'}>Stripe</MenuItem>
+            <MenuItem value={'Bank'}>Bank</MenuItem>
+            <MenuItem value={'Paypal'}>Paypal</MenuItem>
           </Select>
-          {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>}
+          &nbsp;
+          {error && <Alert severity="error">{error}</Alert>}
         </FormControl>
 
       </div>
@@ -136,18 +167,35 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 }
 
 
-function Form2() {
+function Form2({...props}) {
   const [depositCurrency, setDepositCurrency] = React.useState('')
   const [userDepositAmount, setUserDepositAmount] = React.useState('')
+  const [userDepositPayMethod, setUserDepositPayMethod] = React.useState('')
+  
+
 
   React.useEffect(() => {
        const GetCurrency = localStorage.getItem('DepositCurrency')
-       setDepositCurrency(GetCurrency)
-
+       if(GetCurrency){
+          setDepositCurrency(GetCurrency)
+       }
+       
        const GetAmount = localStorage.getItem('UsersDepositAmount')
-       setUserDepositAmount(GetAmount)
+       if(GetAmount){
+          setUserDepositAmount(GetAmount)
+       };
+
+       const Getdepositpaymethod = localStorage.getItem('userdepositpaymentmethod')
+       if (Getdepositpaymethod) {
+          setUserDepositPayMethod(Getdepositpaymethod)
+       };
+
     }, [])
 
+  
+
+    
+    // console.log(props.error)
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-3'>
@@ -157,7 +205,7 @@ function Form2() {
     <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
       <div className="my-4">
         <div className="d-flex justify-content-between">
-            <p>Deposit Amount Stripe</p> 
+            <p>Deposit Amount {userDepositPayMethod}</p> 
             <p>{depositCurrency} {userDepositAmount}</p>
         </div>
         <hr className='mb-3'/>
@@ -165,15 +213,17 @@ function Form2() {
 
       <div className="d-flex justify-content-between">
           <p>Fee</p> 
-          <p>{depositCurrency} 1.02</p>
+          <p>{depositCurrency} 0.00</p>
       </div>
       <hr className='mb-4'/>
 
       <div className="d-flex justify-content-between">
-        <p><b>Total</b></p> <p><b>{depositCurrency} 13.02</b></p>
+        <p><b>Total</b></p> <p><b>{depositCurrency} {props.totalAamount}</b></p>
       </div>
       <hr className='mb-4'/>
     </div>
+
+    {props.error && <Alert severity="error">{props.error}</Alert>}
 
     </>
   )
@@ -183,6 +233,7 @@ function Form2() {
 
 
 export default function DepositForm({open}) {
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
@@ -190,6 +241,7 @@ export default function DepositForm({open}) {
   const [paymentMethod, setPaymentMethod] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const [error, setError] = React.useState('');
+  const [totalAamount, setTotalAmount] = React.useState('')
   const navigate = useNavigate()
 
 
@@ -222,7 +274,7 @@ export default function DepositForm({open}) {
             setError('Please fill all the above fields');
             return;
           }
-        }
+        };
     setActiveStep(newActiveStep);
   };
 
@@ -237,27 +289,78 @@ export default function DepositForm({open}) {
   const handleComplete = () => {
     const newCompleted = completed;
 
-
     if (activeStep == 0) {
       if (!currency || !amount || !paymentMethod) {
         setError('Please fill all the above fields');
         return;
       }else {
         setError('')
-
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
         handleNext();
-      }
+      };
     } else {
-        
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-        handleNext();
-    }
+      // console.log(currency)
+      axiosInstance.post(`api/v1/user/deposit/`, {
+        currency: currency,
+        deposit_amount: amount,
+        fee: 0.0,
+        total_amount: totalAamount,
+        payment_mode: paymentMethod
 
+      }).then((res)=> {
+        // console.log(res)
+
+        if(res.data.msg == 'Deposit successful') {
+            newCompleted[activeStep] = true;
+            setCompleted(newCompleted);
+            handleNext();
+
+        } else if(res.data.msg == 'Token has expired'){
+            setError("Session has expired please try to login")
+
+        } else if(res.data.msg == 'Invalid token') {
+            setError("Invalid Session please try to login")
+        } else {
+          setError('')
+        };
+
+      }).catch((error)=> {
+        console.log(error.response)
+
+        if(error.response.data.msg == 'Invalid currency'){
+            setError("Requested Currency is not available")
+
+        } else if(error.response.data.msg == 'Wallet not found') {
+            setError("Donot have wallet please create your wallet")
+
+        } else if(error.response.data.msg == 'Error depositing funds') {
+            setError("Error while depositing money")
+
+        } else if(error.response.data.msg == 'Wallet not found') {
+            setError("Wallet is not available please create a wallet first")
+
+        } else if(error.response.data.msg == 'Authentication Failed Please provide auth token') {
+            setError("Authentication Failed")
+
+        } else if(error.response.data.msg == 'Authentication Failed') {
+            setError("Authentication error")
+
+        } else if(error.response.data.msg == 'Currency error') {
+            setError("Error while fetching the value of currency")
+
+        } else if(error.response.data.msg == 'Wallet error') {
+            setError("Wallet error")
+
+        } else if(error.response.data.msg == 'Error depositing funds') {
+            setError("Server Error")
+        } else {
+            setError('')
+        };
+      })
+    };
     
-
+    // console.log(amount)
     // if (completedSteps() === totalSteps()) {
     //    navigate('/')
     // }else {
@@ -286,11 +389,24 @@ export default function DepositForm({open}) {
         setError={setError}
           />;
       case 1:
-        return <Form2 />;
+        return <Form2 
+        error={error}
+        setError={setError}
+        totalAamount={totalAamount}
+        />;
       default:
         return null;
     }
-  }
+  };
+
+  React.useEffect(() => {
+    if(amount) {
+      const TotalAmount = (parseInt(amount) + 0.00)
+      setTotalAmount(TotalAmount)
+    }
+  }, [amount])
+
+  
 
 
   return (
@@ -298,7 +414,6 @@ export default function DepositForm({open}) {
     <DrawerHeader />
 
     {/* <Paper elevation={24}  sx={{height: '120%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', width: {xs: '100%', sm: '85%'}, marginLeft: {xs: '0%', sm: '7%'}}}> */}
-      
     <Box sx={{ 
               width: {xs: '100%', sm: '40%'},
               marginTop: {xs: '40px', sm: '1rem'},
@@ -320,19 +435,20 @@ export default function DepositForm({open}) {
                 {label}
             </StepButton> */}
             <StepButton color="inherit">
-                {label}
+              {label}
             </StepButton>
-          </Step> 
+          </Step>
         ))}
       </Stepper>
       <div>
         {allStepsCompleted() ? (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
+            <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
               {/* All steps completed - you&apos;re finished */}
               <Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
-                 Your Money has been deposited to your account successfully.
+                    Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
+                    We'll notify you once your deposit has been approved.
               </Alert>
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -348,7 +464,7 @@ export default function DepositForm({open}) {
 
             {renderForms(activeStep)}
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', marginRight: '27%' }}>
               {/* <Button
                 color="inherit"
                 disabled={activeStep === 0}

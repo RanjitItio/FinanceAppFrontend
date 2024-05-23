@@ -48,7 +48,7 @@ const RecentTransactions = [
 ]
 
 
-export default function Transactions({CryptoData, initialCryptoConversion}) {
+export default function CryptoTransactions({CryptoData, initialCryptoConversion}) {
 
     const [selectedItem1, setSelectedItem1] = useState('BTC');
     const [selectedItem2, setSelectedItem2] = useState('ETH');

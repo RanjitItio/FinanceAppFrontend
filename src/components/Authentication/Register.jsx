@@ -95,7 +95,7 @@ function Register() {
             is_merchent: true
         })
         .then((res) => {
-            // console.log(res.data.msg)
+            // console.log(res.data)
             if(res.status == 201) {
                 const response_msg = res.data.msg;
                 const match = response_msg.match(/\d+$/);
@@ -276,75 +276,6 @@ function Register() {
       </div>
 
 
-{/*         
-        <section className="vh-100 bg-image" style={{backgroundImage: "url('/src/images/signupbg.jpg')"}}>
-            <div className="mask d-flex align-items-center h-100 gradient-custom-3">
-                <div className="container h-100">
-                <div className="row d-flex justify-content-center align-items-center h-100">
-                    <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                    <div className="card" style={{borderRadius: "15px"}}>
-                        <div className="card-body p-5">
-                        <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-
-                       
-                        <form method='post'>
-
-                            <div className="form-outline mb-2">
-                                <input type="text" id="username" name='first_name' className="form-control form-control-lg" required onChange={handleChange} />
-                                <label className="form-label" htmlFor="username">First Name</label>
-                            </div>
-
-                            <div className="form-outline mb-2">
-                                <input type="text" id="username" name='last_name' className="form-control form-control-lg" required onChange={handleChange} />
-                                <label className="form-label" htmlFor="username">Last Name</label>
-                            </div>
-
-                            <div className="form-outline mb-2">
-                                <input type="number" id="contact_number" name='contact_number' className="form-control form-control-lg" required onChange={handleChange} value={formData.contact_number} />
-                                <label className="form-label" htmlFor="contact_number">Mobile No.</label>
-                            </div>
-
-                            <div className="form-outline mb-2">
-                                <input type="email" id="email" name='email' className="form-control form-control-lg"  required  onChange={handleChange} value={formData.email} />
-                                <label className="form-label" htmlFor="email">Your Email</label>
-                            </div>
-
-                            <div className="form-outline mb-2">
-                                <input type="password" id="password" name='password' className="form-control form-control-lg" required onChange={handleChange} />
-                                <label className="form-label" htmlFor="form3Example4cg">Password</label>
-                            </div>
-
-                            <div className="form-outline mb-2">
-                                <input type="password" id="confirm_password" name='confirm_password' className="form-control form-control-lg" required onChange={handleChange} />
-                                <label className="form-label" htmlFor="confirm_password">Confirm password</label>
-                            </div>
-
-                            <div className="d-flex justify-content-center">
-                                <button type="submit" onClick={handleSubmit}
-                                    className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
-                            </div>
-
-                            {error &&  <p className="text-danger">{error}</p>}
-                            {successMessage && <p className="text-success">{successMessage}</p>}
-
-                            &nbsp;
-                            <div className="form-check d-flex justify-content-center mb-5">
-                               <Link to={'/forgot-password/'} className="text-body"><u>Forgot Password</u></Link>
-                            </div>
-
-                            <p className="text-center text-muted mt-5 mb-0">Have already an account? <Link to={'/signin/'}
-                                className="fw-bold text-body"><u>Login here</u></Link></p>
-                        </form>
-
-                     
-
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </section> */}
           
         </>
     );
