@@ -37,6 +37,7 @@ import CryptoList from "../CryptoExchange/cryptoexchangelist";
 import Plan from "../Invesment/Plan";
 import Invest from "../Invesment/Invest";
 import CryptoSwap from "../CryptoTransactions/CryptoSwap";
+import ResetPassword from "../Authentication/ResetPassword";
 
 
 
@@ -86,6 +87,7 @@ const AuthRoutes = () => {
                     <Route exact path='/signin/' element={<Login />}></Route>
                     <Route exact path='/signout/' element={<UserLogout />}></Route>
                     <Route exact path='/forgot-password/' element={<ForgotPassword />}></Route>
+                    <Route exact path='/reset-password/:id' element={<ResetPassword />}></Route>
                     <Route exact path='/kyc/' element={<KYCForm />}></Route>
                     <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
                     <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
@@ -134,6 +136,10 @@ const AuthRoutes = () => {
       {
         path: "/signup/",
         element: <Register />,
+      }, 
+      {
+        path: "/reset-password/:id",
+        element: <ResetPassword />,
       },
       {
         path: "/signin/",

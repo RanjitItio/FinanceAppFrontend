@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import './tailwind.css';
+import axiosInstance from './axios';
 
 
 
 function ForgotPassword() {
+
     const initialFormData = Object.freeze({
         email: ''
     })
@@ -35,16 +37,15 @@ function ForgotPassword() {
             setError('');
         }
 
-        // axiosInstance.post(`userauthentication/user/register`, {
-        //     email: formData.email,
-        //     username: formData.username,
-        //     password: formData.password,
-        // })
-        // .then((res) => {
-        //     // history.push('/login');
-        //     console.log(res);
-        //     console.log(res.data);
-        // });
+        axiosInstance.post(`api/v1/user/reset_passwd/mail/`, {
+            email: formData.email,
+          
+        })
+        .then((res) => {
+            // history.push('/login');
+            console.log(res);
+            console.log(res.data);
+        });
     }
     return (
         <div className="min-h-screen flex bg-blue-300">
@@ -96,7 +97,7 @@ function ForgotPassword() {
 
           <div className='cols col-span-1 flex justify-between items-center'>
 
-        <p className='font-extralight'>If you don't have any account <Link to={'/signup/'}>  Signup</Link></p>
+        <p className='font-extralight'>If you don-t have any account <Link to={'/signup/'}>  Signup</Link></p>
         <p className='font-extralight'> <a href='/forgetpasswdpage'> Forget password</a></p>
         </div>
         </div>
