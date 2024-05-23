@@ -402,13 +402,13 @@ export default function AllTransactions({open}) {
                              
                     }
                     secondary={
-                        transaction.txdstatus == 'Pending' ? (
+                        transaction.transaction.txdstatus == 'Pending' ? (
                             <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
 
-                        ) : transaction.txdstatus == 'Success' ? (
+                        ) : transaction.transaction.txdstatus == 'Success' ? (
                             <span style={{ color: 'green' }}>{transaction.transaction.txdstatus}</span>
 
-                        ) : transaction.txdstatus === 'Cancelled' ? (
+                        ) : transaction.transaction.txdstatus === 'Cancelled' ? (
                             <span style={{ color: 'red' }}>{transaction.transaction.txdstatus}</span>
 
                         ) : (
