@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import {Main, DrawerHeader} from '../Content';
 
 
 
@@ -17,7 +18,9 @@ function PaymentInformation() {
     }
 
     return (
-        <>
+        
+        <Main open={open}>
+        <DrawerHeader />
         <div className="container my-4" style={{maxWidth: '35rem'}}>
                 <div className="card">
                     <div className="card-body rounded" style={{backgroundColor: '#0E2F44', color: 'white'}}>
@@ -100,7 +103,7 @@ function PaymentInformation() {
                 </div>
         </div>
           
-        </>
+        </Main>
     );
 };
 

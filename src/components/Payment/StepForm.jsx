@@ -6,6 +6,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { TextField, Grid,Container, Select, MenuItem, InputLabel, useMediaQuery, useTheme } from '@mui/material';
+import {Main, DrawerHeader} from '../Content';
 
 
 
@@ -218,6 +219,8 @@ export default function StepWisePaymentForm() {
   };
 
   return (
+    <Main open={open}>
+    <DrawerHeader />
     <Box sx={{ maxWidth: '100%' }}>
         <Container maxWidth="md" style={{ marginTop: '50px' }}>
         <Stepper activeStep={activeStep} orientation={matchesXS ? 'vertical': 'horizontal'} >
@@ -282,5 +285,6 @@ export default function StepWisePaymentForm() {
         </>
       )}
     </Box>
+    </Main>
   );
 }
