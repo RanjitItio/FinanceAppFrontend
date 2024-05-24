@@ -27,6 +27,7 @@ function ForgotPassword() {
     const handleSubmit = (e)=> {
         e.preventDefault();
         let validationError = [];
+        setIsButtonDisabled(true);
 		// console.log(formData);
 
         if(formData.email === '') {

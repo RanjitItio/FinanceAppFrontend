@@ -328,7 +328,7 @@ export default function DepositForm({open}) {
         };
 
       }).catch((error)=> {
-        console.log(error.response)
+        console.log(error)
 
         if(error.response.data.msg == 'Invalid currency'){
             setError("Requested Currency is not available")
