@@ -42,7 +42,7 @@ const NavContent = [
   { text: 'TRANSACTIONS', subItems: [
     {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/transactions/'},
     {text: 'Deposit Money', icon: <AddCardIcon />, url: '/deposit/'}, 
-    {text: '+Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
+    {text: '+Send Money', icon: <SendIcon />, url: '/payment-form/'}, 
     {text: '-Request Money', icon: <SwapCallsIcon />, url: '/request-payment/'}, 
     {text: '-Exchange Money', icon: <CurrencyExchangeIcon />, url: '/exchange-currency/'}, 
     {text: '-Withdrawal Money', icon: <PaymentsIcon />, url: '/payout-payment/'}, 

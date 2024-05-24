@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 const ResetPassword = () => {
     const { id } = useParams();
     const navigate =  useNavigate();
-    // console.log(id)
+    console.log(id)
     const initialFormData = Object.freeze({
 		password1: '',
 		password2: '',

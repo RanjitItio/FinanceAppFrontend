@@ -7,10 +7,11 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {Main, DrawerHeader} from '../Content';
+import { Payment } from '@mui/icons-material';
 
 
 
-function PaymentInformation() {
+function PaymentStepper() {
     const navigate = useNavigate()
 
     const handleSubmit = ()=> {
@@ -109,4 +110,4 @@ function PaymentInformation() {
 
 
 
-export default PaymentInformation;
+export default PaymentStepper;
