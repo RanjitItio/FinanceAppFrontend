@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from './axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './tailwind.css';
-import { RiUser3Line } from "react-icons/ri";
-import { useParams } from 'react-router-dom'
+
+
+
+
 const ResetPassword = () => {
-    const { id } = useParams();
-    const navigate =  useNavigate();
-    // console.log(id)
+
+    const url_data             = new URLSearchParams(window.location.search)
+    const password_reset_token = url_data.get('token') || ''
+
     const initialFormData = Object.freeze({
 		password1: '',
 		password2: '',
@@ -29,22 +32,23 @@ const ResetPassword = () => {
     const handleOnSubmit = async (e)=> {
         e.preventDefault();
         let validationError = [];
-		console.log(formData);
-        console.log(e)
 
-        // if (!formData.password1) {
-        //     validationError.push("Please fill the Email");
-        // }
-        // else if (!formData.password2) {
-        //     validationError.push("Please fill the password");
-        // }
-        if (formData.password1 != formData.password2){
-            validationError.push("both password are not matching")
+
+        if (formData.password1 === '') {
+            validationError.push("Please fill the Password");
+
+        } else if (formData.password2 === '') {
+            validationError.push("Please fill the Confirm Password");
+
+        } else if (formData.password1 !== formData.password2){
+            validationError.push("Password did not match")
+
+        } else if(formData.password1.length < 10){
+            validationError.push("Password should be 10 digit long")
+
+        } else if(formData.password2.length < 10){
+            validationError.push("Confirm password should be 10 digit long")
         }
-        else if(formData.password1.length <10){
-            validationError.push("password should have 10 latter")
-        }
-        
 
         if (validationError.length > 0) {
             setError(validationError.join(''));
@@ -54,41 +58,61 @@ const ResetPassword = () => {
             setSuccessMessage("")
         }
 
-
         await axiosInstance.post(`api/v1/user/reset_passwd/`, {
-            token: id,
+            token: password_reset_token,
             password1: formData.password1,
             password2: formData.password2,
 			})
 			.then((res) => {
-                if(res.status == 200) {
+                if(res.data.msg == 'Password has been reset successfully') {
+                    setSuccessMessage(`Password has been changed successfully please try to login`)
+                    // console.log(res);
                     setTimeout(() => {
-                        // navigate('/')
-                        window.location.href = '/'
-                    }, 1000);
+                      window.location.href = '/signin/'
+                    }, 2000);
 
-                    setSuccessMessage(`Password Change  Successfull`)
-                  
-                    console.log(res);
-                    // console.log(res.data);
+                } else {
+                  setSuccessMessage('')
                 }
-            //  localStorage.clear();
+
 			}).catch((error)=> {
-                console.log(error.response.data.error)
-                if (error.response.status == 500){
-                    setError("Invalid or expired token");
-                    return;
-                }
-                else if (error.response.status == 400){
+                console.log(error)
+
+                if (error.response.data.msg == 'Password did not match'){
                     setError("Password did not match");
-                    return;
-                }
-                else {
+
+                } else if (error.response.status == 400){
+                    setError("Missing Input data")
+                    
+                } else if (error.response.data.msg == 'Invalid token or user does not exist'){
+                    setError("Password reset Timeout")
+
+                } else if (error.response.data.msg == 'User fetch error'){
+                    setError("Some unknown error occure please retry")
+
+                } else if (error.response.data.msg == 'Server Error'){
+                    setError("Password reset time expired please retry");
+
+                } else {
                     setError('')
-                }
+                };
 
             })
-    }
+    };
+
+
+    useEffect(() => {
+
+      if (error || successMessage) {
+        const timer = setTimeout(() => {
+          setError('');
+          setSuccessMessage('');
+        }, 4000); 
+  
+        return () => clearTimeout(timer);
+      }
+    }, [error, successMessage]);
+
 
    return(
     <>
@@ -97,7 +121,6 @@ const ResetPassword = () => {
         {/* First flex container with a blue color palette */}
         <div className="flex-[50%] bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center justify-center">
         <img src="https://script.viserlab.com/paymenthub/assets/images/frontend/login_register/641872cda99f91679323853.png" alt="Logo" className="h-80 w-80 drop-shadow-2xl " />
-        
       
         </div>
   
@@ -108,7 +131,7 @@ const ResetPassword = () => {
             <div className='col-span-1  rounded-full'>
               <center>
             {/* <p className='text-7xl' ><RiUser3Line/>  </p> */}
-            <h2 className="text-2xl font-semibold mb-4 ">Reset Password</h2>
+            <h2 className="text-2xl font-semibold mb-4 ">Reset Forgot Password</h2>
               </center>
             </div>
           
@@ -163,63 +186,6 @@ const ResetPassword = () => {
         </div>
       </div>
 
-        {/* <section className="bg-light py-3 py-md-5 my-3">
-        <div className="container">
-            <div className="row justify-content-center">
-            <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-                <div className="card border border-light-subtle rounded-3 shadow-sm">
-                <div className="card-body p-3 p-md-4 p-xl-5">
-                    <div className="text-center mb-3">
-                    <a href="#!">
-                        <img src="" alt="Put Logo Here" width="175" height="57" />
-                    </a>
-
-                    </div>
-                    <h2 className="fs-6 fw-normal text-center text-secondary mb-4">Sign in to your account</h2>
-
-                
-                    <form action="#!">
-                    <div className="row gy-2 overflow-hidden">
-                        <div className="col-12">
-                        <div className="form-floating mb-3">
-                            <input type="email" className="form-control" name="email" id="email" placeholder="name@example.com" onChange={handleChange} required />
-                            <label htmlFor="email" className="form-label">Email</label>
-                        </div>
-                        </div>
-
-                        <div className="col-12">
-                            <div className="form-floating mb-3">
-                                <input type="password" className="form-control" name="password" id="password"  placeholder="Password" onChange={handleChange} required />
-                                <label htmlFor="password" className="form-label">Password</label>
-                            </div>
-                        </div>
-
-                        <div className="col-12">
-                        <div className="d-flex gap-2 justify-content-between">
-                            <Link to={'/forgot-password/'} className="link-primary text-decoration-none">Forgot password?</Link>
-                        </div>
-                        </div>
-
-                        <div className="col-12">
-                            <div className="d-grid my-3">
-                                <button className="btn btn-primary btn-lg" type="submit" onClick={handleOnSubmit}>Log in</button>
-                                {error &&  <p className="text-danger">{error}</p>}
-                                {successMessage && <p className="text-success">{successMessage}</p>}
-                            </div>
-                            </div>
-                            <div className="col-12">
-                            <p className="m-0 text-secondary text-center">Don't have an account? <Link to={'/signup/'} className="link-primary text-decoration-none">Sign up</Link></p>
-                        </div>
-
-                    </div>
-                    </form>
-               
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        </section> */}
     </>
    );
 };

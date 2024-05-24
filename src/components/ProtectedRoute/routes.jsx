@@ -138,10 +138,6 @@ const AuthRoutes = () => {
         element: <Register />,
       }, 
       {
-        path: "/reset-password/:id",
-        element: <ResetPassword />,
-      },
-      {
         path: "/signin/",
         element: <Login />,
       },
@@ -165,14 +161,14 @@ const AuthRoutes = () => {
         path: "/kyc-submission-report/",
         element: <KYCSubmissionReport />,
       },
-      {
-        path: "/payment-info/",
-        element: <PaymentInformation />,
-      },
-      {
-        path: "/payment-form/",
-        element: <StepWisePaymentForm />,
-      },
+      // {
+      //   path: "/payment-info/",
+      //   element: <PaymentInformation />,
+      // },
+      // {
+      //   path: "/payment-form/",
+      //   element: <StepWisePaymentForm />,
+      // },
     ];
   
     

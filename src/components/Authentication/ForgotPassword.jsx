@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './tailwind.css';
 import axiosInstance from './axios';
+
 
 
 
@@ -13,6 +14,8 @@ function ForgotPassword() {
 
     const [formData, UpdatFormData] = useState(initialFormData)
     const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const handleChange = (e)=> {
         UpdatFormData({
@@ -24,9 +27,9 @@ function ForgotPassword() {
     const handleSubmit = (e)=> {
         e.preventDefault();
         let validationError = [];
-		console.log(formData);
+		// console.log(formData);
 
-        if(!formData.email) {
+        if(formData.email === '') {
             validationError.push("Please fillup the Email");
         }
 
@@ -42,11 +45,44 @@ function ForgotPassword() {
           
         })
         .then((res) => {
-            // history.push('/login');
-            console.log(res);
-            console.log(res.data);
-        });
-    }
+            // console.log(res)
+            if (res.data.msg == 'Password reset instructions have been sent to your email address.') {
+              setSuccessMessage('Password reset mail has been sent to the given email, Please check your mail')
+              setIsButtonDisabled(true);
+
+            } else{
+              setSuccessMessage('')
+            }
+
+        }).catch((error)=> {
+          console.log(error)
+
+          if (error.response.data.msg == 'Requested mail ID does not exist') {
+            setError('Requested user does not exist')
+
+          } else if (error.response.data.msg == 'Unable to get the user') {
+            setError('Unable to get The user details please retry')
+
+          } else if (error.response.data.msg == 'Server error') {
+            setError('Unknow error occured please retry after some time')
+
+          };
+        })
+    };
+
+    useEffect(() => {
+
+      if (error || successMessage) {
+        const timer = setTimeout(() => {
+          setError('');
+          setSuccessMessage('');
+        }, 4000); 
+  
+        return () => clearTimeout(timer);
+      }
+    }, [error, successMessage]);
+
+
     return (
         <div className="min-h-screen flex bg-blue-300">
         {/* First flex container with a blue color palette */}
@@ -89,10 +125,12 @@ function ForgotPassword() {
               type="submit"
               className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               onClick={handleSubmit}
+              disabled={isButtonDisabled}
             >
               Submit
             </button>
             {error &&  <p className="text-danger">{error}</p>}
+            {successMessage && <p className="text-success">{successMessage}</p>}
           </form>
 
           <div className='cols col-span-1 flex justify-between items-center'>

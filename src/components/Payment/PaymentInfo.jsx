@@ -12,7 +12,7 @@ import {Main, DrawerHeader} from '../Content';
 
 function PaymentInformation() {
     const navigate = useNavigate()
-
+    
     const handleSubmit = ()=> {
         navigate('/payment-form/');
     }

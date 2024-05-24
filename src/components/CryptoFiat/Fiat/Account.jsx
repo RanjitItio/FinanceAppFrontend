@@ -10,20 +10,34 @@ import Stack from '@mui/material/Stack';
 export default function FiatAccount() {
     const [userWallet, updateUserWallet] = useState([]);
     const [error, setError] = useState('');
-    const [selectedCurrency, setSelectedCurrency] = useState('USD');
+    const [selectedCurrency, setSelectedCurrency] = useState(localStorage.getItem('UserSelectedDefaultCurrency') || 'USD');
+    const [selectedWalletId, setSelectedWalletId] = useState(localStorage.getItem('UserSelectedWalletID') || '');
 
 
     useEffect(() => {
         axiosInstance.get(`api/v3/user/wallet`).then((res)=> {
+
              if(res.data.user_wallet_data) {
                 updateUserWallet(res.data.user_wallet_data)
                 // console.log(res.data.user_wallet_data)
+
+                if(!selectedWalletId) {
+                    const defaultWalletID = res.data.user_wallet_data.find(wallet => wallet.currency === 'USD');
+
+                    if (defaultWalletID) {
+                        setSelectedWalletId(defaultWalletID.id);
+                        localStorage.setItem('UserSelectedWalletID', defaultWalletID.id);
+                      }
+                };
+                
+
              } else if(res.data.msg == 'Token has expired') {
                 setError('Session has expired please login to view wallet balance')
 
              } else if (res.data.msg == 'Invalid token') {
                 setError('Invalid session please try to login')
              }
+
         }).catch((error)=> {
             console.log(error.response)
 
@@ -48,9 +62,18 @@ export default function FiatAccount() {
 
     const handleCurrencyClick = (currency) => {
         setSelectedCurrency(currency);
+
+        const selectedWallet = userWallet.find(wallet => wallet.currency === currency)
+
+        if (selectedWallet) {
+            setSelectedWalletId(selectedWallet.id);
+            localStorage.setItem('UserSelectedWalletID', selectedWallet.id);
+            localStorage.setItem('UserSelectedDefaultCurrency', currency);
+        } 
     };
-    
     // console.log(userWallet)
+
+    
     
     return (
         <div className="card" style={{backgroundColor: '#95b02f'}}>
