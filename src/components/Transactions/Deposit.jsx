@@ -23,6 +23,7 @@ import { useEffect } from 'react';
 
 const steps = ['Create Deposit', 'Confirm your Deposit'];
 const user_selected_wallet_id = localStorage.getItem('UserSelectedWalletID')
+// console.log(typeof(parseInt(user_selected_wallet_id)))
 
 
 
@@ -308,7 +309,7 @@ export default function DepositForm({open}) {
         fee: 0.0,
         total_amount: totalAamount,
         payment_mode: paymentMethod,
-        selected_wallet: user_selected_wallet_id
+        selected_wallet: parseInt(user_selected_wallet_id)
 
       }).then((res)=> {
         // console.log(res)
