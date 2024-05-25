@@ -8,6 +8,7 @@ import {Main, DrawerHeader} from '../Content';
 
 
 export default function CryptoFiat({open}) {
+
     return (
         <>
             <Main open={open}>

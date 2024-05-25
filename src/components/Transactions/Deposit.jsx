@@ -22,7 +22,8 @@ import { useEffect } from 'react';
 
 
 const steps = ['Create Deposit', 'Confirm your Deposit'];
-const user_selected_wallet_id = localStorage.getItem('UserSelectedWalletID')
+const user_selected_wallet = localStorage.getItem('UserSelectedWalletID')
+const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 // console.log(typeof(parseInt(user_selected_wallet_id)))
 
 
@@ -302,14 +303,15 @@ export default function DepositForm({open}) {
         handleNext();
       };
     } else {
-      // console.log(currency)
+      // console.log(totalAamount)
+      // console.log(amount)
       axiosInstance.post(`api/v1/user/deposit/`, {
         currency: currency,
         deposit_amount: amount,
         fee: 0.0,
         total_amount: totalAamount,
         payment_mode: paymentMethod,
-        selected_wallet: parseInt(user_selected_wallet_id)
+        selected_wallet: user_selected_wallet_id
 
       }).then((res)=> {
         // console.log(res)

@@ -3,6 +3,8 @@ import AuthProvider from './components/ProtectedRoute/authProvider';
 import AuthRoutes from './components/ProtectedRoute/routes';
 // import { refreshAccessToken } from './components/Authentication/axios';
 import { useEffect } from 'react';
+import axiosInstance from './components/Authentication/axios';
+
 
 
 
@@ -18,6 +20,31 @@ function App() {
     
 //     return () => clearInterval(intervalId);
 // }, []);
+
+useEffect(() => {
+  const auth_token = localStorage.getItem('token')
+  
+  if(auth_token) {
+    axiosInstance.get(`api/v3/user/wallet`).then((res)=> {
+
+      if(res.data.user_wallet_data) {
+        const GlobalDefaultUserSelectedWallet = localStorage.getItem('UserSelectedWalletID')
+  
+        if(!GlobalDefaultUserSelectedWallet) {
+          const defaultWalletID = res.data.user_wallet_data.find(wallet => wallet.currency === 'USD');
+  
+          if (defaultWalletID) {
+              localStorage.setItem('UserSelectedWalletID', defaultWalletID.id);
+            }
+        }
+      }
+    })
+  };
+  
+}, []);
+
+
+
 
   return (
      
