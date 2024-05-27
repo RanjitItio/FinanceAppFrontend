@@ -23,19 +23,19 @@ function HeadForm() {
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '  controlId="formGridSend">
             {/* <Form.Label>Send</Form.Label> */}
             {/* <Form.Control type="number" placeholder="Enter Amount" /> */}
-            <InputLabel style={{color: 'white'} }>Send</InputLabel>
+            <InputLabel >Send</InputLabel>
 
-            <TextField fullWidth autoFocus label="Enter Amount" type="number" style={{color: 'white'} } variant="outlined" />
+            <TextField fullWidth autoFocus label="Enter Amount" type="number"  variant="outlined" />
           </Form.Group>
 
-          <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' style={{color: 'white'} } controlId="formGridState">
+          <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridState">
 
-            <InputLabel id="demo-simple-select-standard-label " style={{color: 'white'} }>Currency</InputLabel>
+            <InputLabel id="demo-simple-select-standard-label ">Currency</InputLabel>
             <Select
               fullWidth
               autoFocus
               label="Currency"
-              style={{color: 'white'} }
+              
             >
               <MenuItem value="">
                 <em>Choose...</em>
@@ -52,13 +52,13 @@ function HeadForm() {
         {/* &nbsp; */}
         <Row className="mb-3">
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridEmail">
-            <InputLabel style={{color: 'white'} }>Recipient will receive</InputLabel>
+            <InputLabel>Recipient will receive</InputLabel>
 
             <TextField fullWidth autoFocus label="Enter Amount" type="number" variant="outlined" style={{color: 'white'} } />
           </Form.Group>
 
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridState">
-            <InputLabel id="demo-simple-select-standard-label" style={{color: 'white'} }>Currency</InputLabel>
+            <InputLabel id="demo-simple-select-standard-label" >Currency</InputLabel>
             <Select
               fullWidth
               autoFocus
@@ -76,8 +76,8 @@ function HeadForm() {
         </Row>
 
         <Form.Group as={Col} controlId="formGridState">
-          <InputLabel id="demo-simple-select-standard-label" style={{color: 'white'}}>Source Fund</InputLabel>
-          <Select fullWidth autoFocus label="Source Fund" style={{color: 'white'}}>
+          <InputLabel id="demo-simple-select-standard-label" >Source Fund</InputLabel>
+          <Select fullWidth autoFocus label="Source Fund">
             <MenuItem value="">
               <em>Choose...</em>
             </MenuItem>
@@ -88,8 +88,8 @@ function HeadForm() {
         </Form.Group>
         &nbsp;
         <Form.Group as={Col} controlId="formGridState">
-          <InputLabel id="demo-simple-select-standard-label" style={{color: 'white'} }>Sending Purpose</InputLabel>
-          <Select fullWidth autoFocus label="Sending Purpose" style={{color: 'white'} }>
+          <InputLabel id="demo-simple-select-standard-label" >Sending Purpose</InputLabel>
+          <Select fullWidth autoFocus label="Sending Purpose">
             <MenuItem value="">
               <em>Choose...</em>
             </MenuItem>
@@ -102,9 +102,9 @@ function HeadForm() {
 
         <hr />
         <div className="d-flex justify-content-between">
-          <p className='text-white'><b>Charge CHF</b></p>
-          <p className='text-white'><b>Payble CHF</b></p>
-          <p className='text-white'><b>Payble USD</b></p>
+          <p className=''><b>Charge CHF</b></p>
+          <p className=''><b>Payble CHF</b></p>
+          <p className=''><b>Payble USD</b></p>
         </div>
         <div className="d-flex justify-content-between">
           <p><b>11.22</b></p>
@@ -260,7 +260,7 @@ function Step4Form() {
 }
 
 
-const steps = ['Payment Information','Receipient Details', 'Receipient Bank Details', 'Receipient Address', 'Payment Information'];
+const steps = ['Payment Information','Recipient Details', 'Recipient Bank Details', 'Recipient Address', 'Payment Information'];
 
 
 export default function StepWisePaymentForm() {
@@ -333,26 +333,26 @@ export default function StepWisePaymentForm() {
     <Main open={open}>
       <DrawerHeader />
       <div className="container my-4 " style={{ maxWidth: '50rem' }}>
-        <div className="card shadow-lg">
-          <div className="card-body rounded " style={{ background: 'blue', color: 'white' }}>
+        <div className="card shadow-lg rounded-lg" style={{ background: '#F0F8FF' , borderRadius:'5%'}}>
+          <div className="card-body  " style={{ background: '#F0F8FF', borderRadius:'5%'}}>
             
             <Box sx={{ maxWidth: '100%' }}>
               <Container maxWidth="md" style={{ marginTop: '50px' }}>
-                <Stepper style={{color: 'white'}} activeStep={activeStep} orientation={matchesXS ? 'vertical' : 'horizontal'} >
+                <Stepper activeStep={activeStep} orientation={matchesXS ? 'vertical' : 'horizontal'} >
                   {steps.map((label, index) => {
                     const stepProps = {};
                     const labelProps = {};
-                    if (isStepOptional(index)) {
-                      labelProps.optional = (
-                        <Typography style={{color: 'white'}} variant="caption">Optional</Typography>
-                      );
-                    }
+                    // if (isStepOptional(index)) {
+                    //   labelProps.optional = (
+                    //     <Typography  variant="caption">Optional</Typography>
+                    //   );
+                    // }
                     if (isStepSkipped(index)) {
                       stepProps.completed = false;
                     }
                     return (
-                      <Step style={{color: 'white'}} key={label} {...stepProps}>
-                        <StepLabel style={{color: 'white'}}{...labelProps}>{label}</StepLabel>
+                      <Step key={label} {...stepProps}>
+                        <StepLabel {...labelProps}>{label}</StepLabel>
                       </Step>
                     );
                   })}
@@ -363,11 +363,11 @@ export default function StepWisePaymentForm() {
                 <>
                   <Container maxWidth="md" style={{ marginTop: '50px' }}>
                     <Typography sx={{ mt: 2, mb: 1 }}>
-                      <p className="text-success">Congatulation your payment information has been submitted successfully</p>
+                      <p className="text-success">congratulation your payment information has been submitted successfully</p>
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                       <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={handleReset}>Reset</Button>
+                      <Button onClick={handleReset} style={{width:'15rem'}}>Reset</Button>
                     </Box>
                   </Container>
                 </>
@@ -379,18 +379,18 @@ export default function StepWisePaymentForm() {
                   {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
                   <Container maxWidth="md" style={{ marginTop: '50px' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }} >
+                      <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }} style={{width:'15rem',backgroundColor:'#90caf9'}}>
                         {'<'} Back
                       </Button>
 
                       <Box sx={{ flex: '1 1 auto' }} />
-                      {isStepOptional(activeStep) && (
-                        <Button color="inherit" className='mx-3' onClick={handleSkip} sx={{ mr: 1 }}>
+                      {/* {isStepOptional(activeStep) && (
+                        <Button color="inherit" className='mx-3' onClick={handleSkip} sx={{ mr: 1 }} style={{width:'15rem',backgroundColor:'#2979ff'}}>
                           Skip
                         </Button>
-                      )}
+                      )} */}
 
-                      <Button onClick={handleNext}>
+                      <Button onClick={handleNext} style={{width:'15rem',backgroundColor:"#1e88e5"}}>
                         {activeStep === steps.length - 1 ? 'Make Payment >' : 'Next >'}
                       </Button>
                     </Box>
