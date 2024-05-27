@@ -21,10 +21,15 @@ import { useEffect } from 'react';
 
 
 
-const steps = ['Create Deposit', 'Confirm your Deposit'];
-const user_selected_wallet = localStorage.getItem('UserSelectedWalletID')
+const steps                   = ['Create Deposit', 'Confirm your Deposit'];
+const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
 const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
+
+// if (isNaN(user_selected_wallet_id)) {
+//   console.log('NAN')
+// }
 // console.log(typeof(parseInt(user_selected_wallet_id)))
+// console.log(user_selected_wallet_id)
 
 
 
@@ -310,8 +315,8 @@ export default function DepositForm({open}) {
         deposit_amount: amount,
         fee: 0.0,
         total_amount: totalAamount,
+        selected_wallet: user_selected_wallet_id,
         payment_mode: paymentMethod,
-        selected_wallet: user_selected_wallet_id
 
       }).then((res)=> {
         // console.log(res)

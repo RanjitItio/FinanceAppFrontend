@@ -7,11 +7,16 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { TextField, Grid,Container, Select, MenuItem, InputLabel, useMediaQuery, useTheme } from '@mui/material';
 import {Main, DrawerHeader} from '../Content';
+import { useLocation } from 'react-router-dom';
 
 
 
 
-function Step1Form() {
+function Step1Form({props}) {
+
+    const handleForm1Submit = ()=> {
+      props.updateStepFormData()
+    }
     return (
         <Container maxWidth="md" style={{ marginTop: '50px' }}>
         <form>
@@ -28,13 +33,6 @@ function Step1Form() {
             <Grid item xs={12} sm={6}>
                 <TextField fullWidth label="Mobile Number" type="number" variant="outlined" />
             </Grid>
-            
-            {/* Button */}
-            {/* <Grid item xs={3}>
-                <Button variant="contained" color="primary" fullWidth>
-                Submit
-                </Button>
-            </Grid> */}
 
             </Grid>
       </form>
@@ -57,16 +55,16 @@ function Step1Form() {
             <Grid container spacing={2} >
 
                 <Grid item xs={12} sm={12} md={12}>
-                    <InputLabel  id="demo-simple-select-label">Agent or Bank Transfer</InputLabel>
+                    <InputLabel  id="demo-simple-select-label">Payment Mode</InputLabel>
                     <Select labelId="demo-simple-select-label" id="demo-simple-select" value={agenetOption} label="age" fullWidth size='small' onChange={handleChange} >
-                        <MenuItem value={'Agent'}>Agent</MenuItem>
+                        <MenuItem value={'Wallet'}>Wallet</MenuItem>
                         <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
                         <MenuItem value={'Others'}>Others</MenuItem>
                     </Select>
                 </Grid>
 
                 <Grid item xs={12} sm={6} >
-                    <TextField fullWidth  label="Agent/Bank Name" variant="outlined" type='text' required />
+                    <TextField fullWidth  label="Bank Name" variant="outlined" type='text' required />
                 </Grid>
                 
                 <Grid item xs={12} sm={6}>
@@ -80,13 +78,6 @@ function Step1Form() {
                 <Grid item xs={12} sm={6}>
                     <TextField fullWidth label="Additional Info" type="text" variant="outlined" required />
                 </Grid>
-            
-                {/* Button */}
-                {/* <Grid item xs={3}>
-                    <Button variant="contained" color="primary" fullWidth type='submit'> 
-                    Submit
-                    </Button>
-                </Grid> */}
 
             </Grid>
       </form>
@@ -103,55 +94,50 @@ function Step1Form() {
                 <Grid item xs={12} sm={12}>
                     <TextField fullWidth autoFocus label="Address Line" variant="outlined" />
                 </Grid>
-                {/* Button */}
-                {/* <Grid item xs={3}>
-                    <Button variant="contained" color="primary" fullWidth>
-                    Submit
-                    </Button>
-                </Grid> */}
+               
             </Grid>
         </form>
       </Container>
     );
   }
   
-  function Step4Form() {
-    const [payvia, setPayvia] = React.useState('');
+  // function Step4Form() {
+  //   const [payvia, setPayvia] = React.useState('');
 
-    const handleChange = (event) => {
-        setPayvia(event.target.value);
-    };
+  //   const handleChange = (event) => {
+  //       setPayvia(event.target.value);
+  //   };
 
-    return (
-        <Container maxWidth="md" style={{ marginTop: '50px' }}>
-        <form>
-            <Grid container spacing={2} >
+  //   return (
+  //       <Container maxWidth="md" style={{ marginTop: '50px' }}>
+  //       <form>
+  //           <Grid container spacing={2} >
 
-            <Grid item xs={12} sm={12} md={12}>
-                <InputLabel  id="demo-simple-select-label">Payment Via</InputLabel>
-                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={payvia} label="age" fullWidth size='small' onChange={handleChange} >
-                    <MenuItem value={'USD Wallet'}>USD Wallet</MenuItem>
-                    <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
-                    <MenuItem value={'Swift'}>Swift</MenuItem>
-                    <MenuItem value={'Sepa'}>Sepa</MenuItem>
-                </Select>
-            </Grid>
+  //           <Grid item xs={12} sm={12} md={12}>
+  //               <InputLabel  id="demo-simple-select-label">Payment Via</InputLabel>
+  //               <Select labelId="demo-simple-select-label" id="demo-simple-select" value={payvia} label="age" fullWidth size='small' onChange={handleChange} >
+  //                   <MenuItem value={'USD Wallet'}>USD Wallet</MenuItem>
+  //                   <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
+  //                   <MenuItem value={'Swift'}>Swift</MenuItem>
+  //                   <MenuItem value={'Sepa'}>Sepa</MenuItem>
+  //               </Select>
+  //           </Grid>
             
-            {/* Button */}
-            {/* <Grid item xs={3}>
-                <Button variant="contained" color="primary" fullWidth>
-                Submit
-                </Button>
-            </Grid> */}
+  //           {/* Button */}
+  //           {/* <Grid item xs={3}>
+  //               <Button variant="contained" color="primary" fullWidth>
+  //               Submit
+  //               </Button>
+  //           </Grid> */}
 
-            </Grid>
-      </form>
-      </Container>
-    );
-  }
+  //           </Grid>
+  //     </form>
+  //     </Container>
+  //   );
+  // }
 
 
-const steps = ['Receipient Details', 'Receipient Bank Details', 'Receipient Address', 'Payment Information'];
+const steps = ['Receipient Details', 'Receipient Payment Info', 'Receipient Address'];
 
 
 export default function StepWisePaymentForm() {
@@ -159,6 +145,11 @@ export default function StepWisePaymentForm() {
   const [skipped, setSkipped] = React.useState(new Set());
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const location = useLocation();
+  const formData = location.state?.formData;
+
+  const [stepFormData, updateStepFormData] = React.useState(formData)
 
 
   const isStepOptional = (step) => {
@@ -171,6 +162,7 @@ export default function StepWisePaymentForm() {
 
   const handleNext = () => {
     let newSkipped = skipped;
+    
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
@@ -206,13 +198,13 @@ export default function StepWisePaymentForm() {
   const renderStepForm = (step) => {
     switch (step) {
       case 0:
-        return <Step1Form />;
+        return <Step1Form updateStepFormData={updateStepFormData} />;
       case 1:
-        return <Step2Form />;
+        return <Step2Form updateStepFormData={updateStepFormData} />;
       case 2:
-        return <Step3Form />;
-      case 3:
-        return <Step4Form />;
+        return <Step3Form updateStepFormData={updateStepFormData} />;
+      // case 3:
+      //   return <Step4Form />;
       default:
         return null;
     }

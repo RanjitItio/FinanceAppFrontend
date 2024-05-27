@@ -99,6 +99,7 @@ function Register() {
             if(res.status == 201) {
                 const response_msg = res.data.msg;
                 const match = response_msg.match(/\d+$/);
+
                 if (response_msg) {
                   const user_ID = parseInt(match[0])
                   filteredFormData.user_id = user_ID;
@@ -109,9 +110,11 @@ function Register() {
 
                 setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
                 const queryString = new URLSearchParams(filteredFormData).toString();
+
                 setTimeout(() => {
                     navigate(`/kyc?${queryString}`);
                 }, 3000);
+                
             }
         })
         .catch((error) => {

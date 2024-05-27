@@ -46,6 +46,7 @@ import ResetPassword from "../Authentication/ResetPassword";
 
 
 
+
 const AuthRoutes = () => {
     const [open, setOpen] = React.useState(true);
 
