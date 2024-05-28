@@ -38,6 +38,7 @@ import Plan from "../Invesment/Plan";
 import Invest from "../Invesment/Invest";
 import CryptoSwap from "../CryptoTransactions/CryptoSwap";
 import ResetPassword from "../Authentication/ResetPassword";
+import PaymentStepper from "../Payment/payment";
 
 
 
@@ -81,7 +82,6 @@ const AuthRoutes = () => {
             path: "*",
             element: (
               
-              
                 <Routes>
                     <Route exact path='/signup/' element={<Register />}></Route>
                     <Route exact path='/signin/' element={<Login />}></Route>
@@ -90,8 +90,7 @@ const AuthRoutes = () => {
                     <Route exact path='/reset-password/:id' element={<ResetPassword />}></Route>
                     <Route exact path='/kyc/' element={<KYCForm />}></Route>
                     <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
-                    <Route exact path='/payment-info/' element={<PaymentInformation />}></Route>
-                    <Route exact path='/payment-form/' element={<StepWisePaymentForm />}></Route>
+                    <Route exact path='/payment/' element={<PaymentStepper />}></Route>
 
                     
                   <Route exact path='*' element={
@@ -103,7 +102,9 @@ const AuthRoutes = () => {
                           <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
-                          <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route>
+                          {/* <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route> */}
+                          <Route exact path='/moneytransfer/' element={<PaymentInformation open={open} />}></Route>
+                          <Route exact path='/payment-form/' element={<StepWisePaymentForm open={open} />}></Route>
                           <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
                           <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
                           <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
@@ -152,6 +153,10 @@ const AuthRoutes = () => {
       {
         path: "/forgot-password/",
         element: <ForgotPassword />,
+      },
+      {
+        path: "/reset-password/",
+        element: <ResetPassword />,
       },
       {
         path: "/kyc/",
