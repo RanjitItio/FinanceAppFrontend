@@ -20,7 +20,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
-
+import axiosInstance from '../Authentication/axios';
 
 
 const steps = ['Create Withdrawal', 'Confirm Withdrawal'];
@@ -253,7 +253,14 @@ export default function WithdrawalMoneyForm({open}) {
   const [paymentMethod, updatepaymentMethod] = React.useState('');
   const [error, setError] = React.useState('');
   const navigate = useNavigate();
-
+  // {
+  //   "currency": "Currency",
+  //   "deposit_amount": Amount,
+  //   "fee": 0,
+  //   "total_amount": Amount,
+  //   "payment_mode": "paymentMethod",
+  //   "note": "string"
+  // }
 
   const totalSteps = () => {
     return steps.length;
@@ -303,14 +310,40 @@ export default function WithdrawalMoneyForm({open}) {
       if (!Currency || !Amount || !paymentMethod) {
         setError('Please fill all the above fields');
         return;
-      }else {
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
       }
-    } else {
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-    }
+      // else {
+      //   newCompleted[activeStep] = true;
+      //   setCompleted(newCompleted);
+      // }
+    } 
+    axiosInstance.post(`api/v1/user/reset_passwd/`, {
+      currency: Currency,
+      deposit_amount: Amount,
+      fee: 0,
+      total_amount: Amount,
+      payment_mode: paymentMethod,
+      note: "string"
+      
+}).then((res) => {
+  if(res.status == 200) {
+      setTimeout(() => {
+          // navigate('/')
+          window.location.href = '/payout-payment/'
+      }, 1000);
+      newCompleted[activeStep] = true;
+      setCompleted(newCompleted);
+
+    
+      console.log(res);
+      // console.log(res.data);
+  }
+//  localStorage.clear();
+})
+    
+    // else {
+    //     newCompleted[activeStep] = true;
+    //     setCompleted(newCompleted);
+    // }
     
   //   if (completedSteps() === totalSteps()) {
   //      navigate('/')

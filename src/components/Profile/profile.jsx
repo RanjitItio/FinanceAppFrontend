@@ -16,6 +16,9 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 
+
+
+
 const Profile = () => {
     const [Passwd, setPasswd] = useState(false);
     const [phone, setPhone] = useState(false);

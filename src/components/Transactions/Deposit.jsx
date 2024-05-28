@@ -92,7 +92,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
   };
 
     useEffect(() => {
-      axiosInstance.get(`api/v2/currency/`).then((res)=> {
+      axiosInstance.get(`api/v1/user/deposit`).then((res)=> {
         // console.log(res.data.currencies)
         if (res.data && res.data.currencies){
             setCurrencies(res.data.currencies)
@@ -319,7 +319,7 @@ export default function DepositForm({open}) {
         payment_mode: paymentMethod,
 
       }).then((res)=> {
-        // console.log(res)
+        console.log(res)
 
         if(res.data.msg == 'Deposit successful') {
             newCompleted[activeStep] = true;

@@ -123,11 +123,6 @@ export default function Ticket({ open }) {
 
 
 
-
-
-
-
-
             </Main >
             {/* <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} /> */}
 

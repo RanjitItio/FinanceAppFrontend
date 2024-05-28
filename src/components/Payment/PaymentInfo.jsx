@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {Main, DrawerHeader} from '../Content';
+<<<<<<< HEAD
 import { useState, useContext } from 'react';
 
 
@@ -35,6 +36,13 @@ function PaymentInformation() {
     const [error, setError] = useState('');
 
 
+=======
+import { Payment } from '@mui/icons-material';
+
+
+
+function PaymentStepper() {
+>>>>>>> master
     const navigate = useNavigate()
 
     const handleFormChange = (e)=> {
@@ -168,4 +176,4 @@ function PaymentInformation() {
 
 
 
-export default PaymentInformation;
+export default PaymentStepper;

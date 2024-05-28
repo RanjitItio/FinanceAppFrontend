@@ -7,10 +7,16 @@ import './tailwind.css';
 
 
 const ResetPassword = () => {
+<<<<<<< HEAD
 
     const url_data             = new URLSearchParams(window.location.search)
     const password_reset_token = url_data.get('token') || ''
 
+=======
+    const { id } = useParams();
+    const navigate =  useNavigate();
+    console.log(id)
+>>>>>>> master
     const initialFormData = Object.freeze({
 		password1: '',
 		password2: '',

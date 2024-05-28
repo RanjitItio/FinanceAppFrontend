@@ -9,13 +9,17 @@ function UserLogout(){
     const navigate = useNavigate();
 
     useEffect(() => {
-		// const response = axiosInstance.post('user/logout/blacklist/', {
-		// 	refresh_token: localStorage.getItem('refresh_token'),
-		// });
+		const defaultWallet = 'UserSelectedWalletID'
 
-		localStorage.removeItem('access_token');
-		localStorage.removeItem('refresh_token');
-		localStorage.removeItem('token');
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i)
+			if (key != defaultWallet) {
+				localStorage.removeItem(key)
+
+				i--;
+			}
+		};
+
 		axiosInstance.defaults.headers['Authorization'] = null;
 		navigate('/signin/');
 	});
