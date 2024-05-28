@@ -3,10 +3,6 @@ import AuthProvider from './components/ProtectedRoute/authProvider';
 import AuthRoutes from './components/ProtectedRoute/routes';
 // import { refreshAccessToken } from './components/Authentication/axios';
 import { useEffect } from 'react';
-<<<<<<< HEAD
-=======
-
->>>>>>> 4ba5639aa290050e6481484fa688fd8821bac65f
 
 
 

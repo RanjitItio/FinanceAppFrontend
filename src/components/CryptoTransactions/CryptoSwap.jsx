@@ -605,7 +605,3 @@ export default function CryptoSwap({open}) {
 </Main>
     )
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 4ba5639aa290050e6481484fa688fd8821bac65f
