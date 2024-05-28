@@ -103,9 +103,7 @@ const AuthRoutes = () => {
                           <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
-                          {/* <Route exact path='/moneytransfer/' element={<SendMoneyForm open={open} />}></Route> */}
-                          <Route exact path='/moneytransfer/' element={<PaymentInformation open={open} />}></Route>
-                          <Route exact path='/payment-form/' element={<StepWisePaymentForm open={open} />}></Route>
+                          <Route exact path='/moneytransfer/' element={<StepWisePaymentForm open={open} />}></Route>
                           <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
                           <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
                           <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>

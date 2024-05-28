@@ -12,6 +12,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import { useLocation } from 'react-router-dom';
 
 
 function HeadForm() {
@@ -23,7 +24,7 @@ function HeadForm() {
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '  controlId="formGridSend">
             {/* <Form.Label>Send</Form.Label> */}
             {/* <Form.Control type="number" placeholder="Enter Amount" /> */}
-            <InputLabel >Send</InputLabel>
+            <InputLabel>Send</InputLabel>
 
             <TextField fullWidth autoFocus label="Enter Amount" type="number"  variant="outlined" />
           </Form.Group>
