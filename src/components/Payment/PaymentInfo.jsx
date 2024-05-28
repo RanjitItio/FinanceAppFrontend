@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Button from 'react-bootstrap/Button';
@@ -7,44 +7,14 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {Main, DrawerHeader} from '../Content';
-<<<<<<< HEAD
-import { useState, useContext } from 'react';
-
-
-
-function PaymentInformation() {
-    const initialFormData = Object.freeze({
-        send_amount: '',
-        send_currency: '',
-        recipient_currency: '',
-        source_fund: '',
-        sending_purpose: '',
-        rec_full_name: '',
-        rec_email: '',
-        rec_mobile_no: '',
-        rec_payment_mode: '',
-        rec_bank: '',
-        rec_ifsc_code: '',
-        rec_acc_no: '',
-        rec_add_info: '',
-        rec_add: '',
-
-    })
-
-    const [formData, updateFormData] = useState(initialFormData)
-    
-    const [error, setError] = useState('');
-
-
-=======
 import { Payment } from '@mui/icons-material';
 
 
 
 function PaymentStepper() {
->>>>>>> master
     const navigate = useNavigate()
-
+    const [error, setError] = useState('')
+    
     const handleFormChange = (e)=> {
         updateFormData({
             ...formData,

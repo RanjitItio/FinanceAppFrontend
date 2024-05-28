@@ -5,11 +5,6 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 // import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-<<<<<<< HEAD
-import { TextField, Grid,Container, Select, MenuItem, InputLabel, useMediaQuery, useTheme } from '@mui/material';
-import {Main, DrawerHeader} from '../Content';
-import { useLocation } from 'react-router-dom';
-=======
 import { TextField, Grid, Container, Select, MenuItem, InputLabel, useMediaQuery, useTheme } from '@mui/material';
 import { Main, DrawerHeader } from '../Content';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -17,7 +12,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
->>>>>>> master
 
 
 function HeadForm() {
@@ -126,37 +120,16 @@ function HeadForm() {
   )
 }
 
-<<<<<<< HEAD
-function Step1Form({props}) {
-
-    const handleForm1Submit = ()=> {
-      props.updateStepFormData()
-    }
-    return (
-        <Container maxWidth="md" style={{ marginTop: '50px' }}>
-        <form>
-            <Grid container spacing={2} >
-=======
 function Step1Form() {
   return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
       <form>
         <Grid container spacing={2} >
->>>>>>> master
 
           <Grid item xs={12} sm={6} md={6}>
             <TextField fullWidth autoFocus label="Full Name"  variant="outlined" />
           </Grid>
 
-<<<<<<< HEAD
-            <Grid item xs={12} sm={6} md={6}>
-                <TextField fullWidth  label="Email" variant="outlined" />
-            </Grid>
-            
-            <Grid item xs={12} sm={6}>
-                <TextField fullWidth label="Mobile Number" type="number" variant="outlined" />
-            </Grid>
-=======
           <Grid item xs={12} sm={6} md={6}>
             <TextField fullWidth label="Email" variant="outlined" />
           </Grid>
@@ -171,39 +144,12 @@ function Step1Form() {
                 Submit
                 </Button>
             </Grid> */}
->>>>>>> master
 
         </Grid>
       </form>
     </Container>
 
 
-<<<<<<< HEAD
-                <Grid item xs={12} sm={12} md={12}>
-                    <InputLabel  id="demo-simple-select-label">Payment Mode</InputLabel>
-                    <Select labelId="demo-simple-select-label" id="demo-simple-select" value={agenetOption} label="age" fullWidth size='small' onChange={handleChange} >
-                        <MenuItem value={'Wallet'}>Wallet</MenuItem>
-                        <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
-                        <MenuItem value={'Others'}>Others</MenuItem>
-                    </Select>
-                </Grid>
-
-                <Grid item xs={12} sm={6} >
-                    <TextField fullWidth  label="Bank Name" variant="outlined" type='text' required />
-                </Grid>
-                
-                <Grid item xs={12} sm={6}>
-                    <TextField fullWidth label="IBAN/AC/ACH Number" type="text" variant="outlined" required />
-                </Grid>
-
-                <Grid item xs={12} sm={6} >
-                    <TextField fullWidth  label="Routing/IFSC/BIC/SwiftCode" type='text' variant="outlined" required />
-                </Grid>
-                
-                <Grid item xs={12} sm={6}>
-                    <TextField fullWidth label="Additional Info" type="text" variant="outlined" required />
-                </Grid>
-=======
   );
 }
 
@@ -250,7 +196,6 @@ function Step2Form() {
                     Submit
                     </Button>
                 </Grid> */}
->>>>>>> master
 
         </Grid>
       </form>
@@ -258,55 +203,6 @@ function Step2Form() {
   );
 }
 
-<<<<<<< HEAD
-                <Grid item xs={12} sm={12}>
-                    <TextField fullWidth autoFocus label="Address Line" variant="outlined" />
-                </Grid>
-               
-            </Grid>
-        </form>
-      </Container>
-    );
-  }
-  
-  // function Step4Form() {
-  //   const [payvia, setPayvia] = React.useState('');
-
-  //   const handleChange = (event) => {
-  //       setPayvia(event.target.value);
-  //   };
-
-  //   return (
-  //       <Container maxWidth="md" style={{ marginTop: '50px' }}>
-  //       <form>
-  //           <Grid container spacing={2} >
-
-  //           <Grid item xs={12} sm={12} md={12}>
-  //               <InputLabel  id="demo-simple-select-label">Payment Via</InputLabel>
-  //               <Select labelId="demo-simple-select-label" id="demo-simple-select" value={payvia} label="age" fullWidth size='small' onChange={handleChange} >
-  //                   <MenuItem value={'USD Wallet'}>USD Wallet</MenuItem>
-  //                   <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
-  //                   <MenuItem value={'Swift'}>Swift</MenuItem>
-  //                   <MenuItem value={'Sepa'}>Sepa</MenuItem>
-  //               </Select>
-  //           </Grid>
-            
-  //           {/* Button */}
-  //           {/* <Grid item xs={3}>
-  //               <Button variant="contained" color="primary" fullWidth>
-  //               Submit
-  //               </Button>
-  //           </Grid> */}
-
-  //           </Grid>
-  //     </form>
-  //     </Container>
-  //   );
-  // }
-
-
-const steps = ['Receipient Details', 'Receipient Payment Info', 'Receipient Address'];
-=======
 function Step3Form() {
   return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
@@ -365,7 +261,6 @@ function Step4Form() {
 
 
 const steps = ['Payment Information','Recipient Details', 'Recipient Bank Details', 'Recipient Address', 'Payment Information'];
->>>>>>> master
 
 
 export default function StepWisePaymentForm() {
@@ -426,15 +321,6 @@ export default function StepWisePaymentForm() {
   const renderStepForm = (step) => {
     switch (step) {
       case 0:
-<<<<<<< HEAD
-        return <Step1Form updateStepFormData={updateStepFormData} />;
-      case 1:
-        return <Step2Form updateStepFormData={updateStepFormData} />;
-      case 2:
-        return <Step3Form updateStepFormData={updateStepFormData} />;
-      // case 3:
-      //   return <Step4Form />;
-=======
         return <HeadForm />;
       case 1:
         return <Step1Form />;
@@ -444,7 +330,6 @@ export default function StepWisePaymentForm() {
         return <Step3Form />;
       case 4:
         return <Step4Form />;
->>>>>>> master
       default:
         return null;
     }
