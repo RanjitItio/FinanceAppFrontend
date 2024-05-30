@@ -29,7 +29,7 @@ useEffect(() => {
       if(res.data.user_wallet_data) {
         const GlobalDefaultUserSelectedWallet = localStorage.getItem('UserSelectedWalletID')
   
-        if(!GlobalDefaultUserSelectedWallet) {
+        if(GlobalDefaultUserSelectedWallet) {
           const defaultWalletID = res.data.user_wallet_data.find(wallet => wallet.currency === 'USD');
   
           if (defaultWalletID) {
