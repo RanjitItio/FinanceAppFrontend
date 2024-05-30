@@ -12,22 +12,80 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../Authentication/axios'
 
 
 
-function HeadForm() {
+
+
+
+
+function HeadForm({...props}) {
+
+  const [currencies, setCurrencies]                          = useState([])
+  const [senderCurrencyValue, updateSenderCurrencyValue]     = useState('')
+  const [receiverCurrencyValue, updateReceiverCurrencyValue] = useState('')
+  const [sourceFundValue, updatesourceFundValue]             = useState('')
+  const [sendingPurposeValue, updateSendingPurposeValue]     = useState('')
+
+  // Call API to convert the Currency Value
+  useEffect(() => {
+    if (props.formData.receiver_amount && props.formData.receiver_currency && props.formData.send_currency && props.formData.send_amount){
+        const fetchData = async () => {
+          try {
+            // const url = `${}`
+          }
+        }
+    }
+  }, [props.formData.receiver_amount, props.formData.receiver_currency, props.formData.send_currency, props.formData.send_amount])
+
+
+  useEffect(() => {
+    axiosInstance.get(`/api/v2/currency`).then((res) => {
+        // console.log(res.data.currencies)
+        if (res.data.currencies) {
+          setCurrencies(res.data.currencies)
+        }
+
+    }).catch((error) => {
+        console.log(error.response)
+
+    })
+  }, [])
+
+  const handleUpdateSenderCurrencyValue = (event) => {
+    updateSenderCurrencyValue(event.target.value)
+  }
+
+  const handleUpdateReceiverCurrencyValue = (event) => {
+    updateReceiverCurrencyValue(event.target.value)
+  }
+
+  const handleSourceFundValue = (event)=> {
+    updatesourceFundValue(event.target.value)
+  }
+  
+  const handleSendingPurposeValue = (event)=> {
+    updateSendingPurposeValue(event.target.value)
+  }
+
+  
+
   return (
     <>
 
       <Form method='post'>
         <Row className="mb-3">
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '  controlId="formGridSend">
-            {/* <Form.Label>Send</Form.Label> */}
-            {/* <Form.Control type="number" placeholder="Enter Amount" /> */}
-            <InputLabel>Send</InputLabel>
-
-            <TextField fullWidth autoFocus label="Enter Amount" type="number"  variant="outlined" />
+            <InputLabel >Send</InputLabel>
+            <TextField fullWidth autoFocus 
+                       label="Enter Amount" 
+                       type="number"  
+                       onChange={(event)=>{props.handleFormValueChange(event)}}
+                       variant="outlined"
+                       name='send_amount'
+                       />
           </Form.Group>
 
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridState">
@@ -37,66 +95,95 @@ function HeadForm() {
               fullWidth
               autoFocus
               label="Currency"
-              
+              value={senderCurrencyValue}
+              name='send_currency'
+              onChange={(event)=> {handleUpdateSenderCurrencyValue(event); props.handleFormValueChange(event)}}
             >
               <MenuItem value="">
                 <em>Choose...</em>
               </MenuItem>
-              <MenuItem value={"USD"}>USD</MenuItem>
-              <MenuItem value={"INR"}>INR</MenuItem>
-              <MenuItem value={"EURO"}>EURO</MenuItem>
-            </Select>
+          
+              {currencies.map((currency, index) => (
+                    <MenuItem value={currency.name} key={index}>{currency.name}</MenuItem>
+              ))}
 
+            </Select>
 
           </Form.Group>
 
         </Row>
         {/* &nbsp; */}
         <Row className="mb-3">
-          <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridEmail">
+
+        <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridEmail">
             <InputLabel>Recipient will receive</InputLabel>
 
-            <TextField fullWidth autoFocus label="Enter Amount" type="number" variant="outlined" style={{color: 'white'} } />
+            <TextField fullWidth autoFocus label="Enter Amount"
+                        type="number" 
+                        variant="outlined" 
+                        style={{color: 'white'} } 
+                        name='receiver_amount'
+                        onChange={(event)=>{props.handleFormValueChange(event)}}
+                        />
           </Form.Group>
 
           <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridState">
-            <InputLabel id="demo-simple-select-standard-label" >Currency</InputLabel>
+
+            <InputLabel id="demo-simple-select-standard-label ">Currency</InputLabel>
             <Select
               fullWidth
               autoFocus
               label="Currency"
-              style={{color: 'white'} }
+              value={receiverCurrencyValue}
+              name='receiver_currency'
+              onChange={(event)=>{handleUpdateReceiverCurrencyValue(event); props.handleFormValueChange(event)}}
             >
               <MenuItem value="">
                 <em>Choose...</em>
               </MenuItem>
-              <MenuItem value={"USD"}>USD</MenuItem>
-              <MenuItem value={"INR"}>INR</MenuItem>
-              <MenuItem value={"EURO"}>EURO</MenuItem>
+          
+              {currencies.map((currency, index) => (
+                    <MenuItem value={currency.name} key={index}>{currency.name}</MenuItem>
+              ))}
+
             </Select>
           </Form.Group>
+
         </Row>
 
         <Form.Group as={Col} controlId="formGridState">
           <InputLabel id="demo-simple-select-standard-label" >Source Fund</InputLabel>
-          <Select fullWidth autoFocus label="Source Fund">
+          <Select fullWidth autoFocus 
+                label="Source Fund"
+                name='source_fund'
+                onChange={(event) => {props.handleFormValueChange(event); handleSourceFundValue(event)}}
+                value={sourceFundValue}
+                >
             <MenuItem value="">
               <em>Choose...</em>
             </MenuItem>
-            <MenuItem value={"personal"}>Personal</MenuItem>
-            <MenuItem value={"bank"}>Bank</MenuItem>
+            <MenuItem value={"Wallet"}>Wallet</MenuItem>
+            <MenuItem value={"Bank"}>Bank</MenuItem>
+            <MenuItem value={"Paypal"}>Paypal</MenuItem>
+            <MenuItem value={"Paytm"}>Paytm</MenuItem>
 
           </Select>
         </Form.Group>
         &nbsp;
         <Form.Group as={Col} controlId="formGridState">
           <InputLabel id="demo-simple-select-standard-label" >Sending Purpose</InputLabel>
-          <Select fullWidth autoFocus label="Sending Purpose">
+          <Select fullWidth autoFocus 
+                  label="Sending Purpose"
+                  name='sending_purpose'
+                  onChange={(event)=> {props.handleFormValueChange(event); handleSendingPurposeValue(event)}}
+                  value={sendingPurposeValue}
+                  >
             <MenuItem value="">
               <em>Choose...</em>
             </MenuItem>
             <MenuItem value={"Expenses"}>Expenses</MenuItem>
             <MenuItem value={"Insurance"}>Insurance</MenuItem>
+            <MenuItem value={"Travel"}>Travel</MenuItem>
             <MenuItem value={"Others"}>Others</MenuItem>
           </Select>
 
@@ -104,14 +191,14 @@ function HeadForm() {
 
         <hr />
         <div className="d-flex justify-content-between">
-          <p className=''><b>Charge CHF</b></p>
-          <p className=''><b>Payble CHF</b></p>
-          <p className=''><b>Payble USD</b></p>
+          <p className=''><b>Send Amount</b></p>
+          <p className=''><b>Payble Fee</b></p>
+          <p className=''><b>Total Amount</b></p>
         </div>
         <div className="d-flex justify-content-between">
-          <p><b>11.22</b></p>
-          <p><b>111.22</b></p>
-          <p><b>111.22 USD</b></p>
+          <p><b>{props.formData.send_amount} {props.formData.send_currency}</b></p>
+          <p><b>{props.formData.transaction_fee} {props.formData.send_currency}</b></p>
+          <p><b>{props.formData.total_amount} {props.formData.send_currency}</b></p>
         </div>
         <br />
 
@@ -121,6 +208,7 @@ function HeadForm() {
     </>
   )
 }
+
 
 function Step1Form() {
   return (
@@ -266,15 +354,24 @@ const steps = ['Payment Information','Recipient Details', 'Recipient Bank Detail
 
 
 export default function StepWisePaymentForm() {
+
+  const initialFormData = {
+    send_amount: 0,
+    send_currency: '',
+    receiver_amount: 0,
+    receiver_currency: '',
+    source_fund: '',
+    sending_purpose: '',
+    transaction_fee: 0,
+    total_amount: 0
+  }
+
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const location = useLocation();
-  const formData = location.state?.formData;
-
-  const [stepFormData, updateStepFormData] = React.useState(formData)
+  const [formData, updateFormData] = useState(initialFormData)
 
 
   const isStepOptional = (step) => {
@@ -319,11 +416,44 @@ export default function StepWisePaymentForm() {
     setActiveStep(0);
   };
 
+  // Get the value of the form after the form filled
+  const handleFormValueChange = (event) => {
+    updateFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    })
+  };
+
+
+  // calculate Total Amount
+  useEffect(() => {
+    if (formData.send_amount && formData.send_currency) {
+      updateFormData((formData)=> ({
+        ...formData,
+        total_amount: parseFloat(formData.send_amount) + parseFloat(formData.transaction_fee)
+      }))
+    }
+  }, [formData.send_amount, formData.send_currency])
+
+  // Update the Transaction Fee after Selecting send amount and currency
+  useEffect(() => {
+    if (formData.send_amount && formData.send_currency) {
+      updateFormData((formData)=> ({
+        ...formData,
+        transaction_fee: 10
+      }))
+    }
+  }, [formData.send_amount, formData.send_currency])
+
+
 
   const renderStepForm = (step) => {
     switch (step) {
       case 0:
-        return <HeadForm />;
+        return <HeadForm
+               handleFormValueChange={handleFormValueChange}
+               formData={formData}
+            />;
       case 1:
         return <Step1Form />;
       case 2:
