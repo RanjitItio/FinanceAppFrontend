@@ -18,9 +18,6 @@ import axiosInstance from '../Authentication/axios'
 
 
 
-
-
-
 function HeadForm({...props}) {
 
   const [currencies, setCurrencies]                          = useState([])
@@ -28,15 +25,26 @@ function HeadForm({...props}) {
   const [receiverCurrencyValue, updateReceiverCurrencyValue] = useState('')
   const [sourceFundValue, updatesourceFundValue]             = useState('')
   const [sendingPurposeValue, updateSendingPurposeValue]     = useState('')
+  const [convertedAmount, setConvertedAmount]                = useState('');
 
   // Call API to convert the Currency Value
   useEffect(() => {
-    if (props.formData.receiver_amount && props.formData.receiver_currency && props.formData.send_currency && props.formData.send_amount){
-        const fetchData = async () => {
-          try {
-            // const url = `${}`
-          }
-        }
+    if (props.formData.receiver_currency && props.formData.send_currency && props.formData.send_amount){
+      const convert_amount = parseInt(props.formData.send_amount)
+
+      axiosInstance.post(`api/v2/convert/currency/`, {
+        from_currency: props.formData.send_currency,
+        to_currency:   props.formData.receiver_currency,
+        amount     :   convert_amount
+
+      }).then((res)=> {
+        // console.log(res.data.converted_amount)
+        setConvertedAmount(res.data.converted_amount)
+
+      }).catch((error)=> {
+        console.log(error.response)
+
+      })
     }
   }, [props.formData.receiver_amount, props.formData.receiver_currency, props.formData.send_currency, props.formData.send_amount])
 
@@ -118,12 +126,13 @@ function HeadForm({...props}) {
         <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridEmail">
             <InputLabel>Recipient will receive</InputLabel>
 
-            <TextField fullWidth autoFocus label="Enter Amount"
+            <TextField fullWidth autoFocus
                         type="number" 
                         variant="outlined" 
                         style={{color: 'white'} } 
                         name='receiver_amount'
-                        onChange={(event)=>{props.handleFormValueChange(event)}}
+                        // onChange={(event)=>{props.handleFormValueChange(event)}}
+                        value={convertedAmount}
                         />
           </Form.Group>
 
@@ -143,7 +152,7 @@ function HeadForm({...props}) {
               </MenuItem>
           
               {currencies.map((currency, index) => (
-                    <MenuItem value={currency.name} key={index}>{currency.name}</MenuItem>
+                    <MenuItem value={currency.name} key={`${currency.name}-${index}`}>{currency.name}</MenuItem>
               ))}
 
             </Select>
@@ -189,6 +198,7 @@ function HeadForm({...props}) {
 
         </Form.Group>
 
+
         <hr />
         <div className="d-flex justify-content-between">
           <p className=''><b>Send Amount</b></p>
@@ -202,7 +212,7 @@ function HeadForm({...props}) {
         </div>
         <br />
 
-
+        {props.error && <p className='text-warning'>{props.error}</p>}
       </Form>
 
     </>
@@ -210,44 +220,53 @@ function HeadForm({...props}) {
 }
 
 
-function Step1Form() {
+function Step1Form({...props}) {
+
   return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
       <form>
         <Grid container spacing={2} >
 
           <Grid item xs={12} sm={6} md={6}>
-            <TextField fullWidth autoFocus label="Full Name"  variant="outlined" />
+            <TextField fullWidth autoFocus label="Full Name"  
+                        variant="outlined" 
+                        onChange={(event)=> {props.handleFormValueChange(event)}} 
+                        name='receiver_full_name'
+                        />
           </Grid>
 
           <Grid item xs={12} sm={6} md={6}>
-            <TextField fullWidth label="Email" variant="outlined" />
+            <TextField fullWidth label="Email" 
+                       variant="outlined" 
+                       onChange={(event)=> {props.handleFormValueChange(event)}} 
+                       name='receiver_email'
+                       />
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Mobile Number" type="number" variant="outlined" />
+            <TextField fullWidth 
+                      label="Mobile Number" 
+                      type="number"
+                      variant="outlined" 
+                      onChange={(event)=> {props.handleFormValueChange(event)}} 
+                      name='receiver_mobile_number'
+                      />
           </Grid>
-
-          {/* Button */}
-          {/* <Grid item xs={3}>
-                <Button variant="contained" color="primary" fullWidth>
-                Submit
-                </Button>
-            </Grid> */}
 
         </Grid>
       </form>
-    </Container>
 
+      {props.error && <p className='text-warning'>{props.error}</p>}
+    </Container>
 
   );
 }
 
-function Step2Form() {
-  const [agenetOption, setAgenetOption] = React.useState('');
+function Step2Form({...props}) {
+  const [paymentOption, setPaymentOption] = React.useState('');
 
   const handleChange = (event) => {
-    setAgenetOption(event.target.value);
+    setPaymentOption(event.target.value);
   };
 
   return (
@@ -256,59 +275,98 @@ function Step2Form() {
         <Grid container spacing={2} >
 
           <Grid item xs={12} sm={12} md={12}>
-            <InputLabel id="demo-simple-select-label">Agent or Bank Transfer</InputLabel>
-            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={agenetOption} label="age" fullWidth size='small' onChange={handleChange} >
-              <MenuItem value={'Agent'}>Agent</MenuItem>
-              <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
+            <InputLabel id="demo-simple-select-label">Wallet or Bank Transfer</InputLabel>
+            <Select 
+                  labelId="demo-simple-select-label" 
+                  id="demo-simple-select" 
+                  value={paymentOption} 
+                  label="age" 
+                  fullWidth size='small' 
+                  name='rec_payment_mode'
+                  onChange={(event)=> {handleChange(event); props.handleFormValueChange(event); }} 
+                  >
+              <MenuItem value={'Wallet'}>Wallet</MenuItem>
+              <MenuItem value={'Bank'}>External Bank Transfer</MenuItem>
               <MenuItem value={'Others'}>Others</MenuItem>
             </Select>
+            {paymentOption === 'Wallet' && <p className='text-warning'>Receiver email should be registered</p> }
           </Grid>
 
-          <Grid item xs={12} sm={6} >
-            <TextField fullWidth label="Agent/Bank Name" variant="outlined" type='text' required />
-          </Grid>
+          {paymentOption !== 'Wallet' && (
+            <>
+                <Grid item xs={12} sm={6} >
+                <TextField fullWidth 
+                           label="Card/Bank Name" 
+                          variant="outlined" 
+                          type='text' 
+                          required 
+                          name='rec_bank_name'
+                          onChange={(event)=> {props.handleFormValueChange(event);}}
+                          />
+                </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="IBAN/AC/ACH Number" type="text" variant="outlined" required />
-          </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField fullWidth 
+                           label="IBAN/AC/ACH Number" 
+                           type="text" 
+                           variant="outlined" 
+                           required 
+                           name='rec_bank_acc_no'
+                           onChange={(event)=> {props.handleFormValueChange(event);}}
+                           />
+              </Grid>
 
-          <Grid item xs={12} sm={6} >
-            <TextField fullWidth label="Routing/IFSC/BIC/SwiftCode" type='text' variant="outlined" required />
-          </Grid>
+              <Grid item xs={12} sm={6} >
+                <TextField fullWidth 
+                           label="Routing/IFSC/BIC/SwiftCode" 
+                           type='text' 
+                           variant="outlined" 
+                           required 
+                           name='rec_bank_ifsc_code'
+                           onChange={(event)=> {props.handleFormValueChange(event);}}
+                           />
+              </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Additional Info" type="text" variant="outlined" required />
-          </Grid>
-
-          {/* Button */}
-          {/* <Grid item xs={3}>
-                    <Button variant="contained" color="primary" fullWidth type='submit'> 
-                    Submit
-                    </Button>
-                </Grid> */}
-
+              <Grid item xs={12} sm={6}>
+                <TextField fullWidth 
+                           label="Additional Info" 
+                           type="text" 
+                           variant="outlined" 
+                           required
+                           name='rec_add_info'
+                           onChange={(event)=> {props.handleFormValueChange(event);}}
+                           />
+              </Grid>
+            </>
+          )}
+        
         </Grid>
+        {props.error && <p className='text-warning'>{props.error}</p>}
       </form>
+
     </Container>
   );
 }
 
-function Step3Form() {
+function Step3Form({...props}) {
   return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
       <form method='post'>
         <Grid container spacing={2} >
 
           <Grid item xs={12} sm={12}>
-            <TextField fullWidth autoFocus label="Address Line" variant="outlined" />
+            <TextField fullWidth 
+                        autoFocus 
+                        label="Address Line" 
+                        variant="outlined" 
+                        name='rec_address'
+                        onChange={(event)=> {props.handleFormValueChange(event)}}
+                        />
           </Grid>
-          {/* Button */}
-          {/* <Grid item xs={3}>
-                    <Button variant="contained" color="primary" fullWidth>
-                    Submit
-                    </Button>
-                </Grid> */}
+          
         </Grid>
+
+        {props.error && <p className='text-warning'>{props.error}</p>}
       </form>
     </Container>
   );
@@ -350,7 +408,7 @@ function Step4Form() {
 }
 
 
-const steps = ['Payment Information','Recipient Details', 'Recipient Bank Details', 'Recipient Address', 'Payment Information'];
+const steps = ['Payment Information','Recipient Details', 'Recipient Payment Details', 'Recipient Address'];
 
 
 export default function StepWisePaymentForm() {
@@ -363,16 +421,27 @@ export default function StepWisePaymentForm() {
     source_fund: '',
     sending_purpose: '',
     transaction_fee: 0,
-    total_amount: 0
+    total_amount: 0,
+    receiver_full_name: '',
+    receiver_email: '',
+    receiver_mobile_number: '',
+    rec_payment_mode: '',
+    rec_bank_name: '',
+    rec_bank_acc_no: '',
+    rec_bank_ifsc_code: '',
+    rec_add_info: '',
+    rec_address: ''
   }
 
 
   const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
-  const theme = useTheme();
-  const matchesXS = useMediaQuery(theme.breakpoints.down('sm'));
-  const [formData, updateFormData] = useState(initialFormData)
+  const [skipped, setSkipped]       = React.useState(new Set());
+  const theme                       = useTheme();
+  const matchesXS                   = useMediaQuery(theme.breakpoints.down('sm'));
+  const [formData, updateFormData]  = useState(initialFormData)
+  const [error, setError]           = useState('')
 
+  // console.log(formData)
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -384,15 +453,155 @@ export default function StepWisePaymentForm() {
 
   const handleNext = () => {
     let newSkipped = skipped;
-    
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
+   
+    console.log(activeStep)
+
+    // Check the first Step Validation
+    if (activeStep === 0) {
+          if (formData.send_amount === 0) {
+            setError('Please fillup the Send amount field')
+
+          } else if (formData.send_currency === '') {
+            setError('Please select Send Currency')
+
+          } else if (formData.receiver_currency === '') {
+            setError('Please select Receiver Currency')
+
+          } else if (formData.source_fund === '') {
+            setError('Please select Source fund type')
+
+          } else if (formData.sending_purpose === '') {
+            setError('Please select Sending Purpose')
+
+          } else {
+              setError('')
+
+              if (isStepSkipped(activeStep)) {
+                newSkipped = new Set(newSkipped.values());
+                newSkipped.delete(activeStep);
+              }
+            
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+              
+            };
+    // Check for 2nd step validation
+    } else if (activeStep === 1) {
+            if (formData.receiver_full_name === '') {
+              setError('Please fill up receiver full name')
+
+            } else if (formData.receiver_mobile_number === '') {
+              setError('Please fill up receiver Mobile number')
+              
+            } else if (formData.receiver_email === '') {
+              setError('Please fill up receiver Email')
+
+            } else {
+              setError('')
+
+              if (isStepSkipped(activeStep)) {
+                newSkipped = new Set(newSkipped.values());
+                newSkipped.delete(activeStep);
+              }
+            
+              setActiveStep((prevActiveStep) => prevActiveStep + 1);
+              setSkipped(newSkipped);
+
+            }
+
+    // Check for 3rd step validation
+    } else if (activeStep === 2) {
+
+      if (formData.rec_payment_mode === '') {
+        setError('Please select receiver payment mode')
+
+        // Check the payment mode is Bank or Others
+      } else if (formData.rec_payment_mode === 'Bank' || formData.rec_payment_mode === 'Others') {
+           if (formData.rec_bank_name === '') {
+            setError('Please type receiver bank name')
+
+           } else if (formData.rec_bank_acc_no === '') {
+             setError('Please type receiver bank account number')
+
+           } else if (formData.rec_bank_ifsc_code === '') {
+            setError('Please type receiver IFSC Code')
+           } else {
+              setError('')
+
+              if (isStepSkipped(activeStep)) {
+                newSkipped = new Set(newSkipped.values());
+                newSkipped.delete(activeStep);
+              }
+            
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+
+           }
+      } else {
+            setError('')
+
+            if (isStepSkipped(activeStep)) {
+              newSkipped = new Set(newSkipped.values());
+              newSkipped.delete(activeStep);
+            }
+          
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          setSkipped(newSkipped);
+
+      }
+
+    // Check for 4th step data validation
+    } else if (activeStep === 3) {
+          if (formData.rec_address === '') {
+            setError('Please fillup Receiver Address')
+
+          } else {
+            setError('')
+            console.log(formData)
+            // Submit the data in API Request
+            axiosInstance.post(`api/v1/user/transfer_money/`, {
+              send_amount:         parseInt(formData.send_amount),
+              fee:                 formData.transaction_fee,
+              total_amount:        formData.total_amount,
+              send_currency:       formData.send_currency,
+              sender_payment_mode: formData.source_fund,
+              purpose:             formData.sending_purpose,
+              rec_currency:        formData.receiver_currency,
+              rec_full_name:       formData.receiver_full_name,
+              rec_email:           formData.receiver_email,
+              rec_phoneno:         formData.receiver_mobile_number,
+              rec_add_info:        formData.rec_add_info,
+              rec_address:         formData.rec_address,
+              rec_pay_mode:        formData.rec_payment_mode,
+              rec_bank_name:       formData.rec_bank_name,
+              rec_acc_no:          formData.rec_bank_acc_no,
+              rec_ifsc:            formData.rec_bank_ifsc_code
+
+            }).then((res)=> {
+              if (res.status === 200) {
+
+                if (isStepSkipped(activeStep)) {
+                    newSkipped = new Set(newSkipped.values());
+                    newSkipped.delete(activeStep);
+                  }
+                
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                setSkipped(newSkipped);
+
+              }
+
+            }).catch((error)=> {
+              console.log(error.response)
+              setError(error.response.data.msg)
+
+            })
+          }
+      } 
+    };
+    
+    
+    
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -427,13 +636,13 @@ export default function StepWisePaymentForm() {
 
   // calculate Total Amount
   useEffect(() => {
-    if (formData.send_amount && formData.send_currency) {
+    if (formData.send_amount) {
       updateFormData((formData)=> ({
         ...formData,
         total_amount: parseFloat(formData.send_amount) + parseFloat(formData.transaction_fee)
       }))
     }
-  }, [formData.send_amount, formData.send_currency])
+  }, [formData.send_amount])
 
   // Update the Transaction Fee after Selecting send amount and currency
   useEffect(() => {
@@ -453,15 +662,24 @@ export default function StepWisePaymentForm() {
         return <HeadForm
                handleFormValueChange={handleFormValueChange}
                formData={formData}
+               error={error}
             />;
       case 1:
-        return <Step1Form />;
+        return <Step1Form 
+                handleFormValueChange={handleFormValueChange}
+                error={error}
+           />;
       case 2:
-        return <Step2Form />;
+        return <Step2Form 
+                  handleFormValueChange={handleFormValueChange}
+                  error={error}
+               />;
       case 3:
-        return <Step3Form />;
-      case 4:
-        return <Step4Form />;
+        return <Step3Form 
+                  handleFormValueChange={handleFormValueChange}
+                  error={error}
+              />;
+    
       default:
         return null;
     }
@@ -480,16 +698,12 @@ export default function StepWisePaymentForm() {
                   {steps.map((label, index) => {
                     const stepProps = {};
                     const labelProps = {};
-                    // if (isStepOptional(index)) {
-                    //   labelProps.optional = (
-                    //     <Typography  variant="caption">Optional</Typography>
-                    //   );
-                    // }
+                   
                     if (isStepSkipped(index)) {
                       stepProps.completed = false;
                     }
                     return (
-                      <Step key={label} {...stepProps}>
+                      <Step key={index} {...stepProps}>
                         <StepLabel {...labelProps}>{label}</StepLabel>
                       </Step>
                     );
@@ -500,13 +714,13 @@ export default function StepWisePaymentForm() {
               {activeStep === steps.length ? (
                 <>
                   <Container maxWidth="md" style={{ marginTop: '50px' }}>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                      <p className="text-success">congratulation your payment information has been submitted successfully</p>
+                    <Typography sx={{ mt: 2, mb: 1 }} variant='div'>
+                      <p className="text-success">
+                        Thank you for the Transaction! Your transaction is currently in pending, After approval from admin your amount will get credited to receiver account. 
+                        We'll notify you once your Transfer Transaction has been approved.
+                    </p>
                     </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={handleReset} style={{width:'15rem'}}>Reset</Button>
-                    </Box>
+                    
                   </Container>
                 </>
               ) : (
@@ -517,9 +731,9 @@ export default function StepWisePaymentForm() {
                   {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
                   <Container maxWidth="md" style={{ marginTop: '50px' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }} style={{width:'15rem',backgroundColor:'#90caf9'}}>
+                      {/* <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }} style={{width:'15rem',backgroundColor:'#90caf9'}}>
                         {'<'} Back
-                      </Button>
+                      </Button> */}
 
                       <Box sx={{ flex: '1 1 auto' }} />
                       {/* {isStepOptional(activeStep) && (
