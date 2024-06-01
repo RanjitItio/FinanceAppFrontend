@@ -455,7 +455,7 @@ export default function StepWisePaymentForm() {
     let newSkipped = skipped;
 
    
-    console.log(activeStep)
+    // console.log(activeStep)
 
     // Check the first Step Validation
     if (activeStep === 0) {

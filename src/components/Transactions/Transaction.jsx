@@ -178,8 +178,8 @@ export default function AllTransactions({open}) {
                 }
 
                 if(res.data && res.data.all_transactions) {
-                    const SortedTransactions = res.data.all_transactions.reverse()
-                    setTransactionData(SortedTransactions)
+                    // const SortedTransactions = res.data.all_transactions.reverse()
+                    setTransactionData(res.data.all_transactions)
                     // console.log(res.data)
                 };
             })

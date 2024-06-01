@@ -72,7 +72,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
 
       localStorage.setItem('userSendMoneyAmount', event.target.value)
 
-      const expirationTime = 1 * 60 * 1000;// 10 minutes in milliseconds
+      const expirationTime = 1 * 60 * 1000;
 
       setTimeout(() => {
         localStorage.removeItem('userSendMoneyAmount')
@@ -100,6 +100,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
       };
     }).catch((error)=> {
       console.log(error.response)
+
     });
 
   }, [])

@@ -29,25 +29,11 @@ export default function FiatAccount() {
                         localStorage.setItem('UserSelectedWalletID', defaultWalletID.id);
                       }
                 };
-                
-
-             } else if(res.data.msg == 'Token has expired') {
-                setError('Session has expired please login to view wallet balance')
-
-             } else if (res.data.msg == 'Invalid token') {
-                setError('Invalid session please try to login')
              }
-
         }).catch((error)=> {
             console.log(error.response)
 
-            if (error.response.data.msg == 'Authentication Failed Please provide auth token') {
-                setError("Authentication Failed")
-
-            } else if (error.response.data.msg == 'Authentication Failed')  {
-                setError("Authentication Failed")
-
-            } else if (error.response.data.msg == 'User Wallet not available') {
+            if (error.response.data.msg == 'User Wallet not available') {
                 setError("User wallet is not available")
 
             } else if(error.response.data.msg == 'Unable to get the Wallet of user') {
@@ -72,9 +58,8 @@ export default function FiatAccount() {
         } 
     };
     // console.log(userWallet)
+    
 
-    
-    
     return (
         <div className="card" style={{backgroundColor: '#95b02f'}}>
             <div className="card-body">
@@ -108,7 +93,7 @@ export default function FiatAccount() {
                             {selectedCurrency == wallet.currency && (
                                 <React.Fragment>
                                     <h2 className="d-flex justify-content-center my-2"><span className="mx-1">{wallet.currency}</span> <b>{wallet.balance.toFixed(4)}</b></h2>
-                                    <p className="d-flex justify-content-center text-muted">9090 7867 5467</p>
+                                    <p className="d-flex justify-content-center text-muted">{wallet.wallet_id ? wallet.wallet_id : '9999-8888-1111'}</p>
                                     <br />
                                 </React.Fragment>
                             )}

@@ -2,7 +2,7 @@ import Wallet from './components/Wallet';
 import AuthProvider from './components/ProtectedRoute/authProvider';
 import AuthRoutes from './components/ProtectedRoute/routes';
 // import { refreshAccessToken } from './components/Authentication/axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axiosInstance from './components/Authentication/axios';
 
 
@@ -10,7 +10,7 @@ import axiosInstance from './components/Authentication/axios';
 
 
 function App() {
-
+  const [serverStatus, updateServerStatus] = useState(false)
 //   useEffect(() => {
 //     const intervalId = setInterval(() => {
 //         refreshAccessToken();
@@ -19,6 +19,17 @@ function App() {
     
 //     return () => clearInterval(intervalId);
 // }, []);
+
+  useEffect(() => {
+    axiosInstance.get(`api/server/status`).then((res)=> {
+        // console.log(res)
+        updateServerStatus(false)
+    }).catch((error)=> {
+        // console.log(error)
+        updateServerStatus(true)
+    })
+  }, []);
+
 
 useEffect(() => {
   const auth_token = localStorage.getItem('token')
@@ -29,7 +40,7 @@ useEffect(() => {
       if(res.data.user_wallet_data) {
         const GlobalDefaultUserSelectedWallet = localStorage.getItem('UserSelectedWalletID')
   
-        if(GlobalDefaultUserSelectedWallet) {
+        if(!GlobalDefaultUserSelectedWallet) {
           const defaultWalletID = res.data.user_wallet_data.find(wallet => wallet.currency === 'USD');
   
           if (defaultWalletID) {
@@ -46,10 +57,16 @@ useEffect(() => {
 
 
   return (
-     
-      <AuthProvider>
-          <AuthRoutes />
-      </AuthProvider>
+    <>
+       {serverStatus ? 
+         <b><p className='d-flex justify-content-center my-5 text-danger'>Inconvinience Deeply Regreted please retry after sometime</p></b>
+       : 
+          <AuthProvider>
+              <AuthRoutes />
+          </AuthProvider>
+       
+       }
+      </>
 
   );
 };
