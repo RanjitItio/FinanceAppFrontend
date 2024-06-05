@@ -27,6 +27,7 @@ function Register() {
     const [formData, updateFormData] = useState(initialFormData);
     const [error, setError] = useState('')
     const [successMessage, setSuccessMessage] = useState('');
+    const [diableRegisterButton, setDisableRegisterButton] = useState(false)
 
 
     const handleChange = (e) => {
@@ -85,6 +86,12 @@ function Register() {
             setError(''); 
         }
 
+        setDisableRegisterButton(true)
+
+        setTimeout(() => {
+          setDisableRegisterButton(false)
+        }, 4000);
+
       await axiosInstance.post(`api/v1/user/register/`, {
             firstname: formData.first_name,
             lastname: formData.last_name,
@@ -98,10 +105,10 @@ function Register() {
             // console.log(res.data)
             if(res.status == 201) {
                 const response_msg = res.data.msg;
-                const match = response_msg.match(/\d+$/);
+                const match        = response_msg.match(/\d+$/);
 
                 if (response_msg) {
-                  const user_ID = parseInt(match[0])
+                  const user_ID            = parseInt(match[0])
                   filteredFormData.user_id = user_ID;
                   // console.log("User:", user_ID);
                 } else {
@@ -118,13 +125,11 @@ function Register() {
             }
         })
         .catch((error) => {
-            if (error.response.status == 400) {
+            if (error.response.status === 400) {
                 setError(error.response.data.msg)
-                return;
             }
             else if (error.response.data.msg == 'Password is not same Please try again') {
                 setError('Password did not match please try again')
-                return;
             }
             else {
                 setError('')
@@ -258,6 +263,7 @@ function Register() {
               type="submit"
               className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               onClick={handleSubmit}
+              disabled={diableRegisterButton}
             >
               Sign Up
             </button>

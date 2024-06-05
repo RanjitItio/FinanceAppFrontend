@@ -9,6 +9,7 @@ import { Card } from 'react-bootstrap';
 
 const KYCForm = () => {
   const navigate = useNavigate();
+  const currenct_date = new Date().toISOString().split('T')[0]
 
   const initialFormData = Object.freeze({
     firstName: '',
@@ -61,6 +62,7 @@ const KYCForm = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     let validationError = [];
+    const currenct_date = new Date().toISOString().split('T')[0]
 
     if (!formData.firstName.trim()) validationError.push("Please fill your First Name");
     if (!formData.lastName.trim()) validationError.push("Please fill your Last Name");
@@ -79,6 +81,12 @@ const KYCForm = () => {
     if (!formData.idType.trim()) validationError.push("Please select your ID Type");
     if (!formData.idNumber.trim()) validationError.push("Please type your ID Number");
     if (!formData.idExpiryDate.trim()) validationError.push("Please fill in ID Expiry Date");
+
+    // if (formData.idExpiryDate < currenct_date ) {
+    //   setError('Please select Expiry date greater than today')
+    // } else if (formData.idExpiryDate > currenct_date) {
+    //   setError('')
+    // }
 
     if (validationError.length > 0) {
       setError(validationError.join(', '));
@@ -129,6 +137,19 @@ const KYCForm = () => {
       [name]: files ? files[0] : value
     });
   };
+
+  const handleZipCodeChange = (e) => {
+     const input_value = e.target.value
+    //  console.log(input_value)
+
+     if (Number.isNaN(Number(input_value))) {
+        setError('Please type a number')
+
+     } else {
+      setError('')
+     }
+  };
+
 
 
   const renderStep = () => {
@@ -271,15 +292,18 @@ const KYCForm = () => {
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
+
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Zip Code</label>
                 <input
                   type="text"
                   name="zipCode"
                   value={formData.zipCode}
-                  onChange={handleChange}
+                  onChange={(event)=> {handleChange(event); handleZipCodeChange(event);}}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
+                {error && <p className='text-red-500'>{error}</p>}
+
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">State/UT</label>
@@ -353,9 +377,11 @@ const KYCForm = () => {
                   type="date"
                   name="idExpiryDate"
                   value={formData.idExpiryDate}
-                  onChange={handleChange}
+                  min={currenct_date}
+                  onChange={(event)=> {handleChange(event); }}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
+                {error && <p className='text-red-500'>{error}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Upload Document</label>

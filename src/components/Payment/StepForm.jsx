@@ -637,12 +637,17 @@ export default function StepWisePaymentForm() {
   // calculate Total Amount
   useEffect(() => {
     if (formData.send_amount) {
-      updateFormData((formData)=> ({
-        ...formData,
-        total_amount: parseFloat(formData.send_amount) + parseFloat(formData.transaction_fee)
-      }))
-    }
-  }, [formData.send_amount])
+
+      setTimeout(() => {
+        updateFormData((formData)=> ({
+          ...formData,
+          total_amount: parseFloat(formData.send_amount) + parseFloat(formData.transaction_fee)
+        }))
+      }, 3000);
+
+    };
+
+  }, [formData.send_amount, formData.send_currency])
 
   // Update the Transaction Fee after Selecting send amount and currency
   useEffect(() => {
@@ -731,23 +736,14 @@ export default function StepWisePaymentForm() {
                   {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
                   <Container maxWidth="md" style={{ marginTop: '50px' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      {/* <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }} style={{width:'15rem',backgroundColor:'#90caf9'}}>
-                        {'<'} Back
-                      </Button> */}
 
                       <Box sx={{ flex: '1 1 auto' }} />
-                      {/* {isStepOptional(activeStep) && (
-                        <Button color="inherit" className='mx-3' onClick={handleSkip} sx={{ mr: 1 }} style={{width:'15rem',backgroundColor:'#2979ff'}}>
-                          Skip
-                        </Button>
-                      )} */}
 
                       <Button onClick={handleNext} style={{width:'15rem',backgroundColor:"#1e88e5"}}>
                         {activeStep === steps.length - 1 ? 'Make Payment >' : 'Next >'}
                       </Button>
                     </Box>
                   </Container>
-
 
                 </>
               )}

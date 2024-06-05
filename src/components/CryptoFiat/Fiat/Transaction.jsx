@@ -1,53 +1,13 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../../Authentication/axios";
-
-
-
-
-// const FiatTransactionsData = [
-//     {
-//         currency_name: 'Bitcoin',
-//         price: '$6,134.90',
-//         cagr: '+18.98%',
-//         ltc: '0 LTC',
-//         value: '$0.00',
-//         percentage: '0%',
-//         crypto_color: 'orange'
-//     },
-//     {
-//         currency_name: 'Etherium',
-//         price: '$6,134.90',
-//         cagr: '+18.98%',
-//         ltc: '0 LTC',
-//         value: '$0.00',
-//         percentage: '0%',
-//         crypto_color: 'blue'
-//     },
-//     {
-//         currency_name: 'Dodge Coin',
-//         price: '$6,134.90',
-//         cagr: '+18.98%',
-//         ltc: '0 LTC',
-//         value: '$0.00',
-//         percentage: '0%',
-//         crypto_color: 'yellow'
-//     },
-//     {
-//         currency_name: 'Lite Coin',
-//         price: '$6,134.90',
-//         cagr: '+18.98%',
-//         ltc: '0 LTC',
-//         value: '$0.00',
-//         percentage: '0%',
-//         crypto_color: 'green'
-//     },
-// ]
+import { useNavigate } from "react-router-dom";
 
 
 
 
 export default function FiatTransaction() {
-    
+
+    const navigate          = useNavigate()
     const [error, setError] = useState('')
     const  [FiatTransactionsData, updateFiatTransactionsData] = useState([])
 
@@ -71,6 +31,10 @@ export default function FiatTransaction() {
        
     }, [])
 
+    const handleRedirectAllTransaction = () => {
+        navigate('/transactions/')
+    }
+
 
     return(
         <div className="card" style={{maxHeight: ''}}>
@@ -87,6 +51,7 @@ export default function FiatTransaction() {
                             <th scope="col">Date</th>
                             <th scope="col">Status</th>
                             <th scope="col">Credited</th>
+                            <th scope="col">view</th>
                         </tr>
                     </thead>
 
@@ -120,6 +85,11 @@ export default function FiatTransaction() {
                                     }
                                 </td>
                                 <td className="text-primary">{item.credited_amount ? item.credited_amount : 'NA'} {item.credited_currency ? item.credited_currency : ''}</td>
+                                <td className="text-primary">
+                                    <button type="button" onClick={handleRedirectAllTransaction} className="btn btn-primary">
+                                        Detail
+                                    </button>
+                                </td>
                             </tr>
                           
                         ))}

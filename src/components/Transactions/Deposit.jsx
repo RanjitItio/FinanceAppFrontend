@@ -425,14 +425,14 @@ export default function DepositForm({open}) {
 
     {/* <Paper elevation={24}  sx={{height: '120%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', width: {xs: '100%', sm: '85%'}, marginLeft: {xs: '0%', sm: '7%'}}}> */}
     <Box sx={{ 
-              width: {xs: '100%', sm: '40%'},
+              width: {xs: '100%', sm: '50%'},
               marginTop: {xs: '40px', sm: '1rem'},
-              marginLeft: {xs: '0%', sm: '25%'},
-              // background: 'url("/formBackgroundImage.jpg")',
-              backgroundColor: '#E5E4E2',
+              marginLeft: {xs: '0%', sm: '20%'},
+              // backgroundColor: '#E5E4E2',
+              background: '#F0F8FF',
               backdropFilter: 'blur( 20px )',
               boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
-              borderRadius: '20px',
+              borderRadius: '5%',
               height: {xs:'100%', sm: '120%'}
             }}
        >
