@@ -16,18 +16,22 @@ function Register() {
     const navigate = useNavigate();
 
     const initialFormData = Object.freeze({
-		first_name: '',
-    last_name: '',
-    contact_number: '',
-		email: '',
-		password: '',
-		confirm_password: '',
-	});
+      first_name: '',
+      last_name: '',
+      contact_number: '',
+      email: '',
+      password: '',
+      confirm_password: '',
+    });
     
-    const [formData, updateFormData] = useState(initialFormData);
-    const [error, setError] = useState('')
-    const [successMessage, setSuccessMessage] = useState('');
+    const [formData, updateFormData]                       = useState(initialFormData);
+    const [error, setError]                                = useState('')
+    const [successMessage, setSuccessMessage]              = useState('');
     const [diableRegisterButton, setDisableRegisterButton] = useState(false)
+    const [selectedAccountColor, setSelectedAccountColor]  = useState('')
+    const [isMerchant, updateIsMerchant]                   = useState(false)
+
+    
 
 
     const handleChange = (e) => {
@@ -99,7 +103,7 @@ function Register() {
             email: formData.email,
             password: formData.password,
             password1: formData.confirm_password,
-            is_merchent: true
+            is_merchent: isMerchant
         })
         .then((res) => {
             // console.log(res.data)
@@ -125,6 +129,7 @@ function Register() {
             }
         })
         .catch((error) => {
+          console.log(error)
             if (error.response.status === 400) {
                 setError(error.response.data.msg)
             }
@@ -165,6 +170,20 @@ function Register() {
         //     console.error('Error:', error);
         // })
 	};
+
+
+  const handelSelectedAccountClick = (event, account) => {
+    setSelectedAccountColor(account)
+
+    if (account === 'merchant') {
+      updateIsMerchant(true)
+
+    } else {
+      updateIsMerchant(false)
+    }
+
+    // console.log(event.target.value)
+  }
 
 
 
@@ -256,6 +275,21 @@ function Register() {
                 name='confirm_password'
                 onChange={handleChange}
               />
+            </div>
+            
+            
+            <div className="w-full bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}} >
+                <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'user' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'user')}}>
+                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="./user.png" alt="User image" style={{marginTop: "20px"}}  />
+                    <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white peer-checked:text-white">User</h5>
+                </div>
+            </div>
+
+            <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}}>
+                <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'merchant' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'merchant')}}>
+                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="./merchant.png" alt="Bonnie image" style={{marginTop: '20px'}}/>
+                    <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white">Mechant</h5>
+                </div>
             </div>
 
           </div>

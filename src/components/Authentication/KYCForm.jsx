@@ -29,7 +29,7 @@ const KYCForm = () => {
     idType: '',
     idNumber: '',
     idExpiryDate: '',
-    document: null,
+    document: '',
     user_id: '',
   });
 
@@ -82,12 +82,6 @@ const KYCForm = () => {
     if (!formData.idNumber.trim()) validationError.push("Please type your ID Number");
     if (!formData.idExpiryDate.trim()) validationError.push("Please fill in ID Expiry Date");
 
-    // if (formData.idExpiryDate < currenct_date ) {
-    //   setError('Please select Expiry date greater than today')
-    // } else if (formData.idExpiryDate > currenct_date) {
-    //   setError('')
-    // }
-
     if (validationError.length > 0) {
       setError(validationError.join(', '));
       return;
@@ -95,27 +89,33 @@ const KYCForm = () => {
       setError('');
     }
 
+    const formDataToSend = new FormData();
+
+    formDataToSend.append('user_id', formData.user_id);
+    formDataToSend.append('firstname', formData.firstName);
+    formDataToSend.append('lastname', formData.lastName);
+    formDataToSend.append('dateofbirth', formData.dob);
+    formDataToSend.append('gender', formData.gender);
+    formDataToSend.append('marital_status', formData.maritalStatus);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('phoneno', formData.phoneNumber);
+    formDataToSend.append('address', formData.address);
+    formDataToSend.append('landmark', formData.landmark);
+    formDataToSend.append('city', formData.city);
+    formDataToSend.append('zipcode', formData.zipCode);
+    formDataToSend.append('state', formData.stateOrUt);
+    formDataToSend.append('country', formData.country);
+    formDataToSend.append('nationality', formData.nationality);
+    formDataToSend.append('id_type', formData.idType);
+    formDataToSend.append('id_number', formData.idNumber);
+    formDataToSend.append('id_expiry_date', formData.idExpiryDate);
+    formDataToSend.append('uploaddocument', formData.document);
+
     try {
-      const res = await axiosInstance.post(`api/v1/user/kyc/`, {
-        user_id: formData.user_id,
-        firstname: formData.firstName,
-        lastname: formData.lastName,
-        dateofbirth: formData.dob,
-        gender: formData.gender,
-        marital_status: formData.maritalStatus,
-        email: formData.email,
-        phoneno: formData.phoneNumber,
-        address: formData.address,
-        landmark: formData.landmark,
-        city: formData.city,
-        zipcode: formData.zipCode,
-        state: formData.stateOrUt,
-        country: formData.country,
-        nationality: formData.nationality,
-        id_type: formData.idType,
-        id_number: formData.idNumber,
-        id_expiry_date: formData.idExpiryDate,
-        uploaddocument: 'none' // Change this to handle actual file upload
+      const res = await axiosInstance.post(`api/v1/user/kyc/`, formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
       if (res.status === 200) {
@@ -126,7 +126,7 @@ const KYCForm = () => {
         }, 2000);
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   }
 
@@ -150,6 +150,11 @@ const KYCForm = () => {
      }
   };
 
+  // console.log(formData.document)
+
+  const handleDocumentChange = (event) => {
+    updateFormData({ ...formData, document: event.target.files[0] });
+  };
 
 
   const renderStep = () => {
@@ -388,7 +393,8 @@ const KYCForm = () => {
                 <input
                   type="file"
                   name="document"
-                  onChange={handleChange}
+                  // value={formData.document}
+                  onChange={handleDocumentChange}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
