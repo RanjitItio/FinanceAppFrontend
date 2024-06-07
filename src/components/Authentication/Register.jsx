@@ -72,6 +72,9 @@ function Register() {
         }
         else if (formData.password.length < 10) {
             validationError.push("Password must contain at least 10 characters");
+
+        } else if (!selectedAccountColor) {
+          validationError.push("Please select User account type");
         }
         // else if (!passwordRegex.test(formData.password)) {
         //     validationError.push("Password must contain at least 10 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.");
@@ -280,14 +283,14 @@ function Register() {
             
             <div className="w-full bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}} >
                 <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'user' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'user')}}>
-                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="./user.png" alt="User image" style={{marginTop: "20px"}}  />
+                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="https://python-uat.oyefin.com/media/signup/user.png" alt="User image" style={{marginTop: "20px"}}  />
                     <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white peer-checked:text-white">User</h5>
                 </div>
             </div>
 
             <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}}>
                 <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'merchant' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'merchant')}}>
-                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="./merchant.png" alt="Bonnie image" style={{marginTop: '20px'}}/>
+                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="https://python-uat.oyefin.com/media/signup/merchant.png" alt="Bonnie image" style={{marginTop: '20px'}}/>
                     <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white">Mechant</h5>
                 </div>
             </div>
