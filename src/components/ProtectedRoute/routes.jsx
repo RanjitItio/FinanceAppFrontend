@@ -29,6 +29,7 @@ import Ticket from "../Ticket/ticket";
 import AddTicket from "../Ticket/addtickets";
 import TicketReply from "../Ticket/ticketreply";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
@@ -39,6 +40,9 @@ import Invest from "../Invesment/Invest";
 import CryptoSwap from "../CryptoTransactions/CryptoSwap";
 import ResetPassword from "../Authentication/ResetPassword";
 import PaymentStepper from "../Payment/payment";
+import Merchants from "../Merchant/merchants";
+import AddNewMerchant from "../Merchant/add_merchant";
+import EditMerchant from "../Merchant/EditMerchant";
 
 
 
@@ -121,6 +125,9 @@ const AuthRoutes = () => {
                           <Route exact path='/investment/plan/' element={<Plan open={open} />}></Route>
                           <Route exact path='/investment/invest/' element={<Invest open={open} />}></Route>
                           <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route>
+                          <Route exact path='/merchants/' element={<Merchants open={open} />}></Route>
+                          <Route exact path='/add/merchants/' element={<AddNewMerchant open={open} />}></Route>
+                          <Route exact path='/edit/merchant/' element={<EditMerchant open={open} />}></Route>
                       </Routes>
                     </Box>
                   }></Route>

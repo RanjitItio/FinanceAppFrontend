@@ -291,7 +291,7 @@ function Register() {
             <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}}>
                 <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'merchant' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'merchant')}}>
                     <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="https://python-uat.oyefin.com/media/signup/merchant.png" alt="Bonnie image" style={{marginTop: '20px'}}/>
-                    <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white">Mechant</h5>
+                    <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white">Merchant</h5>
                 </div>
             </div>
 

@@ -28,6 +28,8 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 
 
+const is_merchant = localStorage.getItem('is_merchant') === 'true';
+
 
 
 
@@ -42,12 +44,19 @@ const NavContent = [
   { text: 'TRANSACTIONS', subItems: [
     {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/transactions/'},
     {text: 'Deposit Money', icon: <AddCardIcon />, url: '/deposit/'}, 
-    {text: '+Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
+    {text: 'Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 
     {text: '-Request Money', icon: <SwapCallsIcon />, url: '/request-payment/'}, 
     {text: '-Exchange Money', icon: <CurrencyExchangeIcon />, url: '/exchange-currency/'}, 
     {text: '-Withdrawal Money', icon: <PaymentsIcon />, url: '/payout-payment/'}, 
     {text: '-Withdrawal List', icon: <FormatListBulletedIcon />, url: '/withdrawal-history/'}, 
     {text: '-Withdrawal Settings', icon: <SettingsIcon />, url: '/withdrawal-settings/'}, 
+    
+    ...(is_merchant ? [
+      {text: '-Merchants', icon: <SettingsIcon />, url: '/merchants/'},
+      {text: '-Merchant Payments', icon: <SettingsIcon />, url: '/withdrawal-settings/'},
+
+    ] : [])
+
   ],
   icon:''},
 

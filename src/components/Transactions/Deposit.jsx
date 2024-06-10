@@ -61,6 +61,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
     if(!event.target.value) {
       setError('Please fill all the above fields')
+
     }else {
       setError('')
 
@@ -76,8 +77,10 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
   const handleAmountChange = (event)=> {
     setAmount(event.target.value)
+
     if(!event.target.value) {
       setError('Please fill all the above fields')
+
     } else {
       setError('')
 
@@ -87,6 +90,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
       setTimeout(() => {
         localStorage.removeItem('UsersDepositAmount')
+        
       }, depositexpirytime);
     }
   };
@@ -129,7 +133,9 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
           </MenuItem>
 
           {currencies.map((curr)=> (
-              <MenuItem key={curr.id} value={curr.name}>{curr.name}</MenuItem>
+              <MenuItem key={curr.id} value={curr.name}>
+                {curr.name}
+              </MenuItem>
           ))};
           
         </Select>

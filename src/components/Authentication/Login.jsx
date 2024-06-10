@@ -53,18 +53,22 @@ function Login(){
 			})
 			.then((res) => {
                 if(res.status == 200) {
+                     
                     setTimeout(() => {
-                        // navigate('/')
                         window.location.href = '/'
                     }, 1000);
 
                     setSuccessMessage(`Login Successfull`)
+                   
+                    localStorage.setItem('is_merchant', res.data.is_merchant)
+                    
                     localStorage.setItem('access_token', res.data.access_token);
                     localStorage.setItem('refresh_token', res.data.access_token);
                     axiosInstance.defaults.headers['Authorization'] =
                       'Bearer ' + localStorage.getItem('access_token');
                     // console.log(res);
                     // console.log(res.data);
+                    // console.log(res.data.is_merchant)
                 }
             //  localStorage.clear();
 			}).catch((error)=> {
