@@ -138,7 +138,6 @@ export default function EditMerchant({open}) {
         }
     
     
-    console.log(merchant_details)
 
     if (merchant_details === null) {
         return (

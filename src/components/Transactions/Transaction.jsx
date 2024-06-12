@@ -7,7 +7,6 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ResponsiveDialog from './TransactionDetails';
 import { useEffect, useState } from 'react';
@@ -23,103 +22,16 @@ import axiosInstance from '../Authentication/axios';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import HistoryIcon from '@mui/icons-material/History';
 import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 
 
-const TransactionData = [
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashin',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Exchange From',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '75',
-        status: 'cancelled',
-        status_color: 'red',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'red',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashin',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-04-2024',
-        time: '9:37 PM',
-        currency: '$',
-        amount: '10',
-        status: 'Pending',
-        status_color: 'orange',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'orange',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-]
+
+
+
 
 
 
@@ -134,6 +46,7 @@ export default function AllTransactions({open}) {
     const [error, setError] = useState('');
     // const [specificTransaction, updateSpecificTransaction] = useState([]);
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);
+    const [loader, setLoader] = useState(true);
 
 
 
@@ -165,21 +78,10 @@ export default function AllTransactions({open}) {
     useEffect(() => {
         try{
             axiosInstance.get(`api/v4/users/transactions/`).then((res)=> {
-                if(res.data.msg == "Token has expired"){
-                    setError("Session has expired please try to login")
-                }else if (res.data.msg == "Invalid token"){
-                    setError("Invalid Session please try to login")
-                } else if(res.data.msg == "Authentication Failed") {
-                    setError("Authentication Failed please re login")
-                } else if (res.data.msg == "Unable to get the Transactions") {
-                    setError("Server error")
-                } else {
-                    setError('')
-                }
-
                 if(res.data && res.data.all_transactions) {
                     // const SortedTransactions = res.data.all_transactions.reverse()
                     setTransactionData(res.data.all_transactions)
+                    setLoader(false)
                     // console.log(res.data)
                 };
             })
@@ -189,6 +91,38 @@ export default function AllTransactions({open}) {
        
     }, [])
     // console.log(transactionData)
+
+
+    if (loader) {
+        return (
+            <Main open={open}>
+            <DrawerHeader />
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20%'}}>
+                    <CircularProgress />
+                </Box>
+
+            </Main>
+        )
+        
+    };
+
+    if (transactionData.length === 0) {
+        return (
+            <Main open={open}>
+            <DrawerHeader />
+                <div className="d-flex justify-content-center">
+                    <p className='fs-3'>TRANSACTIONS</p>
+                </div>
+                <div className="d-flex justify-content-center">
+                    <p className='text-muted'>History of transactions in your account</p>
+                </div>
+                <br />
+
+                <p className='fs-5 d-flex justify-content-center my-5'><b>Nothing to show</b></p>
+                <CloseIcon sx={{marginLeft: {lg: '45%', md: '45%', sm: '39%', xs: '39%'}, fontSize: '100px'}} />
+            </Main>
+        )
+    };
 
     return (
         <>

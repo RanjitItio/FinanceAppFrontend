@@ -20,6 +20,7 @@ import MerchantDetails from './MerchantDetail';
 import GenerateMerchantQRCode from './MerchantQRCode';
 import axiosInstance from '../Authentication/axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import Pagination from '@mui/material/Pagination';
 
 
 
@@ -78,6 +79,7 @@ export default function Merchants ({open}) {
 
     }, []);
 
+
     if (merchantsData.length === 0) {
         return (
             <Main open={open}>
@@ -99,8 +101,9 @@ export default function Merchants ({open}) {
                 <p style={{justifyContent:'center', marginTop: '10%', marginLeft: '40%'}}><b>No Merchants available</b></p>
             </Main>
         )
-    }
-    
+    };
+
+
     if (loader) {
         return (
             <Main open={open}>
@@ -111,7 +114,22 @@ export default function Merchants ({open}) {
 
             </Main>
         )
+    };
+
+
+    const getStatusColor = (status) => {
+        switch(status){
+            case 'Approved':
+                return <span className="text-success mx-5">Approved</span>
+            case 'Cancelled':
+                return <span className="text-danger mx-5">Rejected</span>
+            case 'Moderation':
+                return <span className="text-warning mx-5">Moderation</span>
+        }
+
     }
+    
+    
     
     
     return (
@@ -155,36 +173,37 @@ export default function Merchants ({open}) {
                     </ListItemAvatar>
                    
                     <Grid container spacing={2} alignItems="center">
-                            
-                            
-
+                            {/* Business Name and URL */}
                             <Grid item xs={12} sm={4} md={3}>
                                 <ListItemText
                                 style={{ marginLeft: isSmallScreen ? '0' : '5px' }}
-                                primary={<p className="fs-5">{mct.merchants.bsn_name}</p>}
+                                primary={<p className="fs-7">{mct.merchants.bsn_name}</p>}
                                 secondary={<span className="text-muted"><i>{mct.merchants.bsn_url}</i></span>}
                             />
                             </Grid>
 
+                            {/* Merchant ID and Status */}
                             <Grid item xs={12} sm={4} md={3}>
                             <ListItemText
-                                style={{ marginRight: isSmallScreen ? '0' : '20%' }}
-                                primary={<p className="fs-8">{mct.merchants.merchant_id ? mct.merchants.merchant_id : 'NA'}</p>}
-                                secondary={<span className="text-warning mx-5">{mct.merchants.status ? mct.merchants.status : "NA"}</span>}
-                                sx={{ textAlign: 'left' }}
+                                style={{ }}
+                                primary={<small>{mct.merchants.merchant_id ? mct.merchants.merchant_id : 'NA'}</small>}
+                                secondary={mct.merchants ? getStatusColor(mct.merchants.status) : 'NA'}
+
+                                sx={{ textAlign: 'left', marginRight: isSmallScreen ? '0%' : '15%' }}
                             />
                             </Grid>
 
+                            {/* Currency Name */}
                             <Grid item xs={12} sm={4} md={2}>
                             <ListItemText
-                                primary={<p className="fs-5">{mct.currency.name}</p>}
+                                primary={<p className="fs-7">{mct.currency.name}</p>}
                                 
                                 sx={{ textAlign: isSmallScreen ? 'left' : 'right' }}
                             />
                             </Grid>
-                           
-                       
-
+                        
+                        
+                        {/* Icons */}
                         <Grid item xs={12} sm={12} md={4}>
                         <ListItemText
                             primary={
@@ -248,6 +267,8 @@ export default function Merchants ({open}) {
             </List>
              ))}
 
+             {/* Pagination */}
+            <Pagination count={10} color="primary" sx={{float:'right', marginTop: '20px'}} />
         </Main>
 
         <MerchantHTMLFormGenerator setHtmlFormOpen={setHtmlFormOpen} htmlFormOpen={htmlFormOpen}/>
