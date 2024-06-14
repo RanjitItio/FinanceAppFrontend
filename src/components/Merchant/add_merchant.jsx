@@ -131,6 +131,12 @@ export default function AddNewMerchant({open}) {
             }).catch((error) => {
                 console.log(error)
 
+                if (error.response.data.msg === 'This business name has already been taken') {
+                    setError('Business name already exists')
+
+                } else if (error.response.data.msg === 'This URl has already been taken') {
+                    setError('URL already exists')
+                }
             })
         }
     };
