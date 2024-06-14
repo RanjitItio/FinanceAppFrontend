@@ -53,7 +53,7 @@ const NavContent = [
     
     ...(is_merchant ? [
       {text: '-Merchants', icon: <SettingsIcon />, url: '/merchants/'},
-      {text: '-Merchant Payments', icon: <SettingsIcon />, url: '/withdrawal-settings/'},
+      {text: '-Merchant Payments', icon: <SettingsIcon />, url: '/merchant/payments/'},
 
     ] : [])
 

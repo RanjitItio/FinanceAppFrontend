@@ -341,6 +341,7 @@ function Step2Form({...props}) {
           )}
         
         </Grid>
+
         {props.error && <p className='text-warning'>{props.error}</p>}
       </form>
 
@@ -558,7 +559,8 @@ export default function StepWisePaymentForm() {
 
           } else {
             setError('')
-            console.log(formData)
+
+            // console.log(formData)
             // Submit the data in API Request
             axiosInstance.post(`api/v1/user/transfer_money/`, {
               send_amount:         parseInt(formData.send_amount),
@@ -583,7 +585,7 @@ export default function StepWisePaymentForm() {
 
                 if (isStepSkipped(activeStep)) {
                     newSkipped = new Set(newSkipped.values());
-                    newSkipped.delete(activeStep);
+                    newSkipped.delete(activeStep);  
                   }
                 
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -593,7 +595,12 @@ export default function StepWisePaymentForm() {
 
             }).catch((error)=> {
               console.log(error.response)
-              setError(error.response.data.msg)
+
+              if (error.response.data.msg == 'Sender donot have sufficient balance in wallet') {
+                setError('Do not have sufficient wallet in your wallet')
+              }
+
+              // setError(error.response.data.msg)
 
             })
           }
@@ -689,6 +696,7 @@ export default function StepWisePaymentForm() {
         return null;
     }
   };
+
 
   return (
     <Main open={open}>

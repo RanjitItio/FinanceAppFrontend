@@ -59,7 +59,7 @@ export default function MerchantDetails({...props}) {
   };
 
   const status = props.MerchantDetail?.status || 'NA';
-  const color  = getStatusColor(status);
+  const status_color  = getStatusColor(status);
 
 
   return (
@@ -135,8 +135,8 @@ export default function MerchantDetails({...props}) {
 
             <Grid item xs={12} sm={12} md={6} lg={6}>
                 <div className='d-flex justify-content-start'>
-                    <p className='fs-5'><b>{props.MerchantDetail?.bsn_name || 'NA'}</b></p> 
-                    <small style={{color: color}}>{status}</small>
+                    <p className='fs-6'><b>{props.MerchantDetail?.bsn_name || 'NA'}</b></p> 
+                    <small style={{color: status_color}}>{status}</small>
                 </div>
 
                 <a href={props.MerchantDetail?.bsn_url || 'NA'} target='_blank'>{props.MerchantDetail?.bsn_url || 'NA'}</a>

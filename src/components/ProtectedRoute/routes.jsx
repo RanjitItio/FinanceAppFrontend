@@ -29,7 +29,7 @@ import Ticket from "../Ticket/ticket";
 import AddTicket from "../Ticket/addtickets";
 import TicketReply from "../Ticket/ticketreply";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
@@ -43,9 +43,8 @@ import PaymentStepper from "../Payment/payment";
 import Merchants from "../Merchant/merchants";
 import AddNewMerchant from "../Merchant/add_merchant";
 import EditMerchant from "../Merchant/EditMerchant";
-
-
-
+import PaymentForm from "../MerchantPayment/paymentDetails";
+import MerchantPayments from "../MerchantPayment/payments";
 
 
 
@@ -96,8 +95,9 @@ const AuthRoutes = () => {
                     <Route exact path='/kyc/' element={<KYCForm />}></Route>
                     <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
                     <Route exact path='/payment/' element={<PaymentStepper />}></Route>
+                    <Route exact path='/payment/form/' element={<PaymentForm />}></Route>
 
-                    
+
                   <Route exact path='*' element={
                     <Box sx={{ display: 'flex' }}>
                     <UpperNavbar handleDrawerOpen={handleDrawerOpen} open={open} />
@@ -128,6 +128,8 @@ const AuthRoutes = () => {
                           <Route exact path='/merchants/' element={<Merchants open={open} />}></Route>
                           <Route exact path='/add/merchants/' element={<AddNewMerchant open={open} />}></Route>
                           <Route exact path='/edit/merchant/' element={<EditMerchant open={open} />}></Route>
+                          <Route exact path='/merchant/payments/' element={<MerchantPayments open={open} />}></Route>
+                          
                       </Routes>
                     </Box>
                   }></Route>
@@ -168,10 +170,10 @@ const AuthRoutes = () => {
         path: "/kyc-submission-report/",
         element: <KYCSubmissionReport />,
       },
-      // {
-      //   path: "/payment-info/",
-      //   element: <PaymentInformation />,
-      // },
+      {
+        path: "/payment/form/",
+        element: <PaymentForm />,
+      },
       // {
       //   path: "/payment-form/",
       //   element: <StepWisePaymentForm />,

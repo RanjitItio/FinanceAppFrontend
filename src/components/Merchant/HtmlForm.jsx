@@ -29,57 +29,104 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 
 export default function MerchantHTMLFormGenerator({...props}) {
-
+    const initialFormData = {
+      item_name: '',
+      order_number: '',
+      price: '',
+      custom: ''
+    }
+    
+    const [htmlData, updatehtmlFormData] = useState(initialFormData);
+    const [error, setError]              = useState('');
+    const [validAmountError, updateValidAmountError] = useState('');
+    const [copyMessage, setCopyMessage]   = useState('');
     const [formValue, updateFormValue] = useState(`
             <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pay Money</title>
-        <script src="https://demo.paymoney.techvill.net/public/frontend/templates/js/flashesh-dark.min.js"></script>
-       <link rel="stylesheet" href="https://demo.paymoney.techvill.net/public/dist/libraries/bootstrap-5.0.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://demo.paymoney.techvill.net/public/frontend/templates/css/style.min.css">
-        <link rel="shortcut icon" href="https://demo.paymoney.techvill.net/public/uploads/logos/1530689937_favicon.png"/>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
-         
-        <style>
-            body{font-family: "Plus Jakarta Sans", sans-serif;}h3 {font-weight: 500;font-family: "Plus Jakarta Sans", sans-serif !important;}p {font-weight: 400;font-family: "Plus Jakarta Sans", sans-serif !important;}button {font-weight: 400; font-family: "Plus Jakarta Sans", sans-serif !important;}
-        </style>
-     </head>
-     
-     <body class="bg-body-muted">
-        <div class="container-fluid container-layout px-0">
-            <div class="section-payment">
-                <div class="payment-main-module">
-                    <h3>You&#039;re almost there!</h3>
-                    <p>Only a few steps to complete your payment. Click the button to continue.</p>
-                    
-                    <form method="POST" action="https://demo.paymoney.techvill.net/payment/form">
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Payment Page</title>
+                
+                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+                <style>
+                  body {
+                    background-color: #1b1b32;
+                    color: #fff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                  }
+                  .card {
+                    background-color: #2c2c54;
+                    border: none;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                    padding: 25px;
+                  }
+                  .btn-primary {
+                    background-color: #5865f2;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    font-size: 16px;
+                  }
+                  .btn-primary:hover {
+                    background-color: #4752c4;
+                  }
+                  @media (max-width: 576px) {
+                    .card {
+                      padding: 15px;
+                    }
+                    .btn-primary {
+                      padding: 8px 16px;
+                      font-size: 14px;
+                    }
+                  }
+                </style>
 
-                            <input type="hidden" name="merchant" value="3764DB96ED5BB" />
-                            <input type="hidden" name="merchant_id" value="12" />
-                            <input type="hidden" name="item_name" value="Bottle" />
-                            <input type="hidden" name="currency_id" value="1" />
-                            <input type="hidden" name="order" value="990000" />
-                            <input type="hidden" name="amount" value="200" />
-                            <input type="hidden" name="custom" value="hhh" />
+                <script>
+                  function RedirectFunc() {
+                      window.location.replace("http://localhost:5173/payment/form/");
+                  }
+                </script>
 
-                        <button type="submit" class="btn btn-lg btn-primary">
-                            <strong>Pay Now</strong>
-                        </button>
-                    </form>
+              </head>
+              <body>
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                      <div class="card text-center">
+                        <div class="card-body">
+                          <h5 class="card-title"><b>You're almost there!</b></h5>
+                          <p class="card-text">Only a few steps to complete your payment. Click the button to continue.</p>
+
+                          <form
+                              method="POST"
+                              action="http://localhost:5173/payment/form"
+                            >
+                            <input type="hidden" name="merchant" value="" />
+                            <input type="hidden" name="merchant_id" value="" />
+                            <input type="hidden" name="item_name" value="" />
+                            <input type="hidden" name="order_number" value="" />
+                            <input type="hidden" name="amount" value="" />
+                            <input type="hidden" name="custom" value="" />
+                            <button type="submit" href="#" class="btn btn-primary">Pay Now</button>
+                            <button type="button" class="btn btn-primary" onclick="RedirectFunc()">Pay Now</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
-<script src="https://demo.paymoney.techvill.net/public/dist/libraries/jquery-3.6.1/jquery-3.6.1.min.js"></script>
-<script src="https://demo.paymoney.techvill.net/public/dist/libraries/bootstrap-5.0.2/js/bootstrap.min.js"></script>
-<script src="https://demo.paymoney.techvill.net/public/frontend/templates/js/main.min.js"></script>
-
-</body>
-
-</html>
+               
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+              </body>
+              </html>
         `)
 
 
@@ -87,14 +134,151 @@ export default function MerchantHTMLFormGenerator({...props}) {
         props.setHtmlFormOpen(false);
     };
 
+    const handleFormChange = (event)=> {
+         const value = event.target.value
+
+         updatehtmlFormData({
+          ...htmlData,
+          [event.target.name]: value
+         })
+         
+    };
+  
+    const handleValidAmountChange = (event)=> {
+          const value = event.target.value
+
+          if (isNaN(value) || value.trim() === '') {
+              updateValidAmountError('Please type valid amount')
+          } else {
+              updateValidAmountError('')
+          }
+    };
+
     const handleCopy = () => {
         navigator.clipboard.writeText(formValue).then(() => {
-          alert('Text copied to clipboard');
+          // alert('Text copied to clipboard');
+          setCopyMessage('Copied successfully')
         }).catch(err => {
           console.error('Failed to copy text: ', err);
         });
       };
 
+  const handleHtmlGenerate = ()=> {
+
+    if (htmlData.item_name === '') {
+        setError('Please type item name')
+    } else if(htmlData.order_number === '') {
+        setError('Please type order number')
+    } else if (htmlData.price === '') {
+      setError('Please type item price')
+    } else if (htmlData.custom === '') {
+      setError('Please type any custome message')
+    } else {
+      setError('')
+
+      const newHtmlData = {
+        item_name: htmlData.item_name,
+        order_number: htmlData.order_number,
+        price: htmlData.price,
+        custom: htmlData.custom
+      }
+
+      updatehtmlFormData(newHtmlData)
+
+
+      const newFormValue = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Payment Page</title>
+        
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+          body {
+            background-color: #1b1b32;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+          }
+          .card {
+            background-color: #2c2c54;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+          }
+          .btn-primary {
+            background-color: #5865f2;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+          }
+          .btn-primary:hover {
+            background-color: #4752c4;
+          }
+          @media (max-width: 576px) {
+            .card {
+              padding: 15px;
+            }
+            .btn-primary {
+              padding: 8px 16px;
+              font-size: 14px;
+            }
+          }
+        </style>
+
+        <script>
+            function RedirectFunc() {
+                window.location.replace("http://localhost:5173/payment/form/");
+            }
+        </script>
+
+      </head>
+      <body>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+              <div class="card text-center">
+                <div class="card-body">
+                  <h5 class="card-title"><b>You're almost there!</b></h5>
+                  <p class="card-text">Only a few steps to complete your payment. Click the button to continue.</p>
+
+                  <form method="POST" action="http://localhost:5173/payment/form">
+                    <input type="hidden" name="merchant" value="${props.merchantId.id}" />
+                    <input type="hidden" name="merchant_id" value="${props.merchantId.merchant_id}" />
+                    <input type="hidden" name="item_name" value="${newHtmlData.item_name}" />
+                    <input type="hidden" name="order_number" value="${newHtmlData.order_number}" />
+                    <input type="hidden" name="amount" value="${newHtmlData.price}" />
+                    <input type="hidden" name="custom" value="${newHtmlData.custom}" />
+                    <button type="button" class="btn btn-primary" onclick="RedirectFunc()">Pay Now</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      </body>
+      </html>
+  `;
+
+    updateFormValue(newFormValue)
+
+
+    }
+
+};
+
+// console.log(formValue)
 
   return (
     <React.Fragment>
@@ -127,6 +311,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
                 <TextField 
                     id="merchant-id" 
                     label="Merchant ID" 
+                    value={props.merchantId.merchant_id}
                     variant="outlined" 
                     placeholder='Merchant ID'
                     fullWidth 
@@ -134,14 +319,18 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     />
                 <TextField 
                     id="item-name" 
+                    name='item_name'
                     label="Item Name" 
                     variant="outlined" 
                     placeholder='Item Name'
+                    onChange={handleFormChange}
                     fullWidth 
                     sx={{marginBottom: 2}}
                     />
                 <TextField 
                     id="order-number" 
+                    name='order_number'
+                    onChange={handleFormChange}
                     label="Order Number" 
                     variant="outlined" 
                     placeholder='Order Number'
@@ -150,27 +339,36 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     />
                 <TextField 
                     id="price" 
+                    name='price'
+                    onChange={(event)=>{handleFormChange(event); handleValidAmountChange(event)}}
                     label="Price" 
+                    
                     variant="outlined" 
                     placeholder='Price'
-                    fullWidth 
+                    fullWidth
                     sx={{marginBottom: 2}}
+                    error={!!validAmountError}
+                    helperText={validAmountError}
                     />
+      
                 <TextField 
                     id="custom" 
+                    name='custom'
+                    onChange={handleFormChange}
                     label="Custom" 
                     variant="outlined" 
                     fullWidth 
                     sx={{marginBottom: 2}}
                     />
+
+                  {error && <p className='text-danger'>{error}</p>}
             </Grid>
 
-            <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid item xs={12} sm={12} md={6} lg={6} sx={{marginBottom: 2, width: '100%', maxHeight: '350px', overflow: 'auto'}}>
+                <small style={{marginLeft: '45%', color: 'green'}}>{copyMessage && copyMessage}</small>
                 <Textarea 
                     color="primary"
                     minRows={15} 
-                    placeholder='Enter your Message here'
-                    sx={{marginBottom: 2, width: '100%', maxHeight: '350px', overflow: 'auto'}}
                     readOnly
                     value={formValue}
                 />
@@ -184,6 +382,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
                       }}
                       onClick={handleCopy}
                    />
+                   
             </Grid>
 
           </Grid>
@@ -193,7 +392,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
           <Button autoFocus onClick={handleClose}>
             Close
           </Button>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleHtmlGenerate}>
             Generate Form
           </Button>
         </DialogActions>

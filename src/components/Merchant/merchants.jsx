@@ -21,6 +21,7 @@ import GenerateMerchantQRCode from './MerchantQRCode';
 import axiosInstance from '../Authentication/axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Pagination from '@mui/material/Pagination';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -37,13 +38,16 @@ export default function Merchants ({open}) {
     const [loader, setLoader]                         = useState(true);
     const [MerchantDetail, updateMerchantDetailData]  = useState([]);
     const [MerchantCurrency, updateMerchantCurrency]  = useState([]);
+    const [merchantId, updateMerchanTID]              = useState([]);
 
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const handleClickHTMLFormOpen = () => {
+    const handleClickHTMLFormOpen = (evenet, mct_id) => {
         setHtmlFormOpen(true);
+        const merchant_id = mct_id
+        updateMerchanTID(merchant_id)
       };
 
     const handleClickMerchantDetailOpen = (evenet, merchant, currency) => {
@@ -80,6 +84,7 @@ export default function Merchants ({open}) {
     }, []);
 
 
+
     if (merchantsData.length === 0) {
         return (
             <Main open={open}>
@@ -103,7 +108,6 @@ export default function Merchants ({open}) {
         )
     };
 
-
     if (loader) {
         return (
             <Main open={open}>
@@ -115,6 +119,7 @@ export default function Merchants ({open}) {
             </Main>
         )
     };
+
 
 
     const getStatusColor = (status) => {
@@ -209,52 +214,72 @@ export default function Merchants ({open}) {
                             primary={
                             <Box display="flex" justifyContent={isSmallScreen ? 'center' : 'flex-end'} alignItems="center">
                                 <Box mr={2}>
-                                    <QrCodeScannerIcon 
-                                    sx={{
-                                        color: 'black', 
-                                        '&:hover': {
-                                          color: 'blue', 
-                                        },
-                                        transition: 'color 0.3s',
-                                      }}
-                                      onClick={handleClickQRCodeOpen}
-                                    />
+                                    <Tooltip title="Generate QR code">
+                                        <IconButton
+                                            onClick={handleClickQRCodeOpen}
+                                        >
+                                            <QrCodeScannerIcon 
+                                            sx={{
+                                                color: 'black', 
+                                                '&:hover': {
+                                                color: 'blue', 
+                                                },
+                                                transition: 'color 0.3s',
+                                            }}
+                                            
+                                            />
+                                        </IconButton>
+                                    </Tooltip>
+                                    
                                 </Box>
                                 <Box mr={2} >
-                                    <SettingsIcon 
-                                        onClick={handleClickHTMLFormOpen}
-                                        sx={{
-                                            color: 'black', 
-                                            '&:hover': {
-                                            color: 'blue', 
-                                            },
-                                            transition: 'color 0.3s',
-                                        }}
-                                    />
+                                    <Tooltip title="Generate html Form">
+                                        <IconButton onClick={(event)=> {handleClickHTMLFormOpen(event, mct.merchants, mct.currency)}}>
+                                            <SettingsIcon 
+                                            
+                                            sx={{
+                                                color: 'black', 
+                                                '&:hover': {
+                                                color: 'blue', 
+                                                },
+                                                transition: 'color 0.3s',
+                                            }}
+                                        />
+                                        </IconButton>
+                                    </Tooltip>
+                                    
                                 </Box>
                                 <Box mr={2}>
-                                    <VisibilityIcon 
-                                        onClick={(event)=> {handleClickMerchantDetailOpen(event, mct.merchants, mct.currency); }} 
-                                        sx={{
-                                            color: 'black', 
-                                            '&:hover': {
-                                              color: 'blue', 
-                                            },
-                                            transition: 'color 0.3s',
-                                          }}
-                                    />
+                                    <Tooltip title="View detail">
+                                        <IconButton onClick={(event)=> {handleClickMerchantDetailOpen(event, mct.merchants, mct.currency); }} >
+                                            <VisibilityIcon 
+                                            
+                                            sx={{
+                                                color: 'black', 
+                                                '&:hover': {
+                                                color: 'blue', 
+                                                },
+                                                transition: 'color 0.3s',
+                                            }}
+                                        />
+                                        </IconButton>
+                                    </Tooltip>
+                                    
                                 </Box>
                                 <Box>
-                                    <EditOutlinedIcon 
-                                        onClick={(event)=> {handleEditRedirect(mct.merchants, mct.currency)}}
-                                        sx={{
-                                            color: 'black', 
-                                            '&:hover': {
-                                              color: 'blue', 
-                                            },
-                                            transition: 'color 0.3s',
-                                          }}
-                                    />
+                                    <Tooltip title="Delete">
+                                        <IconButton onClick={()=> {handleEditRedirect(mct.merchants, mct.currency)}}>
+                                            <EditOutlinedIcon 
+                                            sx={{
+                                                color: 'black', 
+                                                '&:hover': {
+                                                color: 'blue', 
+                                                },
+                                                transition: 'color 0.3s',
+                                            }}
+                                        />
+                                        </IconButton>
+                                    </Tooltip>
                                 </Box>
                             </Box>
                             }
@@ -271,7 +296,11 @@ export default function Merchants ({open}) {
             <Pagination count={10} color="primary" sx={{float:'right', marginTop: '20px'}} />
         </Main>
 
-        <MerchantHTMLFormGenerator setHtmlFormOpen={setHtmlFormOpen} htmlFormOpen={htmlFormOpen}/>
+        <MerchantHTMLFormGenerator 
+             setHtmlFormOpen={setHtmlFormOpen} 
+             htmlFormOpen={htmlFormOpen}
+             merchantId={merchantId}
+             />
 
         <MerchantDetails 
                merchantdetailOpen={merchantdetailOpen} 
