@@ -89,7 +89,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
 
                 <script>
                   function RedirectFunc() {
-                      window.location.replace("http://localhost:5173/payment/form/");
+                      window.location.replace("https://react-uat.oyefin.com/payment/form/");
                   }
                 </script>
 
@@ -105,7 +105,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
 
                           <form
                               method="POST"
-                              action="http://localhost:5173/payment/form"
+                              action="https://react-uat.oyefin.com/payment/form/"
                             >
                             <input type="hidden" name="merchant" value="" />
                             <input type="hidden" name="merchant_id" value="" />
@@ -235,7 +235,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
 
         <script>
             function RedirectFunc() {
-                window.location.replace("http://localhost:5173/payment/form/");
+                window.location.replace("https://react-uat.oyefin.com/payment/form/");
             }
         </script>
 
@@ -249,7 +249,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
                   <h5 class="card-title"><b>You're almost there!</b></h5>
                   <p class="card-text">Only a few steps to complete your payment. Click the button to continue.</p>
 
-                  <form method="POST" action="http://localhost:5173/payment/form">
+                  <form method="POST" action="https://react-uat.oyefin.com/payment/form/">
                     <input type="hidden" name="merchant" value="${props.merchantId.id}" />
                     <input type="hidden" name="merchant_id" value="${props.merchantId.merchant_id}" />
                     <input type="hidden" name="item_name" value="${newHtmlData.item_name}" />

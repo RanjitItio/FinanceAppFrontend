@@ -600,6 +600,10 @@ export default function StepWisePaymentForm() {
                 setError('Do not have sufficient wallet in your wallet')
               }
 
+              if (error.response.data.msg == 'Recipient email does not exist') {
+                setError('Receiver email does not exist')
+              }
+
               // setError(error.response.data.msg)
 
             })
