@@ -12,6 +12,8 @@ import Textarea from '@mui/joy/Textarea';
 import Button from '@mui/material/Button';
 import axiosInstance from '../Authentication/axios';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import FormHelperText from '@mui/material/FormHelperText';
+import Typography from '@mui/material/Typography';
 
 
 
@@ -39,6 +41,9 @@ export default function EditMerchant({open}) {
     const [successMessage, setSuccessMessage]       = useState('');
     const [existBusinessName, setExistBusinessName] = useState('');
     const [existBusinessURL, setExistBusinessURL]   = useState('');
+    const [error, setError]                         = useState('');
+    const [selectedImage, setSelectedImage]         = useState(null);
+    const [ImageError, setImageError]               = useState('');
 
 
     // const handleCurrencyChange = (event) => {
@@ -55,6 +60,32 @@ export default function EditMerchant({open}) {
         const { name, value, files } = event.target;
 
         if (name == 'img') {
+            const file = files[0];
+            const validFormats = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/svg+xml'];
+
+            if (!validFormats.includes(file.type)) {
+                setImageError('Unsupported file format. Please upload a jpeg, png, bmp, gif, or svg file.')
+                // return;
+            }
+
+            const img_reader = new FileReader()
+
+            img_reader.onload = (e)=> {
+                const img = new Image();
+
+                img.onload = ()=> {
+
+                    if (img.width != 100 || img.height != 100) {
+                        setImageError('Image dimensions must be 100px by 100px.')
+                    } else {
+                        setImageError('')
+                        setSelectedImage(e.target.result)
+                    }
+                }
+                img.src = e.target.result;
+            };
+            img_reader.readAsDataURL(file)
+            
             updateFormData({
                 ...formData,
                 [name]: files[0],
@@ -92,50 +123,139 @@ export default function EditMerchant({open}) {
 
 
     const handleFormSubmit = ()=> {
-    
-            const FormDataObj = new FormData()
-            // console.log(formData)
-            // console.log(Merchant_id)
 
-            FormDataObj.append('bsn_name', formData.business_name)
-            FormDataObj.append('bsn_url', formData.site_url)
-            FormDataObj.append('currency', formData.currency)
-            FormDataObj.append('bsn_msg', formData.msg)
-            FormDataObj.append('logo', formData.img)
-            FormDataObj.append('merchant_id', Merchant_id)
+        if(formData.img) {
+            const file = formData.img
+            const validFormats = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/svg+xml'];
 
-            axiosInstance.put(`api/v4/user/merchant/`, FormDataObj, {
+            if (!validFormats.includes(file.type)) {
+                setImageError('Unsupported file format. Please upload a jpeg, png, bmp, gif, or svg file.')
+
+            } else {
+                const img_reader = new FileReader()
+
+                img_reader.onload = (e)=> {
+                    const img = new Image();
+
+                    img.onload = ()=> {
+
+                        if (img.width != 100 || img.height != 100) {
+                            setImageError('Image dimensions must be 100px by 100px.')
+                        } 
+                        else {
+                            setImageError('')
+                            submitFormData()
+                        }
+                    }
+                    img.src = e.target.result;
+                };
+                img_reader.readAsDataURL(file)
+            }
+
+        } else {
+            submitFormData()
+        } 
+            // const FormDataObj = new FormData()
+
+            // FormDataObj.append('bsn_name', formData.business_name)
+            // FormDataObj.append('bsn_url', formData.site_url)
+            // FormDataObj.append('currency', formData.currency)
+            // FormDataObj.append('bsn_msg', formData.msg)
+            // FormDataObj.append('logo', formData.img)
+            // FormDataObj.append('merchant_id', Merchant_id)
+
+            // axiosInstance.put(`api/v4/user/merchant/`, FormDataObj, {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // }).then((res)=> {
+            //     // console.log(res)
+            //     setSuccessMessage('Updated Successfully')
+
+            //     setTimeout(() => {
+            //         navigate('/merchants/')
+            //     }, 2000);
+
+            // }).catch((error)=> {
+            //     console.log(error)
+
+            //     if (error.response.data.msg === 'This business name has already been taken') {
+            //         setExistBusinessName('Given Business Name already Exist')
+
+            //         setTimeout(() => {
+            //             setExistBusinessName('')
+            //         }, 5000);
+
+            //     } else if (error.response.data.msg === 'This URl has already been taken') {
+            //         setExistBusinessURL('Given URL already exists')
+
+            //         setTimeout(() => {
+            //             setExistBusinessURL('')
+            //         }, 5000);
+            //     }
+            // })
+
+        };
+
+        const submitFormData = () => {
+
+            if (formData.business_name === '') {
+              setError('Please type your Business Name');
+            } else if (formData.site_url === '') {
+              setError('Please type your URL');
+            } else if (formData.currency === '') {
+              setError('Please select your transaction Currency');
+            } else if (formData.msg === '') {
+              setError('Please type your Message');
+            } else {
+              setError(''); 
+          
+              
+              const FormDataObj = new FormData();
+
+              FormDataObj.append('bsn_name', formData.business_name)
+              FormDataObj.append('bsn_url', formData.site_url)
+              FormDataObj.append('currency', formData.currency)
+              FormDataObj.append('bsn_msg', formData.msg)
+              FormDataObj.append('logo', formData.img)
+              FormDataObj.append('merchant_id', Merchant_id)
+          
+              // Make API call using Axios
+              axiosInstance.put(`api/v4/user/merchant/`, FormDataObj, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                  'Content-Type': 'multipart/form-data'
                 }
-            }).then((res)=> {
-                // console.log(res)
-                setSuccessMessage('Updated Successfully')
-
-                setTimeout(() => {
-                    navigate('/merchants/')
-                }, 2000);
-
-            }).catch((error)=> {
-                console.log(error)
-
+              }).then((res) => {
+    
+                if (res.status === 200) {
+                  setSuccessMessage('Updated Successfully');
+                  setTimeout(() => {
+                    navigate('/merchants/');
+                  }, 2000);
+                }
+    
+              }).catch((error) => {
+                console.log(error);
+    
                 if (error.response.data.msg === 'This business name has already been taken') {
                     setExistBusinessName('Given Business Name already Exist')
 
                     setTimeout(() => {
                         setExistBusinessName('')
                     }, 5000);
-
+    
                 } else if (error.response.data.msg === 'This URl has already been taken') {
                     setExistBusinessURL('Given URL already exists')
 
                     setTimeout(() => {
                         setExistBusinessURL('')
                     }, 5000);
+    
                 }
-            })
-
-        }
+    
+              });
+            }
+          };
     
     
 
@@ -220,6 +340,8 @@ export default function EditMerchant({open}) {
                         <Box sx={{ p: 3 }}>
                             
                             <p style={{textAlign: 'center'}} className='fs-3 my-3'>Merchant Form</p>
+
+                            {existBusinessName && <small className='text-warning'>{existBusinessName}</small>}
                             <TextField 
                                 id="business-name" 
                                 name='business_name'
@@ -231,8 +353,8 @@ export default function EditMerchant({open}) {
                                 sx={{marginBottom: 2}}
                                 onChange={(evenet)=> {handleFormValueChange(evenet);}}
                                 />
-                                {existBusinessName && <small className='text-warning'>{existBusinessName}</small>}
-
+                                
+                            {existBusinessURL && <small className='text-warning'>{existBusinessURL}</small>}
                             <TextField 
                                 id="business-url" 
                                 name='site_url'
@@ -244,12 +366,16 @@ export default function EditMerchant({open}) {
                                 sx={{marginBottom: 2}}
                                 onChange={(evenet)=> {handleFormValueChange(evenet);}}
                                 error={Boolean(urlError)}
-                                helperText={urlError}
+                                 helperText={
+                                    <>
+                                       <Typography variant="caption" color="error">{urlError}</Typography>
+                                       <Typography variant="caption"><i>* Make sure to add https:// </i></Typography>
+                                    </>
+                                 }
                                 />
-                                {existBusinessURL && <small className='text-warning'>{existBusinessURL}</small>}
-                            
+                                
                                 <FormControl fullWidth sx={{marginBottom: 2}}>
-                                    <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">*Currency</InputLabel>
                                     <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
@@ -266,23 +392,46 @@ export default function EditMerchant({open}) {
                                     </Select>
                                 </FormControl>
 
-                            <Textarea 
-                                color="primary"
-                                name='msg'
-                                value={formData?.msg}
-                                minRows={5} 
-                                placeholder='Enter your Message here'
-                                sx={{marginBottom: 2, width: '100%'}}
-                                onChange={(evenet)=> {handleFormValueChange(evenet);}}
-                                />
+                            <FormControl fullWidth>
+                                <FormHelperText><i>*Message for administration</i></FormHelperText>
+                                <Textarea 
+                                    color="primary"
+                                    name='msg'
+                                    value={formData?.msg}
+                                    minRows={5} 
+                                    placeholder='Enter your Message here'
+                                    sx={{marginBottom: 2, width: '100%'}}
+                                    onChange={(evenet)=> {handleFormValueChange(evenet);}}
+                                    />
+                            </FormControl>
 
-                            <input 
-                                type="file" 
-                                name="img" 
-                                id="" 
-                                style={{marginBottom: 20, width: '100%'}}
-                                onChange={(evenet)=> {handleFormValueChange(evenet);}}
-                            /> 
+                            <FormControl sx={{marginBottom: '2px'}}>
+                                <input 
+                                    type="file" 
+                                    name="img" 
+                                    id="logo" 
+                                    style={{marginBottom: 20, width: '100%'}}
+                                    onChange={(event)=> {handleFormValueChange(event);}}
+                                    accept='image/*'
+                                    hidden
+                                /> 
+                                <label htmlFor="logo">
+                                    <Button variant="contained" color="primary" component="span">
+                                        Upload Logo
+                                    </Button>
+                                </label> 
+                                <br/>
+                                <FormHelperText><i>Recommended size: 100px * 100px</i></FormHelperText>
+                                <FormHelperText><i>Supported format:jpeg, png, bmp, gif or svg</i></FormHelperText>
+                                {ImageError && (
+                                    <Typography variant="caption" color="error">{ImageError}</Typography>
+                                )}
+                                {selectedImage && (
+                                        <div>
+                                            <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%' }} />
+                                        </div>
+                                    )}
+                            </FormControl>
                             <img
                                 src={merchant_details?.logo || 'NA'}
                                 alt="Merchant logo"
@@ -290,7 +439,8 @@ export default function EditMerchant({open}) {
                             />
                             <br />
 
-                            <Button variant="contained" fullWidth sx={{marginBottom: 2}} onClick={handleFormSubmit}>Update Merchant</Button>
+                            <Button variant="contained" fullWidth sx={{marginBottom: 2}} onClick={handleFormSubmit}>Update Business</Button>
+                            {error && <p className='text-danger'>{error}</p>}
                             {successMessage && <p className='text-success'>{successMessage}</p>}
                         </Box>
                        

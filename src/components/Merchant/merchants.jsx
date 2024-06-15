@@ -132,11 +132,9 @@ export default function Merchants ({open}) {
                 return <span className="text-warning mx-5">Moderation</span>
         }
 
-    }
-    
-    
-    
-    
+    };
+
+
     return (
         <>
         <Main open={open}>

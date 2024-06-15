@@ -13,6 +13,8 @@ import Button from '@mui/material/Button';
 import { useEffect } from 'react';
 import axiosInstance from '../Authentication/axios';
 import { useNavigate } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import FormHelperText from '@mui/material/FormHelperText';
 
 
 
@@ -32,8 +34,10 @@ export default function AddNewMerchant({open}) {
     const [selectedCurrency, setSelectedCurrency] = useState('');
     const [formData, updateFormData]              = useState(initialFormData);
     const [error, setError]                       = useState('');
+    const [ImageError, setImageError]             = useState('');
     const [successMessage, setSuccessMessage]     = useState('');
     const [urlError, setUrlError]                 = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
 
 
     const handleCurrencyChange = (event) => {
@@ -60,10 +64,38 @@ export default function AddNewMerchant({open}) {
         return urlPattern.test(url);
     };
 
+    //Handle Form value change
+    // console.log(formData.img)
     const handleFormValueChange = (event)=> {
         const { name, value, files } = event.target;
 
         if (name == 'img') {
+            const file = files[0];
+            const validFormats = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/svg+xml'];
+
+            if (!validFormats.includes(file.type)) {
+                setImageError('Unsupported file format. Please upload a jpeg, png, bmp, gif, or svg file.')
+                // return;
+            }
+
+            const img_reader = new FileReader()
+
+            img_reader.onload = (e)=> {
+                const img = new Image();
+
+                img.onload = ()=> {
+
+                    if (img.width != 100 || img.height != 100) {
+                        setImageError('Image dimensions must be 100px by 100px.')
+                    } else {
+                        setImageError('')
+                        setSelectedImage(e.target.result)
+                    }
+                }
+                img.src = e.target.result;
+            };
+            img_reader.readAsDataURL(file)
+
             updateFormData({
                 ...formData,
                 [name]: files[0],
@@ -85,62 +117,93 @@ export default function AddNewMerchant({open}) {
         }
     };
 
-    
 
     const handleFormSubmit = (event) => {
-       
-        if(formData.business_name === '') {
-            setError('Please type your Business Name')
 
-        } else if (formData.site_url === '') {
-            setError('Please type your url')
+        if(formData.img) {
+            const file = formData.img
+            const validFormats = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/svg+xml'];
 
-        } else if (formData.currency === '') {
-            setError('Please select your transaction Currency')
+            if (!validFormats.includes(file.type)) {
+                setImageError('Unsupported file format. Please upload a jpeg, png, bmp, gif, or svg file.')
 
-        } else if (formData.message === '') {
-            setError('Please type your Message')
+            } else {
+                const img_reader = new FileReader()
+
+                img_reader.onload = (e)=> {
+                    const img = new Image();
+
+                    img.onload = ()=> {
+
+                        if (img.width != 100 || img.height != 100) {
+                            setImageError('Image dimensions must be 100px by 100px.')
+                        } 
+                        else {
+                            setImageError('')
+                            submitFormData()
+                        }
+                    }
+                    img.src = e.target.result;
+                };
+                img_reader.readAsDataURL(file)
+            }
 
         } else {
-            setError('')
-
-            const FormDataObj = new FormData()
-
-            FormDataObj.append('bsn_name', formData.business_name)
-            FormDataObj.append('bsn_url', formData.site_url)
-            FormDataObj.append('currency', formData.currency)
-            FormDataObj.append('bsn_msg', formData.message)
-            FormDataObj.append('logo', formData.img)
-
-            axiosInstance.post(`api/v4/user/merchant/`, FormDataObj, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-
-            }).then((res)=> {
-                // console.log(res)
-                if (res.status == 200) {
-                    setSuccessMessage('Merchant created successfully please wait for admin Approval')
-
-                    setTimeout(() => {
-                        navigate('/merchants/')
-                    }, 3000);
-
-                }
-
-            }).catch((error) => {
-                console.log(error)
-
-                if (error.response.data.msg === 'This business name has already been taken') {
-                    setError('Business name already exists')
-
-                } else if (error.response.data.msg === 'This URl has already been taken') {
-                    setError('URL already exists')
-                }
-            })
-        }
+            submitFormData()
+        } 
     };
-    
+
+
+    const submitFormData = () => {
+
+        if (formData.business_name === '') {
+          setError('Please type your Business Name');
+        } else if (formData.site_url === '') {
+          setError('Please type your URL');
+        } else if (formData.currency === '') {
+          setError('Please select your transaction Currency');
+        } else if (formData.message === '') {
+          setError('Please type your Message');
+        } else {
+          setError(''); 
+      
+          
+          const FormDataObj = new FormData();
+          FormDataObj.append('bsn_name', formData.business_name);
+          FormDataObj.append('bsn_url', formData.site_url);
+          FormDataObj.append('currency', formData.currency);
+          FormDataObj.append('bsn_msg', formData.message);
+          FormDataObj.append('logo', formData.img);
+      
+          // Make API call using Axios
+          axiosInstance.post(`api/v4/user/merchant/`, FormDataObj, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }).then((res) => {
+
+            if (res.status === 200) {
+              setSuccessMessage('Merchant created successfully. Please wait for admin approval.');
+              setTimeout(() => {
+                navigate('/merchants/');
+              }, 2000);
+            }
+
+          }).catch((error) => {
+            console.log(error);
+
+            if (error.response.data.msg === 'This business name has already been taken') {
+              setError('Business name already exists');
+
+            } else if (error.response.data.msg === 'This URl has already been taken') {
+              setError('URL already exists');
+
+            }
+
+          });
+        }
+      };
+    // console.log(error)
 
     return (
         <Main open={open}>
@@ -213,7 +276,7 @@ export default function AddNewMerchant({open}) {
                                 id="business-name" 
                                 name='business_name'
                                 onChange={handleFormValueChange}
-                                label="Business Name" 
+                                label="*Business Name" 
                                 variant="outlined" 
                                 placeholder='Enter your business name'
                                 fullWidth
@@ -224,17 +287,22 @@ export default function AddNewMerchant({open}) {
                                 id="business-url" 
                                 name='site_url'
                                 onChange={handleFormValueChange}
-                                label="Site URL" 
+                                label="*Site URL" 
                                 variant="outlined" 
                                 placeholder='https://example.com'
                                 fullWidth 
                                 sx={{marginBottom: 2}}
                                 error={Boolean(urlError)}
-                                helperText={urlError}
+                                helperText={
+                                    <>
+                                       <Typography variant="caption" color="error">{urlError}</Typography>
+                                       <Typography variant="caption"><i>* Make sure to add https:// </i></Typography>
+                                    </>
+                                }
                                 />
 
                                 <FormControl fullWidth sx={{marginBottom: 2}}>
-                                    <InputLabel id="demo-simple-select-label">Currency</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">*Currency</InputLabel>
                                     <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-currency-select"
@@ -252,24 +320,47 @@ export default function AddNewMerchant({open}) {
                                     </Select>
                                 </FormControl>
 
-                            <Textarea 
-                                color="primary"
-                                name='message'
-                                onChange={handleFormValueChange}
-                                minRows={5} 
-                                placeholder='Enter your Message here'
-                                sx={{marginBottom: 2, width: '100%'}}
-                                />
+                            <FormControl fullWidth>
+                                <FormHelperText><i>Message for administration</i></FormHelperText>
+                                <Textarea 
+                                    color="primary"
+                                    name='message'
+                                    onChange={handleFormValueChange}
+                                    minRows={5} 
+                                    placeholder='Enter your Message here'
+                                    sx={{marginBottom: 2, width: '100%'}}
+                                    />
+                            </FormControl>
 
-                            <input 
-                                type="file" 
-                                placeholder='Upload Logo'
-                                name="img" 
-                                id="logo" 
-                                style={{marginBottom: 20, width: '100%'}}
-                                onChange={handleFormValueChange}
-                                /> 
-                            <br />
+                            <FormControl sx={{marginBottom: '2px'}}>
+                                <input 
+                                    type="file" 
+                                    placeholder='Upload Logo'
+                                    name="img" 
+                                    id="logo" 
+                                    style={{marginBottom: 20, width: '100%'}}
+                                    onChange={handleFormValueChange}
+                                    accept='image/*'
+                                    hidden
+                                    />
+                                    <label htmlFor="logo">
+                                        <Button variant="contained" color="primary" component="span">
+                                            Upload Logo
+                                        </Button>
+                                    </label> 
+                                <br/>
+                                <FormHelperText><i>Recommended size: 100px * 100px</i></FormHelperText>
+                                <FormHelperText><i>Supported format:jpeg, png, bmp, gif or svg</i></FormHelperText>
+                                {ImageError && (
+                                    <Typography variant="caption" color="error">{ImageError}</Typography>
+                                )}
+                                {selectedImage && (
+                                        <div>
+                                            <img src={selectedImage} alt="Selected" style={{ maxWidth: '100%' }} />
+                                        </div>
+                                    )}
+                            </FormControl>
+
 
                             <Button variant="contained" fullWidth sx={{marginBottom: 2}} onClick={handleFormSubmit}>Create Merchant</Button>
                             {error && <p className='text-danger'>{error}</p>}
