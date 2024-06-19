@@ -44,10 +44,11 @@ export default function Merchants ({open}) {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const handleClickHTMLFormOpen = (evenet, mct_id) => {
+    const handleClickHTMLFormOpen = (event, mct_id, currency) => {
         setHtmlFormOpen(true);
-        const merchant_id = mct_id
-        updateMerchanTID(merchant_id)
+
+        updateMerchanTID(mct_id)
+        updateMerchantCurrency(currency)
       };
 
     const handleClickMerchantDetailOpen = (evenet, merchant, currency) => {
@@ -298,6 +299,7 @@ export default function Merchants ({open}) {
              setHtmlFormOpen={setHtmlFormOpen} 
              htmlFormOpen={htmlFormOpen}
              merchantId={merchantId}
+             MerchantCurrency={MerchantCurrency}
              />
 
         <MerchantDetails 

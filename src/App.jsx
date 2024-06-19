@@ -7,8 +7,6 @@ import axiosInstance from './components/Authentication/axios';
 
 
 
-
-
 function App() {
   const [serverStatus, updateServerStatus] = useState(false)
 //   useEffect(() => {

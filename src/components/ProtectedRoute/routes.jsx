@@ -43,9 +43,12 @@ import PaymentStepper from "../Payment/payment";
 import Merchants from "../Merchant/merchants";
 import AddNewMerchant from "../Merchant/add_merchant";
 import EditMerchant from "../Merchant/EditMerchant";
-import PaymentForm from "../MerchantPayment/paymentDetails";
+import PaymentForm from "../MerchantPayment/paymentCheckout";
 import MerchantPayments from "../MerchantPayment/payments";
-
+import PaymoneyCheckout from "../MerchantPayment/paymoneyChekout";
+import OtherPaymentCheckoutForm from "../MerchantPayment/OtherCheckout";
+import PaymentFailure from "../MerchantPayment/paymentFailure";
+import PaymentSuccess from "../MerchantPayment/paymentSuccess";
 
 
 
@@ -96,6 +99,10 @@ const AuthRoutes = () => {
                     <Route exact path='/kyc-submission-report/' element={<KYCSubmissionReport />}></Route>
                     <Route exact path='/payment/' element={<PaymentStepper />}></Route>
                     <Route exact path='/payment/form/' element={<PaymentForm />}></Route>
+                    <Route exact path='/paymoney/checkout/form/' element={<PaymoneyCheckout />}></Route>
+                    <Route exact path='/other/checkout/form/' element={<OtherPaymentCheckoutForm />}></Route>
+                    <Route exact path='/payment/form/success/' element={<PaymentSuccess />}></Route>
+                    <Route exact path='/payment/form/fail/' element={<PaymentFailure />}></Route>
 
 
                   <Route exact path='*' element={
@@ -173,6 +180,22 @@ const AuthRoutes = () => {
       {
         path: "/payment/form/",
         element: <PaymentForm />,
+      },
+      {
+        path: "/paymoney/checkout/form/",
+        element: <PaymoneyCheckout />,
+      },
+      {
+        path: "/other/checkout/form/",
+        element: <OtherPaymentCheckoutForm />,
+      },
+      {
+        path: "/payment/form/success/",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "/payment/form/fail/",
+        element: <PaymentFailure />,
       },
       // {
       //   path: "/payment-form/",

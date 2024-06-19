@@ -2,6 +2,10 @@ import React from 'react';
 import { Stepper, Step, StepLabel, TextField, Button } from '@mui/material';
 import { Container } from 'react-bootstrap';
 
+
+
+
+
 export default function AgeStepper() {
 
     const [activeStep, setActiveStep] = React.useState(0);

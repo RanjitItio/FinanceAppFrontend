@@ -14,6 +14,17 @@ import { useState } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 
+const IS_DEVELOPMENT = import.meta.env.VITE_IS_DEVELOPMENT;
+let redirect_url = '';
+
+
+if (IS_DEVELOPMENT === 'True') {
+  redirect_url = 'http://localhost:5173/payment/form/'
+
+} else {
+  redirect_url = 'https://react-uat.oyefin.com/payment/form/'
+}
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -35,12 +46,12 @@ export default function MerchantHTMLFormGenerator({...props}) {
       price: '',
       custom: ''
     }
-    
-    const [htmlData, updatehtmlFormData] = useState(initialFormData);
-    const [error, setError]              = useState('');
+
+    const [htmlData, updatehtmlFormData]             = useState(initialFormData);
+    const [error, setError]                          = useState('');
     const [validAmountError, updateValidAmountError] = useState('');
-    const [copyMessage, setCopyMessage]   = useState('');
-    const [formValue, updateFormValue] = useState(`
+    const [copyMessage, setCopyMessage]              = useState('');
+    const [formValue, updateFormValue]               = useState(`
             <!DOCTYPE html>
               <html lang="en">
               <head>
@@ -89,7 +100,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
 
                 <script>
                   function RedirectFunc() {
-                      window.location.replace("https://react-uat.oyefin.com/payment/form/");
+                      window.location.replace("${redirect_url}");
                   }
                 </script>
 
@@ -104,17 +115,17 @@ export default function MerchantHTMLFormGenerator({...props}) {
                           <p class="card-text">Only a few steps to complete your payment. Click the button to continue.</p>
 
                           <form
-                              method="POST"
-                              action="https://react-uat.oyefin.com/payment/form/"
+                              method="GET"
+                              action="${redirect_url}"
                             >
                             <input type="hidden" name="merchant" value="" />
                             <input type="hidden" name="merchant_id" value="" />
                             <input type="hidden" name="item_name" value="" />
                             <input type="hidden" name="order_number" value="" />
-                            <input type="hidden" name="amount" value="" />
+                            <input type="hidden" name="amt" value="" />
+                            <input type="hidden" name="cur" value="" />
                             <input type="hidden" name="custom" value="" />
-                            <button type="submit" href="#" class="btn btn-primary">Pay Now</button>
-                            <button type="button" class="btn btn-primary" onclick="RedirectFunc()">Pay Now</button>
+                            <button type="submit" class="btn btn-primary">Pay Now</button>
                           </form>
                         </div>
                       </div>
@@ -158,6 +169,11 @@ export default function MerchantHTMLFormGenerator({...props}) {
         navigator.clipboard.writeText(formValue).then(() => {
           // alert('Text copied to clipboard');
           setCopyMessage('Copied successfully')
+
+          setTimeout(() => {
+            setCopyMessage('')
+          }, 4000);
+
         }).catch(err => {
           console.error('Failed to copy text: ', err);
         });
@@ -184,6 +200,31 @@ export default function MerchantHTMLFormGenerator({...props}) {
       }
 
       updatehtmlFormData(newHtmlData)
+
+      // Form Name
+      const name_merchant     = 'merch'
+      const name_merchant_id  = 'merch_id'
+      const name_item_name    = 'item'
+      const name_order_number = 'order_no'
+      const name_price        = 'amt'
+      const name_custom       = 'custom'
+      const name_currency     = 'cur'
+
+      // Form Value
+      let merchant = props.merchantId.key
+
+      if (merchant) {
+        merchant = btoa(merchant)
+      } else {
+        merchant = ''
+      }
+
+      const merchant_id  = btoa(props.merchantId.merchant_id)
+      const item_name    = btoa(newHtmlData.item_name)
+      const order_number = btoa(newHtmlData.order_number)
+      const price        = btoa(newHtmlData.price)
+      const custom       = btoa(newHtmlData.custom)
+      const currency     = btoa(props.MerchantCurrency.name)
 
 
       const newFormValue = `
@@ -233,12 +274,6 @@ export default function MerchantHTMLFormGenerator({...props}) {
           }
         </style>
 
-        <script>
-            function RedirectFunc() {
-                window.location.replace("https://react-uat.oyefin.com/payment/form/");
-            }
-        </script>
-
       </head>
       <body>
         <div class="container">
@@ -249,14 +284,15 @@ export default function MerchantHTMLFormGenerator({...props}) {
                   <h5 class="card-title"><b>You're almost there!</b></h5>
                   <p class="card-text">Only a few steps to complete your payment. Click the button to continue.</p>
 
-                  <form method="POST" action="https://react-uat.oyefin.com/payment/form/">
-                    <input type="hidden" name="merchant" value="${props.merchantId.id}" />
-                    <input type="hidden" name="merchant_id" value="${props.merchantId.merchant_id}" />
-                    <input type="hidden" name="item_name" value="${newHtmlData.item_name}" />
-                    <input type="hidden" name="order_number" value="${newHtmlData.order_number}" />
-                    <input type="hidden" name="amount" value="${newHtmlData.price}" />
-                    <input type="hidden" name="custom" value="${newHtmlData.custom}" />
-                    <button type="button" class="btn btn-primary" onclick="RedirectFunc()">Pay Now</button>
+                  <form method="GET" action="${redirect_url}">
+                    <input type="hidden" name="${name_merchant}" value="${merchant}" />
+                    <input type="hidden" name="${name_merchant_id}" value="${merchant_id}" />
+                    <input type="hidden" name="${name_item_name}" value="${item_name}" />
+                    <input type="hidden" name="${name_order_number}" value="${order_number}" />
+                    <input type="hidden" name="${name_price}" value="${price}" />
+                    <input type="hidden" name="${name_custom}" value="${custom}" />
+                    <input type="hidden" name="${name_currency}" value="${currency}" />
+                    <button type="submit" class="btn btn-primary">Pay Now</button>
                   </form>
                 </div>
               </div>
@@ -271,7 +307,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
       </html>
   `;
 
-    updateFormValue(newFormValue)
+  updateFormValue(newFormValue)
 
 
     }
@@ -337,12 +373,13 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     fullWidth 
                     sx={{marginBottom: 2}}
                     />
+
+                <small style={{float: 'right', color: 'green'}}>{props.MerchantCurrency.name}</small>
                 <TextField 
                     id="price" 
                     name='price'
                     onChange={(event)=>{handleFormChange(event); handleValidAmountChange(event)}}
                     label="Price" 
-                    
                     variant="outlined" 
                     placeholder='Price'
                     fullWidth
@@ -350,7 +387,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     error={!!validAmountError}
                     helperText={validAmountError}
                     />
-      
+                    
                 <TextField 
                     id="custom" 
                     name='custom'
@@ -365,13 +402,14 @@ export default function MerchantHTMLFormGenerator({...props}) {
             </Grid>
 
             <Grid item xs={12} sm={12} md={6} lg={6} sx={{marginBottom: 2, width: '100%', maxHeight: '350px', overflow: 'auto'}}>
-                <small style={{marginLeft: '45%', color: 'green'}}>{copyMessage && copyMessage}</small>
+            <small style={{marginLeft: '45%', color: 'green'}}>{copyMessage && copyMessage}</small>
                 <Textarea 
                     color="primary"
                     minRows={15} 
                     readOnly
                     value={formValue}
                 />
+                
                    <ContentCopyIcon 
                       sx={{
                         position: 'absolute',
