@@ -6,7 +6,6 @@ import Register from "../Authentication/Register";
 import UserLogout from "../Authentication/Logout";
 import KYCForm from "../Authentication/KYCForm";
 import KYCSubmissionReport from "../Authentication/KYCSubmission";
-import PaymentInformation from "../Payment/PaymentInfo";
 import StepWisePaymentForm from "../Payment/StepForm";
 import ForgotPassword from "../Authentication/ForgotPassword";
 import Box from '@mui/material/Box';
@@ -17,7 +16,6 @@ import AllTransactions from "../Transactions/Transaction";
 import React from "react";
 import CryptoFiat from "../CryptoFiat/CryptoFiat";
 import DepositForm from "../Transactions/Deposit";
-import SendMoneyForm from "../Transactions/SendMoney";
 import CryptoBuy from "../CryptoTransactions/CryptoBuy";
 import CryptoSell from "../CryptoTransactions/CryptoSell";
 import RequestMoneyForm from "../Transactions/RequestMoney";
@@ -49,6 +47,7 @@ import PaymoneyCheckout from "../MerchantPayment/paymoneyChekout";
 import OtherPaymentCheckoutForm from "../MerchantPayment/OtherCheckout";
 import PaymentFailure from "../MerchantPayment/paymentFailure";
 import PaymentSuccess from "../MerchantPayment/paymentSuccess";
+import TransactionTable from "../transaction_table";
 
 
 
@@ -103,6 +102,7 @@ const AuthRoutes = () => {
                     <Route exact path='/other/checkout/form/' element={<OtherPaymentCheckoutForm />}></Route>
                     <Route exact path='/payment/form/success/' element={<PaymentSuccess />}></Route>
                     <Route exact path='/payment/form/fail/' element={<PaymentFailure />}></Route>
+                    
 
 
                   <Route exact path='*' element={
@@ -111,6 +111,7 @@ const AuthRoutes = () => {
                     <LeftNavbar handleDrawerClose={handleDrawerClose} open={open} />
 
                       <Routes>
+                          <Route exact path='/test/transaction/table/' element={<TransactionTable open={open} />}></Route>
                           <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>

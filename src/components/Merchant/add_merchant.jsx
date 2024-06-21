@@ -37,7 +37,8 @@ export default function AddNewMerchant({open}) {
     const [ImageError, setImageError]             = useState('');
     const [successMessage, setSuccessMessage]     = useState('');
     const [urlError, setUrlError]                 = useState('');
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage]       = useState(null);
+    const [disableButton, setDisableButton]       = useState(false);
 
 
     const handleCurrencyChange = (event) => {
@@ -181,9 +182,11 @@ export default function AddNewMerchant({open}) {
               'Content-Type': 'multipart/form-data'
             }
           }).then((res) => {
+            setDisableButton(true)
 
             if (res.status === 200) {
               setSuccessMessage('Merchant created successfully. Please wait for admin approval.');
+
               setTimeout(() => {
                 navigate('/merchants/');
               }, 2000);
@@ -362,7 +365,15 @@ export default function AddNewMerchant({open}) {
                             </FormControl>
 
 
-                            <Button variant="contained" fullWidth sx={{marginBottom: 2}} onClick={handleFormSubmit}>Create Merchant</Button>
+                            <Button 
+                                 variant="contained" 
+                                 fullWidth 
+                                 sx={{marginBottom: 2}} 
+                                 onClick={handleFormSubmit}
+                                 disabled={disableButton}
+                            >
+                                Create Merchant
+                            </Button>
                             {error && <p className='text-danger'>{error}</p>}
                             {successMessage && <p className='text-success'>{successMessage}</p>}
                         </Box>

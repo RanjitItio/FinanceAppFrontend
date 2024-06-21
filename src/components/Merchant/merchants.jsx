@@ -68,7 +68,6 @@ export default function Merchants ({open}) {
     };
 
     // Get all the Merchants created by the user
-
     useEffect(() => {
         axiosInstance.get(`api/v4/user/all/merchants/`).then((res) => {
             // console.log(res.data.data)
@@ -211,11 +210,53 @@ export default function Merchants ({open}) {
                         <Grid item xs={12} sm={12} md={4}>
                         <ListItemText
                             primary={
+                                <>
+                             
                             <Box display="flex" justifyContent={isSmallScreen ? 'center' : 'flex-end'} alignItems="center">
-                                <Box mr={2}>
+                                {mct.merchants && mct.merchants.is_active ? 
+                                <>
+                                   <Box mr={2}>
+                                   <Tooltip title="Generate QR code">
+                                       <IconButton
+                                           onClick={handleClickQRCodeOpen}
+                                       >
+                                           <QrCodeScannerIcon 
+                                           sx={{
+                                               color: 'black', 
+                                               '&:hover': {
+                                               color: 'blue', 
+                                               },
+                                               transition: 'color 0.3s',
+                                           }}
+                                           
+                                           />
+                                       </IconButton>
+                                   </Tooltip>
+                                   
+                                    </Box>
+                                    <Box mr={2} >
+                                        <Tooltip title="Generate html Form">
+                                            <IconButton onClick={(event)=> {handleClickHTMLFormOpen(event, mct.merchants, mct.currency)}}>
+                                                <SettingsIcon 
+                                                
+                                                sx={{
+                                                    color: 'black', 
+                                                    '&:hover': {
+                                                    color: 'blue', 
+                                                    },
+                                                    transition: 'color 0.3s',
+                                                }}
+                                            />
+                                            </IconButton>
+                                        </Tooltip>
+                                        
+                                    </Box>
+                               </>
+                                : 
+                                <>
+                                    <Box mr={2}>
                                     <Tooltip title="Generate QR code">
                                         <IconButton
-                                            onClick={handleClickQRCodeOpen}
                                         >
                                             <QrCodeScannerIcon 
                                             sx={{
@@ -230,24 +271,26 @@ export default function Merchants ({open}) {
                                         </IconButton>
                                     </Tooltip>
                                     
-                                </Box>
-                                <Box mr={2} >
-                                    <Tooltip title="Generate html Form">
-                                        <IconButton onClick={(event)=> {handleClickHTMLFormOpen(event, mct.merchants, mct.currency)}}>
-                                            <SettingsIcon 
-                                            
-                                            sx={{
-                                                color: 'black', 
-                                                '&:hover': {
-                                                color: 'blue', 
-                                                },
-                                                transition: 'color 0.3s',
-                                            }}
-                                        />
-                                        </IconButton>
-                                    </Tooltip>
-                                    
-                                </Box>
+                                        </Box>
+                                        <Box mr={2} >
+                                            <Tooltip title="Generate HTML Form">
+                                                <IconButton>
+                                                    <SettingsIcon 
+                                                    
+                                                    sx={{
+                                                        color: 'black', 
+                                                        '&:hover': {
+                                                        color: 'blue', 
+                                                        },
+                                                        transition: 'color 0.3s',
+                                                    }}
+                                                />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Box>
+                                    </>
+                                    }
+                                
                                 <Box mr={2}>
                                     <Tooltip title="View detail">
                                         <IconButton onClick={(event)=> {handleClickMerchantDetailOpen(event, mct.merchants, mct.currency); }} >
@@ -281,6 +324,7 @@ export default function Merchants ({open}) {
                                     </Tooltip>
                                 </Box>
                             </Box>
+                            </>
                             }
                             sx={{ textAlign: 'right' }}
                         />

@@ -44,6 +44,7 @@ export default function EditMerchant({open}) {
     const [error, setError]                         = useState('');
     const [selectedImage, setSelectedImage]         = useState(null);
     const [ImageError, setImageError]               = useState('');
+    const [disableButton, setDisableButton]         = useState(false);
 
 
     // const handleCurrencyChange = (event) => {
@@ -229,6 +230,8 @@ export default function EditMerchant({open}) {
     
                 if (res.status === 200) {
                   setSuccessMessage('Updated Successfully');
+                  setDisableButton(true)
+
                   setTimeout(() => {
                     navigate('/merchants/');
                   }, 2000);
@@ -439,7 +442,15 @@ export default function EditMerchant({open}) {
                             />
                             <br />
 
-                            <Button variant="contained" fullWidth sx={{marginBottom: 2}} onClick={handleFormSubmit}>Update Business</Button>
+                            <Button 
+                                 variant="contained" 
+                                 fullWidth 
+                                 sx={{marginBottom: 2}} 
+                                 onClick={handleFormSubmit}
+                                 disabled={disableButton}
+                                 >
+                                    Update Business
+                            </Button>
                             {error && <p className='text-danger'>{error}</p>}
                             {successMessage && <p className='text-success'>{successMessage}</p>}
                         </Box>

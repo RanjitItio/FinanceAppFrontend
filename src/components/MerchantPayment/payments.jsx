@@ -35,6 +35,8 @@ export default function MerchantPayments({open}) {
                 return 'success'
             case 'Cancelled':
                 return 'danger' 
+            case 'Pending':
+                return 'warning' 
             default:
                 return 'defaultColor';
         }
