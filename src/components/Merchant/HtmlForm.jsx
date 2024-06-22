@@ -12,6 +12,7 @@ import { Grid } from '@mui/material';
 import Textarea from '@mui/joy/Textarea';
 import { useState } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 
 
 const IS_DEVELOPMENT = import.meta.env.VITE_IS_DEVELOPMENT;
@@ -44,13 +45,19 @@ export default function MerchantHTMLFormGenerator({...props}) {
       item_name: '',
       order_number: '',
       price: '',
-      custom: ''
+      custom: '',
+      redirect_url: ''
     }
 
     const [htmlData, updatehtmlFormData]             = useState(initialFormData);
     const [error, setError]                          = useState('');
     const [validAmountError, updateValidAmountError] = useState('');
     const [copyMessage, setCopyMessage]              = useState('');
+    const [showDownloadIcon, setShowDownloadIcon]    = useState(true);
+    const [itemError, setItemError]                  = useState('');
+    const [orderError, setOrderError]                = useState('');
+    const [redirectUrlError, setRedirectURLError]    = useState('');
+
     const [formValue, updateFormValue]               = useState(`
             <!DOCTYPE html>
               <html lang="en">
@@ -152,6 +159,17 @@ export default function MerchantHTMLFormGenerator({...props}) {
           ...htmlData,
           [event.target.name]: value
          })
+
+         if (htmlData.item_name) {
+             setItemError('')
+         }
+         if (htmlData.order_number) {
+            setOrderError('')
+         }
+
+         if (htmlData.redirect_url) {
+            setRedirectURLError('')
+         }
          
     };
   
@@ -180,23 +198,30 @@ export default function MerchantHTMLFormGenerator({...props}) {
       };
 
   const handleHtmlGenerate = ()=> {
-
+    
     if (htmlData.item_name === '') {
-        setError('Please type item name')
+       setItemError('Please type item name')
     } else if(htmlData.order_number === '') {
-        setError('Please type order number')
+       setOrderError('Please type order number')
     } else if (htmlData.price === '') {
-      setError('Please type item price')
+        setError('Please type item price')
     } else if (htmlData.custom === '') {
       setError('Please type any custome message')
+    } else if (htmlData.redirect_url === '') {
+      setRedirectURLError('Please type redirect url')
+
     } else {
       setError('')
+      setItemError('')
+
+      setShowDownloadIcon(false)
 
       const newHtmlData = {
-        item_name: htmlData.item_name,
+        item_name:    htmlData.item_name,
         order_number: htmlData.order_number,
-        price: htmlData.price,
-        custom: htmlData.custom
+        price:        htmlData.price,
+        custom:       htmlData.custom,
+        redirect_url: htmlData.redirect_url
       }
 
       updatehtmlFormData(newHtmlData)
@@ -209,6 +234,7 @@ export default function MerchantHTMLFormGenerator({...props}) {
       const name_price        = 'amt'
       const name_custom       = 'custom'
       const name_currency     = 'cur'
+      // const redirect_url      = 'redirect'
 
       // Form Value
       let merchant = props.merchantId.key
@@ -309,10 +335,20 @@ export default function MerchantHTMLFormGenerator({...props}) {
 
   updateFormValue(newFormValue)
 
-
     }
 
 };
+
+
+const handleDownload = ()=> {
+  const element    = document.createElement('a');
+  const file       = new Blob([formValue], {type: 'text/html'});
+  element.href     = URL.createObjectURL(file)
+  element.download = 'form.html'
+  document.body.appendChild(element)
+  element.click()
+  document.body.removeChild(element)
+}
 
 // console.log(formValue)
 
@@ -362,6 +398,8 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     onChange={handleFormChange}
                     fullWidth 
                     sx={{marginBottom: 2}}
+                    error={Boolean(itemError)}
+                    helperText={itemError}
                     />
                 <TextField 
                     id="order-number" 
@@ -372,6 +410,8 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     placeholder='Order Number'
                     fullWidth 
                     sx={{marginBottom: 2}}
+                    error={Boolean(orderError)}
+                    helperText={orderError}
                     />
 
                 <small style={{float: 'right', color: 'green'}}>{props.MerchantCurrency.name}</small>
@@ -397,8 +437,27 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     fullWidth 
                     sx={{marginBottom: 2}}
                     />
-
-                  {error && <p className='text-danger'>{error}</p>}
+                <TextField 
+                    id="redirect_url" 
+                    name='redirect_url'
+                    onChange={handleFormChange}
+                    label="Redirect URL" 
+                    variant="outlined" 
+                    fullWidth 
+                    sx={{marginBottom: 2}}
+                    error={Boolean(redirectUrlError)}
+                    helperText={redirectUrlError}
+                    />
+                <TextField 
+                    id="webhook_url" 
+                    name='webhook_url'
+                    onChange={handleFormChange}
+                    label="Webhook URL" 
+                    variant="outlined" 
+                    fullWidth 
+                    sx={{marginBottom: 2}}
+                    />
+            {error && <p className='text-danger'>{error}</p>}
             </Grid>
 
             <Grid item xs={12} sm={12} md={6} lg={6} sx={{marginBottom: 2, width: '100%', maxHeight: '350px', overflow: 'auto'}}>
@@ -409,8 +468,9 @@ export default function MerchantHTMLFormGenerator({...props}) {
                     readOnly
                     value={formValue}
                 />
-                
-                   <ContentCopyIcon 
+            </Grid>
+            
+            <ContentCopyIcon 
                       sx={{
                         position: 'absolute',
                         top: {md: 90, xs: 470},
@@ -420,9 +480,6 @@ export default function MerchantHTMLFormGenerator({...props}) {
                       }}
                       onClick={handleCopy}
                    />
-                   
-            </Grid>
-
           </Grid>
         </DialogContent>
 
@@ -430,9 +487,15 @@ export default function MerchantHTMLFormGenerator({...props}) {
           <Button autoFocus onClick={handleClose}>
             Close
           </Button>
+
           <Button autoFocus onClick={handleHtmlGenerate}>
             Generate Form
           </Button>
+
+          <Button disabled={showDownloadIcon} onClick={handleDownload}>
+            <DownloadForOfflineIcon />
+          </Button>
+
         </DialogActions>
       </BootstrapDialog>
     </React.Fragment>

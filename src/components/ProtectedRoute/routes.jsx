@@ -48,6 +48,9 @@ import OtherPaymentCheckoutForm from "../MerchantPayment/OtherCheckout";
 import PaymentFailure from "../MerchantPayment/paymentFailure";
 import PaymentSuccess from "../MerchantPayment/paymentSuccess";
 import TransactionTable from "../transaction_table";
+import AddMerchantBankAccount from "../Merchant/Bank/AddBankaccount";
+import MerchantBankAccounts from "../Merchant/Bank/BankAccounts";
+import UpdateMerchantBankAccount from "../Merchant/Bank/updateBank";
 
 
 
@@ -137,7 +140,10 @@ const AuthRoutes = () => {
                           <Route exact path='/add/merchants/' element={<AddNewMerchant open={open} />}></Route>
                           <Route exact path='/edit/merchant/' element={<EditMerchant open={open} />}></Route>
                           <Route exact path='/merchant/payments/' element={<MerchantPayments open={open} />}></Route>
-                          
+                          <Route exact path='/add/merchant/bank/account/' element={<AddMerchantBankAccount open={open} />}></Route>
+                          <Route exact path='/merchant/bank/accounts/' element={<MerchantBankAccounts open={open} />}></Route>
+                          <Route exact path='/update/merchant/bank/accounts/' element={<UpdateMerchantBankAccount open={open} />}></Route>
+  
                       </Routes>
                     </Box>
                   }></Route>
