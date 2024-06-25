@@ -286,10 +286,10 @@ export default function EditMerchant({open}) {
         <Main open={open}>
             <DrawerHeader />
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>EDIT MERCHANT</p>
+                <p className='fs-3'>EDIT BUSINESS</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>Fill in the Information needed to update merchant account</p>
+                <p className='text-muted'>Fill in the Information needed to update business account</p>
             </div>
             <br />
             
@@ -342,7 +342,7 @@ export default function EditMerchant({open}) {
                        
                         <Box sx={{ p: 3 }}>
                             
-                            <p style={{textAlign: 'center'}} className='fs-3 my-3'>Merchant Form</p>
+                            <p style={{textAlign: 'center'}} className='fs-3 my-3'>Business Form</p>
 
                             {existBusinessName && <small className='text-warning'>{existBusinessName}</small>}
                             <TextField 

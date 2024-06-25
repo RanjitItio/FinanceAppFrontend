@@ -16,6 +16,9 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Textarea from '@mui/joy/Textarea';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ContentCopySharpIcon from '@mui/icons-material/ContentCopySharp';
+import GenerateSecretKey from './GenerateKey';
 
 
 
@@ -33,9 +36,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 
 export default function MerchantDetails({...props}) {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    // const [messageValue, updateMessageValue] = useState(props.MerchantDetail?.bsn_msg)
+    const [openGenkey, setOpenGenkey] = useState(false);
+    const [callApi, setCallApi]       = useState(false);    // State to Call generate secret key API
 
     const handleClose = () => {
         props.setMerchantDetailOpen(false);
@@ -60,6 +64,12 @@ export default function MerchantDetails({...props}) {
 
   const status = props.MerchantDetail?.status || 'NA';
   const status_color  = getStatusColor(status);
+
+
+  const handleOpenGenKey = ()=> {
+      setOpenGenkey(true);
+      setCallApi(true);
+  };
 
 
   return (
@@ -143,13 +153,26 @@ export default function MerchantDetails({...props}) {
 
                 <br /><br />
 
-                <p>Currency</p>
-                <p className='fs-6'><b>{props.MerchantCurrency?.name || 'NA'}</b></p>
+                <p><b>Merchant ID</b></p>
+                <p className='fs-6 mb-3'>{props.MerchantDetail?.merchant_id || 'NA'}</p>
+
+                <p><b>Merchant Secret Key</b></p>
+                <p className='fs-6 mb-4' style={{ margin: 0, fontSize: '2rem', letterSpacing: '5px' }}>
+                    <MoreHorizIcon /><MoreHorizIcon /><MoreHorizIcon /><MoreHorizIcon /> <ContentCopySharpIcon />
+
+                    <Button variant="outlined" size="small" sx={{marginLeft: '8px'}} onClick={handleOpenGenKey}>
+                        <small>Generate key</small>
+                    </Button>
+
+                </p>
+
+                <p><b>Currency</b></p>
+                <p className='fs-6'>{props.MerchantCurrency?.name || 'NA'}</p>
 
                 <br />
 
-                <p>Created on</p>
-                <p className='fs-6'><b>{props.MerchantDetail?.created_date} {props.MerchantDetail?.created_time}</b></p>
+                <p><b>Created on</b></p>
+                <p className='fs-6'>{props.MerchantDetail?.created_date} {props.MerchantDetail?.created_time}</p>
 
             </Grid>
 
@@ -178,6 +201,16 @@ export default function MerchantDetails({...props}) {
         </DialogActions>
 
       </BootstrapDialog>
+
+      {/* Generate key component */}
+      <GenerateSecretKey 
+            open={openGenkey} 
+            setOpen={setOpenGenkey} 
+            callApi={callApi} 
+            businessID={props.MerchantDetail.id}
+            setCallApi={setCallApi}
+             />
+
     </React.Fragment>
   );
 }

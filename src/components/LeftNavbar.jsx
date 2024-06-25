@@ -52,8 +52,8 @@ const NavContent = [
     {text: '-Withdrawal Settings', icon: <SettingsIcon />, url: '/withdrawal-settings/'}, 
     
     ...(is_merchant ? [
-      {text: 'Merchants', icon: <SettingsIcon />, url: '/merchants/'},
-      {text: '-Merchant Payments', icon: <SettingsIcon />, url: '/merchant/payments/'},
+      {text: 'Business', icon: <SettingsIcon />, url: '/merchants/'},
+      {text: '-Business Payments', icon: <SettingsIcon />, url: '/merchant/payments/'},
       {text: 'Bank Accounts', icon: <SettingsIcon />, url: '/merchant/bank/accounts/'},
 
     ] : [])

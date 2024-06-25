@@ -90,16 +90,16 @@ export default function Merchants ({open}) {
             <Main open={open}>
             <DrawerHeader />
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>MERCHANTS</p>
+                <p className='fs-3'>BUSINESSES</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>List of all merchant account in one place</p>
+                <p className='text-muted'>List of all your Businesses in one place</p>
             </div>
             <br />
             <div className="d-flex justify-content-center">
                 <Link to={'/add/merchants/'} className="btn btn-primary">
                     <i className="bi bi-plus-lg mx-1"></i>
-                    Add Merchant
+                    Add Business
                 </Link>
             </div>
             <br />
@@ -141,16 +141,16 @@ export default function Merchants ({open}) {
         <DrawerHeader />
 
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>MERCHANTS</p>
+                <p className='fs-3'>BUSINESSES</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>List of all merchant account in one place</p>
+                <p className='text-muted'>List of all your Businesses in one place</p>
             </div>
             <br />
             <div className="d-flex justify-content-center">
                 <Link to={'/add/merchants/'} className="btn btn-primary">
                     <i className="bi bi-plus-lg mx-1"></i>
-                    Add Merchant
+                    Add Business
                 </Link>
             </div>
             <br />

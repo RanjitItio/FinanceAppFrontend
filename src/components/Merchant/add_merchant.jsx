@@ -212,10 +212,10 @@ export default function AddNewMerchant({open}) {
         <Main open={open}>
             <DrawerHeader />
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>NEW MERCHANTS</p>
+                <p className='fs-3'>NEW BUSINESS</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>Fill in the Information needed to create a merchant account</p>
+                <p className='text-muted'>Fill in the Information needed to create a business account</p>
             </div>
             <br />
             
@@ -274,7 +274,7 @@ export default function AddNewMerchant({open}) {
                        
                         <Box sx={{ p: 3 }}>
                             
-                            <p style={{textAlign: 'center'}} className='fs-3 my-3'>Merchant Form</p>
+                            <p style={{textAlign: 'center'}} className='fs-3 my-3'>Business Form</p>
                             <TextField 
                                 id="business-name" 
                                 name='business_name'
@@ -372,7 +372,7 @@ export default function AddNewMerchant({open}) {
                                  onClick={handleFormSubmit}
                                  disabled={disableButton}
                             >
-                                Create Merchant
+                                Create Business
                             </Button>
                             {error && <p className='text-danger'>{error}</p>}
                             {successMessage && <p className='text-success'>{successMessage}</p>}

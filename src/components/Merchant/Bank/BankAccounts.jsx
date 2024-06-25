@@ -8,6 +8,10 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
+import axiosInstance from "../../Authentication/axios";
+import { useEffect, useState } from "react";
+import CancelIcon from '@mui/icons-material/Cancel';
+import BankAccountDelete from "./BankDelete";
 
 
 
@@ -15,13 +19,58 @@ import Box from '@mui/material/Box';
 export default function MerchantBankAccounts ({open}) {
     const navigate = useNavigate();
 
+    const [bankAccount, updateBankAccounts] = useState([]);      // State to update all banks after API call
+    const [deleteOpen, setDeleteOpen]       = useState(false);  //State to open Popup for Delete bank account
+    const [bankAccountId, setBankAccountId] = useState(0);
+
+    //Navigate to Add bank account page
     const handelAddBankAccountClicked = ()=> {
         navigate('/add/merchant/bank/account/')
-    }
+    };
 
-    const handelUpdateBankAccountClicked = ()=> {
-        navigate('/update/merchant/bank/accounts/')
+
+    //Navigate to Account update Page
+    const handelUpdateBankAccountClicked = (accountID)=> {
+        const Account = bankAccount.find(Account => Account.id == accountID)
+
+        navigate('/update/merchant/bank/accounts/', {state: {accountDetails: Account}})
+    };
+
+    // Fetch all created bank accounts of user
+    useEffect(() => {
+        axiosInstance.get(`api/v4/merchant/bank/`).then((res)=> {
+            // console.log(res.data.data)
+
+            if (res.status === 200 && res.data.data) {
+                const sortedData = res.data.data.sort((a,b) => b.id - a.id)
+                updateBankAccounts(sortedData)
+            }
+
+        }).catch((error)=> {
+            console.log(error.response)
+
+        })
+    }, [])
+
+    // Show only two number from first and two number from last of Account number
+    const formatAccountNumber = (acc_no) => {
+        if (acc_no.length < 4) {
+            return acc_no; 
+          }
+        
+          const firstTwo = acc_no.slice(0, 2);
+          const lastTwo   = acc_no.slice(-2);
+
+          return `${firstTwo}****${lastTwo}`
+    };
+
+
+    const handleBankAccountDelete = (accountID)=> {
+        setDeleteOpen(true);
+        setBankAccountId(accountID)
     }
+    
+
     return (
         <>
         <Main open={open}>
@@ -55,26 +104,60 @@ export default function MerchantBankAccounts ({open}) {
                             <TableCell style={{ backgroundColor: '#0089BA', color: 'white' }}>Action</TableCell>
                         </TableRow>
                         </TableHead>
+
                         <TableBody>
-                        {[1, 2, 3].map((row) => (
-                            <TableRow key={row}>
-                            <TableCell>{row}</TableCell>
-                            <TableCell>Mark</TableCell>
-                            <TableCell>12***222</TableCell>
-                            <TableCell>IDBI</TableCell>
-                            <TableCell>INR</TableCell>
-                            <TableCell>DOC</TableCell>
-                            <TableCell>
-                                <Tooltip title="Verified">
-                                <DoneAllIcon style={{ color: 'green', cursor: 'pointer', marginRight: '8px' }} />
-                                </Tooltip>
-                                <Tooltip title="Edit">
-                                <BorderColorIcon color="primary" style={{ cursor: 'pointer', marginRight: '8px' }} onClick={handelUpdateBankAccountClicked} />
-                                </Tooltip>
-                                <Tooltip title="Delete">
-                                <DeleteForeverIcon color="error" style={{ cursor: 'pointer' }} />
-                                </Tooltip>
-                            </TableCell>
+                        {bankAccount.map((row, index) => (
+                            <TableRow key={index}>
+
+                                {/* Sl No. Cell */}
+                                <TableCell>{row.id}</TableCell>
+
+                                {/* Account Holder Name Column */}
+                                <TableCell>{row.acc_hold_name}</TableCell>
+
+                                {/* Account Number Column */}
+                                <TableCell>{formatAccountNumber(row.acc_no)}</TableCell>
+
+                                {/* Bank Name Column */}
+                                <TableCell>{row.bank_name}</TableCell>
+
+                                {/* Currency Column */}
+                                <TableCell>{row.currency.name}</TableCell>
+
+                                {/* Document Column */}
+                                <TableCell>
+                                    <a href={row.doc? row.doc : 'NA'}>DOC</a>
+                                </TableCell>
+
+                                {/* Action Cell */}
+                                <TableCell>
+                                    {row.is_active ? 
+                                        <Tooltip title="Verified">
+                                            <DoneAllIcon style={{ color: 'green', cursor: 'pointer', marginRight: '8px' }} />
+                                        </Tooltip>
+                                        : 
+                                        <Tooltip title="Not Verified">
+                                            <CancelIcon style={{ color: 'red', cursor: 'pointer', marginRight: '8px' }} />
+                                        </Tooltip>
+                                    }
+
+                                    <Tooltip title="Edit">
+                                        <BorderColorIcon 
+                                               color="primary" 
+                                               style={{ cursor: 'pointer', marginRight: '8px' }} 
+                                               onClick={()=> {handelUpdateBankAccountClicked(row.id)}} 
+                                               /> 
+                                    </Tooltip>
+                                        
+                                    <Tooltip title="Delete">
+                                        <DeleteForeverIcon 
+                                              color="error" 
+                                              style={{ cursor: 'pointer' }} 
+                                              onClick={()=> {handleBankAccountDelete(row.id)}}
+                                              />
+                                    </Tooltip>
+
+                                </TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
@@ -85,6 +168,8 @@ export default function MerchantBankAccounts ({open}) {
             </Card>
             
         </Main>
+
+        <BankAccountDelete open={deleteOpen} setOpen={setDeleteOpen} accountID={bankAccountId} />
         </>
     );
 };
