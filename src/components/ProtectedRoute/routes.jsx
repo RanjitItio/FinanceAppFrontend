@@ -51,7 +51,8 @@ import TransactionTable from "../transaction_table";
 import AddMerchantBankAccount from "../Merchant/Bank/AddBankaccount";
 import MerchantBankAccounts from "../Merchant/Bank/BankAccounts";
 import UpdateMerchantBankAccount from "../Merchant/Bank/updateBank";
-
+import DeveloperDocs from "../Developer/devdocs";
+import DevIntroDoc from "../Developer/intro";
 
 
 
@@ -105,7 +106,8 @@ const AuthRoutes = () => {
                     <Route exact path='/other/checkout/form/' element={<OtherPaymentCheckoutForm />}></Route>
                     <Route exact path='/payment/form/success/' element={<PaymentSuccess />}></Route>
                     <Route exact path='/payment/form/fail/' element={<PaymentFailure />}></Route>
-                    
+                    {/* <Route exact path='/dev/docs/' element={<DeveloperDocs />}></Route> */}
+                    <Route exact path='/dev/docs/intro/' element={<DevIntroDoc />}></Route>
 
 
                   <Route exact path='*' element={
@@ -203,6 +205,18 @@ const AuthRoutes = () => {
       {
         path: "/payment/form/fail/",
         element: <PaymentFailure />,
+      },
+      {
+        path: "/dev/docs/",
+        element: <DeveloperDocs />,
+      },
+      {
+        path: "/dev/docs/intro/",
+        element: <DevIntroDoc />,
+      },
+      {
+        path: "/dev/docs/",
+        element: <DeveloperDocs />,
       },
       // {
       //   path: "/payment-form/",

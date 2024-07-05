@@ -37,7 +37,7 @@ function Wallet() {
             </div>
             {/* Balance Analytics End */}
 
-                <div className="row my-3">
+                {/* <div className="row my-3">
                     <div className="col-md-7 col-lg-7 col-sm-12 col-xs-12">
                         <div className="card shadow">
                             <div className="card-body">
@@ -49,7 +49,7 @@ function Wallet() {
                     <div className="col-md-5 col-lg-5 col-sm-12 col-xs-12">
                         <Currency />
                     </div>
-                </div>
+                </div> */}
 
             </div>
           </div>

@@ -9,6 +9,7 @@ import Alert from '@mui/material/Alert';
 
 
 const PaymentForm = () => {
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -25,19 +26,22 @@ const PaymentForm = () => {
 
   
   
-  const merchant    = decodedQueryParams(queryParams.get('merch'))
-  const merchant_id = decodedQueryParams(queryParams.get('merch_id'))
-  const itemName    = decodedQueryParams(queryParams.get('item'))
-  const orderNumber = decodedQueryParams(queryParams.get('order_no'))
-  const amount      = decodedQueryParams(queryParams.get('amt'))
-  const custom      = decodedQueryParams(queryParams.get('custom'))
-  const currency    = decodedQueryParams(queryParams.get('cur'))
 
+  const merchant_key   = decodedQueryParams(queryParams.get('merch_key'))
+  const merchant_name  = decodedQueryParams(queryParams.get('merch_name'))
+  const merchant_id    = decodedQueryParams(queryParams.get('merch_id'))
+  const itemName       = decodedQueryParams(queryParams.get('item'))
+  const orderNumber    = decodedQueryParams(queryParams.get('order_no'))
+  const amount         = decodedQueryParams(queryParams.get('amt'))
+  const custom         = decodedQueryParams(queryParams.get('custom'))
+  const currency       = decodedQueryParams(queryParams.get('cur'))
+  const redirect_url   = decodedQueryParams(queryParams.get('url'))
+
+  
 
   const handleButtonSelected = (selectedButton)=> {
-    setActiveButton(selectedButton)
-    updateSelectedMethod(selectedButton)
-
+      setActiveButton(selectedButton)
+      updateSelectedMethod(selectedButton)
   };
 
   const handleFormSubmit = ()=> {
@@ -51,39 +55,40 @@ const PaymentForm = () => {
 
     } else {
       setError('')
-
     }
 
      if(selectedMethod === 'paymoney') {
           navigate('/paymoney/checkout/form/', {
             state:{
-              merchant: merchant,
-              merchant_id: merchant_id,
-              itemName: itemName,
-              orderNumber: orderNumber,
-              amount: amount,
-              custom: custom,
-              currency: currency
+              merchant:     merchant_key,
+              merchant_id:  merchant_id,
+              itemName:     itemName,
+              orderNumber:  orderNumber,
+              amount:       amount,
+              custom:       custom,
+              currency:     currency,
+              redirect_url: redirect_url
             }
           })
      } else if (selectedMethod === 'stripe') {
           navigate('/other/checkout/form/', {
             state:{
-              merchant: merchant,
+              merchant:    merchant_key,
               merchant_id: merchant_id,
-              itemName: itemName,
+              itemName:    itemName,
               orderNumber: orderNumber,
-              amount: amount,
-              custom: custom,
-              currency: currency,
-              img: 'https://python-uat.oyefin.com/media/paymentForm/stripe.png',
-              pay_mode: 'Stripe'
+              amount:      amount,
+              custom:      custom,
+              currency:    currency,
+              img:         'https://python-uat.oyefin.com/media/paymentForm/stripe.png',
+              pay_mode:    'Stripe',
+              redirect_url: redirect_url
             }
           })
      } else if (selectedMethod === 'paypal') {
           navigate('/other/checkout/form/', {
             state:{
-              merchant: merchant,
+              merchant: merchant_key,
               merchant_id: merchant_id,
               itemName: itemName,
               orderNumber: orderNumber,
@@ -91,10 +96,27 @@ const PaymentForm = () => {
               custom: custom,
               currency: currency,
               img: 'https://python-uat.oyefin.com/media/paymentForm/paypal.png',
-              pay_mode: 'Paypal'
+              pay_mode: 'Paypal',
+              redirect_url: redirect_url
             }
           })
-     };
+
+     } else if (selectedMethod === 'ipg15') {
+          navigate('/other/checkout/form/', {
+            state:{
+              merchant: merchant_key,
+              merchant_id: merchant_id,
+              itemName: itemName,
+              orderNumber: orderNumber,
+              amount: amount,
+              custom: custom,
+              currency: currency,
+              img: '',
+              pay_mode: 'ipg15',
+              redirect_url: redirect_url
+            }
+          })
+     }
   };
 
 
@@ -112,17 +134,18 @@ const PaymentForm = () => {
            <hr style={{borderTop:'2px dashed'}}/>
 
           <div className="card-body">
-                <span className='d-flex justify-content-between'>
+                {/* <span className='d-flex justify-content-between'>
                     <p className="card-text">{itemName}</p>
                     <small><b>{currency} {amount}</b></small>
-                </span>
+                </span> */}
 
-                <small className="text-muted">Merchant ID: {merchant_id}</small><br />
-                <small className="text-muted">Order ID: {orderNumber}</small>
+                <small className="text-muted">Merchant Name: {merchant_name}</small><br />
+                <small className="text-muted">Product: {itemName}</small><br />
+                <small className="text-muted">Order ID: {orderNumber}</small> 
                 <hr className='mb-4'/>
 
                 <div className="card-text d-flex justify-content-between">
-                    <strong>Total {currency}</strong>
+                    <strong>Total Amount</strong>
                     <span className="float-right"><b>{currency} {amount}</b></span>
                 </div>
                 <hr className='mb-3'/>
@@ -156,6 +179,15 @@ const PaymentForm = () => {
                         <img 
                             src="https://python-uat.oyefin.com/media/paymentForm/paypal.png" 
                             alt="Pay Money" 
+                            className="button-icon" 
+                            style={{maxWidth: '50px'}}
+                            />
+                    </button>
+                    <button className={`btn btn-outline-primary ${activeButton === 'ipg15' ? 'active' : ''}`} onClick={()=> {handleButtonSelected('ipg15')}}>
+                        <small>ipg15</small>
+                        <img 
+                            src="" 
+                            alt="ipg15" 
                             className="button-icon" 
                             style={{maxWidth: '50px'}}
                             />

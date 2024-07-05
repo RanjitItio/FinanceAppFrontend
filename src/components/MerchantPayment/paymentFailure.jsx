@@ -19,6 +19,8 @@ export default function PaymentFailure() {
     const message    = location.state || ''
     const failed_msg = message.msg || 'Payment failed due to an unknown error'
 
+    const redirect_url = location.state?.redirect_url || ''
+
     const [state, setState] = React.useState({
         open: true,
         vertical: 'top',
@@ -33,6 +35,12 @@ export default function PaymentFailure() {
     const handleClose = () => {
         setState({ ...state, open: false });
     };
+
+   
+    //Redirect to Redirect url page
+  //   setTimeout(() => {
+  //     window.location.href = redirect_url
+  // }, 3000);
 
     const action = (
         <React.Fragment>

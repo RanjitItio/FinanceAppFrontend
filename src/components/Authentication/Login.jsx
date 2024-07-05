@@ -30,8 +30,6 @@ function Login(){
     const handleOnSubmit = async (e)=> {
         e.preventDefault();
         let validationError = [];
-		// console.log(formData);
-        // console.log(e)
 
         if (!formData.email) {
             validationError.push("Please fill the Email");
@@ -50,14 +48,10 @@ function Login(){
         await axiosInstance.post(`api/v1/user/login/`, {
 				email: formData.email,
 				password: formData.password,
-			})
+      })
 			.then((res) => {
                 if(res.status == 200) {
-                     
-                    setTimeout(() => {
-                        window.location.href = '/'
-                    }, 1000);
-
+                    
                     setSuccessMessage(`Login Successfull`)
                    
                     localStorage.setItem('is_merchant', res.data.is_merchant)
@@ -66,13 +60,13 @@ function Login(){
                     localStorage.setItem('refresh_token', res.data.access_token);
                     axiosInstance.defaults.headers['Authorization'] =
                       'Bearer ' + localStorage.getItem('access_token');
-                    // console.log(res);
-                    // console.log(res.data);
-                    // console.log(res.data.is_merchant)
+
+                      setTimeout(() => {
+                        window.location.href = '/'
+                    }, 1000);
                 }
-            //  localStorage.clear();
 			}).catch((error)=> {
-                // console.log(error.response.data.msg)
+                console.log(error.response)
                 if (error.response.data.msg == 'Your account is not active. Please contact the administrator.'){
                     setError("Your account is not active yet please contact the Administrator");
                     return;

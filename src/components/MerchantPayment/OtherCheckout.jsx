@@ -70,7 +70,7 @@ export default function OtherPaymentCheckoutForm() {
         setCvc(value);
       };
 
-
+      ///Manage page response if no state value is present
       if(states === '') {
         return (
             <p>No payment method available</p>
@@ -114,17 +114,20 @@ export default function OtherPaymentCheckoutForm() {
                     pay_mode:     states.pay_mode,
                     product:      states.itemName,
                     order_id:     states.orderNumber,
-                    msg:          states.custom
+                    msg:          states.custom,
+                    url:          states.redirect_url
 
                 }).then((res)=> {
                     // console.log(res)
+                    setDisablButton(true)
 
                     if (res.status === 200) {
-                        setDisablButton(true)
+                        // console.log(res.data.redirect_url)
 
                         setTimeout(() => {
-                            navigate('/payment/form/success/')
-                        }, 1000);
+                            // navigate('/payment/form/success/', {state: {redirect_url: states.redirect_url}})
+                            window.location.href = res.data.redirect_url
+                        }, 1000); 
                     }
 
                 }).catch((error)=> {
@@ -133,37 +136,37 @@ export default function OtherPaymentCheckoutForm() {
                     if (error.response.data.msg === 'Invalid Merchant key') {
                         setDisablButton(true)
                         setTimeout(() => {
-                            navigate('/payment/form/fail/', {state: {msg: 'Invalid Merchant Key'}})
+                            navigate('/payment/form/fail/', {state: {msg: 'Invalid Merchant Key', redirect_url: states.redirect_url}})
                          }, 1000);
 
                     } else if (error.response.data.msg === 'Requested merchant not found') {
                         setDisablButton(true)
                         setTimeout(() => {
-                            navigate('/payment/form/fail/', {state: {msg: 'Merchant does not exists'}})
+                            navigate('/payment/form/fail/', {state: {msg: 'Merchant does not exists', redirect_url: states.redirect_url}})
                          }, 1000);
 
                     } else if (error.response.data.msg === 'Merchant fetch error') {
                         setDisablButton(true)
                         setTimeout(() => {
-                            navigate('/payment/form/fail/', {state: {msg: 'Server Error'}})
+                            navigate('/payment/form/fail/', {state: {msg: 'Server Error', redirect_url: states.redirect_url}})
                          }, 1000);
 
                     } else if (error.response.data.msg === 'Requested currency not available') {
                         setDisablButton(true)
                         setTimeout(() => {
-                            navigate('/payment/form/fail/', {state: {msg: 'Currency does not exists'}})
+                            navigate('/payment/form/fail/', {state: {msg: 'Currency does not exists', redirect_url: states.redirect_url}})
                          }, 1000);
 
                     } else if (error.response.data.msg === 'Merchant wallet not available') {
                         setDisablButton(true)
                         setTimeout(() => {
-                            navigate('/payment/form/fail/', {state: {msg: 'Merchant does not have wallet'}})
+                            navigate('/payment/form/fail/', {state: {msg: 'Merchant does not have wallet', redirect_url: states.redirect_url}})
                          }, 1000);
 
                     } else if (error.response.data.msg === 'Server error') {
                         setDisablButton(true)
                         setTimeout(() => {
-                            navigate('/payment/form/fail/', {state: {msg: 'Server error occure'}})
+                            navigate('/payment/form/fail/', {state: {msg: 'Server error occure', redirect_url: states.redirect_url}})
                          }, 1000);
 
                     }
@@ -192,7 +195,7 @@ export default function OtherPaymentCheckoutForm() {
             }}
         >
             <Typography variant="h6" gutterBottom>
-            Transaction Details
+                Transaction Details
             </Typography>
 
             <Typography variant="body2" gutterBottom>

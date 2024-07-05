@@ -55,6 +55,7 @@ const NavContent = [
       {text: 'Business', icon: <SettingsIcon />, url: '/merchants/'},
       {text: '-Business Payments', icon: <SettingsIcon />, url: '/merchant/payments/'},
       {text: 'Bank Accounts', icon: <SettingsIcon />, url: '/merchant/bank/accounts/'},
+      {text: 'Developer', icon: <SettingsIcon />, url: '/dev/docs/intro/'},
 
     ] : [])
 

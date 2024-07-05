@@ -4,12 +4,30 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import { useLocation } from 'react-router-dom';
 
 
 
 
 
 export default function PaymentSuccess() {
+
+    const location = useLocation();
+    const redirect_url = location.state?.redirect_url || ''
+
+  //   setTimeout(() => {
+  //     window.location.href = redirect_url
+  // }, 3000);
+
+
+  //If state value is not present
+  if (redirect_url === '') {
+    return (
+      <p>Not Verified</p>
+    )
+  };
+
+
     return (
         <Box
         sx={{

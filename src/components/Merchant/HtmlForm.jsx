@@ -49,6 +49,8 @@ export default function MerchantHTMLFormGenerator({...props}) {
       redirect_url: ''
     }
 
+    // console.log(props.merchantId.bsn_name)
+
     const [htmlData, updatehtmlFormData]             = useState(initialFormData);
     const [error, setError]                          = useState('');
     const [validAmountError, updateValidAmountError] = useState('');
@@ -227,30 +229,44 @@ export default function MerchantHTMLFormGenerator({...props}) {
       updatehtmlFormData(newHtmlData)
 
       // Form Name
-      const name_merchant     = 'merch'
+      const merch_name        = 'merch_name'
+      const name_merchant_key = 'merch_key'
       const name_merchant_id  = 'merch_id'
       const name_item_name    = 'item'
       const name_order_number = 'order_no'
       const name_price        = 'amt'
       const name_custom       = 'custom'
       const name_currency     = 'cur'
+      const name_url          = 'url'
       // const redirect_url      = 'redirect'
 
       // Form Value
-      let merchant = props.merchantId.key
+      let merchant_key   = props.merchantId.key
+      let merchant_name = props.merchantId.bsn_name
 
-      if (merchant) {
-        merchant = btoa(merchant)
+      //Encode the key value in base64
+      if (merchant_key) {
+        merchant_key = btoa(merchant_key)
       } else {
-        merchant = ''
+        merchant_key = ''
       }
 
-      const merchant_id  = btoa(props.merchantId.merchant_id)
-      const item_name    = btoa(newHtmlData.item_name)
-      const order_number = btoa(newHtmlData.order_number)
-      const price        = btoa(newHtmlData.price)
-      const custom       = btoa(newHtmlData.custom)
-      const currency     = btoa(props.MerchantCurrency.name)
+      //Encode the merchant name in base64
+      if (merchant_name) {
+        merchant_name = btoa(merchant_name)
+      } else {
+        merchant_name = ''
+      }
+
+
+    const merchant_id  = btoa(props.merchantId.merchant_id)
+    const item_name    = btoa(newHtmlData.item_name)
+    const order_number = btoa(newHtmlData.order_number)
+    const price        = btoa(newHtmlData.price)
+    const custom       = btoa(newHtmlData.custom)
+    const currency     = btoa(props.MerchantCurrency.name)
+    const url          = btoa(newHtmlData.redirect_url)
+
 
 
       const newFormValue = `
@@ -311,7 +327,9 @@ export default function MerchantHTMLFormGenerator({...props}) {
                   <p class="card-text">Only a few steps to complete your payment. Click the button to continue.</p>
 
                   <form method="GET" action="${redirect_url}">
-                    <input type="hidden" name="${name_merchant}" value="${merchant}" />
+                    <input type="hidden" name="${merch_name}" value="${merchant_name}" />
+                    <input type="hidden" name="${name_url}" value="${url}" />
+                    <input type="hidden" name="${name_merchant_key}" value="${merchant_key}" />
                     <input type="hidden" name="${name_merchant_id}" value="${merchant_id}" />
                     <input type="hidden" name="${name_item_name}" value="${item_name}" />
                     <input type="hidden" name="${name_order_number}" value="${order_number}" />
