@@ -1,7 +1,6 @@
-import '/src/styles/CryptoCards.css'
+// import '/src/styles/CryptoCards.css'
 import { useState, useEffect } from 'react'
 import { Carousel } from 'antd';
-import axios from 'axios';
 import CryptoIcons from '../../../cryptoicons';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';

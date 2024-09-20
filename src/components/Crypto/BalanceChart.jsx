@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
+
 
 
 const data = [
@@ -11,6 +11,7 @@ const data = [
   { value: 15, label: 'Binance' },
   { value: 20, label: 'Polkstar' },
 ];
+
 
 const size = {
 //   width: 400,
@@ -50,7 +51,7 @@ function PieCenterLabel({label, amount }) {
   );
 }
 
-
+// Total Crypto Balance Chart
 export default function TotalBalanceChart() {
     const balanceText = 'Total Balance'
     const balanceValue = "$8970.67"
@@ -61,7 +62,6 @@ export default function TotalBalanceChart() {
       amount={balanceValue}
       >
      </PieCenterLabel>
-
      
     </PieChart>
 

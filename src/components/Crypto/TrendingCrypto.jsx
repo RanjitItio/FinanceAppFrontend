@@ -44,7 +44,7 @@ const TrendingCryptoCoins = [
 export default function TrendingCrypto() {
     return(
         <>
-          <div className="card shadow" >
+          <div className="card" >
                 <div className="card-body">
                     <div className="d-flex justify-content-between mb-2">
                         <h5 className="card-title">Trending</h5>
@@ -56,7 +56,6 @@ export default function TrendingCrypto() {
                         <div className='d-flex justify-content-start'>
                             <div className='d-flex align-items-center justify-content-center rounded-circle my-1' style={{width: '35px', height: '35px', backgroundColor: item.crypto_background_color}}>
                                 {item.icon}
-                                {/* <i className="bi bi-currency-bitcoin" style={{color: 'white', fontSize: '20px'}}></i> */}
                             </div>
                             &nbsp;
                             <div>
@@ -76,5 +75,5 @@ export default function TrendingCrypto() {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};

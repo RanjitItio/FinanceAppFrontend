@@ -45,6 +45,7 @@ const settings = [
 ];
 
 
+// Upper side Navbar
 function UpperNavbar({handleDrawerOpen, open}){
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -74,8 +75,8 @@ function UpperNavbar({handleDrawerOpen, open}){
           <Typography variant="h6" noWrap component="div">
             Itio Innovex
           </Typography>
-
-
+    
+    
            {/* Avatar Section */}
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}}>
             <Tooltip title="Open settings">

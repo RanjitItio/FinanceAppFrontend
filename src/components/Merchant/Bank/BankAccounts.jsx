@@ -15,7 +15,7 @@ import BankAccountDelete from "./BankDelete";
 
 
 
-
+// All Available Merchant Bank Accounts
 export default function MerchantBankAccounts ({open}) {
     const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ export default function MerchantBankAccounts ({open}) {
             console.log(error.response)
 
         })
-    }, [])
+    }, []);
 
     // Show only two number from first and two number from last of Account number
     const formatAccountNumber = (acc_no) => {
@@ -68,7 +68,7 @@ export default function MerchantBankAccounts ({open}) {
     const handleBankAccountDelete = (accountID)=> {
         setDeleteOpen(true);
         setBankAccountId(accountID)
-    }
+    };
     
 
     return (

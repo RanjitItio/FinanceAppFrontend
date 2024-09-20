@@ -3,8 +3,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import SplitButton from 'react-bootstrap/SplitButton';
 import { useEffect, useState } from 'react';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
-import axios from 'axios';
-import { error } from 'jquery';
 
 
 
@@ -48,6 +46,8 @@ const RecentTransactions = [
 ]
 
 
+
+// Recent Crypto Transactions
 export default function CryptoTransactions({CryptoData, initialCryptoConversion}) {
 
     const [selectedItem1, setSelectedItem1] = useState('BTC');
@@ -148,9 +148,9 @@ export default function CryptoTransactions({CryptoData, initialCryptoConversion}
                 </div>
             </div>
 
-           <a onClick={handleSwapItems} style={{cursor: 'pointer'}}>
+           {/* <a onClick={handleSwapItems} style={{cursor: 'pointer'}}>
                 <ImportExportIcon style={{position: 'absolute', top: '18%', left: '45%', zIndex: '1'}} />
-            </a>
+            </a> */}
 
             <div className="card mb-3">
                 <div className="card-body">

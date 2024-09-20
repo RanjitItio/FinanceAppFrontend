@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react"
-import axiosInstance from "../../Authentication/axios"
+import axiosInstance from '../Authentication/axios';
 import { Link } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-
+import { Typography, ButtonGroup, Button } from "@mui/material";
+import EuroIcon from '@mui/icons-material/Euro';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 
 
@@ -42,6 +45,10 @@ export default function FiatAccount() {
             } else if(error.response.data.msg == 'Server error') {
                 setError("Server Error")
             }
+
+            if (error.response.statusText === 'Unauthorized') {
+                window.location.href = '/signin/'
+            }
         });
     }, [])
 
@@ -64,24 +71,42 @@ export default function FiatAccount() {
         <div className="card" style={{backgroundColor: '#95b02f'}}>
             <div className="card-body">
 
-                <div className="d-flex justify-content-between">
-                    <h5 className="card-title my-1">Accounts</h5>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {/* Title */}
+                <Typography variant="h5" component="div">
+                    Accounts
+                </Typography>
 
-                    <div className="btn-group " role="group" aria-label="Basic example">
-                        <button type="button" className={`btn btn-light ${selectedCurrency=='EUR' ? "active" : ""}`} onClick={()=> handleCurrencyClick('EUR')}>
-                            <i className="bi bi-currency-euro"></i>
-                            <span className='d-none d-sm-inline'>Euro</span> 
-                        </button>
-                        <button type="button" className={`btn btn-light ${selectedCurrency=='USD' ? "active" : ""}`} onClick={()=> handleCurrencyClick('USD')}>
-                            <i className="bi bi-currency-dollar"></i>
-                            <span className='d-none d-sm-inline'>USD</span>
-                        </button>
-                        <button type="button" className={`btn btn-light ${selectedCurrency=='INR' ? "active" : ""}`} onClick={()=> handleCurrencyClick('INR')}>
-                            <i className="bi bi-currency-rupee"></i>
-                            <span className='d-none d-sm-inline'>INR</span>
-                        </button>
-                    </div>
-                </div>
+                {/* Currency Buttons */}
+                <ButtonGroup variant="outlined" aria-label="currency selection">
+
+                <Button
+                    variant={selectedCurrency === 'EUR' ? 'contained' : 'outlined'}
+                    onClick={() => handleCurrencyClick('EUR')}
+                    startIcon={<EuroIcon />}
+                >
+                    <span className='d-none d-sm-inline'>Euro</span>
+                </Button>
+
+                <Button
+                    variant={selectedCurrency === 'USD' ? 'contained' : 'outlined'}
+                    onClick={() => handleCurrencyClick('USD')}
+                    startIcon={<AttachMoneyIcon />}
+                >
+                    <span className='d-none d-sm-inline'>USD</span>
+                </Button>
+
+                <Button
+                    variant={selectedCurrency === 'INR' ? 'contained' : 'outlined'}
+                    onClick={() => handleCurrencyClick('INR')}
+                    startIcon={<CurrencyRupeeIcon />}
+                >
+                    <span className='d-none d-sm-inline'>INR</span>
+                </Button>
+
+                </ButtonGroup>
+            </div>
+
 
                 {error ? (
                     <Stack sx={{ width: '100%', marginBottom: '20px', marginTop: '10px'}}>
@@ -151,8 +176,7 @@ export default function FiatAccount() {
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
-    )
-}
+    );
+};

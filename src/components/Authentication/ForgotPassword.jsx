@@ -5,41 +5,41 @@ import axiosInstance from './axios';
 
 
 
-
+// User Forgot password
 function ForgotPassword() {
-
+    
+    // Initial form data
     const initialFormData = Object.freeze({
         email: ''
     })
 
-    const [formData, UpdatFormData] = useState(initialFormData)
-    const [error, setError] = useState('')
-    const [successMessage, setSuccessMessage] = useState('');
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [formData, UpdatFormData] = useState(initialFormData)  // Password data
+    const [error, setError] = useState('')   // Error Message
+    const [successMessage, setSuccessMessage] = useState('');  // Success Message
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);   // Disable Button
 
+    // Capture the user inputs
     const handleChange = (e)=> {
         UpdatFormData({
             ...formData,
             [e.target.name]: e.target.value.trim()
         });
-    }
+    };
 
+     // Method to submit the data through API
     const handleSubmit = (e)=> {
         e.preventDefault();
         let validationError = [];
-        setIsButtonDisabled(true);
 		// console.log(formData);
 
         if(formData.email === '') {
             validationError.push("Please fillup the Email");
-        }
-
-        if (validationError.length > 0) {
+        } else if (validationError.length > 0) {
             setError(validationError.join(''));
             return;
         } else{
             setError('');
-        }
+            setIsButtonDisabled(true);
 
         axiosInstance.post(`api/v1/user/reset_passwd/mail/`, {
             email: formData.email,
@@ -67,9 +67,12 @@ function ForgotPassword() {
           } else if (error.response.data.msg == 'Server error') {
             setError('Unknow error occured please retry after some time')
 
-          };
-        })
+          }
+        });
+
+      };
     };
+
 
     useEffect(() => {
 
@@ -82,6 +85,7 @@ function ForgotPassword() {
         return () => clearTimeout(timer);
       }
     }, [error, successMessage]);
+
 
 
     return (

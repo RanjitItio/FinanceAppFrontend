@@ -42,8 +42,6 @@ function KYCSubmissionReport(params) {
                     </Modal.Body>
 
                     <Modal.Footer>
-                    {/* <Button variant="secondary">Close</Button> */}
-                    {/* <Button variant="primary">Save changes</Button> */}
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>

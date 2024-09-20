@@ -44,31 +44,11 @@ const actions = [
 
 
 function App() {
-  const [serverStatus, updateServerStatus] = useState(false)
 
   // Speed Dial state and Methods
   const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
   const handlSpeedDialeOpen = () => setOpenSpeedDial(true);
   const handleSpeedDialClose = () => setOpenSpeedDial(false);
-
-//   useEffect(() => {
-//     const intervalId = setInterval(() => {
-//         refreshAccessToken();
-//     }, 5  * 1000); // 2 seconds
-
-    
-//     return () => clearInterval(intervalId);
-// }, []);
-
-  useEffect(() => {
-    axiosInstance.get(`api/server/status`).then((res)=> {
-        // console.log(res)
-        updateServerStatus(false)
-    }).catch((error)=> {
-        // console.log(error)
-        updateServerStatus(true)
-    })
-  }, []);
 
   // Method to redirect the user different project
   const handleActionIconClick = (url) => {
@@ -103,9 +83,7 @@ useEffect(() => {
 
   return (
     <>
-       {serverStatus ? 
-         <b><p className='d-flex justify-content-center my-5 text-danger'>Inconvinience Deeply Regreted please retry after sometime</p></b>
-       : 
+       
           <AuthProvider>
 
             {/* Spped Dial button */}
@@ -130,8 +108,6 @@ useEffect(() => {
 
               <AuthRoutes />
           </AuthProvider>
-       
-       }
       </>
 
   );

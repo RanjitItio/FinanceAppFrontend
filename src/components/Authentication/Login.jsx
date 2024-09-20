@@ -1,218 +1,235 @@
-// import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axiosInstance from './axios';
-import { Link, useNavigate } from 'react-router-dom';
-import './tailwind.css';
-import { RiUser3Line } from "react-icons/ri";
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import { useMediaQuery, useTheme } from '@mui/material';
+import {Input as JoyInput} from '@mui/joy';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+
+const IS_DEVELOPMENT = import.meta.env.VITE_IS_DEVELOPMENT;
+let kycRedirectUrl = '';
 
 
+// URL according to the environment
+if (IS_DEVELOPMENT === 'True') {
+  kycRedirectUrl = 'http://localhost:5173'
+} else {
+  kycRedirectUrl = 'https://react-payment.oyefin.com'
+};
 
+// User Login
 function Login(){
-    const navigate =  useNavigate();
 
     const initialFormData = Object.freeze({
-		email: '',
-		password: '',
-	});
+      email: '',
+      password: '',
+    });
 
-    const [formData, updateFormData] = useState(initialFormData);
-    const [error, setError] = useState('')
-    const [successMessage, setSuccessMessage] = useState('');
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [formData, updateFormData] = useState(initialFormData);   // Form data state
+    const [error, setError] = useState('')                          // Error Message state
+    const [successMessage, setSuccessMessage] = useState('');       // Success Message state
+    const [disbaleButton, setDisableButton]   = useState(false);    // Disable login button state
 
-
+    // Method to capture user input values
     const handleChange = (e) => {
-		updateFormData({
-			...formData,
-			[e.target.name]: e.target.value.trim(),
-		});
-	};
+      updateFormData({
+        ...formData,
+        [e.target.name]: e.target.value.trim(),
+      });
+    };
 
+    // Submit form to API on clicking on Submit button
     const handleOnSubmit = async (e)=> {
-        e.preventDefault();
-        let validationError = [];
+      e.preventDefault();
+      let validationError = [];
 
-        if (!formData.email) {
-            validationError.push("Please fill the Email");
-        }
-        else if (!formData.password) {
-            validationError.push("Please fill the password");
-        }
+      if (!formData.email) {
+          validationError.push("Please fill the Email");
+      }
+      else if (!formData.password) {
+          validationError.push("Please fill the password");
+      }
 
-        if (validationError.length > 0) {
-            setError(validationError.join(''));
-            return;
-        } else{
-            setError('');
-        }
+      if (validationError.length > 0) {
+          setError(validationError.join(''));
+          return;
+      } else{
+          setError('');
+      }
 
-        await axiosInstance.post(`api/v1/user/login/`, {
-				email: formData.email,
-				password: formData.password,
-      })
-			.then((res) => {
-                if(res.status == 200) {
-                    
-                    setSuccessMessage(`Login Successfull`)
-                   
-                    localStorage.setItem('is_merchant', res.data.is_merchant)
-                    
-                    localStorage.setItem('access_token', res.data.access_token);
-                    localStorage.setItem('refresh_token', res.data.access_token);
-                    axiosInstance.defaults.headers['Authorization'] =
-                      'Bearer ' + localStorage.getItem('access_token');
+      // Diable the button
+      setDisableButton(true)
 
-                      setTimeout(() => {
-                        window.location.href = '/'
-                    }, 1000);
-                }
-			}).catch((error)=> {
-                console.log(error.response)
-                if (error.response.data.msg == 'Your account is not active. Please contact the administrator.'){
-                    setError("Your account is not active yet please contact the Administrator");
-                    return;
-                }
-                else if (error.response.data.msg == 'Invalid credentials'){
-                    setError("Invalid Credentials");
-                    return;
-                }
-                else {
-                    setError('')
-                }
+      // Call signin API
+      await axiosInstance.post(`api/v1/crypto/user/login/`, {
+      email: formData.email,
+      password: formData.password,
+    })
+    .then((res) => {
+              if(res.status == 200) {
+                  
+                  setSuccessMessage(`Login Successfull`)
+                 
+                  localStorage.setItem('is_merchant', res.data.is_merchant)
+                  
+                  localStorage.setItem('access_token', res.data.access_token);
+                  localStorage.setItem('refresh_token', res.data.access_token);
+                  localStorage.setItem('user_name', res.data.user_name);
 
-            })
-    }
+                  axiosInstance.defaults.headers['Authorization'] =
+                    'Bearer ' + localStorage.getItem('access_token');
+
+                    setTimeout(() => {
+                      window.location.href = '/'
+                  }, 1000);
+              }
+
+    }).catch((error)=> {
+              console.log(error)
+
+              if (error.response.data.msg == 'Your account is not active. Please contact the administrator'){
+                  setError("Your account is not active yet please contact the Administrator");
+              }
+              else if (error.response.data.msg == 'Invalid credentials'){
+                  setError("Invalid Credentials");
+              }
+              else if (error.response.data.message === 'Kyc not submitted') {
+                  let first_name     = error.response.data.first_name
+                  let last_name      = error.response.data.last_name
+                  let contact_number = error.response.data.contact_number
+                  let email          = error.response.data.email
+                  let user_id        = error.response.data.user_id
+
+                  window.location.href = `${kycRedirectUrl}/kyc/?first_name=${first_name}&last_name=${last_name}&contact_number=${contact_number}&email=${email}&user_id=${user_id}`
+
+              } else if (error.response.data.message === 'Only crypto user allowed') {
+                setError("Only Crypto user allowed")
+
+              } else {
+                  setError('')
+              }
+          })
+    };
+  
 
    return(
-    <>
-
-    <div className="min-h-screen flex bg-blue-300">
-        {/* First flex container with a blue color palette */}
-        <div className="flex-[50%] bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center justify-center">
-        <img src="https://script.viserlab.com/paymenthub/assets/images/frontend/login_register/641872cda99f91679323853.png" alt="Logo" className="h-80 w-80 drop-shadow-2xl " />
-        
-      
-        </div>
+    <Box display="flex">
+        <Box
+          flex={1}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <CardMedia
+            component="img"
+            image="https://python-uat.oyefin.com/media/signup/authImg.png"
+            alt="Logo"
+            sx={{display:{xs:'none', sm:'flex', md:'flex'}}}
+          />
+        </Box>
   
-        {/* Second flex container with a green color palette */}
-        <div className="flex-[80%] bg-white-200 flex items-center justify-center  bg-white  ">
-          <div className="max-w-md w-full space-y-8">
-          <div className="col-span-1 shadow-2xl p-4 rounded-md">
-            <div className='col-span-1  rounded-full'>
-              <center>
-            <p className='text-7xl' ><RiUser3Line/>  </p>
-            <h2 className="text-2xl font-semibold mb-4 "> Login </h2>
-              </center>
-            </div>
-          
-          <form className="space-y-4 ">
-          <div className="grid grid-cols-1 gap-x-4 gap-y-2">
-
-    
-            <div>
-              <label className="block text-gray-600 font-medium">Email</label>
-              <input
-                type="email"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Email"
-                name="email"
-                onChange={handleChange} 
-              />
-            </div>
-
+        <Box flex={1} display="flex" alignItems="center" justifyContent="center" bgcolor="white">
+          <Container maxWidth="sm">
+            <Card sx={{ boxShadow: 0, p: 5, borderRadius: 2 }}>
             
+              <Box display="flex" flexDirection="column" alignItems="left" marginBottom={2}>
+                  <Typography component="h1" variant="h5">
+                      <b>Sign In to your Account</b>
+                  </Typography>
+                  <p>Welcome back! please enter your detail</p>
+              </Box>
 
-            <div>
-              <label className="block text-gray-600 font-medium">Password</label>
-              <input
-                type="password"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="********"
-                name='password'
-                onChange={handleChange}
-              />
-            </div>
+              <form onSubmit={handleOnSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <JoyInput
+                      variant="soft"
+                      required
+                      id="email"
+                      placeholder="Email"
+                      name="email"
+                      autoComplete="email"
+                      onChange={handleChange}
+                      startDecorator={
+                        <EmailIcon color='primary' />
+                      }
+                      sx={{
+                        width:{xs:'100%', sm:'80%'}
+                      }}
+                    />
+                  </Grid>
+  
+                  <Grid item xs={12}>
+                    <JoyInput
+                      variant="soft"
+                      required
+                      name="password"
+                      placeholder="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      onChange={handleChange}
+                      startDecorator={
+                        <LockIcon color='primary'/>
+                      }
+                      sx={{
+                        width:{xs:'100%', sm:'80%'}
+                      }}
+                    />
+                  </Grid>
+  
+                  <Grid item xs={12}>
 
-          </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              onClick={handleOnSubmit}
-            >
-              Submit
-            </button>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      disabled={disbaleButton}
+                      sx={{
+                        width:{xs:'100%', sm:'80%'}
+                      }}
+                    >
+                      Login
+                    </Button>
+                  </Grid>
+  
+                  {error && (
+                    <Grid item xs={12}>
+                      <Typography color="error">{error}</Typography>
+                    </Grid>
+                  )}
+                  {successMessage && (
+                    <Grid item xs={12}>
+                      <Typography color="teal">{successMessage}</Typography>
+                    </Grid>
+                  )}
+                </Grid>
+              </form>
 
-                {error &&  <p className="text-danger">{error}</p>}
-                {successMessage && <p className="text-success">{successMessage}</p>}
-          </form>
-          <div className='cols col-span-1 flex justify-between items-center'>
+              <Box display="flex" justifyContent="space-between" sx={{mt:4, width:{xs:'100%', sm:'80%'}}}>
+                <Typography variant="body2">
+                    If you don't have an account <Link to="/signup">Signup</Link>
+                </Typography>
 
-          <p className='font-extralight'>If you don-t have any account <Link to={'/signup/'}>  Signup</Link></p>
-          <p className='font-extralight'> <Link to={'/forgot-password/'}> Forget password</Link></p>
-          </div>
-        </div>
-            
-          </div>        
-        </div>
-      </div>
+                <Typography variant="body2">
+                  <Link to="/forgot-password">Forgot password?</Link>
+                </Typography>
+              </Box>
 
-        {/* <section className="bg-light py-3 py-md-5 my-3">
-        <div className="container">
-            <div className="row justify-content-center">
-            <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-                <div className="card border border-light-subtle rounded-3 shadow-sm">
-                <div className="card-body p-3 p-md-4 p-xl-5">
-                    <div className="text-center mb-3">
-                    <a href="#!">
-                        <img src="" alt="Put Logo Here" width="175" height="57" />
-                    </a>
-
-                    </div>
-                    <h2 className="fs-6 fw-normal text-center text-secondary mb-4">Sign in to your account</h2>
-
-                
-                    <form action="#!">
-                    <div className="row gy-2 overflow-hidden">
-                        <div className="col-12">
-                        <div className="form-floating mb-3">
-                            <input type="email" className="form-control" name="email" id="email" placeholder="name@example.com" onChange={handleChange} required />
-                            <label htmlFor="email" className="form-label">Email</label>
-                        </div>
-                        </div>
-
-                        <div className="col-12">
-                            <div className="form-floating mb-3">
-                                <input type="password" className="form-control" name="password" id="password"  placeholder="Password" onChange={handleChange} required />
-                                <label htmlFor="password" className="form-label">Password</label>
-                            </div>
-                        </div>
-
-                        <div className="col-12">
-                        <div className="d-flex gap-2 justify-content-between">
-                            <Link to={'/forgot-password/'} className="link-primary text-decoration-none">Forgot password?</Link>
-                        </div>
-                        </div>
-
-                        <div className="col-12">
-                            <div className="d-grid my-3">
-                                <button className="btn btn-primary btn-lg" type="submit" onClick={handleOnSubmit}>Log in</button>
-                                {error &&  <p className="text-danger">{error}</p>}
-                                {successMessage && <p className="text-success">{successMessage}</p>}
-                            </div>
-                            </div>
-                            <div className="col-12">
-                            <p className="m-0 text-secondary text-center">Don't have an account? <Link to={'/signup/'} className="link-primary text-decoration-none">Sign up</Link></p>
-                        </div>
-
-                    </div>
-                    </form>
-               
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        </section> */}
-    </>
+            </Card>
+          </Container>
+        </Box>
+      </Box>
    );
 };
 

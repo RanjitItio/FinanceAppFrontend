@@ -1,12 +1,10 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+import { useState, useEffect } from 'react';
 import TotalBalanceChart from './BalanceChart';
 import CryptoCards from './CryptoCards';
 import TrendingCrypto from './TrendingCrypto';
 import MarketValueCard from './MarketValue';
 import CryptoTransactions from './Transactions';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 
 
 
@@ -76,60 +74,57 @@ export default function CryptoContent() {
     }, []);
 
 
-    return (
-        <>
-        <div className="container">
-            <div className="row">
-                {/* First Column */}
-                <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                    {/* First Row */}
-                    <div className="row my-2">
-                        <CryptoCards CryptoData={CryptoData} loading={loading} />
-                    </div>
+return (
 
-                     {/* Second Row */}
-                    <div className="row">
-                        {/* First Column */}
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
-                            <div className="card shadow-lg" style={{height: '22rem'}} >
-                                <div className="card-body">
-                                    <h5 className="card-title my-4"><b>Your Balance</b></h5>
-                                        <TotalBalanceChart />
-                                </div>
-                            </div> 
-                        </div>
+    <Container maxWidth="xl" sx={{ mt: 2 }}>
+        <Grid container spacing={2}>
+            <Grid item xs={12} md={9}>
+            
+                <Grid item xs={12} sx={{ mb: 2 }}>
+                    <CryptoCards CryptoData={CryptoData} loading={loading} />
+                </Grid>
+                
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={12} md={6} lg={6} xl={6} sx={{ mb: 2 }}>
+                    <Card sx={{ height: '22rem' }}>
+                        <CardContent>
+                        <Typography variant="h5" sx={{ mb: 4 }}><b>Your Balance</b></Typography>
+                            <TotalBalanceChart />
+                        </CardContent>
+                    </Card>
+                    </Grid>
 
-                        {/* Second Column */}
-                        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <TrendingCrypto />
-                        </div>
-                    </div>
+                    
+                    <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                        <TrendingCrypto />
+                    </Grid>
+                </Grid>
 
+                <Grid container >
+                    <Grid item xs={12} sm={12} sx={{ mx: 1, my: 2 }}>
+                        <Card>
+                        <CardContent>
+                            <Typography variant="h5"><b>Market Value</b></Typography>
+                                <MarketValueCard />
+                        </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </Grid>
 
-                    <div className="row mx-1 my-2">
-                        <div className="card" >
-                            <div className="card-body"  >
-                                <h5 className="card-title"><b>Market Value</b></h5>
-                                    {/* <MarketValueCard />  */}
-                            </div>
-                        </div> 
-                    </div>
-                </div>
+            
+            <Grid item xs={12} sm={12} md={3} sx={{ my: 2 }}>
+                <Card>
+                    <CardContent>
+                        <CryptoTransactions CryptoData={CryptoData} initialCryptoConversion={initialCryptoConversion} />
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
+    </Container>
 
-                {/* Second Column */}
-                <div className="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 my-2">
-                    <div className="card" >
-                        <div className="card-body">
-                            {/* <h5 className="card-title mb-2">Transaction</h5> */}
-                            <CryptoTransactions CryptoData={CryptoData} initialCryptoConversion={initialCryptoConversion} />
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
-        </>
-    )
-}
+    );
+};
 
 
 

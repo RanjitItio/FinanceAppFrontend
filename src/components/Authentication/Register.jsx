@@ -1,105 +1,128 @@
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import axiosInstance from './axios';
-import '/src/styles/register.css'
-import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
-import { RiUser3Line } from "react-icons/ri";
-import './tailwind.css';
+import { Link, useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LinearProgress from '@mui/joy/LinearProgress';
+import {Typography as JoyTypography, Input as JoyInput, Stack as JoyStack,
+    FormControl as JoyFormControl, FormLabel as JoyFormLabel, FormHelperText as JoyFormHelperText,
+    Button as JoyButton, Checkbox as JoyCheckbox
+} from '@mui/joy';
+import {Key as JoyKey} from '@mui/icons-material';
+import { InputAdornment } from '@mui/material';
 
 
 
 
-
+// User Register
 function Register() {
-    const navigate = useNavigate();
-
+  
     const initialFormData = Object.freeze({
       first_name: '',
       last_name: '',
       contact_number: '',
-      email: '',
+      otp: '',
       password: '',
       confirm_password: '',
     });
-    
-    const [formData, updateFormData]                       = useState(initialFormData);
-    const [error, setError]                                = useState('')
-    const [successMessage, setSuccessMessage]              = useState('');
-    const [diableRegisterButton, setDisableRegisterButton] = useState(false)
-    const [selectedAccountColor, setSelectedAccountColor]  = useState('')
-    const [isMerchant, updateIsMerchant]                   = useState(false)
 
-    
+    const [formData, updateFormData] = useState(initialFormData);   // User form data state
+    const [error, setError] = useState('');                         // Error Message state
+    const [successMessage, setSuccessMessage] = useState('');       // Success Message state
+    const [disableRegisterButton, setDisableRegisterButton] = useState(false);  // Disable button state
+    const [selectedAccountColor, setSelectedAccountColor] = useState('');       // Highlight user type
+    const [isMerchant, updateIsMerchant] = useState(false);                     // Merchant check state
+
+    const [passwordvalue, setpasswordValue] = useState(''); // For Password
+    const [confirmPasswordvalue, setConfirmPasswordValue] = useState(''); // For Password
+    const [emailOtp, setEmailOTP] = useState(0);  // Email OTP state
+    const [verfiedMail, setVerifiedMail] = useState(false);  // Email verification
+
+    const minLength = 12;  // For Password
+
+    const [emaildata, setEmailData] = useState({
+      email: '',
+      status: 'initial',
+    });  // Email verification state
 
 
+    // Method for email Verification
+    const handleEmailVerificationSubmit = (event) => {
+      event.preventDefault();
+
+      setEmailData((current) => ({ ...current, status: 'loading' }));
+      try {
+
+          axiosInstance.get(`api/v1/send/user/email/?email=${emaildata.email}`).then((res)=> {
+              if(res.status === 200 && res.data.success === true) {
+                  setEmailData({ status: 'sent' });
+                  setEmailOTP(res.data.otp)
+                  setVerifiedMail(true);
+              }
+          })
+      } catch (error) {
+          setEmailData((current) => ({ ...current, status: 'failure' }));
+      }
+    };
+
+
+    // Method to capture input form data of user
     const handleChange = (e) => {
-		updateFormData({
-			...formData,
-			// Trimming any whitespace
-			[e.target.name]: e.target.value.trim(),
-		});
-	};
+      updateFormData({
+        ...formData,
+        [e.target.name]: e.target.value.trim(),
+      });
+    };
 
     const filteredFormData = Object.fromEntries(
-        Object.entries(formData).filter(([key]) => key !== 'password' && key !== 'confirm_password')
-      );
+      Object.entries(formData).filter(([key]) => key !== 'password' && key !== 'confirm_password')
+    );
 
+    
+    // Send data to API on form submit
     const handleSubmit = async (e) => {
-		e.preventDefault();
-        let validationError = [];
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
-		// console.log(formData);
-
-        if (!formData.email) {
-            validationError.push("Please fill your Email Address");
-        }
-        else if (!formData.last_name) {
-            validationError.push("Please fill your Last Name");
-        }
-        else if (!formData.first_name) {
-            validationError.push("Please fill your First Name");
-        }
-        else if (!formData.contact_number) {
-            validationError.push("Please fill the contact number");
-        }
-        else if (formData.contact_number.length < 10) {
-            validationError.push("Mobile number must contain 10 digits");   
-        }
-        else if (!formData.password) {
-            validationError.push("Please fillup the password");
-        }
-        else if (formData.password.length < 10) {
-            validationError.push("Password must contain at least 10 characters");
-
-        } else if (!selectedAccountColor) {
-          validationError.push("Please select User account type");
-        }
-        // else if (!passwordRegex.test(formData.password)) {
-        //     validationError.push("Password must contain at least 10 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.");
-        // }
-        else if (!formData.confirm_password) {
-            validationError.push("Please fillup the confirm password");
-        }
-        else if (formData.password !== formData.confirm_password) {
-            validationError.push("Password did not match please correct the password");
-        }
-
-        if (validationError.length > 0) {
-            setError(validationError.join(''));
-            return;
-        } else{
-            setError(''); 
-        }
-
-        setDisableRegisterButton(true)
+      e.preventDefault();
+  
+      if (!verfiedMail) {
+          setError("Please verify your email address");
+      } else if (parseInt(formData.otp) != emailOtp) {
+          setError('Incorrect OTP Entered')
+      } else if (!formData.last_name) {
+          setError("Please fill your Last Name");
+      }else if (!formData.first_name) {
+          setError("Please fill your First Name");
+      } else if (!formData.contact_number) {
+          setError("Please fill the contact number");
+      } else if (formData.contact_number.length < 10) {
+          setError("Mobile number must be 10 digits");
+      } else if (!formData.password) {
+          setError("Please fillup the password");
+      } else if (formData.password.length < 10) {
+          setError("Password must contain at least 10 characters");
+      } else if (!selectedAccountColor) {
+          setError("Please select User account type");
+      } else if (!formData.confirm_password) {
+          setError("Please fillup the confirm password");
+      } else if (formData.password !== formData.confirm_password) {
+          setError("Password did not match please correct the password");
+      } else {
+        setError('')
+        setDisableRegisterButton(true);
 
         setTimeout(() => {
-          setDisableRegisterButton(false)
+          setDisableRegisterButton(false);
         }, 4000);
 
-      await axiosInstance.post(`api/v1/user/register/`, {
+        // Submit the Signup form through API
+          await axiosInstance.post(`api/v1/crypto/user/register/`, {
             firstname: formData.first_name,
             lastname: formData.last_name,
             phoneno: formData.contact_number,
@@ -107,223 +130,360 @@ function Register() {
             password: formData.password,
             password1: formData.confirm_password,
             is_merchent: isMerchant
-        })
-        .then((res) => {
-            // console.log(res.data)
-            if(res.status == 201) {
-                const response_msg = res.data.msg;
-                const match        = response_msg.match(/\d+$/);
 
-                if (response_msg) {
-                  const user_ID            = parseInt(match[0])
-                  filteredFormData.user_id = user_ID;
-                  // console.log("User:", user_ID);
-                } else {
-                  console.log("No number found at the end of the string.");
-                }
+          })
+          .then((res) => {
+            console.log(res)
 
-                setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please fill the KYC details`)
-                const queryString = new URLSearchParams(filteredFormData).toString();
+            if(res.status === 201) {
+              const response_msg = res.data.msg;
+              const match = response_msg.match(/\d+$/);
+      
+              if (response_msg) {
+                const user_ID = parseInt(match[0]);
+                filteredFormData.user_id = user_ID;
+              } else {
+                console.log("No number found at the end of the string.");
+              }
 
-                setTimeout(() => {
-                    navigate(`/kyc?${queryString}`);
-                }, 3000);
-                
+              setError('');
+              setSuccessMessage(`Dear ${formData.first_name} ${formData.last_name} you have been Registered Successfully Please verify your email Address by clicking on the link sent to the given email Address`);
+      
+              setTimeout(() => {
+                  setSuccessMessage('')
+                  window.location.href = `/signin/`
+              }, 3000);
             }
-        })
-        .catch((error) => {
-          console.log(error)
+          })
+          .catch((error) => {
+            console.log(error)
+
             if (error.response.status === 400) {
-                setError(error.response.data.msg)
+              setError(error.response.data.msg)
+
+            } else if (error.response.data.msg === 'Password is not same Please try again') {
+              setError('Password did not match please try again')
+              
+            } else {
+              setError('')
             }
-            else if (error.response.data.msg == 'Password is not same Please try again') {
-                setError('Password did not match please try again')
-            }
-            else {
-                setError('')
-            }
-        });
-
-        // fetch("http://127.0.0.1:8000/api/v1/user/register/", {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         firstname: formData.first_name,
-        //         lastname: formData.last_name,
-        //         phoneno: formData.contact_number,
-        //         email: formData.email,
-        //         password: formData.password,
-        //         password1: formData.password1
-        //     }),
-        // })
-        // .then(response => {
-        //     if (!response.ok) {
-        //         console.log(response)
-        //         throw new Error('Network response was not ok');
-        //     }
-            
-        //     return response.json();
-        // })
-        // .then(data => {
-        //     console.log('Success:', data);
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        // })
-	};
+        })
+      }};
 
 
-  const handelSelectedAccountClick = (event, account) => {
-    setSelectedAccountColor(account)
-
-    if (account === 'merchant') {
-      updateIsMerchant(true)
-
-    } else {
-      updateIsMerchant(false)
-    }
-
-    // console.log(event.target.value)
-  }
+       // Remove error message after some time
+       useEffect(() => {
+        if (error) {
+          setTimeout(() => {
+                  setError('');
+          }, 3000);
+        }
+      }, [error])
 
 
+      // Method to check which account type user selected
+      const handleSelectedAccountClick = (event, account) => {
+        setSelectedAccountColor(account);
+    
+        if (account === 'merchant') {
+          updateIsMerchant(true);
+        } else {
+          updateIsMerchant(false);
+        }
+      };
+
+      
 
     return(
-        <>
+      <Container component="main" maxWidth="xl">
+            <Grid container spacing={4}>
+                <Grid item xs={12} md={6} className="left-pane">
+                    <CardMedia
+                        component="img"
+                        image="https://python-uat.oyefin.com/media/signup/authImg.png"
+                        alt="Logo"
+                        className="logo"
+                        sx={{display:{xs:'none', sm:'flex'}}}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Box>
+                        <CardContent>
+                            <Box display="flex" flexDirection="column" alignItems="left" marginBottom={2}>
+                                <Typography component="h1" variant="h5">
+                                    <b>Sign Up to your Account</b>
+                                </Typography>
+                                <p>Welcome! Please enter your details</p>
+                            </Box>
 
-    <div className="min-h-screen flex bg-blue-300">
-        {/* First flex container with a blue color palette */}
-        <div className="flex-[50%] bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center justify-center">
-        <img src="https://script.viserlab.com/paymenthub/assets/images/frontend/login_register/641872cda99f91679323853.png" alt="Logo" className="h-80 w-80 drop-shadow-2xl " />
-        
-        </div>
-  
-        {/* Second flex container with a green color palette */}
-        <div className="flex-[80%] bg-white-200 flex items-center justify-center  bg-white  ">
-          <div className="max-w-md w-full space-y-8">
-          <div className="col-span-1 shadow-2xl p-4 rounded-md">
-            <div className='col-span-1  rounded-full'>
-              <center>
-            <p className='text-7xl'><RiUser3Line/>  </p>
-            <h2 className="text-2xl font-semibold mb-4 "> Sign Up</h2>
-              </center>
-            </div>
-          
-          <form className="space-y-4 ">
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                            <form onSubmit={handleSubmit}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="first_name"
+                                            placeholder="First Name"
+                                            name="first_name"
+                                            onChange={handleChange}
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                            startDecorator={
+                                                <InputAdornment position="start">
+                                                    <AccountCircleIcon color='primary' />
+                                                </InputAdornment>
+                                            }
+                                        />
+                                    </Grid>
 
-            <div>
-              <label className="block text-gray-600 font-medium ">First Name</label>
-              <input
-                type="text"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="First Name"
-                name='first_name'
-                onChange={handleChange} 
-              />
-            </div>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="last_name"
+                                            placeholder="Last Name"
+                                            name="last_name"
+                                            autoComplete="lname"
+                                            onChange={handleChange}
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '8px', 
+                                            }}
+                                            startDecorator={
+                                                <InputAdornment position="start">
+                                                    <AccountCircleIcon color='primary' />
+                                                </InputAdornment>
+                                            }
+                                        />
+                                    </Grid>
 
-            <div>
-              <label className="block text-gray-600 font-medium">Last Name</label>
-              <input
-                type="text"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Last Name"
-                name='last_name'
-                onChange={handleChange}
-              />
-            </div>
+                                    <Grid item xs={12}>
+                                        
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={7}>
+                                                <JoyFormControl>
+                                                    <JoyFormLabel
+                                                    sx={(theme) => ({
+                                                        '--FormLabel-color': theme.vars.palette.primary.plainColor,
+                                                    })}
+                                                    >
+                                                    Verify email
+                                                    </JoyFormLabel>
 
-            <div>
-              <label className="block text-gray-600 font-medium">Email</label>
-              <input
-                type="email"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Email"
-                name='email'
-                onChange={handleChange}
-              />
-            </div>
+                                                    <JoyInput
+                                                        sx={{ '--Input-decoratorChildHeight': '45px', backgroundColor: '#f5f7fb', borderRadius: '10px'}}
+                                                        placeholder="abc@mail.com"
+                                                        type="email"
+                                                        name="email"
+                                                        required
+                                                        value={emaildata.email}
+                                                        onChange={(event) => {setEmailData({ email: event.target.value, status: 'initial' }); handleChange(event); }}
+                                                        error={emaildata.status === 'failure'}
+                                                        endDecorator={
+                                                            <JoyButton
+                                                                variant="solid"
+                                                                color="primary"
+                                                                loading={emaildata.status === 'loading'}
+                                                                type="submit"
+                                                                sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                                                                onClick={handleEmailVerificationSubmit}
+                                                                >
+                                                                Verify Email
+                                                            </JoyButton>
+                                                        }
+                                                    />
+                                                    {emaildata.status === 'failure' && (
+                                                    <JoyFormHelperText
+                                                        sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
+                                                    >
+                                                        Oops! something went wrong, please try again later.
+                                                    </JoyFormHelperText>
+                                                    )}
 
-            <div>
-              <label className="block text-gray-600 font-medium">Phone No</label>
-              <input
-                type="text"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Phone No"
-                name='contact_number'
-                onChange={handleChange}
-              />
-            </div>
+                                                    {emaildata.status === 'sent' && (
+                                                    <JoyFormHelperText
+                                                        sx={(theme) => ({ color: theme.vars.palette.primary[400] })}
+                                                    >
+                                                        Mail Sent
+                                                    </JoyFormHelperText>
+                                                    )}
+                                                </JoyFormControl>
 
-            <div>
-              <label className="block text-gray-600 font-medium">Password</label>
-              <input
-                type="password"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="********"
-                name='password'
-                onChange={handleChange}
-              />
-            </div>
+                                            </Grid>
 
-            <div>
-              <label className="block text-gray-600 font-medium">Confirm Password</label>
-              <input
-                type="password"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="********"
-                name='confirm_password'
-                onChange={handleChange}
-              />
-            </div>
-            
-            
-            <div className="w-full bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}} >
-                <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'user' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'user')}}>
-                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="https://python-uat.oyefin.com/media/signup/user.png" alt="User image" style={{marginTop: "20px"}}  />
-                    <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white peer-checked:text-white">User</h5>
-                </div>
-            </div>
+                                            <Grid item xs={12} sm={5} sx={{mt: {xs:1, sm:3.5}}}>
+                                                <JoyInput
+                                                    variant="outlined"
+                                                    type='number'
+                                                    required
+                                                    fullWidth
+                                                    id="otp"
+                                                    placeholder="OTP"
+                                                    name="otp"
+                                                    autoComplete="otp"
+                                                    onChange={handleChange}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
 
-            <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow" style={{borderRadius: '20px'}}>
-                <div className="flex flex-col items-center pb-10" style={{backgroundColor: selectedAccountColor === 'merchant' ? '#008CCC' : '', cursor: 'pointer', borderRadius: '20px'}} onClick={(event)=> {handelSelectedAccountClick(event, 'merchant')}}>
-                    <img className="w-24 h-24 mb-1 rounded-full shadow-lg" src="https://python-uat.oyefin.com/media/signup/merchant.png" alt="Bonnie image" style={{marginTop: '20px'}}/>
-                    <h5 className="mb-0 text-md font-medium text-gray-900 dark:text-white">Merchant</h5>
-                </div>
-            </div>
+                                    <Grid item xs={12}>
+                                        <JoyInput
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="contact_number"
+                                            placeholder="Phone Number"
+                                            name="contact_number"
+                                            onChange={handleChange}
+                                        />
+                                    </Grid>
 
-          </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              onClick={handleSubmit}
-              disabled={diableRegisterButton}
-            >
-              Sign Up
-            </button>
+                                    <Grid item xs={12} sm={6}>
+                                        
+                                        <JoyStack spacing={0.5} sx={{ '--hue': Math.min(passwordvalue.length * 10, 120) }}>
+                                        <JoyInput
+                                            type="password"
+                                            variant="outlined"
+                                            name="password"
+                                            id="password"
+                                            size='lg'
+                                            fullWidth
+                                            required
+                                            placeholder="Password"
+                                            startDecorator={<JoyKey />}
+                                            onChange={(event) => {setpasswordValue(event.target.value); handleChange(event)}}
+                                        />
+                                        <LinearProgress
+                                            determinate
+                                            size="sm"
+                                            value={Math.min((passwordvalue.length * 100) / minLength, 100)}
+                                            sx={{ bgcolor: 'background.level3', color: 'hsl(var(--hue) 80% 40%)' }}
+                                        />
+                                        <JoyTypography
+                                            level="body-xs"
+                                            sx={{ alignSelf: 'flex-end', color: 'hsl(var(--hue) 80% 30%)' }}
+                                        >
+                                            {passwordvalue.length < 3 && 'Very weak'}
+                                            {passwordvalue.length >= 3 && passwordvalue.length < 6 && 'Weak'}
+                                            {passwordvalue.length >= 6 && passwordvalue.length < 10 && 'Strong'}
+                                            {passwordvalue.length >= 10 && 'Very strong'}
+                                        </JoyTypography>
+                                        </JoyStack>
+                                    </Grid>
 
-            {error &&  <p className="text-danger">{error}</p>}
-            {successMessage && <p className="text-success">{successMessage}</p>}
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyStack spacing={0.5} sx={{ '--hue': Math.min(confirmPasswordvalue.length * 10, 120) }}>
+                                            <JoyInput
+                                                type="password"
+                                                variant="outlined"
+                                                name="confirm_password"
+                                                id="confirm_password"
+                                                size='lg'
+                                                fullWidth
+                                                required
+                                                placeholder="Confirm Password"
+                                                startDecorator={<JoyKey />}
+                                                onChange={(event) => {setConfirmPasswordValue(event.target.value); handleChange(event)}}
+                                            />
+                                            <LinearProgress
+                                                determinate
+                                                size="sm"
+                                                value={Math.min((confirmPasswordvalue.length * 100) / minLength, 100)}
+                                                sx={{ bgcolor: 'background.level3', color: 'hsl(var(--hue) 80% 40%)' }}
+                                            />
+                                            <JoyTypography
+                                                level="body-xs"
+                                                sx={{ alignSelf: 'flex-end', color: 'hsl(var(--hue) 80% 30%)' }}
+                                            >
+                                                {confirmPasswordvalue.length < 3 && 'Very weak'}
+                                                {confirmPasswordvalue.length >= 3 && confirmPasswordvalue.length < 6 && 'Weak'}
+                                                {confirmPasswordvalue.length >= 6 && confirmPasswordvalue.length < 10 && 'Strong'}
+                                                {confirmPasswordvalue.length >= 10 && 'Very strong'}
+                                            </JoyTypography>
+                                        </JoyStack>
+                                    </Grid>
 
-          </form>
+                                    <Grid item xs={12} sm={6}>
+                                        <Box
+                                            display="flex"
+                                            flexDirection="column"
+                                            alignItems="center"
+                                            style={{ backgroundColor: selectedAccountColor === 'user' ? '#008CCC' : '', cursor: 'pointer' }}
+                                            onClick={(event) => { handleSelectedAccountClick(event, 'user'); }}
+                                        >
+                                            <Avatar src="https://python-uat.oyefin.com/media/signup/user.png" />
+                                            <Typography variant="body2">User</Typography>
+                                        </Box>
+                                    </Grid>
 
-          <div className='cols col-span-1 flex justify-between items-center'>
+                                    <Grid item xs={12} sm={6}>
+                                        <Box
+                                            display="flex"
+                                            flexDirection="column"
+                                            alignItems="center"
+                                            style={{ backgroundColor: selectedAccountColor === 'merchant' ? '#008CCC' : '', cursor: 'pointer' }}
+                                            onClick={(event) => {handleSelectedAccountClick(event, 'merchant'); }}
+                                        >
+                                            <Avatar src="https://python-uat.oyefin.com/media/signup/merchant.png" />
+                                            <Typography variant="body2">Merchant</Typography>
+                                        </Box>
+                                    </Grid>
 
-          <p className='font-extralight'>If you already have any account <Link to={'/signin/'}>  LOGIN</Link></p>
-          <p className='font-extralight'> <Link to={'/forgot-password/'}> Forget password</Link></p>
-          </div>
-        </div>
+                                    <Grid item xs={12}>
+                                        <JoyFormControl size="sm" sx={{ width: 400 }}>
+                                            <JoyCheckbox
+                                                label={
+                                                <React.Fragment>
+                                                    <small>By creating an account means you agree to the Terms & Conditions and our Privacy Policy</small>
+                                                </React.Fragment>
+                                                }
+                                            />
+                                            <JoyFormHelperText>
+                                                <JoyTypography level="body-sm">
+                                                    Read our <Link href="#link">terms and conditions</Link>.
+                                                </JoyTypography>
+                                            </JoyFormHelperText>
+                                        </JoyFormControl>
+                                    </Grid>
 
-          </div>        
-        </div>
-      </div>
+                                </Grid>
 
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={disableRegisterButton}
+                                    style={{ marginTop: '20px' }}
+                                >
+                                    Sign Up
+                                </Button>
 
-          
-        </>
+                                {error && <Typography color="error">{error}</Typography>}
+                                {successMessage && <Typography color="teal">{successMessage}</Typography>}
+                            </form>
+
+                            <Box mt={2} display="flex" justifyContent="space-between">
+                                <Typography variant="body2">
+                                    If you already have an account <Link to="/signin" style={{color:'#2c73d2'}}>LOGIN</Link>
+                                </Typography>
+
+                                <Typography variant="body2">
+                                    <Link to="/forgot-password" style={{color:'#2c73d2'}}>Forget password</Link>
+                                </Typography>
+
+                            </Box>
+
+                        </CardContent>
+                    </Box>
+                </Grid>
+            </Grid>
+          </Container>
     );
 };
 

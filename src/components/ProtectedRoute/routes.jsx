@@ -1,6 +1,8 @@
+import React, { Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "./authProvider";
 import { ProtectedRoute } from "./protectedroutes";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from "../Authentication/Login";
 import Register from "../Authentication/Register";
 import UserLogout from "../Authentication/Logout";
@@ -11,10 +13,7 @@ import ForgotPassword from "../Authentication/ForgotPassword";
 import Box from '@mui/material/Box';
 import UpperNavbar from "../UpNavbar";
 import LeftNavbar from "../LeftNavbar";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import AllTransactions from "../Transactions/Transaction";
-import React from "react";
-import CryptoFiat from "../CryptoFiat/CryptoFiat";
 import DepositForm from "../Transactions/Deposit";
 import CryptoBuy from "../CryptoTransactions/CryptoBuy";
 import CryptoSell from "../CryptoTransactions/CryptoSell";
@@ -53,7 +52,11 @@ import MerchantBankAccounts from "../Merchant/Bank/BankAccounts";
 import UpdateMerchantBankAccount from "../Merchant/Bank/updateBank";
 import DeveloperDocs from "../Developer/devdocs";
 import DevIntroDoc from "../Developer/intro";
+import CircularProgress from '@mui/joy/CircularProgress';
+import CssBaseline from "@mui/material/CssBaseline";
 
+
+const CryptoFiatTabs = React.lazy(()=> import('../CryptoFiatTabs/Tabs'));
 
 
 
@@ -91,7 +94,7 @@ const AuthRoutes = () => {
           {
             path: "*",
             element: (
-              
+              <Suspense fallback={<CircularProgress />}>
                 <Routes>
                     <Route exact path='/signup/' element={<Register />}></Route>
                     <Route exact path='/signin/' element={<Login />}></Route>
@@ -106,18 +109,18 @@ const AuthRoutes = () => {
                     <Route exact path='/other/checkout/form/' element={<OtherPaymentCheckoutForm />}></Route>
                     <Route exact path='/payment/form/success/' element={<PaymentSuccess />}></Route>
                     <Route exact path='/payment/form/fail/' element={<PaymentFailure />}></Route>
-                    {/* <Route exact path='/dev/docs/' element={<DeveloperDocs />}></Route> */}
                     <Route exact path='/dev/docs/intro/' element={<DevIntroDoc />}></Route>
 
 
                   <Route exact path='*' element={
-                    <Box sx={{ display: 'flex' }}>
-                    <UpperNavbar handleDrawerOpen={handleDrawerOpen} open={open} />
-                    <LeftNavbar handleDrawerClose={handleDrawerClose} open={open} />
+                    <Box sx={{display: 'flex'}}>
+                      <CssBaseline />
+                      <UpperNavbar handleDrawerOpen={handleDrawerOpen} open={open} />
+                      <LeftNavbar handleDrawerClose={handleDrawerClose} open={open} />
 
                       <Routes>
+                          <Route exact path='/' element={<CryptoFiatTabs open={open} />}></Route>
                           <Route exact path='/test/transaction/table/' element={<TransactionTable open={open} />}></Route>
-                          <Route exact path='/' element={<CryptoFiat open={open} />}></Route>
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
                           <Route exact path='/moneytransfer/' element={<StepWisePaymentForm open={open} />}></Route>
@@ -145,11 +148,11 @@ const AuthRoutes = () => {
                           <Route exact path='/add/merchant/bank/account/' element={<AddMerchantBankAccount open={open} />}></Route>
                           <Route exact path='/merchant/bank/accounts/' element={<MerchantBankAccounts open={open} />}></Route>
                           <Route exact path='/update/merchant/bank/accounts/' element={<UpdateMerchantBankAccount open={open} />}></Route>
-  
                       </Routes>
                     </Box>
                   }></Route>
                 </Routes>
+              </Suspense>
             ),
           },
         ],
@@ -213,10 +216,6 @@ const AuthRoutes = () => {
       {
         path: "/dev/docs/intro/",
         element: <DevIntroDoc />,
-      },
-      {
-        path: "/dev/docs/",
-        element: <DeveloperDocs />,
       },
       // {
       //   path: "/payment-form/",

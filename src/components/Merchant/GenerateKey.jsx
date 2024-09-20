@@ -30,16 +30,16 @@ export default function GenerateSecretKey({open, setOpen, callApi, businessID, s
 
   const fetchMerchantSecretKey = ()=> {
       if (callApi) {
-        axiosInstance.get(`api/merchant/secret/key/?query=${businessID}`).then((res)=> {
-            // console.log(res)
+        // axiosInstance.get(`api/merchant/secret/key/?query=${businessID}`).then((res)=> {
+        //     // console.log(res)
 
-            if (res.status === 200 && res.data.data) {
-                updateSecretKey(res.data.data)
-            }
-        }).catch((error)=> {
-            console.log(error)
+        //     if (res.status === 200 && res.data.data) {
+        //         updateSecretKey(res.data.data)
+        //     }
+        // }).catch((error)=> {
+        //     console.log(error)
     
-        })
+        // })
       }
   };
 

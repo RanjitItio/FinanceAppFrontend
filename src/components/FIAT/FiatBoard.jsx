@@ -1,8 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import FiatAccount from './Account';
-import FiatTransaction from './Transaction';
+import FiatTransaction from './Trasaction';
 import FiatMyCard from './Mycard';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 
 

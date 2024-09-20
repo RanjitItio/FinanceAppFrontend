@@ -49,15 +49,15 @@ const NavContent = [
     {text: '-Exchange Money', icon: <CurrencyExchangeIcon />, url: '/exchange-currency/'}, 
     {text: '-Withdrawal Money', icon: <PaymentsIcon />, url: '/payout-payment/'}, 
     {text: '-Withdrawal List', icon: <FormatListBulletedIcon />, url: '/withdrawal-history/'}, 
-    {text: '-Withdrawal Settings', icon: <SettingsIcon />, url: '/withdrawal-settings/'}, 
+    // {text: '-Withdrawal Settings', icon: <SettingsIcon />, url: '/withdrawal-settings/'}, 
     
-    ...(is_merchant ? [
-      {text: 'Business', icon: <SettingsIcon />, url: '/merchants/'},
-      {text: '-Business Payments', icon: <SettingsIcon />, url: '/merchant/payments/'},
-      {text: 'Bank Accounts', icon: <SettingsIcon />, url: '/merchant/bank/accounts/'},
-      {text: 'Developer', icon: <SettingsIcon />, url: '/dev/docs/intro/'},
+    // ...(is_merchant ? [
+    //   {text: 'Business', icon: <SettingsIcon />, url: '/merchants/'},
+    //   {text: '-Business Payments', icon: <SettingsIcon />, url: '/merchant/payments/'},
+    //   {text: 'Bank Accounts', icon: <SettingsIcon />, url: '/merchant/bank/accounts/'},
+    //   {text: 'Developer', icon: <SettingsIcon />, url: '/dev/docs/intro/'},
 
-    ] : [])
+    // ] : [])
 
   ],
   icon:''},
