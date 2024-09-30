@@ -34,31 +34,34 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 
 
-
+// All Transaction of the user
 export default function AllTransactions({open}) {
-    const [boxOpen, setBoxOpen] = useState(false);
-    const [isfilterItem, setFilterItem] = useState(false);
-    const [dateRange, setDateRange] = useState('');
+    const [boxOpen, setBoxOpen] = useState(false);  // Open transaction pop up
+    const [isfilterItem, setFilterItem] = useState(false);  // 
+    const [dateRange, setDateRange] = useState('');   
     const [transactionType, setTransactionType] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
     const [currency, setCurrency] = useState('');
     const [transactionData, setTransactionData] = useState([]);
     const [error, setError] = useState('');
     // const [specificTransaction, updateSpecificTransaction] = useState([]);
-    const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);
-    const [loader, setLoader] = useState(true);
+    const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
+    const [loader, setLoader] = useState(true);  // Loader
 
 
 
     const handleDateChange = (event) => {
         setDateRange(event.target.value);
     };  
+
     const handleTransactionChange = (event) => {
         setTransactionType(event.target.value);
-    };  
+    };
+
     const handleTransactionStatusChange = (event) => {
         setTransactionStatus(event.target.value);
     };  
+
     const handleCurrencyChange = (event) => {
         setCurrency(event.target.value);
     };   
@@ -71,26 +74,34 @@ export default function AllTransactions({open}) {
         setBoxOpen(false);
       };
 
+
     const toggleFilterItemVisibility = () => {
         setFilterItem(!isfilterItem);
       };
 
+
+    // Fetch all transaction data
     useEffect(() => {
         try{
-            axiosInstance.get(`api/v4/users/transactions/`).then((res)=> {
-                if(res.data && res.data.all_transactions) {
-                    // const SortedTransactions = res.data.all_transactions.reverse()
-                    setTransactionData(res.data.all_transactions)
+            axiosInstance.get(`/api/v4/users/fiat/transactions/`).then((res)=> {
+
+                if(res.data && res.data.all_fiat_transactions) {
+                    setTransactionData(res.data.all_fiat_transactions)
                     setLoader(false)
-                    // console.log(res.data)
+                    console.log(res.data)
                 };
             })
         }catch(error) {
             console.log(error)
         }
        
-    }, [])
-    // console.log(transactionData)
+    }, []);
+
+    // Clicked on a specific transaction method
+    const handleTransactionClick = (transaction)=> {
+        handleClickOpen();
+        updateSpecificTransactionDetails(transaction)
+    };
 
 
     if (loader) {
@@ -269,17 +280,12 @@ export default function AllTransactions({open}) {
            
             {transactionData.map((transaction, index) => {
         
-                const transactionDate = new Date(transaction.transaction.txddate);
+                // const transactionDate = new Date(transaction.data.created_At.split('T')[0] || '');
                 
-                const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
+                // const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
 
-                const transactionTime = new Date(transaction.transaction.txdtime);
-                const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
-
-                const handleTransactionClick = ()=> {
-                    handleClickOpen();
-                    updateSpecificTransactionDetails(transaction)
-                };
+                // const transactionTime = new Date(transaction.data.created_At.split('T')[1] || '');
+                // const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
 
                 return(
        
@@ -291,63 +297,63 @@ export default function AllTransactions({open}) {
                         <ArrowRightIcon />
                     </IconButton>
                 }
-                onClick={handleTransactionClick}
+                onClick={()=> {handleTransactionClick(transaction);}}
                 className='mb-2 shadow border border-secondary'
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency.symbol}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency.name}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
-                    primary={transaction.transaction.txdtype}
-                    secondary={`Cash ${transaction.transaction.txddate} ${transaction.transaction.txdtime}`}
+                    primary={transaction.type}
+                    secondary={`Cash ${transaction.data.created_At?.split('T')[0] || ''} ${transaction.data.created_At?.split('T')[1] || ''}`}
                     />
                     <ListItemText
                     primary={
                         
-                        transaction.transaction.txdstatus == 'Pending' ? (
+                        transaction.data.status == 'Pending' ? (
                             <>
                             
                                 <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
                                 <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.transaction.amount}</span>
+                                <span>{transaction.data.amount}</span>
                             
                             </>
 
-                        ) : transaction.txdstatus == 'Success' ? (
+                        ) : transaction.data.status == 'Approved' ? (
                             <>
                                 <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
                                 <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.transaction.amount}</span>
+                                <span>{transaction.data.amount}</span>
                             </>
                             
-                        ) : transaction.txdstatus == 'Cancelled' ? (
+                        ) : transaction.data.status == 'Cancelled' ? (
                             <>
                                 <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
                                 <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.transaction.amount}</span>
+                                <span>{transaction.data.amount}</span>
                             </>
                         ) : (
                             <>
                                 <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
                                 <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.transaction.amount}</span>
+                                <span>{transaction.data.amount}</span>
                             </>
                         )
                              
                     }
                     secondary={
-                        transaction.transaction.txdstatus == 'Pending' ? (
-                            <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
+                        transaction.data.status == 'Pending' ? (
+                            <span style={{ color: 'orange' }}>{transaction.data?.status || ''}</span>
 
-                        ) : transaction.transaction.txdstatus == 'Success' ? (
-                            <span style={{ color: 'green' }}>{transaction.transaction.txdstatus}</span>
+                        ) : transaction.data.status == 'Approved' ? (
+                            <span style={{ color: 'green' }}>{transaction.data?.status || ''}</span>
 
-                        ) : transaction.transaction.txdstatus === 'Cancelled' ? (
-                            <span style={{ color: 'red' }}>{transaction.transaction.txdstatus}</span>
+                        ) : transaction.data.status === 'Cancelled' ? (
+                            <span style={{ color: 'red' }}>{transaction.data?.status || ''}</span>
 
                         ) : (
-                            <span style={{ color: 'orange' }}>{transaction.transaction.txdstatus}</span>
+                            <span style={{ color: 'orange' }}>{transaction.data?.status || ''}</span>
                         )
                     }
                     sx={{ flex: 'auto', textAlign: 'right' }}

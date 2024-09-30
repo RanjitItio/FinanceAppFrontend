@@ -1,37 +1,36 @@
 import FiatAccount from './Account';
 import FiatTransaction from './Trasaction';
 import FiatMyCard from './Mycard';
+import { Grid } from '@mui/material';
 
 
 
-
+/// FIAT Dashboard Content
 export default function FiatDashboard() {
     return (
         <>
-          <div className="container-fluid">
-            {/* First Row */}
-            <div className="row">
-                {/* First row first column */}
-                <div className="col-md-8 col-lg-8 col-xl-8 col-sm-12 col-xs-12 mb-2 my-3">
-                    <div className="row">
-                        <div className="col mb-3">
+        <Grid container spacing={3}>
+            <Grid container item spacing={3}>
+                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
                             <FiatAccount />
-                        </div>
-                    </div>
+                        </Grid>
+                    </Grid>
 
-                    <div className="row">
-                        <div className="col">
+                    <Grid container spacing={3} sx={{mt:1}}>
+                        <Grid item xs={12}>
                             <FiatTransaction />
-                        </div>
-                    </div>
-                </div>
+                        </Grid>
+                    </Grid>
+                </Grid>
 
-                {/* First Row Second Column */}
-                <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12 my-3">
+                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                     <FiatMyCard />
-                </div>
-            </div>
-          </div>
+                </Grid>
+            </Grid>
+        </Grid>
+
         </>
     )
 }

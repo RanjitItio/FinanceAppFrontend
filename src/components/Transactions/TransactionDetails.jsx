@@ -15,20 +15,13 @@ import Avatar from '@mui/material/Avatar';
 
 
 
-export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen, specificTransactionDetails}) {
+export default function ResponsiveDialog({handleClose, boxOpen, specificTransactionDetails}) {
   
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const iconSize = isSmallScreen ? 32 : 40;
   const avatarSize = isSmallScreen ? 48 : 70;
-
-  // const transactionDate = new Date(specificTransactionDetails.transaction.txddate);
-  // const formatedDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
-
-  // const transactionTime = new Date(specificTransactionDetails.transaction.txdtime);
-  // const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
-  
 
   return (
     <React.Fragment>
@@ -60,25 +53,24 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
 
                                 
                                     <React.Fragment >
-                                    {specificTransactionDetails.transaction ? 
-                                    (<p className='d-flex justify-content-center'>{specificTransactionDetails.transaction.txdtype} amount</p>) : (
+                                    {specificTransactionDetails ? 
+                                    (<p className='d-flex justify-content-center'>{specificTransactionDetails?.type || ''} amount</p>) : (
                                       <p className='d-flex justify-content-center'>amount</p>
                                     )
                                   }
                                     
-                                    {specificTransactionDetails.transaction ? (
-                                        <p className='d-flex justify-content-center mb-3 fs-5'><b>{specificTransactionDetails.currency.name} {specificTransactionDetails.transaction.amount}</b></p>
+                                    {specificTransactionDetails ? (
+                                        <p className='d-flex justify-content-center mb-3 fs-5'><b>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.data?.amount || ''}</b></p>
                                     ) : (
                                         <p className='d-flex justify-content-center mb-3 fs-5'><b></b></p>
                                     )}
                                     
-                                    {specificTransactionDetails.transaction ? (
-                                      <p className='text-muted d-flex justify-content-center mb-5'>{specificTransactionDetails.transaction.txddate} {specificTransactionDetails.transaction.txdtime}</p>
+                                    {specificTransactionDetails ? (
+                                      <p className='text-muted d-flex justify-content-center mb-5'>{specificTransactionDetails?.data?.created_At?.split('T')[0] || ''} {specificTransactionDetails?.data?.created_At?.split('T')[1] || ''}</p>
                                     ) : (
                                       <p>Transaction Date & time</p>
                                     )}
                                     
-
                                     <div className='d-flex justify-content-center'>
                                         <Button variant="outlined" startIcon={<PrintIcon />}>
                                             Print
@@ -98,7 +90,7 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
                                 <div>
                                     <p className='text-muted'>Sender</p>
                                     {specificTransactionDetails.user ? (
-                                      <p>{specificTransactionDetails.user.first_name} {specificTransactionDetails.user.lastname}</p>
+                                      <p>{specificTransactionDetails?.user?.first_name || ''} {specificTransactionDetails?.user?.lastname || ''}</p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}
@@ -107,12 +99,11 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
 
                                 <div>
                                     <p className='text-muted'>Currency</p>
-                                    {specificTransactionDetails.currency ? (
-                                      <p className='d-flex justify-content-end'>{specificTransactionDetails.currency.name}</p>
+                                    {specificTransactionDetails ? (
+                                      <p className='d-flex justify-content-end'>{specificTransactionDetails?.currency?.name || ''}</p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}
-                                    
                                 </div>
                                 
                             </div>
@@ -120,19 +111,18 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
                             <div className="d-flex justify-content-between mb-3">
                                 <div>
                                     <p className='text-muted'>Transaction ID</p>
-                                    {specificTransactionDetails.transaction ? (
-                                      <small>{specificTransactionDetails.transaction.txdid}</small>
-                                    ) : (
-                                      <small>Transaction Id</small>
-                                    )
-                                  }
-                                    
+                                      {specificTransactionDetails ? (
+                                        <small style={{color:'gray'}}>{specificTransactionDetails?.data?.transaction_id || ''}</small>
+                                      ) : (
+                                        <small>Transaction Id</small>
+                                      )
+                                    }
                                 </div>
 
                                 <div>
                                     <p className='text-muted'>Transaction Fee</p>
-                                    {specificTransactionDetails.transaction ? (
-                                        <p className='d-flex justify-content-end'>{specificTransactionDetails.currency.name} {specificTransactionDetails.transaction.txdfee}</p>
+                                    {specificTransactionDetails ? (
+                                        <p className='d-flex justify-content-end'>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.data?.transaction_fee || ''}</p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}
@@ -142,8 +132,8 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
                             <div className="d-flex justify-content-between mb-3">
                                 <div>
                                     <p className='text-muted'>Payment Method</p>
-                                    {specificTransactionDetails.transaction ? (
-                                      <p>{specificTransactionDetails.transaction.payment_mode}</p>
+                                    {specificTransactionDetails ? (
+                                      <p>{specificTransactionDetails?.data?.payment_mode || ''}</p>
                                     ) : (
                                       <p>Payment Mode</p>
                                     )}
@@ -152,18 +142,18 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
 
                                 <div>
                                     <p className='text-muted mx-2'>Status</p>
-                                    {specificTransactionDetails.transaction ? (
-                                        specificTransactionDetails.transaction.txdstatus == 'Pending' ? (
-                                          <p className='text-warning'>{specificTransactionDetails.transaction.txdstatus}</p>
+                                    {specificTransactionDetails.data ? (
+                                        specificTransactionDetails?.data.status == 'Pending' ? (
+                                          <p className='text-warning'>{specificTransactionDetails.data.status}</p>
 
-                                        ) : specificTransactionDetails.txdstatus == 'Success' ? (
-                                        <p className='text-success'>{specificTransactionDetails.transaction.txdstatus}</p>
+                                        ) : specificTransactionDetails.data.status == 'Approved' ? (
+                                        <p className='text-success'>{specificTransactionDetails.data.status}</p>
 
-                                        ) : specificTransactionDetails.txdstatus == 'Cancelled' ? (
-                                        <p className='text-danger'>{specificTransactionDetails.transaction.txdstatus}</p>
+                                        ) : specificTransactionDetails.data.status == 'Cancelled' ? (
+                                        <p className='text-danger'>{specificTransactionDetails.data.status}</p>
 
                                         ) : (
-                                        <p className='text-success'>{specificTransactionDetails.transaction.txdstatus}</p>
+                                        <p className='text-success'>{specificTransactionDetails.data.status}</p>
                                         )
                                     ) : (
                                       <>Transaction Status</>
@@ -177,16 +167,16 @@ export default function ResponsiveDialog({handleClickOpen, handleClose, boxOpen,
                             <div className="d-flex justify-content-between mb-2">
                                 <div>
                                     <p className='text-muted'>Cash amount</p>
-                                    {specificTransactionDetails.transaction ? (
-                                        <p>{specificTransactionDetails.currency.name} {specificTransactionDetails.transaction.amount}</p>
+                                    {specificTransactionDetails ? (
+                                        <p>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.amount || ''}</p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}
                                 </div>
                                 <div>
                                     <p className='text-muted'>Total amount</p>
-                                    {specificTransactionDetails.transaction ? (
-                                        <p>{specificTransactionDetails.currency.name} {specificTransactionDetails.transaction.totalamount}</p>
+                                    {specificTransactionDetails ? (
+                                        <p>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.payout_amount || ''}</p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}

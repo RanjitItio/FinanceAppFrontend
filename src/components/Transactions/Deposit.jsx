@@ -25,88 +25,62 @@ const steps                   = ['Create Deposit', 'Confirm your Deposit'];
 const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
 const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 
-// if (isNaN(user_selected_wallet_id)) {
-//   console.log('NAN')
-// }
-// console.log(typeof(parseInt(user_selected_wallet_id)))
-// console.log(user_selected_wallet_id)
 
 
-
-
+// First Form
 function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
 
   const [currencies, setCurrencies] = React.useState([])
 
+  // Get selected Currency value
   const handleCurrencyChange = (event)=> {
-    setCurrency(event.target.value)
+
     if(!event.target.value) {
       setError('Please fill all the above fields')
     }else {
       setError('')
+      setCurrency(event.target.value);
 
-      localStorage.setItem('DepositCurrency', event.target.value)
-
-      const expirytime = 2 * 60 * 1000
-
-      setTimeout(() => {
-          localStorage.removeItem('DepositCurrency')
-      }, expirytime);
     }
   };
 
-
+  // Capture selected payment method
   const handlePaymentMethodChange = (event)=> {
-    setPaymentMethod(event.target.value)
 
     if(!event.target.value) {
       setError('Please fill all the above fields')
 
     }else {
       setError('')
-
-      localStorage.setItem('userdepositpaymentmethod', event.target.value)
-
-      const despositpaymethodexpirytime = 5 * 60 * 1000
-
-      setTimeout(() => {
-        localStorage.removeItem('userdepositpaymentmethod')
-      }, despositpaymethodexpirytime);
+      setPaymentMethod(event.target.value)
     }
   };
 
-  const handleAmountChange = (event)=> {
-    setAmount(event.target.value)
+    // Selected Amount
+    const handleAmountChange = (event)=> {
 
-    if(!event.target.value) {
-      setError('Please fill all the above fields')
+      if(!event.target.value) {
+        setError('Please fill all the above fields')
 
-    } else {
-      setError('')
+      } else {
+        setError('')
+        setAmount(event.target.value)
+      }
+    };
 
-      localStorage.setItem('UsersDepositAmount', event.target.value)
-
-      const depositexpirytime = 2 * 60 * 1000;
-
-      setTimeout(() => {
-        localStorage.removeItem('UsersDepositAmount')
-        
-      }, depositexpirytime);
-    }
-  };
-
+    // Fetch all the available currency from API
     useEffect(() => {
       axiosInstance.get(`api/v2/currency/`).then((res)=> {
         // console.log(res.data.currencies)
         if (res.data && res.data.currencies){
             setCurrencies(res.data.currencies)
-            // console.log(currencies)
-        };
+        }
+
       }).catch((error)=> {
         console.log(error.response)
       });
 
-    }, [])
+    }, []);
 
 
 
@@ -117,7 +91,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         payment methods. Fill the details correctly & the amount you want to deposit.
       </small>
 
-    <div style={{marginLeft: '5%', marginRight: '5%'}}>
+    <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
 
     <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
         <InputLabel id="currency-label">Currency</InputLabel>
@@ -182,34 +156,8 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
 
 function Form2({...props}) {
-  const [depositCurrency, setDepositCurrency] = React.useState('')
-  const [userDepositAmount, setUserDepositAmount] = React.useState('')
-  const [userDepositPayMethod, setUserDepositPayMethod] = React.useState('')
-  
-
-
-  React.useEffect(() => {
-       const GetCurrency = localStorage.getItem('DepositCurrency')
-       if(GetCurrency){
-          setDepositCurrency(GetCurrency)
-       }
-       
-       const GetAmount = localStorage.getItem('UsersDepositAmount')
-       if(GetAmount){
-          setUserDepositAmount(GetAmount)
-       };
-
-       const Getdepositpaymethod = localStorage.getItem('userdepositpaymentmethod')
-       if (Getdepositpaymethod) {
-          setUserDepositPayMethod(Getdepositpaymethod)
-       };
-
-    }, [])
 
   
-
-    
-    // console.log(props.error)
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-3'>
@@ -219,20 +167,20 @@ function Form2({...props}) {
     <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
       <div className="my-4">
         <div className="d-flex justify-content-between">
-            <p>Deposit Amount {userDepositPayMethod}</p> 
-            <p>{depositCurrency} {userDepositAmount}</p>
+            <p>Deposit Amount</p> 
+            <p>{props.currency} {props.amount}</p>
         </div>
         <hr className='mb-3'/>
       </div>
 
       <div className="d-flex justify-content-between">
-          <p>Fee</p> 
-          <p>{depositCurrency} 0.00</p>
+          <p>Fee(10%)</p> 
+          <p>{props.currency} {props.transactionFee.toFixed(3)}</p>
       </div>
       <hr className='mb-4'/>
 
       <div className="d-flex justify-content-between">
-        <p><b>Total</b></p> <p><b>{depositCurrency} {props.totalAamount}</b></p>
+        <p><b>Total</b></p> <p><b>{props.currency} {props.totalAamount}</b></p>
       </div>
       <hr className='mb-4'/>
     </div>
@@ -245,28 +193,32 @@ function Form2({...props}) {
 
 
 
-
+// Deposit Money
 export default function DepositForm({open}) {
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  const [activeStep, setActiveStep] = React.useState(0);  // Currenct step
+  const [completed, setCompleted]   = React.useState({}); // Completed step
 
-  const [currency, setCurrency] = React.useState('');
-  const [paymentMethod, setPaymentMethod] = React.useState('');
-  const [amount, setAmount] = React.useState('');
-  const [error, setError] = React.useState('');
-  const [totalAamount, setTotalAmount] = React.useState('')
-  const navigate = useNavigate()
+  const [currency, setCurrency]           = React.useState('');     // Selected Currency value
+  const [paymentMethod, setPaymentMethod] = React.useState('');  // Payment Mode
+  const [amount, setAmount]               = React.useState('');    // Amount
+  const [error, setError]                 = React.useState('');      // Error Message
+  const [totalAamount, setTotalAmount]    = React.useState('');  // Total amount
+  const [transactionFee, setTransactionFee] = React.useState(0.00);
+  const navigate = useNavigate()  
 
-
+   
+  // Total Steps
   const totalSteps = () => {
     return steps.length;
   };
 
+   // Success step
   const completedSteps = () => {
     return Object.keys(completed).length;
   };
 
+  
   const isLastStep = () => {
     return activeStep === totalSteps() - 1;
   };
@@ -275,6 +227,7 @@ export default function DepositForm({open}) {
     return completedSteps() === totalSteps();
   };
 
+   // Switch to Next step
   const handleNext = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
@@ -292,14 +245,17 @@ export default function DepositForm({open}) {
     setActiveStep(newActiveStep);
   };
 
+  // Switch to previous step
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+   
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
 
+  // Final Step method
   const handleComplete = () => {
     const newCompleted = completed;
 
@@ -307,19 +263,21 @@ export default function DepositForm({open}) {
       if (!currency || !amount || !paymentMethod) {
         setError('Please fill all the above fields');
         return;
+
       }else {
         setError('')
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
         handleNext();
       };
+
     } else {
       // console.log(totalAamount)
       // console.log(amount)
       axiosInstance.post(`api/v1/user/deposit/`, {
         currency: currency,
         deposit_amount: amount,
-        fee: 0.0,
+        fee: transactionFee,
         total_amount: totalAamount,
         selected_wallet: user_selected_wallet_id,
         payment_mode: paymentMethod,
@@ -391,6 +349,8 @@ export default function DepositForm({open}) {
 
   };
 
+
+  // Swicth between forms
   const renderForms = (step) => {
     switch(step){
       case 0:
@@ -409,15 +369,21 @@ export default function DepositForm({open}) {
         error={error}
         setError={setError}
         totalAamount={totalAamount}
+        amount={amount}
+        currency={currency}
+        transactionFee={transactionFee}
         />;
       default:
         return null;
     }
   };
 
+  // Calculate the transaction Fee and the Total amount
   React.useEffect(() => {
     if(amount) {
-      const TotalAmount = (parseInt(amount) + 0.00)
+      const transactionFee = (parseFloat(amount) / 100) * 10
+      setTransactionFee(transactionFee)
+      const TotalAmount = amount - transactionFee
       setTotalAmount(TotalAmount)
     }
   }, [amount])
@@ -429,12 +395,10 @@ export default function DepositForm({open}) {
     <Main open={open}>
     <DrawerHeader />
 
-    {/* <Paper elevation={24}  sx={{height: '120%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', width: {xs: '100%', sm: '85%'}, marginLeft: {xs: '0%', sm: '7%'}}}> */}
     <Box sx={{ 
               width: {xs: '100%', sm: '50%'},
               marginTop: {xs: '40px', sm: '1rem'},
               marginLeft: {xs: '0%', sm: '20%'},
-              // backgroundColor: '#E5E4E2',
               background: '#F0F8FF',
               backdropFilter: 'blur( 20px )',
               boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
@@ -512,7 +476,6 @@ export default function DepositForm({open}) {
         )}
       </div>
     </Box>
-    {/* </Paper> */}
 
     </Main>
 

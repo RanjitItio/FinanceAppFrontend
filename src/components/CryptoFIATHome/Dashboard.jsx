@@ -1,4 +1,4 @@
-import {Main, DrawerHeader} from '../Content';
+import { Main, DrawerHeader } from '../Content';
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
@@ -10,8 +10,9 @@ import CryptoContent from '../Crypto/CryptoDashboard';
 import FiatDashboard from '../FIAT/FiatBoard';
 
 
-// Crypto Fiat Tabs
-export default function CryptoFiatTabs({open}) {
+
+// Crypto Fiat Home Page 
+export default function CryptoFiatHomePage({open}) {
     return (
         <Main open={open}>
         <DrawerHeader />

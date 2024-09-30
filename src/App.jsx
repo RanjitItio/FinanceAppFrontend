@@ -18,20 +18,24 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 const IS_DEVELOPMENT = import.meta.env.VITE_IS_DEVELOPMENT
 
+
 let payment_gateway_url;
 let banking_url;
+
 
 if (IS_DEVELOPMENT === 'True') {
       payment_gateway_url = 'http://localhost:5175/'
 } else {
       payment_gateway_url = 'https://react-uat.oyefin.com/'
-}
+};
+
 
 if (IS_DEVELOPMENT === 'True') {
       banking_url = 'http://localhost:5173/'
 } else {
       banking_url = 'https://react-uat.oyefin.com/'
-}
+};
+
 
 
 const actions = [
@@ -45,49 +49,49 @@ const actions = [
 
 function App() {
 
-  // Speed Dial state and Methods
-  const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
-  const handlSpeedDialeOpen = () => setOpenSpeedDial(true);
-  const handleSpeedDialClose = () => setOpenSpeedDial(false);
+    // Speed Dial state and Methods
+    const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
+    const handlSpeedDialeOpen = () => setOpenSpeedDial(true);
+    const handleSpeedDialClose = () => setOpenSpeedDial(false);
 
-  // Method to redirect the user different project
-  const handleActionIconClick = (url) => {
-    window.location.href = url;
-  };
+    // Method to redirect the user different project
+    const handleActionIconClick = (url) => {
+      window.location.href = url;
+    };
 
 
-useEffect(() => {
-  const auth_token = localStorage.getItem('token')
-  
-  if(auth_token) {
-    axiosInstance.get(`api/v3/user/wallet`).then((res)=> {
+    useEffect(() => {
+      const auth_token = localStorage.getItem('token')
+      
+      if(auth_token) {
+        axiosInstance.get(`api/v3/user/wallet`).then((res)=> {
 
-      if(res.data.user_wallet_data) {
-        const GlobalDefaultUserSelectedWallet = localStorage.getItem('UserSelectedWalletID')
-  
-        if(!GlobalDefaultUserSelectedWallet) {
-          const defaultWalletID = res.data.user_wallet_data.find(wallet => wallet.currency === 'USD');
-  
-          if (defaultWalletID) {
-              localStorage.setItem('UserSelectedWalletID', defaultWalletID.id);
+          if(res.data.user_wallet_data) {
+            const GlobalDefaultUserSelectedWallet = localStorage.getItem('UserSelectedWalletID')
+      
+            if(!GlobalDefaultUserSelectedWallet) {
+              const defaultWalletID = res.data.user_wallet_data.find(wallet => wallet.currency === 'USD');
+      
+              if (defaultWalletID) {
+                  localStorage.setItem('UserSelectedWalletID', defaultWalletID.id);
+                }
             }
-        }
-      }
-    })
-  };
-  
-}, []);
+          }
+        })
+      };
+      
+    }, []);
+
 
 
 
 
   return (
     <>
-       
           <AuthProvider>
 
             {/* Spped Dial button */}
-              <SpeedDial
+              {/* <SpeedDial
                 ariaLabel="SpeedDial controlled open example"
                 sx={{ position: 'fixed', bottom: 16, right: 16, transform: 'translateZ(0px)', flexGrow: 1 }}
                 icon={<SpeedDialIcon icon={<SettingsIcon />} openIcon={<EditIcon />} />}
@@ -103,7 +107,7 @@ useEffect(() => {
                     onClick={()=> {handleSpeedDialClose(); handleActionIconClick(action.url);} }
                   />
                 ))}
-              </SpeedDial>
+              </SpeedDial> */}
               {/* Speed Dial Button Ends */}
 
               <AuthRoutes />

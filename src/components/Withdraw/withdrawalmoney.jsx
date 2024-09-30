@@ -14,78 +14,56 @@ import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
+import { Button as JoyButton, Divider } from '@mui/joy';
+
 
 
 const steps = ['Create Withdrawal', 'Confirm Withdrawal'];
 
 
 
+
+// First step Form
 function WithdrawalForm1({...props}) {
+  const [currencies, setCurrencies] = useState([])
 
-  
-
-  const handlePaymentMethodChange = (event)=> {
-    props.updatepaymentMethod(event.target.value)
-
-    if(!event.target.value) {
-      props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('withdrawalmoneypaymentmethod', encoded_value)
-      const expirationTime = 2 * 60 * 1000;// 10 minutes in milliseconds
-
-      setTimeout(() => {
-        localStorage.removeItem('withdrawalmoneypaymentmethod')
-        }, expirationTime);
-    }
+  // Method To get Selected Wallet Currency
+  const handleWalletCurrencyChange = (event)=> {
+    props.updateWalletCurrency(event.target.value)
   };
 
-  const handleCurrencyChange = (event)=> {
-    props.updateCurrency(event.target.value)
-
-    if(!event.target.value) {
-      props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('withdrawalmoneycurrency', encoded_value)
-      const expirationTime = 2 * 60 * 1000;// 10 minutes in milliseconds
-
-      setTimeout(() => {
-        localStorage.removeItem('withdrawalmoneycurrency')
-        }, expirationTime);
-    }
+  // Method To get Withdrawal Currency
+  const handleWithdrawalCurrencyChange = (event)=> {
+    props.updateWithdrawalCurrency(event.target.value)
   };
 
-
+   
+  // Method to get withdrawal Amount
   const handleAmountChange = (event)=> {
     props.updateAmount(event.target.value)
-
-    if(!event.target.value) {
-      props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('withdrawalmoneyamount', encoded_value)
-
-      const expirationTime = 2 * 60 * 1000;// 2 minutes in milliseconds
-
-      setTimeout(() => {
-          localStorage.removeItem('withdrawalmoneyamount')
-      }, expirationTime);
-    }
   };
+
+
+   // Fetch all the available currency from API
+   useEffect(() => {
+    axiosInstance.get(`api/v2/currency/`).then((res)=> {
+      // console.log(res.data.currencies)
+      if (res.data && res.data.currencies){
+          setCurrencies(res.data.currencies)
+      }
+
+    }).catch((error)=> {
+      console.log(error.response)
+    });
+
+  }, []);
   
   
 
@@ -96,6 +74,7 @@ function WithdrawalForm1({...props}) {
             to your paypal ID or bank account. Setting up the withdrawal 
             settings is must before proceeding to make a withdraw. 
       </small>
+
       <div style={{marginLeft: '8%', marginRight: '3%', marginTop: '6%'}}>
 
       <Grid container spacing={2}>
@@ -104,43 +83,48 @@ function WithdrawalForm1({...props}) {
                  sx={{
                     width:{xs:'90%', lg: '90%',
                     }}}>
-                <InputLabel id="payment-method-select-label">Payment Method</InputLabel>
+                <InputLabel id="payment-method-select-label">Wallet Currency</InputLabel>
                 <Select
-                    labelId="payment-method-select-label"
-                    id="payment-method-select"
-                    value={props.paymentMethod}
-                    label="Payment Method" 
-                    onChange={handlePaymentMethodChange}
+                    id="wallet-currency-select"
+                    value={props.walletCurrency}
+                    label="Wallet Currency" 
+                    onChange={handleWalletCurrencyChange}
                 >
-                    <MenuItem value={'Paypal'}>Paypal</MenuItem>
-                    <MenuItem value={"Bank"}>Bank</MenuItem>
+                    {currencies.map((curr)=> (
+                      <MenuItem key={curr.id} value={curr.name}>
+                        {curr.name}
+                      </MenuItem>
+                  ))}
                 </Select>
             </FormControl>
         </Grid>
         
+
         <Grid item xs={12}>
             <FormControl fullWidth size='small' 
                        sx={{ width:{xs:'90%', lg:'90%'},  
                              marginTop:{xs:'3%', lg: '2%'}}}>
-                <InputLabel id="currency-select-label">Currency</InputLabel>
+                <InputLabel id="currency-select-label">Withdrawal Currency</InputLabel>
                 <Select
-                labelId="currency-select-label"
-                id="currency-select"
-                value={props.Currency}
-                label="Currency"
-                onChange={handleCurrencyChange}
+                  id="withdrawal-currency-select"
+                  value={props.withdrawalCurrency}
+                  label="Withdrawal Currency"
+                  onChange={handleWithdrawalCurrencyChange}
                 >
-                    <MenuItem value={"GBP"}>GBP</MenuItem>
-                    <MenuItem value={"USD"}>USD</MenuItem>
+                    {currencies.map((curr)=> (
+                      <MenuItem key={curr.id} value={curr.name}>
+                        {curr.name}
+                      </MenuItem>
+                  ))};
                 </Select>
-                <FormHelperText><b>Fee</b> 5%+10 Total Fee:  55</FormHelperText>
+                <FormHelperText><b>Fee</b> 5% of Total Amount</FormHelperText>
             </FormControl>
         </Grid>
 
         <Grid item xs={12}>
             <TextField 
                 id="amount" 
-                label="Amount" 
+                label="Withdrawal Amount" 
                 variant="outlined" 
                 size='small' 
                 sx={{width: '90%'}}
@@ -161,46 +145,8 @@ function WithdrawalForm1({...props}) {
 };
 
 
-
-function WithdrawalForm2() {
-  const [userTypedCurrency, setUserTypedCurrency] = React.useState('');
-  const [userTypedAmount, setUserTypedAmount] = React.useState('');
-  const [userTypedPaymentMethod, setUserTypedPaymentMethod] = React.useState('');
-  const [fees, setFees] = React.useState(1.5);
-  const [totalFee, setTotalFee] = React.useState('');
-
-
-  useEffect(()=> {
-        const StoredCurrency = localStorage.getItem('withdrawalmoneycurrency');
-        const StoredAmount = localStorage.getItem('withdrawalmoneyamount');
-        const StoredPaymentMethod = localStorage.getItem('withdrawalmoneypaymentmethod');
-
-    if(StoredCurrency) {
-        const decodedCurrency = atob(StoredCurrency)
-        setUserTypedCurrency(decodedCurrency);
-    }
-    if(StoredAmount) {
-      const decoded_Amount = atob(StoredAmount)
-      setUserTypedAmount(decoded_Amount);
-    }
-    if(StoredPaymentMethod) {
-      const decod_value = atob(StoredPaymentMethod)
-      setUserTypedPaymentMethod(decod_value);
-    }
-  }, [])
-
-//   const handleChange = (event)=> {
-//       setFees(event.target.value)
-//   };
-
-
-    useEffect(() => {
-    if(userTypedAmount) {
-      const TotalFeeAmount = (parseInt(userTypedAmount) + fees)
-      setTotalFee(TotalFeeAmount)
-    }
-  }, [userTypedAmount])
-  
+// Second Form
+function WithdrawalForm2({...props}) {
 
   return(
     <>
@@ -209,75 +155,114 @@ function WithdrawalForm2() {
             and fund amount to your Paypal or Bank account. 
     </small>
 
-    <div style={{marginLeft: '2%', marginRight: '1%'}}>
+    <Box sx={{ marginLeft: '2%', marginRight: '1%' }}>
+        <Typography
+          variant="h6"
+          color="primary"
+          align="center"
+          sx={{ mb: 1 }}
+        >
+          <b>Withdrawal Details</b>
+        </Typography>
 
-      <p className='text-primary d-flex justify-content-center mb-1'>
-        <b>Withdrawal Details</b>
-      </p>
-      <p className='text-primary d-flex justify-content-center mb-4'>
-        <p>Payment method: {userTypedPaymentMethod}</p>
-      </p>
+        <Typography
+          variant="body1"
+          color="primary"
+          align="center"
+          sx={{ mb: 4 }}
+        >
+          Selected Wallet: {props.walletCurrency}
+        </Typography>
 
-      <div className='mx-4'>
-        <div className='d-flex justify-content-between mb-2'>
-          <small>Withdrawal Amount</small>
-          <small>{userTypedCurrency} {userTypedAmount}</small>
-        </div>
-        <hr className='mb-2' />
+        <Box sx={{ mx: 4 }}>
+          <Box display="flex" justifyContent="space-between" mb={2}>
+            <Typography variant="body2">Withdrawal Amount</Typography>
 
-        <div className='d-flex justify-content-between mb-2'>
-          <small>Fee</small>
-          <small value={fees}>{userTypedCurrency} {fees}</small>
-        </div>
-        <hr className='mb-2' />
+            <Typography variant="body2">
+              {props.withdrawalCurrency} {props.Amount}
+            </Typography>
+          </Box>
 
-        <div className='d-flex justify-content-between mb-2'>
-          <p><b>Total</b></p>
-          <p><b>{userTypedCurrency} {totalFee}</b></p>
-        </div>
-      </div>
-    </div>
+          <Divider sx={{ mb: 2 }} />
+
+          <Box display="flex" justifyContent="space-between" mb={2}>
+            <Typography variant="body2">Fee</Typography>
+
+            <Typography variant="body2">
+              {props.withdrawalCurrency} {props.fees.toFixed(3)}
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mb: 2 }} />
+
+          <Box display="flex" justifyContent="space-between" mb={2}>
+            <Typography variant="body1">
+              <b>Total</b>
+            </Typography>
+
+            <Typography variant="body1">
+              <b>{props.withdrawalCurrency} {parseFloat(props.Amount) + parseFloat(props.fees)}</b>
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      {props.error &&
+        <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+                {props.error}
+        </Alert>
+        }
     </>
   );
 };
 
 
 
-
+// Withdrawal Money
 export default function WithdrawalMoneyForm({open}) {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
-  
-  const [Currency, updateCurrency] = React.useState('');
-  const [Amount, updateAmount] = React.useState('');
-  const [paymentMethod, updatepaymentMethod] = React.useState('');
-  const [error, setError] = React.useState('');
   const navigate = useNavigate();
-  // {
-  //   "currency": "Currency",
-  //   "deposit_amount": Amount,
-  //   "fee": 0,
-  //   "total_amount": Amount,
-  //   "payment_mode": "paymentMethod",
-  //   "note": "string"
-  // }
 
+  const [activeStep, setActiveStep] = useState(0);  // Currenct Step State
+  const [completed, setCompleted]   = useState({}); // Completed Step
+  
+  const [withdrawalCurrency, updateWithdrawalCurrency] = useState('');  // Withdrawal Currency State
+  const [Amount, updateAmount]                         = useState('');  // Withdrawal Amount State
+  const [walletCurrency, updateWalletCurrency]         = useState('');  // Wallet Currency State
+  const [error, setError]                              = useState('');  // Error Message State
+  const [fees, setFees]                                = useState('');  // Fees
+
+ 
+  // Calculate total Steps
   const totalSteps = () => {
     return steps.length;
   };
-
+  
+  // Completed Steps
   const completedSteps = () => {
     return Object.keys(completed).length;
   };
 
+  // Check for Last step
   const isLastStep = () => {
     return activeStep === totalSteps() - 1;
   };
 
+  // Check all steps completed or not
   const allStepsCompleted = () => {
     return completedSteps() === totalSteps();
   };
 
+  // Caluculate Fees
+  useEffect(() => {
+    if (Amount){
+       let calculated_fees = (parseFloat(Amount) / 100) * 5
+       setFees(calculated_fees)
+    }
+  }, [Amount]);
+  
+
+  // Redirect to Next Step
   const handleNext = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
@@ -286,12 +271,6 @@ export default function WithdrawalMoneyForm({open}) {
           steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
 
-        if (activeStep == 0) {
-          if (!Currency || !Amount || !paymentMethod) {
-            setError('Please fill all the above fields');
-            return;
-          }
-        };
     setActiveStep(newActiveStep);
   };
 
@@ -303,167 +282,187 @@ export default function WithdrawalMoneyForm({open}) {
     setActiveStep(step);
   };
 
+  // Final Step method
   const handleComplete = () => {
     const newCompleted = completed;
 
     if (activeStep == 0) {
-      if (!Currency || !Amount || !paymentMethod) {
+      if (!withdrawalCurrency || !Amount || !walletCurrency) {
         setError('Please fill all the above fields');
-        return;
-      }
-      // else {
-      //   newCompleted[activeStep] = true;
-      //   setCompleted(newCompleted);
-      // }
-    } 
-    axiosInstance.post(`api/v1/user/reset_passwd/`, {
-      currency: Currency,
-      deposit_amount: Amount,
-      fee: 0,
-      total_amount: Amount,
-      payment_mode: paymentMethod,
-      note: "string"
-      
-}).then((res) => {
-  if(res.status == 200) {
-      setTimeout(() => {
-          // navigate('/')
-          window.location.href = '/payout-payment/'
-      }, 1000);
-      newCompleted[activeStep] = true;
-      setCompleted(newCompleted);
 
-    
-      console.log(res);
-      // console.log(res.data);
-  }
-//  localStorage.clear();
-})
-    
-    // else {
-    //     newCompleted[activeStep] = true;
-    //     setCompleted(newCompleted);
-    // }
-    
-  //   if (completedSteps() === totalSteps()) {
-  //      navigate('/')
-  //   }else {
-  //     handleNext();
-  //   }
-  handleNext();
+      } else {
+        setError('')
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        handleNext();
+      };
+
+    } else {
+
+      axiosInstance.post(`/api/v5/user/fiat/withdrawal/`, {
+        withdrawalAmount: parseFloat(Amount),
+        withdrawalCurrency: withdrawalCurrency,
+        wallet_currency: walletCurrency,
+        fee: parseFloat(fees)
+
+      }).then((res)=> {
+        // console.log(res)
+
+        if(res.status === 200 && res.data.success == true) {
+            setError('')
+            newCompleted[activeStep] = true;
+            setCompleted(newCompleted);
+            handleNext();
+        }
+
+      }).catch((error)=> {
+        // console.log(error)
+
+        if (error.response.data.message === 'Do not have Sufficient balance in Wallet') {
+            setError('Do not have sufficient balance in Wallet')
+
+            setTimeout(() => {
+              setError('')
+            }, 2000);
+
+        } else if (error.response.data.message === 'Invalid Wallet Currency') {
+            setError('Invalid Wallet Currency') 
+
+            setTimeout(() => {
+              setError('')
+            }, 2000);
+
+        } else if (error.response.data.message === 'User wallet does not exists') {
+            setError('User wallet does not exist')
+
+            setTimeout(() => {
+              setError('')
+            }, 2000);
+
+        } else if (error.response.data.message === 'Invalid withdrawal Currency') {
+            setError('Invalid withdrawal Currency')
+
+            setTimeout(() => {
+              setError('')
+            }, 2000);
+
+        } else {
+          setError('')
+        };
+      })
+    };
   };
 
+
+  // Reset
   const handleReset = () => {
-    // setActiveStep(0);
-    // setCompleted({});
     navigate('/')
   };
+
+
 
   const renderForms = (step) => {
     switch(step){
       case 0:
         return <WithdrawalForm1
-                Currency={Currency}
-                updateCurrency={updateCurrency}
+                withdrawalCurrency={withdrawalCurrency}
+                updateWithdrawalCurrency={updateWithdrawalCurrency}
                 Amount={Amount}
                 updateAmount={updateAmount}
-                paymentMethod={paymentMethod}
-                updatepaymentMethod={updatepaymentMethod}
+                walletCurrency={walletCurrency}
+                updateWalletCurrency={updateWalletCurrency}
                 error={error}
                 setError={setError}
             />;
       case 1:
-        return <WithdrawalForm2 />;
+        return <WithdrawalForm2 
+                  walletCurrency={walletCurrency}
+                  withdrawalCurrency={withdrawalCurrency}
+                  Amount={Amount}
+                  fees={fees}
+                  error={error}
+              />;
       default:
         return null;
     }
-  }
+  };
 
 
   return (
     <Main open={open}>
-    <DrawerHeader />
+      <DrawerHeader />
 
-    {/* <Paper elevation={8}  
-       sx={{height: '150%', display: 'flex', 
-         justifyContent: 'center', border: '1px solid #808080', 
-         marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '90%'}
-         }}> */}
-      
-    <Box sx={{ width: {xs: '100%', sm: '80%', md: '50%', lg:'40%'}, 
-               marginTop: {xs: '40px', sm: '1rem'},
-               borderRadius: '20px',
-               backdropFilter: 'blur( 20px )',
-               boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff',
-               marginLeft: {xs: '0%', sm: '10%', md:'25%'},
-              //  background: 'url("/formBackgroundImage.jpg")',
-              backgroundColor: '#E5E4E2',   
-              height: {xs:'100%', sm: '120%'}
-                }}>
-      <p className='fs-3 d-flex justify-content-center my-1'>Withdrawal Money</p> <br />
+        <Box sx={{ 
+                width: {xs: '100%', sm: '80%', md: '50%', lg:'40%'}, 
+                marginTop: {xs: '40px', sm: '1rem'},
+                borderRadius: '5%',
+                background: '#F0F8FF',
+                backdropFilter: 'blur( 20px )',
+                boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
+                marginLeft: {xs: '0%', sm: '10%', md:'25%'}, 
+                height: {xs:'100%', sm: '120%'}
+              }}>
+          <p className='fs-3 d-flex justify-content-center my-1'>Withdrawal Money</p> <br />
 
-      <Stepper nonLinear activeStep={activeStep} sx={{marginLeft: '4%'}}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
-            {/* <StepButton color="inherit" onClick={handleStep(index)}>
-                {label}
-            </StepButton> */}
-            <StepButton color="inherit">
-                {label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
-        {allStepsCompleted() ? (
-          <React.Fragment>
-            <Typography variant='h1' sx={{ mt: 2, mb: 1 }}>
-              <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                    Congatulation Your amount has been Withdrew successfully
-              </Alert>
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Dashboard</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
+          <Stepper nonLinear activeStep={activeStep} sx={{marginLeft: '4%'}}>
+            {steps.map((label, index) => (
+              <Step key={label} completed={completed[index]}>
+                {/* <StepButton color="inherit" onClick={handleStep(index)}>
+                    {label}
+                </StepButton> */}
+                <StepButton color="inherit">
+                    {label}
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
 
-            {/* <Typography sx={{ mt: 2, mb: 1, py: 1 }}>Step {activeStep + 1}</Typography> */}
+          <div>
+            {/* Completed Step */}
+            {allStepsCompleted() ? (
+              <React.Fragment>
 
-            {renderForms(activeStep)}
+                <Typography variant='h1' sx={{ mt: 2, mb: 1 }}>
+                  <Alert severity="success">
+                    <AlertTitle>Success</AlertTitle>
+                        Congatulation Your Withdrawal Request has been raised successfully, Please wait for Admin Approval
+                  </Alert>
+                </Typography>
 
-            <Box 
-                sx={{display: 'flex', marginTop:'9%', marginRight: '27%'}}>
-              <Box sx={{ flex: '1 1 auto'}}/>
-              
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                                     
-                    <Button onClick={handleComplete} variant='contained'  
-                         sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF',
-                            '@media (max-width: 500px)': {
-                                fontSize: '0.6rem' // Decrease font size on smaller screens
-                            }
-                         }} >
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Confirm & Transfer'
-                      : 'Confirm & Proceed'}
-                  </Button>
-                ))}
-                
-            </Box>
-         </React.Fragment>
-        )}
-      </div>
-    </Box>
-    {/* </Paper> */}
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, justifyContent:'center' }}>
+                  <JoyButton onClick={handleReset}>Dashboard</JoyButton>
+                </Box>
+
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+
+                {renderForms(activeStep)}
+                <Box sx={{display: 'flex', marginTop:'8%', justifyContent:'center'}}>
+                  
+                  {activeStep !== steps.length &&
+                    (completed[activeStep] ? (
+                      <Typography variant="caption" sx={{ display: 'inline-block' }}>
+                        Step {activeStep + 1} already completed
+                      </Typography>
+                    ) : (
+                                        
+                        <JoyButton onClick={handleComplete} 
+                            sx={{color: 'primary',
+                                '@media (max-width: 500px)': {
+                                    fontSize: '0.6rem' 
+                                }
+                            }} >
+                        {completedSteps() === totalSteps() - 1
+                          ? 'Confirm & Proceed'
+                          : 'Proceed'}
+                      </JoyButton>
+                    ))}
+                </Box>
+            </React.Fragment>
+            )}
+          </div>
+        </Box>
 
     </Main>
 

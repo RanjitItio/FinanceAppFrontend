@@ -3,10 +3,15 @@ import axiosInstance from '../Authentication/axios';
 import { Link } from "react-router-dom";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { Typography, ButtonGroup, Button } from "@mui/material";
+import { Typography, ButtonGroup, Button, Box, IconButton } from "@mui/material";
 import EuroIcon from '@mui/icons-material/Euro';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 
@@ -73,7 +78,7 @@ export default function FiatAccount() {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {/* Title */}
-                <Typography variant="h5" component="div">
+                <Typography variant="h5" component="div" sx={{fontSize: {xs:'1.08rem', sm:'1.7rem'}}}>
                     Accounts
                 </Typography>
 
@@ -128,54 +133,73 @@ export default function FiatAccount() {
                 
                 
                 {/* For large Device */}
-                <div className='d-flex justify-content-center'>
-                    <div className='d-none d-sm-none d-md-inline d-lg-inline'>
-                        <button type="button" className="btn btn-light mx-1">
-                            <i className="bi bi-arrow-down"></i>&nbsp;
+                <Box display="flex" justifyContent="center">
+                    <Box sx={{ display: { xs: 'none', sm: 'inline', md: 'inline', lg: 'inline' } }}>
+                        <Button variant="contained" startIcon={<ArrowDownwardIcon />} sx={{ mx: 0 }}>
                             Receive
-                        </button>
-                        <Link className="btn btn-light mx-1" to={'/deposit/'}>
-                            <i className="bi bi-plus-lg"></i>&nbsp;
+                        </Button>
+
+                        <Button
+                            component={Link}
+                            to="/deposit/"
+                            variant="contained"
+                            startIcon={<AddIcon />}
+                            sx={{ mx: 1 }}
+                        >
                             Add
-                        </Link>
-                        <Link to={'/moneytransfer/'} className="btn btn-light mx-1">
-                        <i className="bi bi-arrow-up"></i>&nbsp;
+                        </Button>
+
+                        <Button
+                            component={Link}
+                            to="/moneytransfer/"
+                            variant="contained"
+                            startIcon={<ArrowUpwardIcon />}
+                            sx={{ mx: 0.7 }}
+                        >
                             Send
-                        </Link>
-                        <Link to={'/exchange-currency/'} className="btn btn-light mx-1">
-                            <i className="bi bi-arrows"></i>&nbsp;
+                        </Button>
+
+                        <Button
+                            component={Link}
+                            to="/exchange-currency/"
+                            variant="contained"
+                            startIcon={<SwapHorizIcon />}
+                            sx={{ mx: 0.2 }}
+                        >
                             Convert
-                        </Link>
-                        <button type="button" className="btn btn-light mx-1">
-                            <i className="bi bi-three-dots-vertical"></i>&nbsp;
+                        </Button>
+
+                        <Button variant="contained" startIcon={<MoreVertIcon />} sx={{ mx: 0.6 }}>
                             More
-                        </button>
-                    </div>
-                </div>
+                        </Button>
+                    </Box>
+                </Box>
 
                 {/* For small devices */}
-                <div className='d-flex justify-content-center '>
-                    <div className='d-sm-inline d-md-none'>
-                        <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i className="bi bi-arrow-down"></i>
-                        </a>
+                <Box display="flex" justifyContent="center">
+                    {/* Visible on small devices, hidden on medium devices */}
+                    <Box sx={{ display: { xs: 'inline', sm: 'none', md: 'none' } }}>
+                        <IconButton sx={{ mr: '1px' }} color="primary">
+                            <ArrowDownwardIcon />
+                        </IconButton>
 
-                        <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i className="bi bi-plus-lg"></i>
-                        </a>
-                        <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i className="bi bi-arrow-up"></i>
-                        </a>
+                        <IconButton sx={{ mr: '1px' }} color="primary">
+                            <AddIcon />
+                        </IconButton>
 
-                        <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i className="bi bi-arrows"></i>
-                        </a>
+                        <IconButton sx={{ mr: '1px' }} color="primary">
+                            <ArrowUpwardIcon />
+                        </IconButton>
 
-                        <a className='btn btn-light' style={{marginRight: '1px'}}>
-                            <i className="bi bi-three-dots-vertical"></i>&nbsp;
-                        </a>
-                    </div>
-                </div>
+                        <IconButton sx={{ mr: '1px' }} color="primary">
+                            <SwapHorizIcon />
+                        </IconButton>
+
+                        <IconButton sx={{ mr: '1px' }} color="primary">
+                            <MoreVertIcon />
+                        </IconButton>
+                    </Box>
+                </Box>
             </div>
         </div>
     );

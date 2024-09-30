@@ -411,9 +411,10 @@ function Step4Form() {
 
 const steps = ['Payment Information','Recipient Details', 'Recipient Payment Details', 'Recipient Address'];
 
-
+// Send Money
 export default function StepWisePaymentForm() {
 
+  // All Form fields
   const initialFormData = {
     send_amount: 0,
     send_currency: '',
@@ -432,10 +433,10 @@ export default function StepWisePaymentForm() {
     rec_bank_ifsc_code: '',
     rec_add_info: '',
     rec_address: ''
-  }
+  };
 
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(0);  // Currenct Step
   const [skipped, setSkipped]       = React.useState(new Set());
   const theme                       = useTheme();
   const matchesXS                   = useMediaQuery(theme.breakpoints.down('sm'));
@@ -562,7 +563,7 @@ export default function StepWisePaymentForm() {
 
             // console.log(formData)
             // Submit the data in API Request
-            axiosInstance.post(`api/v1/user/transfer_money/`, {
+            axiosInstance.post(`/api/v1/user/send/money/`, {
               send_amount:         parseInt(formData.send_amount),
               fee:                 formData.transaction_fee,
               total_amount:        formData.total_amount,
@@ -587,24 +588,34 @@ export default function StepWisePaymentForm() {
                     newSkipped = new Set(newSkipped.values());
                     newSkipped.delete(activeStep);  
                   }
-                
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
                 setSkipped(newSkipped);
-
-              }
+              };
 
             }).catch((error)=> {
               console.log(error.response)
 
               if (error.response.data.msg == 'Sender donot have sufficient balance in wallet') {
-                setError('Do not have sufficient wallet in your wallet')
-              }
-
-              if (error.response.data.msg == 'Recipient email does not exist') {
-                setError('Receiver email does not exist')
-              }
-
-              // setError(error.response.data.msg)
+                setError('Do not have sufficient wallet in your wallet');
+              } else if (error.response.data.message == 'Your account has been suspended please contact admin for Approval') {
+                setError('Account has been suspended, Can not perform this action');
+              } else if (error.response.data.message == 'Sender currency does not exist') {
+                setError('Invalid sender currency');
+              } else if (error.response.data.message == 'Receiver currency does not exist') {
+                setError('Invalid receiver currency');
+              } else if (error.response.data.message == 'Sender do not have wallet') {
+                setError('Sender wallet does not exists');
+              } else if (error.response.data.message == 'Sender donot have sufficient balance in wallet') {
+                setError('Donot have sufficient balance in Wallet');
+              } else if (error.response.data.message == 'Recipient email does not exist') {
+                setError('Receiver email does not exist, Please provide existing user email');
+              } else if (error.response.data.message == 'Recipient wallet not found') {
+                setError('Receiver donot have any exsting wallet');
+              } else if (error.response.data.message == 'Cannot transfer to same wallet') {
+                setError('Money Can not be transfered to same wallet');
+              } else {
+                setError('')
+              };
 
             })
           }

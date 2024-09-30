@@ -56,7 +56,8 @@ import CircularProgress from '@mui/joy/CircularProgress';
 import CssBaseline from "@mui/material/CssBaseline";
 
 
-const CryptoFiatTabs = React.lazy(()=> import('../CryptoFiatTabs/Tabs'));
+
+const CryptoFiatHomePage = React.lazy(()=> import('../CryptoFIATHome/Dashboard'));
 
 
 
@@ -119,7 +120,7 @@ const AuthRoutes = () => {
                       <LeftNavbar handleDrawerClose={handleDrawerClose} open={open} />
 
                       <Routes>
-                          <Route exact path='/' element={<CryptoFiatTabs open={open} />}></Route>
+                          <Route exact path='/' element={<CryptoFiatHomePage open={open} />}></Route>
                           <Route exact path='/test/transaction/table/' element={<TransactionTable open={open} />}></Route>
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>

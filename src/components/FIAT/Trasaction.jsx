@@ -1,103 +1,115 @@
 import { useState, useEffect } from "react";
 import axiosInstance from '../Authentication/axios';
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent, Typography, Table, TableBody, 
+        TableCell, TableContainer, TableHead, 
+        TableRow, Paper, Button, Box } from '@mui/material';
 
 
 
 
+// User Fiat Recent Transactions
 export default function FiatTransaction() {
 
-    const navigate          = useNavigate()
-    const [error, setError] = useState('')
-    const  [FiatTransactionsData, updateFiatTransactionsData] = useState([])
+    const navigate          = useNavigate();
+    const [error, setError] = useState('');
+    const [FiatTransactionsData, updateFiatTransactionsData] = useState([]);  // Transaction Dat
 
 
     useEffect(() => {
         try{
-            axiosInstance.get(`api/v4/users/transactions/`).then((res)=> {
+            axiosInstance.get(`/api/v4/users/fiat/recent/transactions/`).then((res)=> {
     
-                if(res.data && res.data.all_transactions) {
-                    updateFiatTransactionsData(res.data.all_transactions)
-                    // console.log(res.data)
+                if(res.data && res.data.all_fiat_recent_transactions) {
+                    updateFiatTransactionsData(res.data.all_fiat_recent_transactions)
                 };
             })
+
         }catch(error) {
             console.log(error)
 
-            if (error.response.status === 401) {
-                setError('UnAuthorized Access')
-            }
         }
        
-    }, [])
+    }, []);
 
+    
     const handleRedirectAllTransaction = () => {
         navigate('/transactions/')
-    }
+    };
 
 
     return(
-        <div className="card" style={{maxHeight: ''}}>
-            <div className="card-body">
-                <h5 className="card-title"><b>Transaction History</b></h5>
-                
-                <div className="table-responsive" style={{maxHeight: '300px'}}>
-                <table className="table table-hover" style={{overflowX: 'auto'}}>
-                    <thead>
-                        <tr>
-                            <th scope="col">Transaction ID</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Credited</th>
-                            <th scope="col">view</th>
-                        </tr>
-                    </thead>
+        <Card sx={{borderRadius:'20px'}}>
+            <CardContent>
+                <Typography variant="h5" component="div" fontWeight="bold">
+                    Transaction History
+                </Typography>
 
-                    <tbody>
-                        {FiatTransactionsData.map((item, index)=> (
-                            
-                            <tr className="shadow" key={index}>
-                                <td scope="row">
-                                    <div style={{maxWidth: '100px', overflow: 'scroll', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordWrap: 'break-word'}}>
-                                    <div className='d-flex justify-content-start'>
-                                        
-                                        <div>
-                                            <small className="card-subtitle">{item.transaction.txdid}</small>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </td>
-                                <td>{item.transaction.txdtype}</td>
-                                <td><i>{item.transaction.amount} {item.currency.name}</i></td>
-                                <td>{item.transaction.txddate}</td>
-                                <td>
-                                    {item.transaction.txdstatus === 'Success' ? 
-                                      <p className="text-success">Success</p>
-                                    : 
-                                    item.transaction.txdstatus === 'Pending' ? 
-                                      <p className="text-warning">Pending</p>
-                                    : 
-                                    item.transaction.txdstatus === 'Cancelled' ? 
-                                      <p className="text-danger">Cancelled</p>
-                                    : 'NA'
-                                    }
-                                </td>
-                                <td className="text-primary">{item.credited_amount ? item.credited_amount : 'NA'} {item.credited_currency ? item.credited_currency : ''}</td>
-                                <td className="text-primary">
-                                    <button type="button" onClick={handleRedirectAllTransaction} className="btn btn-primary">
-                                        Detail
-                                    </button>
-                                </td>
-                            </tr>
-                          
-                        ))}
-                    </tbody>
-                </table>
-             </div>
-            </div> 
-        </div>
+                <TableContainer component={Paper} sx={{ maxHeight: '50rem' }}>
+                    <Table stickyHeader sx={{ overflowX: 'auto' }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Transaction ID</TableCell>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Amount</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Status</TableCell>
+                                <TableCell>Credited</TableCell>
+                                <TableCell>View</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-    )
-}
+                        <TableBody>
+                            {FiatTransactionsData.map((item, index) => (
+                                <TableRow key={index} hover>
+                                    <TableCell>
+                                        <Box sx={{ maxWidth: '100px', overflow: 'scroll', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                                            <Typography variant="body2">
+                                                {item.transaction?.transaction_id ? 
+                                                `${item.transaction?.transaction_id.slice(0, 10)}...` : ''}
+                                                </Typography>
+                                        </Box>
+                                    </TableCell>
+
+                                    <TableCell>{item?.type || ''}</TableCell>
+
+                                    <TableCell>
+                                        <i>{item.transaction?.amount || ''} {item.currency.name}</i>
+                                    </TableCell>
+
+                                    <TableCell>{item.transaction?.created_At.split('T')[0] || ''}</TableCell>
+
+                                    <TableCell>
+
+                                        {item.transaction.status === 'Approved' ? (
+                                            <Typography color="success.main">Approved</Typography>
+                                        ) : item.transaction.status === 'Pending' ? (
+                                            <Typography color="warning.main">Pending</Typography>
+                                        ) : item.transaction.status === 'Cancelled' ? (
+                                            <Typography color="error.main">Cancelled</Typography>
+                                        ) : item.transaction.status === 'Hold' ? (
+                                            <Typography color="primary">On Hold</Typography>
+                                        ) : 'NA'}
+
+                                    </TableCell>
+
+                                    <TableCell className="text-primary">
+                                        {item.transaction?.credited_amount ? item.credited_amount : ''} {item.transaction?.credited_currency ? item.transaction.credited_currency : ''}
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <Button variant="contained" color="primary" onClick={handleRedirectAllTransaction}>
+                                            Detail
+                                        </Button>
+                                    </TableCell>
+
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </CardContent>
+        </Card>
+
+    );
+};
