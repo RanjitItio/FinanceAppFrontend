@@ -15,19 +15,21 @@ export default function FiatTransaction() {
     const [error, setError] = useState('');
     const [FiatTransactionsData, updateFiatTransactionsData] = useState([]);  // Transaction Dat
 
-
+    
+    // Fetch all Fiat Transactions
     useEffect(() => {
         try{
             axiosInstance.get(`/api/v4/users/fiat/recent/transactions/`).then((res)=> {
     
                 if(res.data && res.data.all_fiat_recent_transactions) {
-                    updateFiatTransactionsData(res.data.all_fiat_recent_transactions)
+                    const sortedTransaction = res.data.all_fiat_recent_transactions.sort((a,b)=> {
+                        return new Date(b.transaction.created_At) - new Date(a.transaction.created_At)
+                    })
+                    updateFiatTransactionsData(sortedTransaction)
                 };
             })
-
-        }catch(error) {
+        } catch(error) {
             console.log(error)
-
         }
        
     }, []);
@@ -54,7 +56,7 @@ export default function FiatTransaction() {
                                 <TableCell>Amount</TableCell>
                                 <TableCell>Date</TableCell>
                                 <TableCell>Status</TableCell>
-                                <TableCell>Credited</TableCell>
+                                <TableCell>Credit/Debit</TableCell>
                                 <TableCell>View</TableCell>
                             </TableRow>
                         </TableHead>
@@ -92,9 +94,9 @@ export default function FiatTransaction() {
                                         ) : 'NA'}
 
                                     </TableCell>
-
+                                    
                                     <TableCell className="text-primary">
-                                        {item.transaction?.credited_amount ? item.credited_amount : ''} {item.transaction?.credited_currency ? item.transaction.credited_currency : ''}
+                                        {item.transaction?.credited_amount ? item.transaction.credited_amount : ''} {item.transaction?.credited_currency ? item.transaction.credited_currency : ''}
                                     </TableCell>
 
                                     <TableCell>

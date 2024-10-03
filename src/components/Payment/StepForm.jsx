@@ -160,7 +160,7 @@ function HeadForm({...props}) {
 
         </Row>
 
-        <Form.Group as={Col} controlId="formGridState">
+        {/* <Form.Group as={Col} controlId="formGridState">
           <InputLabel id="demo-simple-select-standard-label" >Source Fund</InputLabel>
           <Select fullWidth autoFocus 
                 label="Source Fund"
@@ -177,7 +177,8 @@ function HeadForm({...props}) {
             <MenuItem value={"Paytm"}>Paytm</MenuItem>
 
           </Select>
-        </Form.Group>
+        </Form.Group> */}
+
         &nbsp;
         <Form.Group as={Col} controlId="formGridState">
           <InputLabel id="demo-simple-select-standard-label" >Sending Purpose</InputLabel>
@@ -295,47 +296,51 @@ function Step2Form({...props}) {
           {paymentOption !== 'Wallet' && (
             <>
                 <Grid item xs={12} sm={6} >
-                <TextField fullWidth 
-                           label="Card/Bank Name" 
-                          variant="outlined" 
-                          type='text' 
-                          required 
-                          name='rec_bank_name'
-                          onChange={(event)=> {props.handleFormValueChange(event);}}
-                          />
+                  <TextField 
+                        fullWidth 
+                        label="Card/Bank Name" 
+                        variant="outlined" 
+                        type='text' 
+                        required 
+                        name='rec_bank_name'
+                        onChange={(event)=> {props.handleFormValueChange(event);}}
+                        />
                 </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField fullWidth 
-                           label="IBAN/AC/ACH Number" 
-                           type="text" 
-                           variant="outlined" 
-                           required 
-                           name='rec_bank_acc_no'
-                           onChange={(event)=> {props.handleFormValueChange(event);}}
-                           />
+                <TextField 
+                      fullWidth 
+                      label="IBAN/AC/ACH Number" 
+                      type="text" 
+                      variant="outlined" 
+                      required 
+                      name='rec_bank_acc_no'
+                      onChange={(event)=> {props.handleFormValueChange(event);}}
+                      />
               </Grid>
 
               <Grid item xs={12} sm={6} >
-                <TextField fullWidth 
-                           label="Routing/IFSC/BIC/SwiftCode" 
-                           type='text' 
-                           variant="outlined" 
-                           required 
-                           name='rec_bank_ifsc_code'
-                           onChange={(event)=> {props.handleFormValueChange(event);}}
-                           />
+                <TextField 
+                      fullWidth 
+                      label="Routing/IFSC/BIC/SwiftCode" 
+                      type='text' 
+                      variant="outlined" 
+                      required 
+                      name='rec_bank_ifsc_code'
+                      onChange={(event)=> {props.handleFormValueChange(event);}}
+                      />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField fullWidth 
-                           label="Additional Info" 
-                           type="text" 
-                           variant="outlined" 
-                           required
-                           name='rec_add_info'
-                           onChange={(event)=> {props.handleFormValueChange(event);}}
-                           />
+                <TextField 
+                    fullWidth 
+                    label="Additional Info" 
+                    type="text" 
+                    variant="outlined" 
+                    required
+                    name='rec_add_info'
+                    onChange={(event)=> {props.handleFormValueChange(event);}}
+                    />
               </Grid>
             </>
           )}
@@ -443,8 +448,7 @@ export default function StepWisePaymentForm() {
   const [formData, updateFormData]  = useState(initialFormData)
   const [error, setError]           = useState('')
 
-  // console.log(formData)
-
+  
   const isStepOptional = (step) => {
     return step === 1;
   };
@@ -456,9 +460,6 @@ export default function StepWisePaymentForm() {
   const handleNext = () => {
     let newSkipped = skipped;
 
-   
-    // console.log(activeStep)
-
     // Check the first Step Validation
     if (activeStep === 0) {
           if (formData.send_amount === 0) {
@@ -469,9 +470,6 @@ export default function StepWisePaymentForm() {
 
           } else if (formData.receiver_currency === '') {
             setError('Please select Receiver Currency')
-
-          } else if (formData.source_fund === '') {
-            setError('Please select Source fund type')
 
           } else if (formData.sending_purpose === '') {
             setError('Please select Sending Purpose')

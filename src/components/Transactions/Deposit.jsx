@@ -20,17 +20,17 @@ import { useEffect } from 'react';
 
 
 
-
 const steps                   = ['Create Deposit', 'Confirm your Deposit'];
 const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
 const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 
 
 
-// First Form
-function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error}) {
 
-  const [currencies, setCurrencies] = React.useState([])
+// First Form
+function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error, transactionFee}) {
+
+  const [currencies, setCurrencies] = React.useState([]);
 
   // Get selected Currency value
   const handleCurrencyChange = (event)=> {
@@ -44,6 +44,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
     }
   };
 
+
   // Capture selected payment method
   const handlePaymentMethodChange = (event)=> {
 
@@ -56,6 +57,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
     }
   };
 
+
     // Selected Amount
     const handleAmountChange = (event)=> {
 
@@ -67,6 +69,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         setAmount(event.target.value)
       }
     };
+
 
     // Fetch all the available currency from API
     useEffect(() => {
@@ -91,35 +94,33 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         payment methods. Fill the details correctly & the amount you want to deposit.
       </small>
 
-    <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
+      <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
 
-    <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
-        <InputLabel id="currency-label">Currency</InputLabel>
-        <Select
-          labelId="currency-label"
-          id="currency-select"
-          value={currency}
-          label="Currency"
-          onChange={handleCurrencyChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
+      <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
+          <InputLabel id="currency-label">Currency</InputLabel>
+          <Select
+            labelId="currency-label"
+            id="currency-select"
+            value={currency}
+            label="Currency"
+            onChange={handleCurrencyChange}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
 
-          {currencies.map((curr)=> (
-              <MenuItem key={curr.id} value={curr.name}>
-                {curr.name}
-              </MenuItem>
-          ))};
-          
-        </Select>
-        
-        <FormHelperText>Fee (0.00+0.00) Total Fee: 0.00</FormHelperText>
-      </FormControl>
+            {currencies.map((curr)=> (
+                <MenuItem key={curr.id} value={curr.name}>
+                  {curr.name}
+                </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>Fee ({amount} + {transactionFee.toFixed(2)}(10%)) Total Fee: {parseFloat(amount) + parseFloat(transactionFee)}</FormHelperText>
+        </FormControl>
 
         <TextField
           hiddenLabel
-          id="filled-hidden-label-small"
+          id="amount"
           variant="filled"
           size="small"
           value={amount}
@@ -149,46 +150,45 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         </FormControl>
 
       </div>
-
     </>
-  )
-}
+
+  );
+};
 
 
 function Form2({...props}) {
 
-  
   return(
     <>
-    <small className='text-muted d-flex justify-content-center my-3'>
-      Check your deposit information before confirmation.
-    </small>
+      <small className='text-muted d-flex justify-content-center my-3'>
+        Check your deposit information before confirmation.
+      </small>
 
-    <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
-      <div className="my-4">
-        <div className="d-flex justify-content-between">
-            <p>Deposit Amount</p> 
-            <p>{props.currency} {props.amount}</p>
+      <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
+        <div className="my-4">
+          <div className="d-flex justify-content-between">
+              <p>Deposit Amount</p> 
+              <p>{props.currency} {props.amount}</p>
+          </div>
+          <hr className='mb-3'/>
         </div>
-        <hr className='mb-3'/>
+
+        <div className="d-flex justify-content-between">
+            <p>Fee(10%)</p> 
+            <p>{props.currency} {props.transactionFee.toFixed(3)}</p>
+        </div>
+        <hr className='mb-4'/>
+
+        <div className="d-flex justify-content-between">
+          <p><b>Total</b></p> <p><b>{props.currency} {props.totalAamount}</b></p>
+        </div>
+        <hr className='mb-4'/>
       </div>
 
-      <div className="d-flex justify-content-between">
-          <p>Fee(10%)</p> 
-          <p>{props.currency} {props.transactionFee.toFixed(3)}</p>
-      </div>
-      <hr className='mb-4'/>
-
-      <div className="d-flex justify-content-between">
-        <p><b>Total</b></p> <p><b>{props.currency} {props.totalAamount}</b></p>
-      </div>
-      <hr className='mb-4'/>
-    </div>
-
-    {props.error && <Alert severity="error">{props.error}</Alert>}
-
+      {props.error && <Alert severity="error">{props.error}</Alert>}
     </>
-  )
+
+  );
 };
 
 
@@ -218,14 +218,16 @@ export default function DepositForm({open}) {
     return Object.keys(completed).length;
   };
 
-  
+  // Last step check
   const isLastStep = () => {
     return activeStep === totalSteps() - 1;
   };
 
+  // All step completed check
   const allStepsCompleted = () => {
     return completedSteps() === totalSteps();
   };
+
 
    // Switch to Next step
   const handleNext = () => {
@@ -285,53 +287,53 @@ export default function DepositForm({open}) {
       }).then((res)=> {
         // console.log(res)
 
-        if(res.data.msg == 'Deposit successful') {
-            newCompleted[activeStep] = true;
-            setCompleted(newCompleted);
-            handleNext();
+          if(res.data.msg == 'Deposit successful') {
+              newCompleted[activeStep] = true;
+              setCompleted(newCompleted);
+              handleNext();
 
-        } else if(res.data.msg == 'Token has expired'){
-            setError("Session has expired please try to login")
+          } else if(res.data.msg == 'Token has expired'){
+              setError("Session has expired please try to login")
 
-        } else if(res.data.msg == 'Invalid token') {
-            setError("Invalid Session please try to login")
-        } else {
-          setError('')
-        };
-
-      }).catch((error)=> {
-        console.log(error)
-
-        if(error.response.data.msg == 'Invalid currency'){
-            setError("Requested Currency is not available")
-
-        } else if(error.response.data.msg == 'Wallet not found') {
-            setError("Donot have wallet please create your wallet")
-
-        } else if(error.response.data.msg == 'Error depositing funds') {
-            setError("Error while depositing money")
-
-        } else if(error.response.data.msg == 'Wallet not found') {
-            setError("Wallet is not available please create a wallet first")
-
-        } else if(error.response.data.msg == 'Authentication Failed Please provide auth token') {
-            setError("Authentication Failed")
-
-        } else if(error.response.data.msg == 'Authentication Failed') {
-            setError("Authentication error")
-
-        } else if(error.response.data.msg == 'Currency error') {
-            setError("Error while fetching the value of currency")
-
-        } else if(error.response.data.msg == 'Wallet error') {
-            setError("Wallet error")
-
-        } else if(error.response.data.msg == 'Error depositing funds') {
-            setError("Server Error")
-        } else {
+          } else if(res.data.msg == 'Invalid token') {
+              setError("Invalid Session please try to login")
+          } else {
             setError('')
-        };
-      })
+          };
+
+        }).catch((error)=> {
+          console.log(error)
+
+          if(error.response.data.msg == 'Invalid currency'){
+              setError("Requested Currency is not available")
+
+          } else if(error.response.data.msg == 'Wallet not found') {
+              setError("Donot have wallet please create your wallet")
+
+          } else if(error.response.data.msg == 'Error depositing funds') {
+              setError("Error while depositing money")
+
+          } else if(error.response.data.msg == 'Wallet not found') {
+              setError("Wallet is not available please create a wallet first")
+
+          } else if(error.response.data.msg == 'Authentication Failed Please provide auth token') {
+              setError("Authentication Failed")
+
+          } else if(error.response.data.msg == 'Authentication Failed') {
+              setError("Authentication error")
+
+          } else if(error.response.data.msg == 'Currency error') {
+              setError("Error while fetching the value of currency")
+
+          } else if(error.response.data.msg == 'Wallet error') {
+              setError("Wallet error")
+
+          } else if(error.response.data.msg == 'Error depositing funds') {
+              setError("Server Error")
+          } else {
+              setError('')
+          };
+        })
     };
     
     // console.log(amount)
@@ -346,7 +348,6 @@ export default function DepositForm({open}) {
     // setActiveStep(0);
     // setCompleted({});
     navigate('/')
-
   };
 
 
@@ -355,47 +356,47 @@ export default function DepositForm({open}) {
     switch(step){
       case 0:
         return <Form1
-        currency={currency}
-        setCurrency={setCurrency}
-        paymentMethod={paymentMethod}
-        setPaymentMethod={setPaymentMethod}
-        amount={amount}
-        setAmount={setAmount}
-        error={error}
-        setError={setError}
-          />;
+                  currency={currency}
+                  setCurrency={setCurrency}
+                  paymentMethod={paymentMethod}
+                  setPaymentMethod={setPaymentMethod}
+                  amount={amount}
+                  setAmount={setAmount}
+                  error={error}
+                  setError={setError}
+                  transactionFee={transactionFee}
+              />;
       case 1:
         return <Form2 
-        error={error}
-        setError={setError}
-        totalAamount={totalAamount}
-        amount={amount}
-        currency={currency}
-        transactionFee={transactionFee}
-        />;
+                  error={error}
+                  setError={setError}
+                  totalAamount={totalAamount}
+                  amount={amount}
+                  currency={currency}
+                  transactionFee={transactionFee}
+                  />;
       default:
         return null;
     }
   };
+
 
   // Calculate the transaction Fee and the Total amount
   React.useEffect(() => {
     if(amount) {
       const transactionFee = (parseFloat(amount) / 100) * 10
       setTransactionFee(transactionFee)
-      const TotalAmount = amount - transactionFee
+      const TotalAmount = parseFloat(amount) + parseFloat(transactionFee)
       setTotalAmount(TotalAmount)
     }
-  }, [amount])
-
+  }, [amount]);
 
 
 
   return (
     <Main open={open}>
     <DrawerHeader />
-
-    <Box sx={{ 
+      <Box sx={{ 
               width: {xs: '100%', sm: '50%'},
               marginTop: {xs: '40px', sm: '1rem'},
               marginLeft: {xs: '0%', sm: '20%'},
@@ -404,83 +405,70 @@ export default function DepositForm({open}) {
               boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
               borderRadius: '5%',
               height: {xs:'100%', sm: '120%'}
-            }}
-       >
-      <p className='fs-3 d-flex justify-content-center'>Deposit Money</p> <br />
+              }}
+            >
+        <p className='fs-3 d-flex justify-content-center'>Deposit Money</p> <br />
 
-      <Stepper nonLinear activeStep={activeStep}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
-            {/* <StepButton color="inherit" onClick={handleStep(index)}>
+        <Stepper nonLinear activeStep={activeStep}>
+          {steps.map((label, index) => (
+            <Step key={label} completed={completed[index]}>
+              {/* <StepButton color="inherit" onClick={handleStep(index)}>
+                  {label}
+              </StepButton> */}
+              <StepButton color="inherit">
                 {label}
-            </StepButton> */}
-            <StepButton color="inherit">
-              {label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
-        {allStepsCompleted() ? (
-          <React.Fragment>
-            <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
-              {/* All steps completed - you&apos;re finished */}
-              <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                    Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
-                    We'll notify you once your deposit has been approved.
-              </Alert>
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              {/* <Button onClick={handleReset}>Reset</Button> */}
-              <Button onClick={handleReset}>Go back to dashboard</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
 
-            {/* <Typography sx={{ mt: 2, mb: 1, py: 1 }}>Step {activeStep + 1}</Typography> */}
 
-            {renderForms(activeStep)}
+        <div>
+          {allStepsCompleted() ? (
+            <React.Fragment>
+              <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
+                {/* All steps completed - you&apos;re finished */}
+                <Alert severity="success">
+                  <AlertTitle>Success</AlertTitle>
+                      Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
+                      We'll notify you once your deposit has been approved.
+                </Alert>
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Box sx={{ flex: '1 1 auto' }} />
+                {/* <Button onClick={handleReset}>Reset</Button> */}
+                <Button onClick={handleReset}>Go back to dashboard</Button>
+              </Box>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', marginRight: '27%' }}>
-              {/* <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button> */}
-              <Box sx={{ flex: '1 1 auto' }} />
-              {/* <Button onClick={handleNext} sx={{ mr: 1 }}>
-                  Next
-              </Button> */}
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete} variant='outlined' 
-                    sx={{marginRight: '4%', marginTop: '3%'}}
-                  >
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Confirm & Deposit'
-                      : 'Confirm & Proceed'}
-                  </Button>
-                ))}
-            </Box>
-          </React.Fragment>
-        )}
-      </div>
-    </Box>
 
+              {renderForms(activeStep)}
+
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', justifyContent:'center' }}>
+                  {activeStep !== steps.length &&
+                    (completed[activeStep] ? (
+                      <Typography variant="caption" sx={{ display: 'inline-block' }}>
+                        Step {activeStep + 1} already completed
+                      </Typography>
+                    ) : (
+                      <Button onClick={handleComplete} variant='outlined' 
+                        sx={{marginRight: '4%', marginTop: '3%'}}
+                      >
+                        {completedSteps() === totalSteps() - 1
+                          ? 'Confirm & Deposit'
+                          : 'Confirm & Proceed'}
+                      </Button>
+                    ))}
+              </Box>
+            </React.Fragment>
+          )}
+        </div>
+      </Box>
     </Main>
-
   );
-}
+};
 
 
 

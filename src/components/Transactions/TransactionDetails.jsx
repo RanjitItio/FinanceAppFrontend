@@ -14,7 +14,7 @@ import Avatar from '@mui/material/Avatar';
 
 
 
-
+/// Specific FIAT Transaction Details
 export default function ResponsiveDialog({handleClose, boxOpen, specificTransactionDetails}) {
   
   const theme = useTheme();
@@ -33,12 +33,8 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
         maxWidth='sm'
       >
         <DialogTitle id="responsive-dialog-title">
-          {/* {"Use Google's location service?"} */}
         </DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            <p>Content Text</p>
-          </DialogContentText> */}
 
           <div className="container">
             <div className="row">
@@ -46,12 +42,11 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                     <div className="card rounded" style={{height: '21rem'}}>
                         <div className="card-body" style={{backgroundColor: '#c3c2d5'}}>
                                 <Typography className='d-flex justify-content-center mb-3' variant='div'>
-                                <Avatar sx={{ width: avatarSize, height: avatarSize, backgroundColor: '#a6a3d3'}} >
-                                    <ArrowOutwardIcon sx={{fontSize: iconSize, color:'#4f47bc'}}/>
-                                </Avatar>
+                                  <Avatar sx={{ width: avatarSize, height: avatarSize, backgroundColor: '#a6a3d3'}} >
+                                      <ArrowOutwardIcon sx={{fontSize: iconSize, color:'#4f47bc'}}/>
+                                  </Avatar>
                                 </Typography>
 
-                                
                                     <React.Fragment >
                                     {specificTransactionDetails ? 
                                     (<p className='d-flex justify-content-center'>{specificTransactionDetails?.type || ''} amount</p>) : (
@@ -65,11 +60,13 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                         <p className='d-flex justify-content-center mb-3 fs-5'><b></b></p>
                                     )}
                                     
-                                    {specificTransactionDetails ? (
-                                      <p className='text-muted d-flex justify-content-center mb-5'>{specificTransactionDetails?.data?.created_At?.split('T')[0] || ''} {specificTransactionDetails?.data?.created_At?.split('T')[1] || ''}</p>
-                                    ) : (
-                                      <p>Transaction Date & time</p>
-                                    )}
+                                    <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginBottom:50}}>
+                                        {specificTransactionDetails ? (
+                                          <p>{specificTransactionDetails?.data?.created_At?.split('T')[0] || ''} {specificTransactionDetails?.data?.created_At?.split('T')[1] || ''}</p>
+                                        ) : (
+                                          <p>Transaction Date & time</p>
+                                        )}
+                                    </div>
                                     
                                     <div className='d-flex justify-content-center'>
                                         <Button variant="outlined" startIcon={<PrintIcon />}>

@@ -34,7 +34,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 
 
-// All Transaction of the user
+// All FIAT Transaction of the user
 export default function AllTransactions({open}) {
     const [boxOpen, setBoxOpen] = useState(false);  // Open transaction pop up
     const [isfilterItem, setFilterItem] = useState(false);  // 
@@ -49,15 +49,17 @@ export default function AllTransactions({open}) {
     const [loader, setLoader] = useState(true);  // Loader
 
 
-
+    // Date value change
     const handleDateChange = (event) => {
         setDateRange(event.target.value);
     };  
 
+    // Transaction change
     const handleTransactionChange = (event) => {
         setTransactionType(event.target.value);
     };
 
+    
     const handleTransactionStatusChange = (event) => {
         setTransactionStatus(event.target.value);
     };  
@@ -86,17 +88,19 @@ export default function AllTransactions({open}) {
             axiosInstance.get(`/api/v4/users/fiat/transactions/`).then((res)=> {
 
                 if(res.data && res.data.all_fiat_transactions) {
-                    setTransactionData(res.data.all_fiat_transactions)
+                    const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
+                        return new Date(b.data.created_At) - new Date(a.data.created_At)
+                    })
+                    setTransactionData(sortedTransaction)
                     setLoader(false)
-                    console.log(res.data)
                 };
             })
-        }catch(error) {
+        } catch(error) {
             console.log(error)
         }
-       
     }, []);
 
+    
     // Clicked on a specific transaction method
     const handleTransactionClick = (transaction)=> {
         handleClickOpen();
@@ -104,6 +108,7 @@ export default function AllTransactions({open}) {
     };
 
 
+    // Until API data has not fetched
     if (loader) {
         return (
             <Main open={open}>
@@ -277,7 +282,7 @@ export default function AllTransactions({open}) {
                     <Alert severity="warning">{error}</Alert>
                 ) : (
         <List>
-           
+           {console.log('transactionData', transactionData)}
             {transactionData.map((transaction, index) => {
         
                 // const transactionDate = new Date(transaction.data.created_At.split('T')[0] || '');
@@ -302,11 +307,11 @@ export default function AllTransactions({open}) {
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency.name}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency?.name || ''}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
                     primary={transaction.type}
-                    secondary={`Cash ${transaction.data.created_At?.split('T')[0] || ''} ${transaction.data.created_At?.split('T')[1] || ''}`}
+                    secondary={`${transaction.data?.payment_mode || ''} ${transaction.data.created_At?.split('T')[0] || ''} ${transaction.data.created_At?.split('T')[1] || ''}`}
                     />
                     <ListItemText
                     primary={
