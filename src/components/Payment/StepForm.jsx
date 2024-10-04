@@ -17,7 +17,7 @@ import axiosInstance from '../Authentication/axios'
 
 
 
-
+// First Step Form
 function HeadForm({...props}) {
 
   const [currencies, setCurrencies]                          = useState([])
@@ -32,19 +32,30 @@ function HeadForm({...props}) {
     if (props.formData.receiver_currency && props.formData.send_currency && props.formData.send_amount){
       const convert_amount = parseInt(props.formData.send_amount)
 
-      axiosInstance.post(`api/v2/convert/currency/`, {
-        from_currency: props.formData.send_currency,
-        to_currency:   props.formData.receiver_currency,
-        amount     :   convert_amount
-
-      }).then((res)=> {
-        // console.log(res.data.converted_amount)
-        setConvertedAmount(res.data.converted_amount)
-
-      }).catch((error)=> {
-        console.log(error.response)
-
-      })
+      setTimeout(() => {
+        axiosInstance.post(`api/v2/convert/currency/`, {
+          from_currency: props.formData.send_currency,
+          to_currency:   props.formData.receiver_currency,
+          amount     :   convert_amount
+  
+        }).then((res)=> {
+          // console.log(res.data.converted_amount)
+          if (res.status === 200) {
+            setConvertedAmount(res.data.converted_amount)
+          }
+  
+        }).catch((error)=> {
+          // console.log(error.response)
+          if (error.response.data.message === 'Error calling external API') {
+              alert('Currency Conversion API Limit Exceeded')
+            } else if (error.response.data.message === 'Currency API Error') {
+              alert('Currency Conversion API Limit Exceeded')
+            } else if (error.response.data.message === 'Invalid Curency Converter API response') {
+              alert('Currency Conversion API Limit Exceeded')
+            } 
+        })
+      }, 1500);
+      
     }
   }, [props.formData.receiver_amount, props.formData.receiver_currency, props.formData.send_currency, props.formData.send_amount])
 
@@ -457,6 +468,7 @@ export default function StepWisePaymentForm() {
     return skipped.has(step);
   };
 
+  // Redirect to Next page
   const handleNext = () => {
     let newSkipped = skipped;
 

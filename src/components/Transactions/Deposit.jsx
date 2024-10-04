@@ -266,7 +266,7 @@ export default function DepositForm({open}) {
         setError('Please fill all the above fields');
         return;
 
-      }else {
+      } else {
         setError('')
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
@@ -395,7 +395,7 @@ export default function DepositForm({open}) {
 
   return (
     <Main open={open}>
-    <DrawerHeader />
+      <DrawerHeader />
       <Box sx={{ 
               width: {xs: '100%', sm: '50%'},
               marginTop: {xs: '40px', sm: '1rem'},

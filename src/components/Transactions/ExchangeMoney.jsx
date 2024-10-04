@@ -21,98 +21,64 @@ import AlertTitle from '@mui/material/AlertTitle';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../Authentication/axios';
 
 
 
 const steps = ['Setup Money', 'Confirm Exchange Money'];
 
 
-
+// First step form
 function ExchangeMoneyForm1({...props}) {
+  const [currencies, setCurrencies] = React.useState([]);
 
-  const [totalFee, setTotalFee] = React.useState('')
-
+  // From Currency Value update
   const handleFromCurrencyChange = (event)=> {
-    props.updateFromCurrency(event.target.value)
-
     if(!event.target.value) {
-      props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('exchangepaymentfromcurrency', encoded_value)
-      const expirationTime = 2 * 60 * 1000;// 10 minutes in milliseconds
-
-      setTimeout(() => {
-        localStorage.removeItem('exchangepaymentfromcurrency')
-        }, expirationTime);
-    }
-  };
-
-  const handleToCurrencyChange = (event)=> {
-    props.updateToCurrency(event.target.value)
-
-    if(!event.target.value) {
-      props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('exchangepaymenttocurrency', encoded_value)
-      const expirationTime = 2 * 60 * 1000;// 10 minutes in milliseconds
-
-      setTimeout(() => {
-        localStorage.removeItem('exchangepaymenttocurrency')
-        }, expirationTime);
-    }
-  };
-
-  const handleYouramountChange = (event)=> {
-    props.updateYourAmount(event.target.value)
-
-    if(!event.target.value) {
-      props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('exchangepaymentyouramount', encoded_value)
-
-      const expirationTime = 2 * 60 * 1000;// 2 minutes in milliseconds
-
-      setTimeout(() => {
-          localStorage.removeItem('exchangepaymentyouramount')
-      }, expirationTime);
-    }
-  };
-
-  const handleConvertedAmountChange = (event)=> {
-    props.updateconvertedAmount(event.target.value)
-
-    if(!event.target.value) {
-      props.setError('Please fill all the above fields')
+      props.setError('Please select from Currency')
     } else {
       props.setError('')
-
-      const encoded_value = btoa(event.target.value)
-      localStorage.setItem('exchangepaymentconvertedamount', encoded_value)
-
-      const expirationTime = 2 * 60 * 1000;// 2 minutes in milliseconds
-
-      setTimeout(() => {
-        localStorage.removeItem('exchangepaymentconvertedamount')
-    }, expirationTime);
-
+      props.updateFromCurrency(event.target.value)
     }
   };
 
-//   useEffect(() => {
-//     if(amount) {
-//       const TotalFeeAmount = (((amount / 100) * 2.5) + 3)
-//       setTotalFee(TotalFeeAmount)
-//     }
-//   }, [amount])
+  // To Currency Value update
+  const handleToCurrencyChange = (event)=> {
+
+    if(!event.target.value) {
+      props.setError('Please Select to Currency')
+    }else {
+      props.setError('')
+      props.updateToCurrency(event.target.value)
+    }
+  };
+
+
+  // Get typed amount
+  const handleamountChange = (event)=> {
+    if(!event.target.value) {
+      props.setError('Please fill all the above fields')
+    }else {
+      props.setError('')
+      props.updateAmount(event.target.value);
+    }
+  };
+
+
+  // Fetch all the available currency from API
+  useEffect(() => {
+    axiosInstance.get(`api/v2/currency/`).then((res)=> {
+      // console.log(res.data.currencies)
+      if (res.data && res.data.currencies){
+          setCurrencies(res.data.currencies)
+      }
+
+    }).catch((error)=> {
+      console.log(error.response)
+    });
+
+  }, []);
+
   
 
   return(
@@ -128,16 +94,17 @@ function ExchangeMoneyForm1({...props}) {
             <FormControl size='small' sx={{marginLeft: {xs:'4%', lg: '8%'}, width:{xs:'90%', lg: '100%'}}}>
                 <InputLabel id="from-balance-select-label">Currency</InputLabel>
                 <Select
-                labelId="from-balance-select-label"
                 id="from-balance-select"
                 value={props.fromCurrency}
                 label="Currency" 
                 onChange={handleFromCurrencyChange}
                 >
-                <MenuItem value={'USD'}>USD</MenuItem>
-                <MenuItem value={"GBP"}>GBP</MenuItem>
-                <MenuItem value={"EUR"}>EUR</MenuItem>
-                <MenuItem value={"INR"}>INR</MenuItem>
+                <MenuItem value={''}>None</MenuItem>
+                  {currencies.map((curr)=> (
+                  <MenuItem key={curr.id} value={curr.name}>
+                    {curr.name}
+                  </MenuItem>
+              ))}
                 </Select>
                 <FormHelperText><b>From</b> Balance: (49,945.53 USD) </FormHelperText>
             </FormControl>
@@ -160,16 +127,17 @@ function ExchangeMoneyForm1({...props}) {
                              marginTop:{xs:'-3%', lg: '0px'}}}>
                 <InputLabel id="to-balance-select-label">Currency</InputLabel>
                 <Select
-                labelId="to-balance-select-label"
                 id="to-balance-select"
                 value={props.toCurrency}
                 label="Currency"
                 onChange={handleToCurrencyChange}
                 >
-                    <MenuItem value={"GBP"}>GBP</MenuItem>
-                    <MenuItem value={"USD"}>USD</MenuItem>
-                    <MenuItem value={"EUR"}>EUR</MenuItem>
-                    <MenuItem value={"INR"}>INR</MenuItem>
+                    <MenuItem value={""}>None</MenuItem>
+                    {currencies.map((curr)=> (
+                      <MenuItem key={curr.id} value={curr.name}>
+                        {curr.name}
+                      </MenuItem>
+                  ))}
                 </Select>
                 <FormHelperText><b>To</b> Balance: (19,847 GBP)</FormHelperText>
             </FormControl>
@@ -177,14 +145,14 @@ function ExchangeMoneyForm1({...props}) {
 
         <Grid item xs={12}>
             <TextField 
-                id="your-amount" 
-                label="Your Amount" 
+                id="amount" 
+                label="Amount" 
                 variant="outlined" 
                 size='small' 
                 sx={{width: '90%', marginLeft: '3%'}}
-                onChange={handleYouramountChange}
+                onChange={handleamountChange}
                 />
-                <FormHelperText sx={{marginLeft:'5%'}}>Fee(0.12%+1) Total Fee: 1.96</FormHelperText>
+                <FormHelperText sx={{marginLeft:'5%'}}>Fee(5%)</FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
@@ -193,7 +161,8 @@ function ExchangeMoneyForm1({...props}) {
                 label="Converted Amount"
                 variant="outlined"
                 size='small'
-                onChange={handleConvertedAmountChange}
+                disabled
+                value={props.convertedAmount}
                 sx={{width: '90%', marginLeft: '3%', marginTop: '5px'}}
                 />
         </Grid>
@@ -211,32 +180,8 @@ function ExchangeMoneyForm1({...props}) {
 };
 
 
-
-function ExchangeMoneyForm2() {
-  const [typedFromCurrency, setTypedFromCurrency] = React.useState('')
-  const [typedyourAmount, settypedyourAmount] = React.useState('')
-  const [typedToCurrency, setTypedToCurrency] = React.useState('')
-  // const [typedAmount, setTypedAmount] = React.useState('')
-
-  useEffect(()=> {
-        const StoredFromCurrency = localStorage.getItem('exchangepaymentfromcurrency');
-        const StoredYourAmount = localStorage.getItem('exchangepaymentyouramount');
-        const UserTypedToCurrency = localStorage.getItem('exchangepaymenttocurrency');
-
-    if(StoredFromCurrency) {
-      const decodedFromcurrency = atob(StoredFromCurrency)
-      setTypedFromCurrency(decodedFromcurrency);
-    }
-    if(StoredYourAmount) {
-      const decoded_typedAmount = atob(StoredYourAmount)
-      settypedyourAmount(decoded_typedAmount);
-    }
-    if(UserTypedToCurrency) {
-      const decod_value = atob(UserTypedToCurrency)
-      setTypedToCurrency(decod_value);
-    }
-  }, [])
-  
+// Second step form
+function ExchangeMoneyForm2({...props}) {
 
   return(
     <>
@@ -247,24 +192,30 @@ function ExchangeMoneyForm2() {
     <div style={{marginLeft: '2%', marginRight: '1%'}}>
 
       <p className='text-primary d-flex justify-content-center'><b>Exchanged Amount</b></p>
-      <p className='d-flex justify-content-center mb-4'>{typedFromCurrency} {typedyourAmount}</p>
+      <p className='d-flex justify-content-center mb-4'>{props.toCurrency} {props.convertedAmount}</p>
 
       <div className='mx-4'>
         <div className='d-flex justify-content-between mb-2'>
-          <p>Rate</p>
-          <p>{typedFromCurrency} 1 = {typedToCurrency} 0.75</p>
+          <p>From Currency</p>
+          <p>{props.fromCurrency} {props.Amount}</p>
         </div>
         <hr className='mb-2' />
 
         <div className='d-flex justify-content-between mb-2'>
-          <p>Fee</p>
-          <p>{typedFromCurrency} 1.35</p>
+          <p>To Currency</p>
+          <p>{props.toCurrency} {props.convertedAmount}</p>
+        </div>
+        <hr className='mb-2' />
+
+        <div className='d-flex justify-content-between mb-2'>
+          <p>Fee(5%)</p>
+          <p>{props.fromCurrency} {props.fee}</p>
         </div>
         <hr className='mb-2' />
 
         <div className='d-flex justify-content-between mb-2'>
           <p><b>Total</b></p>
-          <p><b>{typedFromCurrency} 291.35</b></p>
+          <p><b>{props.fromCurrency} {props.totalAmount}</b></p>
         </div>
       </div>
     </div>
@@ -274,17 +225,19 @@ function ExchangeMoneyForm2() {
 
 
 
-
+// Exchange Money 
 export default function ExchangeMoneyForm({open}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
-  const [fromCurrency, updateFromCurrency] = React.useState('');
-  const [toCurrency, updateToCurrency] = React.useState('');
-  const [yourAmount, updateYourAmount] = React.useState('');
-  const [convertedAmount, updateconvertedAmount] = React.useState('');
-  const [error, setError] = React.useState('');
   const navigate = useNavigate();
+  const [fromCurrency, updateFromCurrency]       = React.useState('');
+  const [toCurrency, updateToCurrency]           = React.useState('');
+  const [Amount, updateAmount]                   = React.useState('');
+  const [convertedAmount, updateconvertedAmount] = React.useState('');
+  const [error, setError]                        = React.useState('');
+  const [fee, updateFee]                         = React.useState(0);  // Fee state
+  const [totalAmount, setTotalAmount]            = React.useState(0);
 
 
   const totalSteps = () => {
@@ -303,6 +256,7 @@ export default function ExchangeMoneyForm({open}) {
     return completedSteps() === totalSteps();
   };
 
+  // Redirect to Next Step
   const handleNext = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
@@ -312,7 +266,7 @@ export default function ExchangeMoneyForm({open}) {
         : activeStep + 1;
 
         if (activeStep == 0) {
-          if (!fromCurrency || !toCurrency || !yourAmount || !convertedAmount) {
+          if (!fromCurrency || !toCurrency || !Amount || !convertedAmount) {
             setError('Please fill all the above fields');
             return;
           }
@@ -328,36 +282,62 @@ export default function ExchangeMoneyForm({open}) {
     setActiveStep(step);
   };
 
+  // Last step Method 
   const handleComplete = () => {
     const newCompleted = completed;
-
     if (activeStep == 0) {
-      if (!fromCurrency || !toCurrency || !yourAmount || !convertedAmount) {
+      if (!fromCurrency || !Amount || !toCurrency) {
         setError('Please fill all the above fields');
-        return;
-      }else {
+
+      } else {
+        setError('')
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
-      }
+        handleNext();
+      };
+
     } else {
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-    }
+      // Call API
+      axiosInstance.post(`/api/v6/fiat/exchange/money/`, {
+        exchange_amount: Amount,
+        convert_amount: convertedAmount,
+        fee: fee,
+        from_currency: fromCurrency,
+        to_currency: toCurrency,
+
+      }).then((res)=> {
+        // console.log(res)
+
+          if(res.data.message == 'Exchnage money created successfully') {
+              newCompleted[activeStep] = true;
+              setCompleted(newCompleted);
+              handleNext();
+          }
+
+        }).catch((error)=> {
+          console.log(error)
+
+          if(error.response.data.msg == 'Do not have from wallet'){
+              setError("Do not have existing wallet in From Currency")
+          } else if (error.response.data.msg == 'Do not have sufficient balance in From wallet') {
+            setError('Insufficient Balance in Wallet')
+          } else {
+            setError('')
+          }
+
+        })
+    };
     
-  //   if (completedSteps() === totalSteps()) {
-  //      navigate('/')
-  //   }else {
-  //     handleNext();
-  //   }
-  handleNext();
   };
 
+
+  // Navigate to Dashboard
   const handleReset = () => {
-    // setActiveStep(0);
-    // setCompleted({});
     navigate('/')
   };
 
+  
+  // Render the forms
   const renderForms = (step) => {
     switch(step){
       case 0:
@@ -366,39 +346,81 @@ export default function ExchangeMoneyForm({open}) {
                 updateFromCurrency={updateFromCurrency}
                 toCurrency={toCurrency}
                 updateToCurrency={updateToCurrency}
-                yourAmount={yourAmount}
-                updateYourAmount={updateYourAmount}
+                updateAmount={updateAmount}
                 convertedAmount={convertedAmount}
-                updateconvertedAmount={updateconvertedAmount}
                 error={error}
                 setError={setError}
             />;
       case 1:
-        return <ExchangeMoneyForm2 />;
+        return <ExchangeMoneyForm2 
+                  convertedAmount={convertedAmount}
+                  toCurrency={toCurrency}
+                  fromCurrency={fromCurrency}
+                  Amount={Amount}
+                  fee={fee}
+                  totalAmount={totalAmount}
+                />;
       default:
         return null;
     }
-  }
+  };
+
+  // Convert The currency
+  useEffect(()=> {
+    if (Amount && fromCurrency && toCurrency) {
+      setTimeout(() => {
+        axiosInstance.post(`api/v2/convert/currency/`, {
+          from_currency: fromCurrency,
+          to_currency:   toCurrency,
+          amount     :   parseFloat(Amount)
+  
+        }).then((res)=> {
+          
+          if (res.status === 200) {
+            updateconvertedAmount(res.data.converted_amount)
+          }
+  
+        }).catch((error)=> {
+            console.log(error)
+  
+            if (error.response.data.message === 'Error calling external API') {
+                alert('Currency Conversion API Limit Exceeded')
+            } else if (error.response.data.message === 'Currency API Error') {
+              alert('Currency Conversion API Limit Exceeded')
+            } else if (error.response.data.message === 'Invalid Curency Converter API response') {
+              alert('Currency Conversion API Limit Exceeded')
+            } 
+        })
+      }, 1500);
+    }
+  }, [fromCurrency, toCurrency, Amount]);
+
+
+  // Calculate Fee and Total Amount
+  useEffect(()=> {
+    if (Amount) {
+      const calc_amount  = (Amount / 100) * 5
+      const exact_fee    = parseFloat(calc_amount)
+      const total_amount = parseFloat(Amount) + exact_fee
+      updateFee(exact_fee)
+      setTotalAmount(total_amount)
+    }
+  }, [Amount]);
+
+  
 
 
   return (
     <Main open={open}>
-    <DrawerHeader />
+      <DrawerHeader />
 
-    {/* <Paper elevation={8}  
-       sx={{height: '150%', display: 'flex', 
-         justifyContent: 'center', border: '1px solid #808080', 
-         marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '90%'}
-         }}> */}
-      
     <Box sx={{ width: {xs: '100%', sm: '80%', md: '45%'}, 
                marginTop: {xs: '40px', sm: '1rem'},
                borderRadius: '20px',
                backdropFilter: 'blur( 20px )',
                boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff',
                marginLeft: {xs: '0%', sm: '25%'},
-              //  background: 'url("/formBackgroundImage.jpg")',
-              backgroundColor: '#E5E4E2',
+               background: '#F0F8FF',
               height: {xs:'100%', sm: '120%'}
                 }}>
       <p className='fs-3 d-flex justify-content-center my-2'>Exchange Money</p> <br />
@@ -412,15 +434,17 @@ export default function ExchangeMoneyForm({open}) {
           </Step>
         ))}
       </Stepper>
+
       <div>
         {allStepsCompleted() ? (
           <React.Fragment>
             <Typography variant='h1' sx={{ mt: 2, mb: 1 }}>
               <Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
-                 Congatulation Your amount has been transferred successfully
+                  Congratulation, Your Exchange money request has been raised successfully, Please wait for Admin approval
               </Alert>
             </Typography>
+
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
               <Button onClick={handleReset}>Dashboard</Button>
@@ -429,57 +453,43 @@ export default function ExchangeMoneyForm({open}) {
         ) : (
           <React.Fragment>
 
-            {/* <Typography sx={{ mt: 2, mb: 1, py: 1 }}>Step {activeStep + 1}</Typography> */}
-
             {renderForms(activeStep)}
 
-            <Box 
-                sx={{ display: 'flex', 
-                      flexDirection: 'row', 
-                      pt: 2,
-                      marginLeft: '5%',
-                      marginTop: '5%' }}>
-              {/* <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button> */}
-              <Box sx={{ flex: '1 1 auto' }}  />
-              {/* sx={{ flex: '1 1 auto' }} */}
-              {/* <Button onClick={handleNext} >
-                Next
-              </Button> */}
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete} variant='outlined'  
-                         sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF',
-                            marginRight: {xs: '4%', lg: '3%'},
-                            width: {xs: '50%', lg: '50%'},
-                            '@media (max-width: 500px)': {
-                                fontSize: '0.6rem' // Decrease font size on smaller screens
-                            }
-                         }} >
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Confirm & Transfer'
-                      : 'Confirm & Proceed'}
-                  </Button>
-                ))}
-            </Box>
+                <Box 
+                    sx={{ display: 'flex', 
+                          flexDirection: 'row', 
+                          justifyContent:'center',
+                          pt: 2,
+                          // marginLeft: '5%',
+                          marginTop: '5%' }}>
+                
+                  {/* <Box sx={{ flex: '1 1 auto' }}  /> */}
+              
+                  {activeStep !== steps.length &&
+                    (completed[activeStep] ? (
+                      <Typography variant="caption" sx={{ display: 'inline-block' }}>
+                        Step {activeStep + 1} already completed
+                      </Typography>
+                    ) : (
+                      <Button onClick={handleComplete} variant='outlined'  
+                            sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF',
+                                marginRight: {xs: '4%', lg: '3%'},
+                                width: {xs: '50%', lg: '50%'},
+                                '@media (max-width: 500px)': {
+                                    fontSize: '0.6rem' 
+                                }
+                            }}>
+                        {completedSteps() === totalSteps() - 1
+                          ? 'Confirm & Transfer'
+                          : 'Confirm & Proceed'}
+                      </Button>
+                    ))}
+                </Box>
           </React.Fragment>
         )}
       </div>
     </Box>
-    {/* </Paper> */}
-
-    </Main>
-
+  </Main>
   );
 };
 
