@@ -148,6 +148,11 @@ function WithdrawalForm1({...props}) {
 // Second Form
 function WithdrawalForm2({...props}) {
 
+  const CalculateTotalAmount = (amount, fee)=> {
+    const totalAmount = parseFloat(amount) + parseFloat(fee);
+    return totalAmount.toFixed(3)
+  };
+
   return(
     <>
     <small className='text-muted d-flex justify-content-center my-4' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
@@ -201,7 +206,8 @@ function WithdrawalForm2({...props}) {
             </Typography>
 
             <Typography variant="body1">
-              <b>{props.withdrawalCurrency} {parseFloat(props.Amount) + parseFloat(props.fees)}</b>
+              <b>{props.withdrawalCurrency} {CalculateTotalAmount(props.Amount, props.fees)}</b>
+              {/* <b>{props.withdrawalCurrency} ({parseFloat(props.Amount) + parseFloat(props.fees)})</b> */}
             </Typography>
           </Box>
         </Box>
