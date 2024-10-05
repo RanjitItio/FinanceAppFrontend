@@ -30,7 +30,22 @@ const steps = ['Setup Money', 'Confirm Exchange Money'];
 
 // First step form
 function ExchangeMoneyForm1({...props}) {
-  const [currencies, setCurrencies] = React.useState([]);
+  const [userWallet, setUserWallet]   = React.useState([]);
+
+  // Fetch all the available wallet of the user
+  useEffect(() => {
+      axiosInstance.get(`api/v3/user/wallet/`).then((res)=> {
+        // console.log(res)
+        if (res.status === 200) {
+          setUserWallet(res.data.user_wallet_data)
+        }
+
+      }).catch((error)=> {
+        console.log(error);
+
+      })
+  }, []);
+  
 
   // From Currency Value update
   const handleFromCurrencyChange = (event)=> {
@@ -56,28 +71,20 @@ function ExchangeMoneyForm1({...props}) {
 
   // Get typed amount
   const handleamountChange = (event)=> {
+    const value = event.target.value;
+
     if(!event.target.value) {
+      props.setAmountError('Please fill the amount')
       props.setError('Please fill all the above fields')
-    }else {
-      props.setError('')
+    } else if (isNaN(value)) {
+      props.setAmountError('Please enter a valid number');
+    } else {
+      props.setError('');
+      props.setAmountError('');
       props.updateAmount(event.target.value);
     }
   };
 
-
-  // Fetch all the available currency from API
-  useEffect(() => {
-    axiosInstance.get(`api/v2/currency/`).then((res)=> {
-      // console.log(res.data.currencies)
-      if (res.data && res.data.currencies){
-          setCurrencies(res.data.currencies)
-      }
-
-    }).catch((error)=> {
-      console.log(error.response)
-    });
-
-  }, []);
 
   
 
@@ -100,13 +107,15 @@ function ExchangeMoneyForm1({...props}) {
                 onChange={handleFromCurrencyChange}
                 >
                 <MenuItem value={''}>None</MenuItem>
-                  {currencies.map((curr)=> (
-                  <MenuItem key={curr.id} value={curr.name}>
-                    {curr.name}
+                  {userWallet.map((wallet)=> (
+                  <MenuItem key={wallet.id} value={wallet.currency}>
+                    {wallet.currency}
                   </MenuItem>
               ))}
                 </Select>
-                <FormHelperText><b>From</b> Balance: (49,945.53 USD) </FormHelperText>
+                <FormHelperText>
+                  <b>From</b> Balance: ({userWallet.find((wallet)=> wallet.currency === props.fromCurrency)?.balance.toFixed(2) || 0} {props.fromCurrency}) 
+                </FormHelperText>
             </FormControl>
         </Grid>
 
@@ -119,7 +128,7 @@ function ExchangeMoneyForm1({...props}) {
                    sx={{marginTop: '-5%', display: {xs: 'flex', lg: 'none'}, justifyContent: 'center'}}>
             <ImportExportIcon />
         </Grid>
-        
+
         <Grid item xs={12} lg={5}>
             <FormControl fullWidth size='small' 
                        sx={{ width:{xs:'90%', lg:'110%'}, 
@@ -133,13 +142,16 @@ function ExchangeMoneyForm1({...props}) {
                 onChange={handleToCurrencyChange}
                 >
                     <MenuItem value={""}>None</MenuItem>
-                    {currencies.map((curr)=> (
-                      <MenuItem key={curr.id} value={curr.name}>
-                        {curr.name}
+                    {userWallet.filter((wallet)=> wallet.currency !== props.fromCurrency).map((wallet)=> (
+                      <MenuItem key={wallet.id} value={wallet.currency}>
+                        {wallet.currency}
                       </MenuItem>
-                  ))}
+                    ))}
+
                 </Select>
-                <FormHelperText><b>To</b> Balance: (19,847 GBP)</FormHelperText>
+                <FormHelperText>
+                  <b>To</b> Balance: ({userWallet.find((wallet)=> wallet.currency === props.toCurrency)?.balance || 0} {props.toCurrency})
+                </FormHelperText>
             </FormControl>
         </Grid>
 
@@ -151,8 +163,9 @@ function ExchangeMoneyForm1({...props}) {
                 size='small' 
                 sx={{width: '90%', marginLeft: '3%'}}
                 onChange={handleamountChange}
+                error={props.amountError !== ''}
+                helperText={props.amountError !== '' ? props.amountError : 'Fee (5%)'}
                 />
-                <FormHelperText sx={{marginLeft:'5%'}}>Fee(5%)</FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
@@ -231,27 +244,31 @@ export default function ExchangeMoneyForm({open}) {
   const [completed, setCompleted] = React.useState({});
 
   const navigate = useNavigate();
-  const [fromCurrency, updateFromCurrency]       = React.useState('');
-  const [toCurrency, updateToCurrency]           = React.useState('');
-  const [Amount, updateAmount]                   = React.useState('');
-  const [convertedAmount, updateconvertedAmount] = React.useState('');
-  const [error, setError]                        = React.useState('');
+  const [fromCurrency, updateFromCurrency]       = React.useState(''); // From Currency
+  const [toCurrency, updateToCurrency]           = React.useState(''); // To Currency
+  const [Amount, updateAmount]                   = React.useState(''); // Amount
+  const [convertedAmount, updateconvertedAmount] = React.useState(''); // Converted Amount
+  const [error, setError]                        = React.useState(''); // Error Message
   const [fee, updateFee]                         = React.useState(0);  // Fee state
-  const [totalAmount, setTotalAmount]            = React.useState(0);
+  const [totalAmount, setTotalAmount]            = React.useState(0); // Total Amount
+  const [amountError, setAmountError]            = React.useState(''); // Amount Error
 
-
+  // Total steps
   const totalSteps = () => {
     return steps.length;
   };
 
+  // Completed Steps
   const completedSteps = () => {
     return Object.keys(completed).length;
   };
 
+  // Last step check
   const isLastStep = () => {
     return activeStep === totalSteps() - 1;
   };
 
+  // All steps completed check
   const allStepsCompleted = () => {
     return completedSteps() === totalSteps();
   };
@@ -278,9 +295,11 @@ export default function ExchangeMoneyForm({open}) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  // Update current step value
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
+
 
   // Last step Method 
   const handleComplete = () => {
@@ -288,6 +307,9 @@ export default function ExchangeMoneyForm({open}) {
     if (activeStep == 0) {
       if (!fromCurrency || !Amount || !toCurrency) {
         setError('Please fill all the above fields');
+
+      } else if (amountError) {
+        setError('Please provide valid amount')
 
       } else {
         setError('')
@@ -350,6 +372,8 @@ export default function ExchangeMoneyForm({open}) {
                 convertedAmount={convertedAmount}
                 error={error}
                 setError={setError}
+                amountError={amountError}
+                setAmountError={setAmountError}
             />;
       case 1:
         return <ExchangeMoneyForm2 
@@ -375,7 +399,7 @@ export default function ExchangeMoneyForm({open}) {
           amount     :   parseFloat(Amount)
   
         }).then((res)=> {
-          
+          // console.log('amount', res.data.converted_amount)
           if (res.status === 200) {
             updateconvertedAmount(res.data.converted_amount)
           }
@@ -386,9 +410,9 @@ export default function ExchangeMoneyForm({open}) {
             if (error.response.data.message === 'Error calling external API') {
                 alert('Currency Conversion API Limit Exceeded')
             } else if (error.response.data.message === 'Currency API Error') {
-              alert('Currency Conversion API Limit Exceeded')
+                alert('Currency Conversion API Limit Exceeded')
             } else if (error.response.data.message === 'Invalid Curency Converter API response') {
-              alert('Currency Conversion API Limit Exceeded')
+                alert('Currency Conversion API Limit Exceeded')
             } 
         })
       }, 1500);
