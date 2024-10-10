@@ -38,8 +38,8 @@ const AppBar = styled(MuiAppBar, {
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const settings = [
-      {text: '-Profile', url: '/'},
-      {text: '-Account', url: '/'},
+      {text: 'Profile', url: '/profile/'},
+      {text: 'Change Password', url: '/change/password/'},
       {text: 'Dashboard', url: '/'},
       {text: 'Logout', url: '/signout/'},
 ];

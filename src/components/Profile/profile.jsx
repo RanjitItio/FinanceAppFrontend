@@ -1,300 +1,567 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button, Grid, Paper, IconButton } from '@mui/material';
+import { styled } from '@mui/system';
+import { Input as JoyInput, Select as JoySelect, FormControl as JoyFormControl, 
+         Option as JoyOption, FormHelperText as JoyFormHelperText, Avatar,
+         Textarea as JoyTextarea } from '@mui/joy';
+// import Footer from '../Footer';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../Authentication/axios';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { Main, DrawerHeader } from '../Content';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
-import PrintIcon from '@mui/icons-material/Print';
-import Button from 'react-bootstrap/Button';
-import PasswordIcon from '@mui/icons-material/Password';
-import PhoneIcon from '@mui/icons-material/Phone';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
 
 
 
 
-const Profile = () => {
-    const [Passwd, setPasswd] = useState(false);
-    const [phone, setPhone] = useState(false);
-    const [info, setinfo] = useState(false);
-    const [wallet, setWallet] = useState(false);
-    // const [lgShow, setLgShow] = useState(false);
+
+// Custom styles for profile header and avatar
+const ProfileHeader = styled(Box)(({ theme }) => ({
+    backgroundImage: 'url(https://python-uat.oyefin.com/media/profileBackgroundImage.png)',
+    backgroundSize: 'cover',
+    height: '130px',
+    borderRadius: '10px 10px 0 0',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  }));
+  
+  const ProfileAvatar = styled(Avatar)(({ theme }) => ({
+    width: theme.spacing(15),
+    height: theme.spacing(15),
+    border: '3px solid white',
+    variant: 'soft',
+    position: 'relative',
+  }));
+  
+  
+  const UploadButton = styled(IconButton)(({ theme }) => ({
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      backgroundColor: '#d8eff8',
+      border: `1px solid ${theme.palette.divider}`,
+      '&:hover': {
+        backgroundColor: '#adc5cf',
+      },
+      padding: theme.spacing(0.5),
+    }));
+  
+  
+  const ProfileInfoContainer = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(3),
+    borderRadius: '0 0 10px 10px',
+    marginTop: theme.spacing(1),
+  }));
+  
+  const InfoRow = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing(1),
+  }));
+
+
+
+
+const UserProfile = ({open}) => {
+        const navigate = useNavigate();
+        const [profilePic, updateProfilePic] = useState(null);   // Profile Pic state
+        const [imageError, setImageError]    = useState('');  // Image Errors state
+        const [successMessage, setSuccessMessage] = useState('');   // Success Message state
+        const [userData, updateUserData]          = useState([]);   // User profile data state
+        const [error, setError]                   =  useState('');
+
+        const initialFormData = {
+        full_name: userData?.full_name || '',
+        email: userData?.email || '',
+        phoneno: userData?.phoneno || '',
+        state: userData?.state || '',
+        city:  userData?.city || '',
+        landmark: userData?.landmark || '',
+        zipcode: userData?.zipcode || '',
+        country: userData?.country || '',
+        address: userData?.address || '',
+        nationality: userData?.nationality || '',
+        dob: userData?.dateofbirth || '',
+        };
+
+        const [formData, updateFormData] = useState(initialFormData);
+        const [maritalStatus, setMaritalSatatus] = useState('');
+        const [gender, updateGender]             = useState('');
+
+
+        
+    // Get The selected marital status
+        const handleUpdateMaritalStatusChange = (event, newValue)=> {
+            setMaritalSatatus(newValue);
+        };
+        
+        // Get the selecetd gender
+        const handleUpdateGenderChange = (event, newValue)=> {
+            updateGender(newValue);
+        };
+
+
+        // Get all the user data
+        useEffect(() => {
+            axiosInstance.get(`/api/v1/fiat/crypto/user/profile/`).then((res)=> {
+            // console.log(res)
+            if(res.status === 200 && res.data.success === true) {
+                updateUserData(res.data.user_profile)
+            }
+
+            }).catch((error)=> {
+                console.log(error);
+            })
+        }, []);
+
+
+        
+        // Update Formdata value to UserData when page loads
+        useEffect(() => {
+        updateFormData({
+            full_name: userData?.full_name || '',
+            email: userData?.email || '',
+            phoneno: userData?.phoneno || '',
+            state: userData?.state || '',
+            city:  userData?.city || '',
+            landmark: userData?.landmark || '',
+            zipcode: userData?.zipcode || '',
+            country: userData?.country || '',
+            address: userData?.address || '',
+            nationality: userData?.nationality || '',
+            dob: userData?.dateofbirth || '',
+        })
+
+        if (userData.marital_status) {
+            setMaritalSatatus(userData.marital_status);
+        }
+
+        if (userData.gander) {
+            updateGender(userData.gander)
+        }
+
+    }, [userData]);
+
+
+
+    // Get the image file
+        const handleUpdateProfilePic = (file)=> {
+            updateProfilePic(file);
+            
+        };
+
+        // Trigger upload image method
+        useEffect(() => {
+            if (profilePic) {
+                handleUploadImage();
+            } 
+        }, [profilePic]);
+
+
+        // capture updated form data
+        const handleChangeFormData = (e)=> {
+            const {name, value} = e.target;
+
+            updateFormData({...formData, 
+                [name]: value
+            })
+        };
+
+
+        // Upload image into DB
+        const handleUploadImage = ()=> {
+            
+            const file = profilePic
+            const validFormats = ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/svg+xml'];
+
+            if (!validFormats.includes(file.type)) {
+            setImageError('Unsupported file format. Please upload a jpeg, png, bmp, gif, or svg file.')
+
+            } else {
+            setImageError('');
+
+            const formDatObj = new FormData();
+
+            formDatObj.append('picture', profilePic)
+
+            axiosInstance.post(`/api/v1/upload/user/profile/pic/`, formDatObj, {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            }).then((res)=> {
+                // console.log(res)
+                if (res.status === 200 && res.data.success === true) {
+                setSuccessMessage("Image uploaded successfully");
+                } 
+
+            }).catch((error)=> {
+                console.log(error)
+
+                if (error.response.data.message === 'File size exceeds the maximum allowed size') {
+                    setImageError('File size must be less than 2MB')
+                } else if (error.response.data.message === 'File name is missing') {
+                    setImageError('Invalid file name')
+                } else {
+                    setImageError('')
+                }
+
+            })
+            }
+        };
+
+
+        // Method to update the Data
+        const handleSubmitFormData = ()=> {
+            if (formData.full_name === '') {
+            setError('Name can not be Empty')
+            } else if (formData.email === '') {
+            setError('Email can not be Empty')
+            } else if (formData.phoneno === '') {
+            setError('Mobile Number can not be Empty')
+
+            } else {
+            axiosInstance.put(`/api/v1/fiat/crypto/user/profile/`, {
+                email: formData.email,
+                phoneno: formData.phoneno,
+                full_name: formData.full_name,
+                state: formData.state,
+                city: formData.city,
+                landmark: formData.landmark,
+                zipcode: formData.zipcode,
+                nationality: formData.nationality,
+                dob: formData.dob,
+                gender: gender,
+                marital_status: maritalStatus,
+                country: formData.country,
+                address: formData.address
+
+            }).then((res)=> {
+                //    console.log(res)
+
+                if (res.status === 200 && res.data.success === true) {
+                    setSuccessMessage('Updated Successfully')
+
+                    location.reload(true);
+                };
+
+            }).catch((error)=> {
+                console.log(error)
+
+            })
+            }
+    };
 
 
     return (
+        <>
         <Main open={open}>
-            <DrawerHeader />
+        <DrawerHeader />
+            <Grid container spacing={1}>
+                {/* First Column */}
+                <Grid item xs={12} md={3.5} sx={{mx:4, mt:2}}>
+                    <Paper elevation={3} sx={{height:'100%'}}>
 
-            <Modal className='p-5' show={Passwd} onHide={() => setPasswd(false)}>
-                <Modal.Header closeButton> Change Password</Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formCurrentPassword">
-                            <Form.Label>Current Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter current password" />
-                        </Form.Group>
-                        <Form.Group controlId="formNewPassword">
-                            <Form.Label>New Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter new password" />
+                        <ProfileHeader>
+                            <Box position="relative">
+                                <ProfileAvatar alt="Profile Pic" src={userData?.picture || 'Profile pic'} />
+                                <UploadButton color="primary" component="label">
+                                    <PhotoCameraIcon />
+                                    <input type="file" hidden onChange={(e)=> {handleUpdateProfilePic(e.target.files[0])}} />
+                                </UploadButton>
+                            </Box>
+                        </ProfileHeader>
 
-                        </Form.Group>
-                        <Form.Group controlId="formNewPassword">
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter Confirm password" />
+                        <ProfileInfoContainer elevation={0}>
+                            <Typography variant="h6" align="center">
+                                {userData?.full_name}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" align="center">
+                                {userData?.email}
+                            </Typography>
 
-                        </Form.Group>
-                        <Button variant="primary" className='mt-2 w-100' type="submit">
-                            Change Password
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+                            <Box mt={3}>
+                                <Typography variant="h6">Personal Info</Typography>
+                                <Grid container spacing={2} mt={1}>
+                                    <Grid item xs={12}>
+                                        <InfoRow>
+                                            <Typography variant="p"><b>Full Name:</b></Typography>
+                                            <Typography variant="p">{userData?.full_name}</Typography>
+                                        </InfoRow>
 
+                                        <InfoRow>
+                                            <Typography variant="p"><b>Email:</b></Typography>
+                                            <Typography variant="p">{userData?.email}</Typography>
+                                        </InfoRow>
 
-            <Modal className='p-5' show={phone} onHide={() => setPhone(false)}>
-                <Modal.Header closeButton> Change Phone Number</Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formCurrentPassword">
-                            <Form.Label>Change Phone Number</Form.Label>
-                            <Form.Control type="text" placeholder="Enter new phone number" />
-                        </Form.Group>
+                                        <InfoRow>
+                                            <Typography variant="p"><b>Phone Number:</b></Typography>
+                                            <Typography variant="p">{userData?.phoneno}</Typography>
+                                        </InfoRow>
 
-                        <Button variant="primary" className='mt-2 w-100' type="submit">
-                            Submit
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+                                        <InfoRow>
+                                            <Typography variant="p"><b>DOB:</b></Typography>
+                                            <Typography variant="p">{userData?.dateofbirth}</Typography>
+                                        </InfoRow>
 
-            <Modal className='p-5' show={info} onHide={() => setinfo(false)}>
-                <Modal.Header closeButton>Personal Information</Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Row>
-                            <Col>
-                                <Form.Group controlId="formName">
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter your name" />
-                                </Form.Group>
-                                <Form.Group controlId="formEmail">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter your email" />
-                                </Form.Group>
-                                <Form.Group controlId="formAddress">
-                                    <Form.Label>Address 1</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter your address 1" />
-                                </Form.Group>
-                                <Form.Group controlId="formAddress">
-                                    <Form.Label>Address 2</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter your address 2" />
-                                </Form.Group>
-                            </Col>
+                                        <InfoRow>
+                                            <Typography variant="p"><b>Gender:</b></Typography>
+                                            {userData?.gander && (
+                                                    <Typography variant="p">{userData?.gander?.charAt(0).toUpperCase() + userData?.gander?.slice(1)}</Typography>
+                                                )}
+                                        </InfoRow>
+                                        
+                                        <InfoRow>
+                                            <Typography variant="p"><b>Marital Status:</b></Typography>
+                                            {userData?.marital_status && (
+                                                    <Typography variant="p">{userData?.marital_status?.charAt(0).toUpperCase() + userData?.marital_status?.slice(1)}</Typography>
+                                                )}
+                                        </InfoRow>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </ProfileInfoContainer>
+                    </Paper>
+                </Grid>
 
+                {/* Second Column */}
+                <Grid item xs={12} md={7}>
+                    <Paper elevation={3} sx={{ backgroundColor: '#fff', borderRadius: '8px', mt:2, height:'98%', p:3 }}>
+                        {/* Profile Image Upload Section */}
+                        <Grid container spacing={3}>
 
-                            <Col>
-                                <Form.Group controlId="formName">
-                                    <Form.Label>City</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter your City" />
-                                </Form.Group>
-                                <Form.Group controlId="formEmail">
-                                    <Form.Label>State</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter your State" />
-                                </Form.Group>
-                                <Form.Group controlId="formAddress">
-                                    <Form.Label>Country</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter your Country" />
-                                </Form.Group>
-                                <Form.Group controlId="formAddress">
-                                    <Form.Label>Time Zone</Form.Label>
-                                    <Form.Control type="text" placeholder="TimeZone" />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Button variant="primary" className='mt-2 w-100' type="submit">
-                            Update Information
-                        </Button>
+                            {/* Form Section */}
+                            <Grid item xs={12} sm={12}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Full Name"
+                                            variant="outlined"
+                                            name='full_name'
+                                            value={formData?.full_name}
+                                            onChange={(event)=> handleChangeFormData(event)}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                    </Form>
-                </Modal.Body>
-            </Modal>
-            
-            <Modal className='p-5' show={wallet} onHide={() => setWallet(false)}>
-                <Modal.Header closeButton> Change Default Currency</Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formCurrentPassword">
-                            <Form.Label>choose Default Currency</Form.Label>
-                            <Form.Select aria-label="USD">
-                                <option value="1">USD</option>
-                                <option value="2">EURO</option>
-                                <option value="3">INR</option>
-                            </Form.Select>
-                        </Form.Group>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Email"
+                                            variant="outlined"
+                                            name='email'
+                                            value={formData.email}
+                                            onChange={(event)=> handleChangeFormData(event)}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                        <Button variant="primary" className='mt-2 w-100' type="submit">
-                            Submit
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Mobile Number"
+                                            variant="outlined"
+                                            name='phoneno'
+                                            value={formData?.phoneno}
+                                            onChange={handleChangeFormData}
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyFormControl>
+                                            <JoySelect 
+                                                placeholder="Gender"
+                                                name='gender'
+                                                value={gender}
+                                                onChange={(event, newValue)=> {handleUpdateGenderChange(event, newValue)}}
+                                                >
+                                                <JoyOption value="male">Male</JoyOption>
+                                                <JoyOption value="female">Female</JoyOption>
+                                                <JoyOption value="others">Others</JoyOption>
+                                            </JoySelect>
+                                        </JoyFormControl>
+                                    </Grid>
 
-            <Container className="mx-5  px-5">
+                                    <Grid item xs={12} sm={6}>
+                                        {userData.gander && (
+                                        <JoyFormControl>
+                                            <JoySelect 
+                                                placeholder="Marital Status"
+                                                name='marital_status'
+                                                value={maritalStatus}
+                                                onChange={handleUpdateMaritalStatusChange}
+                                                >
+                                                <JoyOption value="married">Married</JoyOption>
+                                                <JoyOption value="single">Single</JoyOption>
+                                                <JoyOption value="divorced">Divorced</JoyOption>
+                                                <JoyOption value="widowed">Widowed</JoyOption>
+                                            </JoySelect>
+                                        </JoyFormControl>
+                                        )}
+                                    </Grid>
 
-                <Row>
-                    <Col>
-                        <Card className="shadow-lg">
-                            <Card.Body>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="State"
+                                            variant="outlined"
+                                            name='state'
+                                            value={formData?.state}
+                                            onChange={handleChangeFormData}
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                                <Row>
-                                    <Col xs={8} className='py-3 px-3'>
-                                        <h1 className="text-start text-xl fs-4 ">John Doe</h1>
-                                        <h1 className="text-start text-sm  ">Please set your profile image.</h1>
-                                        <h1 className="text-start text-xs text-muted">Supported format: jpeg, png, bmp, gif, or svg</h1>
-                                        <Button variant="primary" className="mt-3">Upload Image</Button>
-                                    </Col>
-                                    <Col xs={4}>
-                                        <img src="https://via.placeholder.com/120" alt="Profile Picture" className="img-fluid rounded-circle" />
-                                    </Col>
-                                </Row>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="City"
+                                            variant="outlined"
+                                            name='city'
+                                            value={formData?.city}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                            </Card.Body>
-                        </Card>
-                        <Card className="shadow-lg mt-3">
-                            <Card.Body>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Landmark"
+                                            variant="outlined"
+                                            name='landmark'
+                                            value={formData?.landmark}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                               <div className="d-flex justify-content-between">
-                                <h1 >Default Currency <BorderColorIcon onClick={()=>setWallet(true)} /></h1>
-                                <h1>USD</h1>
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <Card className="shadow-lg">
-                            <Card.Body className='m-3'>
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Zipcode"
+                                            variant="outlined"
+                                            name='zipcode'
+                                            value={formData?.zipcode}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Country"
+                                            variant="outlined"
+                                            name='country'
+                                            value={formData?.country}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            placeholder="Nationality"
+                                            variant="outlined"
+                                            name='nationality'
+                                            value={formData?.nationality}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                                <h1 className=" text-xl fs-5 "> <p><QrCodeScannerIcon /></p> Profile QR Code</h1>
-                                <h1 className="text-start text-sm  ">Use the QR code to easily handle your transactions.</h1>
-                                <h1 className="text-start text-xs text-muted">Supported format: jpeg, png, bmp, gif, or svg</h1>
-                                <Button variant="primary" className="mt-3"><PrintIcon />Print Code</Button>&nbsp;
-                                <Button variant="outline-success" className="mt-3">Upload Image</Button>
-                                <div className="py-5 px-3">
-                                    <img src="https://via.placeholder.com/150" alt="QR Code" className="img-fluid" />
-                                </div>
-                                <div className="justify-content-between d-flex py-3">
-                                    <div className="d-flex">
-                                        <PasswordIcon /> &nbsp;
+                                    <Grid item xs={12} sm={6}>
+                                        <JoyInput
+                                            type='date'
+                                            placeholder="DOB"
+                                            variant="outlined"
+                                            name='dob'
+                                            value={formData?.dob || ''}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            slotProps={{
+                                                input: {
+                                                min: '1990-06-07',
+                                                max: '2025-06-24',
+                                                },
+                                            }}
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                        <JoyFormHelperText sx={(theme) => ({ color: theme.vars.palette.primary[400] })}>DOB</JoyFormHelperText>
+                                    </Grid>
 
-                                        <h1 className="text-start text-xl fs-6 ">Change Password</h1>
-                                    </div>
-                                    <div className="d-flex">
-                                        <h1 className="text-end text-xl fs-6 ">*********</h1>&nbsp;
-                                        <Button variant="primary" onClick={() => setPasswd(true)} className=""><BorderColorIcon /></Button>
-                                    </div>
-                                </div>
-                                <div className="justify-content-between d-flex py-3">
-                                    <div className="d-flex">
-                                        <PhoneIcon /> &nbsp;
-                                        <h1 className="text-start text-xl fs-6 "> Phone </h1>
-                                    </div>
-                                    <div className="d-flex">
+                                    <Grid item xs={12} sm={12}>
+                                        <JoyTextarea
+                                            placeholder="Address"
+                                            variant="outlined"
+                                            minRows={3}
+                                            size='lg'
+                                            name='address'
+                                            value={formData?.address}
+                                            onChange={handleChangeFormData}
+                                            required
+                                            sx={{
+                                                backgroundColor: '#f5f7fb',
+                                                borderRadius: '10px', 
+                                            }}
+                                        />
+                                    </Grid>
 
-                                        <h1 className="text-end text-xl fs-6 ">N/A</h1>&nbsp;
-                                        <Button variant="primary" onClick={() => setPhone(true)} className=""><BorderColorIcon /></Button>
-                                    </div>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        {/* Action Buttons */}
+                        <Box mt={8} display="flex" justifyContent="center">
+                            <Button variant="outlined" color="error" sx={{ mr: 2 }} onClick={()=> {navigate('/')}}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" color="primary" onClick={handleSubmitFormData}>
+                                Update
+                            </Button>
+                        </Box>
 
-                                </div>
+                        {successMessage && <p style={{color:'green', display:'flex', justifyContent:'center'}}>{successMessage}</p>}
 
+                    </Paper>
+                </Grid>
+            </Grid>
+     </Main>
 
-
-
-                            </Card.Body>
-                        </Card>
-                    </Col>
-
-                </Row>
-                <Card className="shadow-lg mt-5">
-                    <Card.Body className="">
-                        <Card.Title>Personal Information <BorderColorIcon onClick={() => setinfo(true)} /> </Card.Title>
-                        <Row>
-                            <Col className='p-3'>
-                                <ListGroup variant="flush">
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>Name</h1>
-                                            <h1 className='text-muted'> John dev</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>Email</h1>
-                                            <h1 className='text-muted'> Johndev@mail.com</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>Address 1</h1>
-                                            <h1 className='text-muted'></h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>Address 2</h1>
-                                            <h1 className='text-muted'>N/A</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                </ListGroup>
-                            </Col>
-                            <Col className='p-3'>
-                                <ListGroup variant="flush">
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>City</h1>
-                                            <h1 className='text-muted'>N/A</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>State</h1>
-                                            <h1 className='text-muted'>N/A</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>Country</h1>
-                                            <h1 className='text-muted'>Russia</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item>
-                                        <div className="d-flex justify-content-between">
-                                            <h1 className='text-lg'>Time Zone</h1>
-                                            <h1 className='text-muted'>Europe/Moscow</h1>
-                                        </div>
-                                    </ListGroup.Item>
-                                </ListGroup>
-
-                            </Col>
-                        </Row>
-
-
-                    </Card.Body>
-
-                </Card>
-
-
-            </Container>
-        </Main>
+     {/* <Footer /> */}
+    </>
     );
 };
 
-export default Profile;
+export default UserProfile;

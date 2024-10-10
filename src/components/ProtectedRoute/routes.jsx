@@ -30,7 +30,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
-import Profile from "../Profile/profile";
 import CryptoList from "../CryptoExchange/cryptoexchangelist";
 import Plan from "../Invesment/Plan";
 import Invest from "../Invesment/Invest";
@@ -58,6 +57,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 
 const CryptoFiatHomePage = React.lazy(()=> import('../CryptoFIATHome/Dashboard'));
+const UserProfile = React.lazy(()=> import('../Profile/profile'));
+const ChangePassword = React.lazy(()=> import('../Authentication/ChangePassword'));
+
 
 
 
@@ -121,6 +123,9 @@ const AuthRoutes = () => {
 
                       <Routes>
                           <Route exact path='/' element={<CryptoFiatHomePage open={open} />}></Route>
+
+                          <Route exact path='/change/password/' element={<ChangePassword open={open} />}></Route>
+
                           <Route exact path='/test/transaction/table/' element={<TransactionTable open={open} />}></Route>
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
@@ -137,7 +142,7 @@ const AuthRoutes = () => {
                           <Route exact path='/tickets/reply/' element={<TicketReply open={open} />}></Route>
                           <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
                           <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
-                          <Route exact path='/profile/' element={<Profile open={open} />}></Route>
+                          <Route exact path='/profile/' element={<UserProfile open={open} />}></Route>
                           <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
                           <Route exact path='/investment/plan/' element={<Plan open={open} />}></Route>
                           <Route exact path='/investment/invest/' element={<Invest open={open} />}></Route>
