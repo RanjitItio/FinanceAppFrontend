@@ -15,8 +15,8 @@ import UpperNavbar from "../UpNavbar";
 import LeftNavbar from "../LeftNavbar";
 import AllTransactions from "../Transactions/Transaction";
 import DepositForm from "../Transactions/Deposit";
-import CryptoBuy from "../CryptoTransactions/CryptoBuy";
-import CryptoSell from "../CryptoTransactions/CryptoSell";
+// import CryptoBuy from "../CryptoTransactions/CryptoBuy";
+// import CryptoSell from "../CryptoTransactions/CryptoSell";
 import RequestMoneyForm from "../Transactions/RequestMoney";
 import ExchangeMoneyForm from "../Transactions/ExchangeMoney";
 import WithdrawalMoneyForm from "../Withdraw/withdrawalmoney";
@@ -33,7 +33,7 @@ import DisputeReply from "../Dispute/disputereply";
 import CryptoList from "../CryptoExchange/cryptoexchangelist";
 import Plan from "../Invesment/Plan";
 import Invest from "../Invesment/Invest";
-import CryptoSwap from "../CryptoTransactions/CryptoSwap";
+// import CryptoSwap from "../CryptoTransactions/CryptoSwap";
 import ResetPassword from "../Authentication/ResetPassword";
 import PaymentStepper from "../Payment/payment";
 import Merchants from "../Merchant/merchants";
@@ -57,8 +57,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 
 const CryptoFiatHomePage = React.lazy(()=> import('../CryptoFIATHome/Dashboard'));
-const UserProfile = React.lazy(()=> import('../Profile/profile'));
-const ChangePassword = React.lazy(()=> import('../Authentication/ChangePassword'));
+const UserProfile        = React.lazy(()=> import('../Profile/profile'));
+const ChangePassword     = React.lazy(()=> import('../Authentication/ChangePassword'));
+const BuySellCrypto      = React.lazy(()=> import('../CryptoTransactions/BuySell'));
+const UserCryptoWallets  = React.lazy(()=> import('../CryptoWallet/Walltes'));
 
 
 
@@ -130,8 +132,6 @@ const AuthRoutes = () => {
                           <Route exact path='/transactions/' element={<AllTransactions open={open} />}></Route>
                           <Route exact path='/deposit/' element={<DepositForm open={open} />}></Route>
                           <Route exact path='/moneytransfer/' element={<StepWisePaymentForm open={open} />}></Route>
-                          <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
-                          <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route>
                           <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
                           <Route exact path='/exchange-currency/' element={<ExchangeMoneyForm open={open} />}></Route>
                           <Route exact path='/payout-payment/' element={<WithdrawalMoneyForm open={open} />}></Route>
@@ -143,10 +143,8 @@ const AuthRoutes = () => {
                           <Route exact path='/dispute/' element={<Dispute open={open} />}></Route>
                           <Route exact path='/dispute/reply/' element={<DisputeReply open={open} />}></Route>
                           <Route exact path='/profile/' element={<UserProfile open={open} />}></Route>
-                          <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
                           <Route exact path='/investment/plan/' element={<Plan open={open} />}></Route>
                           <Route exact path='/investment/invest/' element={<Invest open={open} />}></Route>
-                          <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route>
                           <Route exact path='/merchants/' element={<Merchants open={open} />}></Route>
                           <Route exact path='/add/merchants/' element={<AddNewMerchant open={open} />}></Route>
                           <Route exact path='/edit/merchant/' element={<EditMerchant open={open} />}></Route>
@@ -154,6 +152,15 @@ const AuthRoutes = () => {
                           <Route exact path='/add/merchant/bank/account/' element={<AddMerchantBankAccount open={open} />}></Route>
                           <Route exact path='/merchant/bank/accounts/' element={<MerchantBankAccounts open={open} />}></Route>
                           <Route exact path='/update/merchant/bank/accounts/' element={<UpdateMerchantBankAccount open={open} />}></Route>
+
+                          {/* Crypto Section */}
+                          <Route exact path='/crypto/transactions/' element={<BuySellCrypto open={open} />}></Route>
+                          <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
+                          <Route exact path='/crypto/wallets/' element={<UserCryptoWallets open={open} />}></Route>
+                          {/* <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route> */}
+                          {/* <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
+                          <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route> */}
+
                       </Routes>
                     </Box>
                   }></Route>

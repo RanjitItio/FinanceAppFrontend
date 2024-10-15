@@ -148,26 +148,6 @@ function ForgotPassword() {
           </div>        
         </div>
       </div>
-        // <center>
-        //     <div class="card text-center my-5" style={{maxWidth: "300px"}}>
-        //         <div class="card-header h5 text-white bg-primary">Password Reset</div>
-        //         <div class="card-body px-5">
-        //             <p class="card-text py-2">
-        //                 Enter your email address and we'll send you an email with instructions to reset your password.
-        //             </p>
-        //             <div class="form-outline">
-        //                 <input type="email" id="email" name='email' class="form-control my-3" onChange={handleChange}/>
-        //                 <label class="form-label" for="email">Email input</label>
-        //             </div>
-        //             <a href="#" class="btn btn-primary w-100" onClick={handleSubmit}>Reset password</a>
-        //             {error &&  <p className="text-danger">{error}</p>}
-        //             <div class="d-flex justify-content-between mt-4">
-        //                 <Link class="" to={'/signin/'}>Login</Link>
-        //                 <Link class="" to={'/signup/'}>Register</Link>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </center>
     );
 };
 

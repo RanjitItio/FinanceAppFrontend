@@ -196,6 +196,7 @@ function Form2({...props}) {
 // Deposit Money
 export default function DepositForm({open}) {
 
+  const navigate = useNavigate()  
   const [activeStep, setActiveStep] = React.useState(0);  // Currenct step
   const [completed, setCompleted]   = React.useState({}); // Completed step
 
@@ -205,7 +206,6 @@ export default function DepositForm({open}) {
   const [error, setError]                 = React.useState('');      // Error Message
   const [totalAamount, setTotalAmount]    = React.useState('');  // Total amount
   const [transactionFee, setTransactionFee] = React.useState(0.00);
-  const navigate = useNavigate()  
 
    
   // Total Steps

@@ -17,7 +17,8 @@ function KYCSubmissionReport(params) {
         lastName: last_name
        })
 
-    }, [])
+    }, []);
+    
     
     return(
         <>
