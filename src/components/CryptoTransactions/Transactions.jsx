@@ -11,6 +11,8 @@ import SellIcon from '@mui/icons-material/Sell';
 import WalletIcon from '@mui/icons-material/Wallet';
 import Pagination from '@mui/material/Pagination';
 import RaiseWalletRequest from './WalletRequest';
+import BuyCrypto from './Buy';
+import SellCrypto from './Sell';
 
 
 const users = [
@@ -24,13 +26,27 @@ const users = [
 
 
 // But and Sell Crypto
-export default function BuySellCrypto({open}) {
+export default function UserCryptoTransactions({open}) {
     const [walletPopup, setWalletPopup] = useState(false);
+    const [openBuy, setOpenBuy]         = useState(false);
+    const [openSell, setOpenSell]       = useState(false);
 
    // Open Wallet Popup
    const handleOpenWalletPopup = ()=> {
         setWalletPopup(true);
    };
+
+   // Open Buy Modal
+   const handleOpenBuy = ()=> {
+        setOpenBuy(true);
+   };
+
+   // Open Buy Modal
+   const handleOpenSell = ()=> {
+        setOpenSell(true);
+   };
+
+
 
     return (
     <>
@@ -39,8 +55,8 @@ export default function BuySellCrypto({open}) {
 
         <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
             
-            <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />}>Buy</Button>
-            <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />}>Sell</Button>
+            <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />} onClick={handleOpenBuy}>Buy</Button>
+            <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button>
             <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
 
             <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
@@ -106,6 +122,16 @@ export default function BuySellCrypto({open}) {
     <RaiseWalletRequest
        open={walletPopup}
        setOpen={setWalletPopup}
+    />
+
+    <BuyCrypto 
+       open={openBuy}
+       setOpen={setOpenBuy}
+    />
+
+    <SellCrypto 
+       open={openSell}
+       setOpen={setOpenSell}
     />
 </>
 

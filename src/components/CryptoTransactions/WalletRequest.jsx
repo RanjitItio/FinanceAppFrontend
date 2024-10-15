@@ -55,13 +55,14 @@ export default function RaiseWalletRequest({open, setOpen}) {
             axiosInstance.post(`/api/v1/user/crypto/wallet/`, {
                 crypto: selectedCrypto
             }).then((res)=> {
-                console.log(res)
+                // console.log(res)
                 
                 if (res.status === 201) {
                     setSuccess(true)
 
                     setTimeout(() => {
                         setSuccess(false)
+                        handleClose()
                     }, 2500);
                 };
             }).catch((error)=> {

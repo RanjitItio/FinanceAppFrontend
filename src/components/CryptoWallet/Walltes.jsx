@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import Pagination from '@mui/material/Pagination';
 import axiosInstance from '../Authentication/axios';
 import Tooltip from '@mui/material/Tooltip';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 
 // Change status color according to the status label
@@ -60,20 +61,64 @@ const getCryptoIcons = (icon)=> {
 // Crypto Wallet Lists
 export default function UserCryptoWallets({open}) {
     const [userWallets, setUserWallets] = useState([]);
+    const [emptyDate, setEmptyDate]     = useState(false);
 
     useEffect(() => {
       axiosInstance.get(`/api/v1/user/crypto/wallet/`).then((res)=> {
-          console.log(res)
+        //   console.log(res)
 
           if (res.status === 200) {
             setUserWallets(res.data.user_crypto_wallet_data)
           }
+
+          if (res.data.user_crypto_wallet_data.length === 0) {
+            setEmptyDate(true)
+          } else {
+            setEmptyDate(false)
+          }
+
       }).catch((error)=> {
         console.log(error);
 
       })
     }, []);
+
+
+    if (emptyDate) {
+        return (
+            <Main open={open}>
+                <DrawerHeader />
+
+                <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
+                    <Table aria-label="User table">
+                        <TableHead sx={{backgroundColor:'#E1EBEE'}}>
+                            <TableRow>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Time</TableCell>
+                                <TableCell>Crypto</TableCell>
+                                <TableCell>Balance</TableCell>
+                                <TableCell>Wallet Address</TableCell>
+                                <TableCell>Status</TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>
+                            <TableRow rowSpan={3}>
+                                <TableCell colSpan={6} align='center'>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        <DeleteOutlineIcon sx={{ fontSize: '6.5rem' }} />
+                                        <small>No data found</small>
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Main>
+        );
+    };
     
+
 
     return (
         <Main open={open}>

@@ -59,7 +59,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 const CryptoFiatHomePage = React.lazy(()=> import('../CryptoFIATHome/Dashboard'));
 const UserProfile        = React.lazy(()=> import('../Profile/profile'));
 const ChangePassword     = React.lazy(()=> import('../Authentication/ChangePassword'));
-const BuySellCrypto      = React.lazy(()=> import('../CryptoTransactions/BuySell'));
+const UserCryptoTransactions = React.lazy(()=> import('../CryptoTransactions/Transactions'));
 const UserCryptoWallets  = React.lazy(()=> import('../CryptoWallet/Walltes'));
 
 
@@ -154,7 +154,7 @@ const AuthRoutes = () => {
                           <Route exact path='/update/merchant/bank/accounts/' element={<UpdateMerchantBankAccount open={open} />}></Route>
 
                           {/* Crypto Section */}
-                          <Route exact path='/crypto/transactions/' element={<BuySellCrypto open={open} />}></Route>
+                          <Route exact path='/crypto/transactions/' element={<UserCryptoTransactions open={open} />}></Route>
                           <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
                           <Route exact path='/crypto/wallets/' element={<UserCryptoWallets open={open} />}></Route>
                           {/* <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route> */}
