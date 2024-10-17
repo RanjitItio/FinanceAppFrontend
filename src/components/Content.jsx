@@ -4,6 +4,16 @@ import { styled } from '@mui/material/styles';
 let drawerWidth = 240;
 
 
+const setDrawerWidth = ()=> {
+  if (window.matchMedia('(min-width: 768px)').matches) {
+    drawerWidth = 240;
+  } else {
+    drawerWidth = 0;
+  };
+};
+
+setDrawerWidth();
+
 
 
 export const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(

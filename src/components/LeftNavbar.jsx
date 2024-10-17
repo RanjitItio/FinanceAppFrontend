@@ -60,6 +60,17 @@ const NavContent = [
   ],
   icon:''},
 
+  { text: 'CRYPTO', subItems: [
+    {text: 'Transactions', icon: <RotateRightIcon />, url: '/crypto/transactions/'},
+    {text: 'Wallet', icon: <RotateRightIcon />, url: '/crypto/wallets/'},
+    {text: '-Crypto Swap', icon: <RotateRightIcon />, url: '/crypto-swap/'},
+    {text: '-Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
+    // {text: '-Investments', icon: <StorageIcon />, url: '/investment/invest/'},
+    // {text: '-Investment Plans', icon: <StorageIcon />, url: '/investment/plan/'},
+    ],
+    icon: ''
+  },
+
   { text: 'OTHERS', subItems: [
     {text: '-Disputes', icon: <MessageIcon />, url: '/dispute/'},
     {text: '-Tickets', icon: <ConfirmationNumberIcon />, url: '/tickets/'},
@@ -67,19 +78,6 @@ const NavContent = [
     {text: '-Verifications', icon: <SettingsIcon />, url: '/'},
   ],
   icon: ''},
-
-  { text: 'CRYPTO', subItems: [
-    {text: 'Transactions', icon: <RotateRightIcon />, url: '/crypto/transactions/'},
-    {text: 'Wallet', icon: <RotateRightIcon />, url: '/crypto/wallets/'},
-    // {text: '-Crypto Buy', icon: <RotateRightIcon />, url: '/crypto-buy/'},
-    // {text: '-Crypto Sell', icon: <RotateRightIcon />, url: '/crypto-sell/'},
-    {text: '-Crypto Swap', icon: <RotateRightIcon />, url: '/crypto-swap/'},
-    {text: '-Investments', icon: <StorageIcon />, url: '/investment/invest/'},
-    {text: '-Investment Plans', icon: <StorageIcon />, url: '/investment/plan/'},
-    {text: '-Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
-    ],
-    icon: ''
-  },
 
 ];
 

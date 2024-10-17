@@ -27,6 +27,7 @@ const getStatusColor = (status)=> {
 };
 
 
+// Crypto Icons
 const getCryptoIcons = (icon)=> {
     switch (icon) {
         case 'BTC':
@@ -61,7 +62,7 @@ const getCryptoIcons = (icon)=> {
 // Crypto Wallet Lists
 export default function UserCryptoWallets({open}) {
     const [userWallets, setUserWallets] = useState([]);
-    const [emptyDate, setEmptyDate]     = useState(false);
+    const [emptyData, setEmptyData]     = useState(false);
 
     useEffect(() => {
       axiosInstance.get(`/api/v1/user/crypto/wallet/`).then((res)=> {
@@ -72,9 +73,9 @@ export default function UserCryptoWallets({open}) {
           }
 
           if (res.data.user_crypto_wallet_data.length === 0) {
-            setEmptyDate(true)
+            setEmptyData(true)
           } else {
-            setEmptyDate(false)
+            setEmptyData(false)
           }
 
       }).catch((error)=> {
@@ -84,7 +85,7 @@ export default function UserCryptoWallets({open}) {
     }, []);
 
 
-    if (emptyDate) {
+    if (emptyData) {
         return (
             <Main open={open}>
                 <DrawerHeader />
