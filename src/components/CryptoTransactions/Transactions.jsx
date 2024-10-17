@@ -140,6 +140,7 @@ export default function UserCryptoTransactions({open}) {
 
         if (emptyData) {
             return (
+            <>
                 <Main open={open}>
                     <DrawerHeader />
 
@@ -148,7 +149,7 @@ export default function UserCryptoTransactions({open}) {
                     <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button>
                     <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
 
-                    
+
                     <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
                         <Table aria-label="User table">
                             <TableHead sx={{backgroundColor:'#E1EBEE'}}>
@@ -176,6 +177,23 @@ export default function UserCryptoTransactions({open}) {
                     </TableContainer>
                 </Box>
                 </Main>
+
+                <RaiseWalletRequest
+                open={walletPopup}
+                setOpen={setWalletPopup}
+                />
+
+                <BuyCrypto 
+                open={openBuy}
+                setOpen={setOpenBuy}
+                />
+
+                <SellCrypto 
+                open={openSell}
+                setOpen={setOpenSell}
+                />
+
+        </>
             );
         };
 
