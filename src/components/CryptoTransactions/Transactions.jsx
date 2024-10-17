@@ -143,6 +143,12 @@ export default function UserCryptoTransactions({open}) {
                 <Main open={open}>
                     <DrawerHeader />
 
+                <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
+                    <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />} onClick={handleOpenBuy}>Buy</Button>
+                    <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button>
+                    <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
+
+                    
                     <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
                         <Table aria-label="User table">
                             <TableHead sx={{backgroundColor:'#E1EBEE'}}>
@@ -168,6 +174,7 @@ export default function UserCryptoTransactions({open}) {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                </Box>
                 </Main>
             );
         };
