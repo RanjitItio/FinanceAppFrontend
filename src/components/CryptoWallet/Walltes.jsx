@@ -51,9 +51,12 @@ const getCryptoIcons = (icon)=> {
         case 'SOL':
             return '/cryptoicons/SOL.png'
 
+        case 'BNB':
+            return '/cryptoicons/BNB.png'
+
         default:
-            break;
-    }
+            break
+    };
 };
 
 
@@ -61,15 +64,20 @@ const getCryptoIcons = (icon)=> {
 
 // Crypto Wallet Lists
 export default function UserCryptoWallets({open}) {
-    const [userWallets, setUserWallets] = useState([]);
-    const [emptyData, setEmptyData]     = useState(false);
+    const [userWallets, setUserWallets] = useState([]);    // User Wallet state
+    const [emptyData, setEmptyData]     = useState(false); // Empty data state
+    const [PaginationCount, setPaginationCount] = useState(0);
 
+    const CountPagination = Math.ceil(PaginationCount ? PaginationCount : 0);
+
+    // Fetch all users wallet
     useEffect(() => {
       axiosInstance.get(`/api/v1/user/crypto/wallet/`).then((res)=> {
         //   console.log(res)
 
           if (res.status === 200) {
             setUserWallets(res.data.user_crypto_wallet_data)
+            setPaginationCount(res.data.total_row_count)
           }
 
           if (res.data.user_crypto_wallet_data.length === 0) {
@@ -83,6 +91,24 @@ export default function UserCryptoWallets({open}) {
 
       })
     }, []);
+
+
+    const handlePagination = (e, value)=> {
+        let limit = 6;
+        let offset = (value - 1) * limit;
+
+        axiosInstance.get(`/api/v1/user/crypto/wallet/?limit=${limit}&offset=${offset}`).then((res)=> {
+            // console.log(res)
+            if (res.status === 200) {
+                setUserWallets(res.data.user_crypto_wallet_data)
+            };
+
+        }).catch((error)=> {
+            // console.log(error);
+
+        })
+
+    };
 
 
     if (emptyData) {
@@ -174,7 +200,11 @@ export default function UserCryptoWallets({open}) {
                 </TableContainer>
     
                 <Box sx={{ display:'flex', justifyContent:'right', mt:2 }}>
-                    <Pagination count={10} color="primary" />
+                    <Pagination 
+                        count={CountPagination} 
+                        color="primary" 
+                        onChange={(e, value)=> handlePagination(e, value)}
+                    />
                 </Box>
             </Box>
         </Main>

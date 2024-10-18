@@ -15,7 +15,7 @@ import BuyCrypto from './Buy';
 import SellCrypto from './Sell';
 import axiosInstance from '../Authentication/axios';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -135,6 +135,28 @@ export default function UserCryptoTransactions({open}) {
 
        });
    }, []);
+
+
+
+   // Get paginated data
+   const handlePaginationData= (e, value)=> {
+        let limit = 4;
+        let offset = (value - 1) * limit;
+
+        axiosInstance.get(`/api/v2/user/crypto/transactions/?limit=${limit}&offset=${offset}`).then((res)=> {
+            // console.log(res)
+            if (res.status === 200) {
+                const sortedTransactions = res.data.crypto_transactions.sort((a,b)=> {
+                    return new Date(b.created_at) - new Date(a.created_at)
+                   })
+                setCryptoTransactions(sortedTransactions)
+            };
+
+        }).catch((error)=> {
+            // console.log(error);
+
+        })
+   };
    
 
 
@@ -241,7 +263,9 @@ export default function UserCryptoTransactions({open}) {
                         </TableCell>
 
                         <TableCell>
-                            <img src={getCryptoIcons(transaction?.crypto_name || '')} alt={transaction?.crypto_name || ''} style={{width:'30px', height:'30px'}} />
+                            <Tooltip title={transaction?.crypto_name}>
+                                <img src={getCryptoIcons(transaction?.crypto_name || '')} alt={transaction?.crypto_name || ''} style={{width:'30px', height:'30px'}} />
+                            </Tooltip>
                         </TableCell>
 
                         <TableCell>{transaction?.payment_mode || ''}</TableCell>
@@ -267,6 +291,7 @@ export default function UserCryptoTransactions({open}) {
             <Box sx={{ display:'flex', justifyContent:'right', mt:2 }}>
                 <Pagination 
                     count={countPagination} 
+                    onChange={(e, value)=> handlePaginationData(e, value)}
                     color="primary" 
                     />
             </Box>
