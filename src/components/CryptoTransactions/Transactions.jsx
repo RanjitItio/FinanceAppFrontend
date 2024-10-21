@@ -16,6 +16,7 @@ import SellCrypto from './Sell';
 import axiosInstance from '../Authentication/axios';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Tooltip from '@mui/material/Tooltip';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 
 
@@ -169,6 +170,7 @@ export default function UserCryptoTransactions({open}) {
                 <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
                     <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />} onClick={handleOpenBuy}>Buy</Button>
                     <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button>
+                    <Button variant="contained" sx={{mx:1}} startIcon={<SwapHorizIcon />} onClick={handleOpenSell}>Swap</Button>
                     <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
 
 
@@ -230,6 +232,7 @@ export default function UserCryptoTransactions({open}) {
             
             <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />} onClick={handleOpenBuy}>Buy</Button>
             <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button>
+            <Button variant="contained" sx={{mx:1}} startIcon={<SwapHorizIcon />} onClick={handleOpenSell}>Swap</Button>
             <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
 
             <TableContainer component={Paper} sx={{mt:1, maxHeight:'70rem'}}>

@@ -227,7 +227,7 @@ export default function BuyCrypto({open, setOpen}) {
             }
 
         }, 1000);
-    }, [exchangeAmount, currencyConversionAmount, convertedUSDValue])
+    }, [exchangeAmount, currencyConversionAmount, convertedUSDValue]);
     
 
 

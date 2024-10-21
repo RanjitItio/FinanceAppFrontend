@@ -5,7 +5,9 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 // import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { TextField, Grid, Container, Select, MenuItem, InputLabel, useMediaQuery, useTheme } from '@mui/material';
+import { TextField, Grid, Container, MenuItem, InputLabel, useMediaQuery, useTheme } from '@mui/material';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 import { Main, DrawerHeader } from '../Content';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Button from 'react-bootstrap/Button';
@@ -27,11 +29,13 @@ function HeadForm({...props}) {
   const [sendingPurposeValue, updateSendingPurposeValue]     = useState('')
   const [convertedAmount, setConvertedAmount]                = useState('');
 
+
+
   // Call API to convert the Currency Value
   useEffect(() => {
     if (props.formData.receiver_currency && props.formData.send_currency && props.formData.send_amount){
-      const convert_amount = parseInt(props.formData.send_amount)
-
+      const convert_amount = parseFloat(props.formData.send_amount)
+     
       setTimeout(() => {
         axiosInstance.post(`api/v2/convert/currency/`, {
           from_currency: props.formData.send_currency,
@@ -43,7 +47,7 @@ function HeadForm({...props}) {
           if (res.status === 200) {
             setConvertedAmount(res.data.converted_amount)
           }
-  
+
         }).catch((error)=> {
           // console.log(error.response)
           if (error.response.data.message === 'Error calling external API') {
@@ -54,7 +58,7 @@ function HeadForm({...props}) {
               alert('Currency Conversion API Limit Exceeded')
             } 
         })
-      }, 1500);
+      }, 1000);
       
     }
   }, [props.formData.receiver_amount, props.formData.receiver_currency, props.formData.send_currency, props.formData.send_amount])
@@ -68,26 +72,23 @@ function HeadForm({...props}) {
         }
 
     }).catch((error) => {
-        console.log(error.response)
+        // console.log(error.response)
 
     })
-  }, [])
+  }, []);
+
 
   const handleUpdateSenderCurrencyValue = (event) => {
-    updateSenderCurrencyValue(event.target.value)
-  }
+      updateSenderCurrencyValue(event.target.value)
+  };
 
   const handleUpdateReceiverCurrencyValue = (event) => {
-    updateReceiverCurrencyValue(event.target.value)
-  }
+      updateReceiverCurrencyValue(event.target.value)
+  };
 
-  const handleSourceFundValue = (event)=> {
-    updatesourceFundValue(event.target.value)
-  }
-  
   const handleSendingPurposeValue = (event)=> {
-    updateSendingPurposeValue(event.target.value)
-  }
+      updateSendingPurposeValue(event.target.value)
+  };
 
   
 
@@ -95,136 +96,118 @@ function HeadForm({...props}) {
     <>
 
       <Form method='post'>
-        <Row className="mb-3">
-          <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '  controlId="formGridSend">
-            <InputLabel >Send</InputLabel>
+        <Row className="mb-3" style={{marginTop:20}}>
+          <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '>
             <TextField fullWidth autoFocus 
-                       label="Enter Amount" 
-                       type="number"  
-                       onChange={(event)=>{props.handleFormValueChange(event)}}
-                       variant="outlined"
-                       name='send_amount'
-                       />
-          </Form.Group>
+                label="Enter Amount" 
+                type="number"  
+                onChange={(event)=>{
+                  const value = event.target.value;
+                  
+                  if (/^\d+$/.test(value)) {
+                     props.setError('')
+                     props.handleFormValueChange(event)
+                  } else {
+                    props.setError('Please type valid Amount')
+                  }
 
-          <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridState">
+                }}
+                variant="outlined"
+                name='send_amount'
+                />
+          </div>
 
-            <InputLabel id="demo-simple-select-standard-label ">Currency</InputLabel>
-            <Select
-              fullWidth
-              autoFocus
-              label="Currency"
-              value={senderCurrencyValue}
-              name='send_currency'
-              onChange={(event)=> {handleUpdateSenderCurrencyValue(event); props.handleFormValueChange(event)}}
-            >
-              <MenuItem value="">
-                <em>Choose...</em>
-              </MenuItem>
-          
-              {currencies.map((currency, index) => (
-                    <MenuItem value={currency.name} key={index}>{currency.name}</MenuItem>
-              ))}
-
-            </Select>
-
-          </Form.Group>
-
+          <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12'>
+            <FormControl fullWidth>
+              <InputLabel id="send_currency">Currency</InputLabel>
+              <Select
+                fullWidth
+                autoFocus
+                label='Currency'
+                value={senderCurrencyValue}
+                name='send_currency'
+                onChange={(event)=> {handleUpdateSenderCurrencyValue(event); props.handleFormValueChange(event)}}
+              >
+                {currencies.map((currency, index) => (
+                      <MenuItem value={currency.name} key={index}>{currency.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>                                                                                                                                                                    
+          </div>
         </Row>
         {/* &nbsp; */}
+
         <Row className="mb-3">
+          <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12'>
 
-        <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridEmail">
-            <InputLabel>Recipient will receive</InputLabel>
+            <TextField 
+                fullWidth 
+                autoFocus
+                type="number" 
+                variant="outlined" 
+                style={{color: 'white'} } 
+                name='receiver_amount'
+                label='Recipient will receive'
+                value={convertedAmount}
+              />
+          </div>
 
-            <TextField fullWidth autoFocus
-                        type="number" 
-                        variant="outlined" 
-                        style={{color: 'white'} } 
-                        name='receiver_amount'
-                        // onChange={(event)=>{props.handleFormValueChange(event)}}
-                        value={convertedAmount}
-                        />
-          </Form.Group>
+          <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12'>
+            <FormControl fullWidth>
+              <InputLabel id="receipient_currency">Currency</InputLabel>
+              <Select
+                fullWidth
+                label="Recipient Currency"
+                value={receiverCurrencyValue}
+                name='receiver_currency'
+                onChange={(event) => {handleUpdateReceiverCurrencyValue(event); props.handleFormValueChange(event); }}
+              >
+                {currencies.map((currency, index) => (
+                      <MenuItem value={currency.name} key={`${currency.name}-${index}`}>{currency.name}</MenuItem>
+                ))}
 
-          <Form.Group className='col-md-6 col-lg-6 col-sm-12 col-xs-12' controlId="formGridState">
-
-            <InputLabel id="demo-simple-select-standard-label ">Currency</InputLabel>
-            <Select
-              fullWidth
-              autoFocus
-              label="Currency"
-              value={receiverCurrencyValue}
-              name='receiver_currency'
-              onChange={(event)=>{handleUpdateReceiverCurrencyValue(event); props.handleFormValueChange(event)}}
-            >
-              <MenuItem value="">
-                <em>Choose...</em>
-              </MenuItem>
-          
-              {currencies.map((currency, index) => (
-                    <MenuItem value={currency.name} key={`${currency.name}-${index}`}>{currency.name}</MenuItem>
-              ))}
-
-            </Select>
-          </Form.Group>
+              </Select>
+            </FormControl>
+          </div>
 
         </Row>
 
-        {/* <Form.Group as={Col} controlId="formGridState">
-          <InputLabel id="demo-simple-select-standard-label" >Source Fund</InputLabel>
-          <Select fullWidth autoFocus 
-                label="Source Fund"
-                name='source_fund'
-                onChange={(event) => {props.handleFormValueChange(event); handleSourceFundValue(event)}}
-                value={sourceFundValue}
-                >
-            <MenuItem value="">
-              <em>Choose...</em>
-            </MenuItem>
-            <MenuItem value={"Wallet"}>Wallet</MenuItem>
-            <MenuItem value={"Bank"}>Bank</MenuItem>
-            <MenuItem value={"Paypal"}>Paypal</MenuItem>
-            <MenuItem value={"Paytm"}>Paytm</MenuItem>
-
-          </Select>
-        </Form.Group> */}
 
         &nbsp;
-        <Form.Group as={Col} controlId="formGridState">
-          <InputLabel id="demo-simple-select-standard-label" >Sending Purpose</InputLabel>
-          <Select fullWidth autoFocus 
+        <FormControl fullWidth>
+          <InputLabel id="sending_purpose">Sending Purpose</InputLabel>
+          <Select fullWidth 
+                  labelId='sending_purpose'
                   label="Sending Purpose"
                   name='sending_purpose'
                   onChange={(event)=> {props.handleFormValueChange(event); handleSendingPurposeValue(event)}}
                   value={sendingPurposeValue}
                   >
-            <MenuItem value="">
-              <em>Choose...</em>
-            </MenuItem>
             <MenuItem value={"Expenses"}>Expenses</MenuItem>
             <MenuItem value={"Insurance"}>Insurance</MenuItem>
             <MenuItem value={"Travel"}>Travel</MenuItem>
             <MenuItem value={"Others"}>Others</MenuItem>
           </Select>
+        </FormControl>
 
-        </Form.Group>
 
+            <hr />
+              <div style={{marginTop:5}}>
+                <div className="d-flex justify-content-between">
+                  <p className=''><b>Send Amount</b></p>
+                  <p className=''><b>Payble Fee</b></p>
+                  <p className=''><b>Total Amount</b></p>
+                </div>
 
-        <hr />
-        <div className="d-flex justify-content-between">
-          <p className=''><b>Send Amount</b></p>
-          <p className=''><b>Payble Fee</b></p>
-          <p className=''><b>Total Amount</b></p>
-        </div>
-        <div className="d-flex justify-content-between">
-          <p><b>{props.formData.send_amount} {props.formData.send_currency}</b></p>
-          <p><b>{props.formData.transaction_fee} {props.formData.send_currency}</b></p>
-          <p><b>{props.formData.total_amount} {props.formData.send_currency}</b></p>
-        </div>
-        <br />
+                <div className="d-flex justify-content-between">
+                  <p><b>{props.formData.send_amount} {props.formData.send_currency}</b></p>
+                  <p><b>{props.chargedFee} {props.formData.send_currency}</b></p>
+                  <p><b>{props.formData.total_amount} {props.formData.send_currency}</b></p>
+                </div>
+              </div>
+            <br />
 
-        {props.error && <p className='text-warning'>{props.error}</p>}
+            {props.error && <p style={{color:'orange', display:'flex', justifyContent:'center'}}>{props.error}</p>}
       </Form>
 
     </>
@@ -232,6 +215,8 @@ function HeadForm({...props}) {
 }
 
 
+
+//// Second Form
 function Step1Form({...props}) {
 
   return (
@@ -274,6 +259,9 @@ function Step1Form({...props}) {
   );
 }
 
+
+
+//// Third Form
 function Step2Form({...props}) {
   const [paymentOption, setPaymentOption] = React.useState('');
 
@@ -365,6 +353,8 @@ function Step2Form({...props}) {
   );
 }
 
+
+/// Fourth step form
 function Step3Form({...props}) {
   return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
@@ -389,6 +379,9 @@ function Step3Form({...props}) {
   );
 }
 
+
+
+// Fifth step form
 function Step4Form() {
   const [payvia, setPayvia] = React.useState('');
 
@@ -427,7 +420,9 @@ function Step4Form() {
 
 const steps = ['Payment Information','Recipient Details', 'Recipient Payment Details', 'Recipient Address'];
 
-// Send Money
+
+
+// Send Money Form
 export default function StepWisePaymentForm() {
 
   // All Form fields
@@ -455,18 +450,22 @@ export default function StepWisePaymentForm() {
   const [activeStep, setActiveStep] = React.useState(0);  // Currenct Step
   const [skipped, setSkipped]       = React.useState(new Set());
   const theme                       = useTheme();
-  const matchesXS                   = useMediaQuery(theme.breakpoints.down('sm'));
-  const [formData, updateFormData]  = useState(initialFormData)
-  const [error, setError]           = useState('')
+  const matchesXS                   = useMediaQuery(theme.breakpoints.down('sm'));  
+  const [formData, updateFormData]  = useState(initialFormData);  // Form Data
+  const [error, setError]           = useState('');  // Error Message
+  const [chargedFee, SetChargedFee] = React.useState(0);  // Fee for Transfer Transaction
 
   
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
+  // const isStepOptional = (step) => {
+  //   return step === 1;
+  // };
+
+
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
+  
 
   // Redirect to Next page
   const handleNext = () => {
@@ -474,17 +473,17 @@ export default function StepWisePaymentForm() {
 
     // Check the first Step Validation
     if (activeStep === 0) {
-          if (formData.send_amount === 0) {
-            setError('Please fillup the Send amount field')
+          if (formData.send_amount === '' || formData.send_amount === 0) {
+            setError('Please fill send amount field')
 
           } else if (formData.send_currency === '') {
-            setError('Please select Send Currency')
+            setError('Please select send currency')
 
           } else if (formData.receiver_currency === '') {
-            setError('Please select Receiver Currency')
+            setError('Please select receiver currency')
 
           } else if (formData.sending_purpose === '') {
-            setError('Please select Sending Purpose')
+            setError('Please select sending purpose')
 
           } else {
               setError('')
@@ -494,32 +493,31 @@ export default function StepWisePaymentForm() {
                 newSkipped.delete(activeStep);
               }
             
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            setSkipped(newSkipped);
-              
-            };
+              setActiveStep((prevActiveStep) => prevActiveStep + 1);
+              setSkipped(newSkipped);
+          };
+
     // Check for 2nd step validation
     } else if (activeStep === 1) {
             if (formData.receiver_full_name === '') {
-              setError('Please fill up receiver full name')
+               setError('Please fill up receiver full name')
 
             } else if (formData.receiver_mobile_number === '') {
-              setError('Please fill up receiver Mobile number')
+               setError('Please fill up receiver Mobile number')
               
             } else if (formData.receiver_email === '') {
-              setError('Please fill up receiver Email')
+               setError('Please fill up receiver Email')
 
             } else {
-              setError('')
+                setError('')
 
-              if (isStepSkipped(activeStep)) {
-                newSkipped = new Set(newSkipped.values());
-                newSkipped.delete(activeStep);
-              }
-            
-              setActiveStep((prevActiveStep) => prevActiveStep + 1);
-              setSkipped(newSkipped);
-
+                if (isStepSkipped(activeStep)) {
+                  newSkipped = new Set(newSkipped.values());
+                  newSkipped.delete(activeStep);
+                }
+              
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                setSkipped(newSkipped);
             }
 
     // Check for 3rd step validation
@@ -574,8 +572,8 @@ export default function StepWisePaymentForm() {
             // console.log(formData)
             // Submit the data in API Request
             axiosInstance.post(`/api/v1/user/send/money/`, {
-              send_amount:         parseInt(formData.send_amount),
-              fee:                 formData.transaction_fee,
+              send_amount:         parseFloat(formData.send_amount),
+              fee:                 parseFloat(chargedFee),
               total_amount:        formData.total_amount,
               send_currency:       formData.send_currency,
               sender_payment_mode: formData.source_fund,
@@ -631,34 +629,35 @@ export default function StepWisePaymentForm() {
           }
       } 
     };
+  
     
-    
-    
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
+  // const handleSkip = () => {
+  //   if (!isStepOptional(activeStep)) {
 
-      throw new Error("You can't skip a step that isn't optional.");
-    }
+  //     throw new Error("You can't skip a step that isn't optional.");
+  //   }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
+  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //   setSkipped((prevSkipped) => {
+  //     const newSkipped = new Set(prevSkipped.values());
+  //     newSkipped.add(activeStep);
+  //     return newSkipped;
+  //   });
+  // };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  // const handleReset = () => {
+  //   setActiveStep(0);
+  // };
 
   // Get the value of the form after the form filled
   const handleFormValueChange = (event) => {
+    const { name, value } = event.target;
+
     updateFormData({
       ...formData,
       [event.target.name]: event.target.value
@@ -673,23 +672,28 @@ export default function StepWisePaymentForm() {
       setTimeout(() => {
         updateFormData((formData)=> ({
           ...formData,
-          total_amount: parseFloat(formData.send_amount) + parseFloat(formData.transaction_fee)
+          total_amount: parseFloat(formData.send_amount) + parseFloat(chargedFee)
         }))
-      }, 3000);
-
+      }, 1000);
     };
+  }, [formData.send_amount, formData.send_currency]);
 
-  }, [formData.send_amount, formData.send_currency])
 
-  // Update the Transaction Fee after Selecting send amount and currency
+  // Update the Transaction Fee for Fiat Transfer Transactions
   useEffect(() => {
-    if (formData.send_amount && formData.send_currency) {
-      updateFormData((formData)=> ({
-        ...formData,
-        transaction_fee: 10
-      }))
+    if (formData.send_amount) {
+        axiosInstance.post(`/api/v2/charged/fee/`, {
+          fee_type: 'Fiat Transfer',
+          amount: parseFloat(formData.send_amount)
+
+        }).then((res)=> {
+
+            if (res.status === 200 && res.data.success === true){ 
+                SetChargedFee(res.data.fee)
+            }
+        })
     }
-  }, [formData.send_amount, formData.send_currency])
+  }, [formData.send_amount]);
 
 
 
@@ -697,10 +701,12 @@ export default function StepWisePaymentForm() {
     switch (step) {
       case 0:
         return <HeadForm
-               handleFormValueChange={handleFormValueChange}
-               formData={formData}
-               error={error}
-            />;
+                handleFormValueChange={handleFormValueChange}
+                formData={formData}
+                error={error}
+                setError={setError}
+                chargedFee={chargedFee}
+              />;
       case 1:
         return <Step1Form 
                 handleFormValueChange={handleFormValueChange}
@@ -721,6 +727,7 @@ export default function StepWisePaymentForm() {
         return null;
     }
   };
+
 
 
   return (

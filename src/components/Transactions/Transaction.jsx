@@ -29,6 +29,22 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 
 
+// Currency Icon
+const getCurrencyIcon = (currency) => {
+    switch (currency) {
+        case 'USD':
+            return '$'
+        case 'EUR':
+            return '€'
+        case 'INR':
+            return '₹'
+        case 'GBP':
+            return '£'
+        default:
+            '$'
+    }
+};
+
 
 
 
@@ -154,10 +170,10 @@ export default function AllTransactions({open}) {
             <br />
             <div className='d-flex justify-content-between'>
                 <p className='text-muted'>All Transactions</p>
-                <div className='d-flex align-items-center'>
+                {/* <div className='d-flex align-items-center'>
                     <p className='text-muted'>Filter</p>&nbsp;
                     <Button startIcon={<FilterListIcon />} style={{backgroundColor: ''}} variant="outlined" onClick={toggleFilterItemVisibility}></Button>
-                </div>
+                </div> */}
             </div>
 
             <div className='d-flex justify-content-between'>   
@@ -282,7 +298,6 @@ export default function AllTransactions({open}) {
                     <Alert severity="warning">{error}</Alert>
                 ) : (
         <List>
-           {console.log('transactionData', transactionData)}
             {transactionData.map((transaction, index) => {
         
                 // const transactionDate = new Date(transaction.data.created_At.split('T')[0] || '');
@@ -307,7 +322,7 @@ export default function AllTransactions({open}) {
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.currency?.name || ''}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.currency?.name || '')}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
                     primary={transaction.type}
@@ -344,8 +359,7 @@ export default function AllTransactions({open}) {
                                 <span className='mx-1'>{transaction.currency.name}</span>
                                 <span>{transaction.data.amount}</span>
                             </>
-                        )
-                             
+                        ) 
                     }
                     secondary={
                         transaction.data.status == 'Pending' ? (

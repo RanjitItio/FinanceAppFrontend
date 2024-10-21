@@ -56,12 +56,15 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 
 
-const CryptoFiatHomePage = React.lazy(()=> import('../CryptoFIATHome/Dashboard'));
-const UserProfile        = React.lazy(()=> import('../Profile/profile'));
-const ChangePassword     = React.lazy(()=> import('../Authentication/ChangePassword'));
+const CryptoFiatHomePage     = React.lazy(()=> import('../CryptoFIATHome/Dashboard'));
+const UserProfile            = React.lazy(()=> import('../Profile/profile'));
+const ChangePassword         = React.lazy(()=> import('../Authentication/ChangePassword'));
 const UserCryptoTransactions = React.lazy(()=> import('../CryptoTransactions/Transactions'));
-const UserCryptoWallets  = React.lazy(()=> import('../CryptoWallet/Walltes'));
-
+const UserCryptoWallets      = React.lazy(()=> import('../CryptoWallet/Walltes'));
+const CryptoBuy              = React.lazy(()=> import('../CryptoTransactions/BuyCrypto'));
+const CryptoSell             = React.lazy(()=> import('../CryptoTransactions/SellCrypto'));
+const CryptoSwap             = React.lazy(()=> import('../CryptoTransactions/CryptoSwap'));
+const CryptoExchange         = React.lazy(()=> import('../CryptoTransactions/CryptoExchange'));
 
 
 
@@ -157,9 +160,10 @@ const AuthRoutes = () => {
                           <Route exact path='/crypto/transactions/' element={<UserCryptoTransactions open={open} />}></Route>
                           <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
                           <Route exact path='/crypto/wallets/' element={<UserCryptoWallets open={open} />}></Route>
-                          {/* <Route exact path='/crypto-swap/' element={<CryptoSwap open={open} />}></Route> */}
-                          {/* <Route exact path='/crypto-buy/' element={<CryptoBuy open={open} />}></Route>
-                          <Route exact path='/crypto-sell/' element={<CryptoSell open={open} />}></Route> */}
+                          <Route exact path='/crypto/buy/' element={<CryptoBuy open={open} />}></Route>
+                          <Route exact path='/crypto/sell/' element={<CryptoSell open={open} />}></Route>
+                          <Route exact path='/crypto/swap/' element={<CryptoSwap open={open} />}></Route>
+                          <Route exact path='/crypto/exchange/' element={<CryptoExchange open={open} />}></Route>
 
                       </Routes>
                     </Box>

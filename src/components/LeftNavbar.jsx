@@ -25,7 +25,11 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import StorageIcon from '@mui/icons-material/Storage';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SellIcon from '@mui/icons-material/Sell';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import SwapHorizontalCircleIcon from '@mui/icons-material/SwapHorizontalCircle';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 
 
@@ -61,10 +65,12 @@ const NavContent = [
   icon:''},
 
   { text: 'CRYPTO', subItems: [
-    {text: 'Transactions', icon: <RotateRightIcon />, url: '/crypto/transactions/'},
-    {text: 'Wallet', icon: <RotateRightIcon />, url: '/crypto/wallets/'},
-    {text: '-Crypto Swap', icon: <RotateRightIcon />, url: '/crypto-swap/'},
-    {text: '-Crypto Exchange', icon: <RotateRightIcon />, url: '/'},
+    {text: 'Transactions', icon: <ReceiptLongIcon />, url: '/crypto/transactions/'},
+    {text: 'Wallet', icon: <AccountBalanceWalletIcon />, url: '/crypto/wallets/'},
+    {text: 'Crypto Buy', icon: <ShoppingCartIcon />, url: '/crypto/buy/'},
+    {text: 'Crypto Sell', icon: <SellIcon />, url: '/crypto/sell/'},
+    {text: '-Crypto Swap', icon: <SwapHorizIcon />, url: '/crypto/swap/'},
+    {text: '-Crypto Exchange', icon: <SwapHorizontalCircleIcon />, url: '/crypto/exchange/'},
     // {text: '-Investments', icon: <StorageIcon />, url: '/investment/invest/'},
     // {text: '-Investment Plans', icon: <StorageIcon />, url: '/investment/plan/'},
     ],

@@ -188,22 +188,35 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
                                 <div>
                                     <p className='text-muted'>Total amount</p>
-                                    {specificTransactionDetails ? (
-                                        <p>{specificTransactionDetails?.data?.payout_amount || ''} {specificTransactionDetails?.currency?.name || ''}</p>
-                                    ) : (
-                                      <p className='d-flex justify-content-end'></p>
-                                    )}
-                    
+                                    {specificTransactionDetails?.type && (
+                                        <>
+                                          {specificTransactionDetails.type === 'Transfer' && (
+                                            <p>
+                                              {specificTransactionDetails?.data?.payout_amount || ''} {specificTransactionDetails?.currency?.name || ''}
+                                            </p>
+                                          )}
+
+                                          {specificTransactionDetails.type === 'Deposit' && (
+                                            <p>
+                                              {parseFloat(specificTransactionDetails?.data?.amount || '') + parseFloat(specificTransactionDetails?.data?.transaction_fee || '')}
+                                            </p>
+                                          )}
+                                        </>
+                                      )}
+                                      {/* {specificTransactionDetails ? (
+                                          <p>{specificTransactionDetails?.data?.payout_amount || ''} {specificTransactionDetails?.currency?.name || ''}</p>
+                                      ) : (
+                                        <p className='d-flex justify-content-end'></p>
+                                      )} */}
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
             </div>
           </div>
         </DialogContent>
-          
+
         <DialogActions>
           {/* <Button autoFocus onClick={handleClose}>
             Disagree

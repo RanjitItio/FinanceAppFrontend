@@ -28,9 +28,11 @@ const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 
 
 // First Form
-function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error, transactionFee}) {
+function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, setAmount, setError, error, setTransactionFee}) {
 
-  const [currencies, setCurrencies] = React.useState([]);
+  const [currencies, setCurrencies] = React.useState([]);  // Currencies
+  const [chargedFee, SetChargedFee] = React.useState(0);  // Fee for Deposit Transaction
+
 
   // Get selected Currency value
   const handleCurrencyChange = (event)=> {
@@ -60,13 +62,13 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
     // Selected Amount
     const handleAmountChange = (event)=> {
+      const {name, value} = event.target;
 
-      if(!event.target.value) {
-        setError('Please fill all the above fields')
-
-      } else {
+      if(/^\d+$/.test(value) || value === '') {
         setError('')
         setAmount(event.target.value)
+      } else {
+        setError('Please type valid number')
       }
     };
 
@@ -84,6 +86,23 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
       });
 
     }, []);
+
+    // Get assigned fee for Crypto Buy Transaction
+    useEffect(() => {
+      if (amount) {
+        axiosInstance.post(`/api/v2/charged/fee/`, {
+           fee_type: 'Fiat Deposit',
+           amount: amount
+
+        }).then((res)=> {
+
+           if (res.status === 200 && res.data.success === true){ 
+               SetChargedFee(res.data.fee)
+               setTransactionFee(res.data.fee)
+           }
+        })
+      }
+   }, [amount]);
 
 
 
@@ -105,28 +124,25 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             label="Currency"
             onChange={handleCurrencyChange}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-
             {currencies.map((curr)=> (
                 <MenuItem key={curr.id} value={curr.name}>
                   {curr.name}
                 </MenuItem>
             ))}
           </Select>
-          <FormHelperText>Fee ({amount} + {transactionFee.toFixed(2)}(10%)) Total Fee: {parseFloat(amount) + parseFloat(transactionFee)}</FormHelperText>
-        </FormControl>
+          <FormHelperText>Fee: {chargedFee} {currency}</FormHelperText>
+      </FormControl>
 
         <TextField
           hiddenLabel
+          type='number'
           id="amount"
           variant="filled"
           size="small"
           value={amount}
           placeholder='Amount'
-          sx={{marginTop: '10px', width: '95%', marginLeft: '10px'}}
-          onChange={handleAmountChange}
+          sx={{ marginTop: '10px', width: '95%', marginLeft: '10px'}}
+          onChange={(e)=> handleAmountChange(e)}
         />
 
         <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '30px' }} size="small">
@@ -145,7 +161,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             <MenuItem value={'Bank'}>Bank</MenuItem>
             <MenuItem value={'Paypal'}>Paypal</MenuItem>
           </Select>
-          &nbsp;
+            &nbsp;
           {error && <Alert severity="error">{error}</Alert>}
         </FormControl>
 
@@ -174,7 +190,7 @@ function Form2({...props}) {
         </div>
 
         <div className="d-flex justify-content-between">
-            <p>Fee(10%)</p> 
+            <p>Fee</p> 
             <p>{props.currency} {props.transactionFee.toFixed(3)}</p>
         </div>
         <hr className='mb-4'/>
@@ -278,7 +294,7 @@ export default function DepositForm({open}) {
       // console.log(amount)
       axiosInstance.post(`api/v1/user/deposit/`, {
         currency: currency,
-        deposit_amount: amount,
+        deposit_amount: parseFloat(amount),
         fee: transactionFee,
         total_amount: totalAamount,
         selected_wallet: user_selected_wallet_id,
@@ -365,6 +381,7 @@ export default function DepositForm({open}) {
                   error={error}
                   setError={setError}
                   transactionFee={transactionFee}
+                  setTransactionFee={setTransactionFee}
               />;
       case 1:
         return <Form2 
@@ -374,7 +391,7 @@ export default function DepositForm({open}) {
                   amount={amount}
                   currency={currency}
                   transactionFee={transactionFee}
-                  />;
+                />;
       default:
         return null;
     }
@@ -383,13 +400,11 @@ export default function DepositForm({open}) {
 
   // Calculate the transaction Fee and the Total amount
   React.useEffect(() => {
-    if(amount) {
-      const transactionFee = (parseFloat(amount) / 100) * 10
-      setTransactionFee(transactionFee)
+    if(transactionFee) {
       const TotalAmount = parseFloat(amount) + parseFloat(transactionFee)
       setTotalAmount(TotalAmount)
     }
-  }, [amount]);
+  }, [transactionFee]);
 
 
 
@@ -453,7 +468,7 @@ export default function DepositForm({open}) {
                         Step {activeStep + 1} already completed
                       </Typography>
                     ) : (
-                      <Button onClick={handleComplete} variant='outlined' 
+                      <Button onClick={handleComplete} variant='contained' 
                         sx={{marginRight: '4%', marginTop: '3%'}}
                       >
                         {completedSteps() === totalSteps() - 1
