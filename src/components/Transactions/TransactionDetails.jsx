@@ -163,7 +163,6 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                       <>Transaction Status</>
                                     )}
                                     
-                                    
                                 </div>
                             </div>
                             <hr />
@@ -198,7 +197,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
                                           {specificTransactionDetails.type === 'Deposit' && (
                                             <p>
-                                              {parseFloat(specificTransactionDetails?.data?.amount || '') + parseFloat(specificTransactionDetails?.data?.transaction_fee || '')}
+                                              {parseFloat(specificTransactionDetails?.data?.amount || '') + parseFloat(specificTransactionDetails?.data?.transaction_fee || '')} {specificTransactionDetails?.currency?.name || ''}
                                             </p>
                                           )}
                                         </>
