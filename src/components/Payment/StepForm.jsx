@@ -667,16 +667,16 @@ export default function StepWisePaymentForm() {
 
   // calculate Total Amount
   useEffect(() => {
-    if (formData.send_amount) {
+    if (formData.send_amount && chargedFee) {
 
       setTimeout(() => {
         updateFormData((formData)=> ({
           ...formData,
-          total_amount: parseFloat(formData.send_amount) + parseFloat(chargedFee)
+          total_amount: (parseFloat(formData.send_amount) + parseFloat(chargedFee))
         }))
       }, 1000);
     };
-  }, [formData.send_amount, formData.send_currency]);
+  }, [formData.send_amount, chargedFee]);
 
 
   // Update the Transaction Fee for Fiat Transfer Transactions
