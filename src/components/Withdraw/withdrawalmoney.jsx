@@ -22,9 +22,11 @@ import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
 import { Button as JoyButton, Divider } from '@mui/joy';
+import Freecurrencyapi from '@everapi/freecurrencyapi-js';
 
 
 
+const freeCurrencyAPIKey = import.meta.env.VITE_FREE_CURRENCY_API
 const steps = ['Create Withdrawal', 'Confirm Withdrawal'];
 
 
@@ -47,7 +49,19 @@ function WithdrawalForm1({...props}) {
    
   // Method to get withdrawal Amount
   const handleAmountChange = (event)=> {
-    props.updateAmount(event.target.value)
+    const { name, value } = event.target;
+
+    if (value === '') {
+      props.updateAmount('')
+      props.setError('');
+
+    } else if (/^\d+$/.test(value)) {
+       props.setError('')
+       props.updateAmount(value)
+
+    } else {
+       props.setError('Please provide valid amount')
+    }
   };
 
 
@@ -117,7 +131,7 @@ function WithdrawalForm1({...props}) {
                       </MenuItem>
                   ))};
                 </Select>
-                <FormHelperText><b>Fee</b> 5% of Total Amount</FormHelperText>
+                <FormHelperText><b>Fee {props?.chargedFee.toFixed(2) || 0}</b></FormHelperText>
             </FormControl>
         </Grid>
 
@@ -147,11 +161,39 @@ function WithdrawalForm1({...props}) {
 
 // Second Form
 function WithdrawalForm2({...props}) {
+  const [withdrawalCurrencyConvert, setWithdrawalCurrencyConvert] = useState(0);
 
+  // Caluculate total Amount
   const CalculateTotalAmount = (amount, fee)=> {
     const totalAmount = parseFloat(amount) + parseFloat(fee);
     return totalAmount.toFixed(3)
   };
+
+
+  // Convert from Wallet Currency to Withdrawal currency
+  useEffect(()=> {
+    if (props.walletCurrency && props.withdrawalCurrency && props.Amount) {
+      const freecurrencyapi = new Freecurrencyapi(freeCurrencyAPIKey);
+        freecurrencyapi.latest({
+          base_currency: props.walletCurrency,
+          currencies: props.withdrawalCurrency 
+
+      }).then(response => {
+          // console.log(response);
+          setWithdrawalCurrencyConvert(response.data[props.withdrawalCurrency])
+      });
+    }
+  }, [props.walletCurrency, props.withdrawalCurrency, props.Amount])
+
+
+  // Calculate Withdrawal currency amount
+  useEffect(() => {
+     if (withdrawalCurrencyConvert && props.Amount) {
+        const calculated_amount = parseFloat(props.Amount) * parseFloat(withdrawalCurrencyConvert)
+        props.setCreditedAmount(calculated_amount)
+     }
+  }, [withdrawalCurrencyConvert, props.Amount]);
+  
 
   return(
     <>
@@ -181,10 +223,20 @@ function WithdrawalForm2({...props}) {
 
         <Box sx={{ mx: 4 }}>
           <Box display="flex" justifyContent="space-between" mb={2}>
+            <Typography variant="body2">Received Amount</Typography>
+
+            <Typography variant="body2">
+              {props?.withdrawalCurrency || ''} {props?.creditedAmount.toFixed(3) || 0}
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mb: 2 }} />
+
+          <Box display="flex" justifyContent="space-between" mb={2}>
             <Typography variant="body2">Withdrawal Amount</Typography>
 
             <Typography variant="body2">
-              {props.withdrawalCurrency} {props.Amount}
+              {props.walletCurrency} {props.Amount}
             </Typography>
           </Box>
 
@@ -194,7 +246,7 @@ function WithdrawalForm2({...props}) {
             <Typography variant="body2">Fee</Typography>
 
             <Typography variant="body2">
-              {props.withdrawalCurrency} {props.fees.toFixed(3)}
+              {props.walletCurrency} {props.chargedFee.toFixed(3)}
             </Typography>
           </Box>
 
@@ -206,8 +258,7 @@ function WithdrawalForm2({...props}) {
             </Typography>
 
             <Typography variant="body1">
-              <b>{props.withdrawalCurrency} {CalculateTotalAmount(props.Amount, props.fees)}</b>
-              {/* <b>{props.withdrawalCurrency} ({parseFloat(props.Amount) + parseFloat(props.fees)})</b> */}
+              <b>{props.walletCurrency} {CalculateTotalAmount(props.Amount, props.chargedFee)}</b>
             </Typography>
           </Box>
         </Box>
@@ -236,9 +287,11 @@ export default function WithdrawalMoneyForm({open}) {
   const [Amount, updateAmount]                         = useState('');  // Withdrawal Amount State
   const [walletCurrency, updateWalletCurrency]         = useState('');  // Wallet Currency State
   const [error, setError]                              = useState('');  // Error Message State
-  const [fees, setFees]                                = useState('');  // Fees
+  const [chargedFee, SetChargedFee]                    = useState(0);  // Fee for Withdrawal Transaction
+  const [creditedAmount, setCreditedAmount]            = useState(0);  // Converted amount of Withdrawal currency
 
- 
+
+
   // Calculate total Steps
   const totalSteps = () => {
     return steps.length;
@@ -259,13 +312,6 @@ export default function WithdrawalMoneyForm({open}) {
     return completedSteps() === totalSteps();
   };
 
-  // Caluculate Fees
-  useEffect(() => {
-    if (Amount){
-       let calculated_fees = (parseFloat(Amount) / 100) * 5
-       setFees(calculated_fees)
-    }
-  }, [Amount]);
   
 
   // Redirect to Next Step
@@ -288,6 +334,7 @@ export default function WithdrawalMoneyForm({open}) {
     setActiveStep(step);
   };
 
+
   // Final Step method
   const handleComplete = () => {
     const newCompleted = completed;
@@ -309,7 +356,8 @@ export default function WithdrawalMoneyForm({open}) {
         withdrawalAmount: parseFloat(Amount),
         withdrawalCurrency: withdrawalCurrency,
         wallet_currency: walletCurrency,
-        fee: parseFloat(fees)
+        fee: parseFloat(chargedFee),
+        converted_credit_amt: parseFloat(creditedAmount)
 
       }).then((res)=> {
         // console.log(res)
@@ -365,8 +413,24 @@ export default function WithdrawalMoneyForm({open}) {
     navigate('/')
   };
 
+    // Get assigned fee for Fiat Withdrawal Transaction
+    useEffect(() => {
+      if (Amount) {
+        axiosInstance.post(`/api/v2/charged/fee/`, {
+          fee_type: 'Fiat Withdrawal',
+          amount: parseFloat(Amount)
+
+        }).then((res)=> {
+
+          if (res.status === 200 && res.data.success === true){ 
+              SetChargedFee(res.data.fee)
+          }
+        })
+      }
+  }, [Amount]);
 
 
+  
   const renderForms = (step) => {
     switch(step){
       case 0:
@@ -379,19 +443,23 @@ export default function WithdrawalMoneyForm({open}) {
                 updateWalletCurrency={updateWalletCurrency}
                 error={error}
                 setError={setError}
+                chargedFee={chargedFee}
             />;
       case 1:
         return <WithdrawalForm2 
                   walletCurrency={walletCurrency}
                   withdrawalCurrency={withdrawalCurrency}
                   Amount={Amount}
-                  fees={fees}
+                  chargedFee={chargedFee}
                   error={error}
+                  setCreditedAmount={setCreditedAmount}
+                  creditedAmount={creditedAmount}
               />;
       default:
         return null;
     }
   };
+
 
 
   return (

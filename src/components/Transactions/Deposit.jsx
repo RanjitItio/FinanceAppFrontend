@@ -42,7 +42,6 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
     }else {
       setError('')
       setCurrency(event.target.value);
-
     }
   };
 
@@ -87,7 +86,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
     }, []);
 
-    // Get assigned fee for Crypto Buy Transaction
+    // Get assigned fee for Fiat Deposit Transaction
     useEffect(() => {
       if (amount) {
         axiosInstance.post(`/api/v2/charged/fee/`, {

@@ -84,10 +84,12 @@ export default function AllTransactions({open}) {
         setCurrency(event.target.value);
     };   
 
+    // Method to open Transaction detail
     const handleClickOpen = () => {
         setBoxOpen(true);
       };
-    
+
+    // Close the Transaction detail box
     const handleClose = () => {
         setBoxOpen(false);
       };
@@ -138,6 +140,7 @@ export default function AllTransactions({open}) {
         
     };
 
+    // If no transaction available
     if (transactionData.length === 0) {
         return (
             <Main open={open}>
@@ -156,6 +159,7 @@ export default function AllTransactions({open}) {
         )
     };
 
+    
     return (
         <>
          <Main open={open}>
@@ -403,50 +407,3 @@ export default function AllTransactions({open}) {
 
 
 
-//Map the list Without any data from API
-// <List>
-//             {TransactionData.map((transaction, index) => (
-        
-//                 <ListItem
-//                 key={index}
-//                 disablePadding
-//                 secondaryAction={
-//                     <IconButton edge="end" aria-label="comments">
-//                         <ArrowRightIcon />
-//                     </IconButton>
-//                 }
-//                 onClick={handleClickOpen}
-//                 className='mb-2 shadow border border-secondary'
-//                 >
-//                 <ListItemButton>
-//                         <ListItemAvatar>
-//                             <Avatar style={{backgroundColor: '#d5d4ed'}}>{transaction.txdcurrency.symbol}</Avatar>
-//                         </ListItemAvatar>
-//                     <ListItemText
-                
-//                     primary={transaction.title}
-                    
-//                     secondary={`Cash ${transaction.date} ${transaction.time}`}
-//                     />
-//                     <ListItemText
-//                     primary={
-//                         <>
-//                             <span style={{color:transaction.status_icon_color}}>{transaction.status_icon}</span> 
-                             
-//                             {transaction.txdcurrency}
-//                             {transaction.currency}
-
-//                             <span>{transaction.amount}</span>
-//                         </>
-//                     }
-//                     secondary={
-                        
-//                         <span style={{ color: transaction.status_color }}>{transaction.status}</span>
-//                     }
-//                     sx={{ flex: 'auto', textAlign: 'right' }}
-//                     />
-//                 </ListItemButton>
-//                 </ListItem>
-//             ))}
-              
-//             </List>

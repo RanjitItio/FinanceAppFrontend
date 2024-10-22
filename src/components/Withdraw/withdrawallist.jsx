@@ -7,122 +7,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import Pagination from '@mui/material/Pagination';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../Authentication/axios';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
+import FiatWithdrawalDetails from './WithdrawalDetails';
 
 
 
-
-
-const TransactionData = [
-    {
-        payment_method: 'Paypal',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Success',
-        status_color: 'green',
-        payment_method_icon: <i class="bi bi-paypal" sx={{fontSize: 18}}></i>,
-        payment_method_icon_color: 'blue',
-    },
-    {
-        payment_method: 'Paypal',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Pending',
-        status_color: 'orange',
-        payment_method_icon: <i class="bi bi-paypal" sx={{fontSize: 18}}></i>,
-        payment_method_icon_color: 'blue',
-    },
-    {
-        payment_method: 'Bank',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Cancelled',
-        status_color: 'red',
-        payment_method_icon: <AccountBalanceIcon sx={{fontSize: 18}} />,
-        payment_method_icon_color: '#cda307',
-    },
-    {
-        payment_method: 'Bank',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Success',
-        status_color: 'green',
-        payment_method_icon: <AccountBalanceIcon sx={{fontSize: 18}} />,
-        payment_method_icon_color: '#cda307',
-    },
-    {
-        payment_method: 'Paypal',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Pending',
-        status_color: 'orange',
-        payment_method_icon: <i class="bi bi-paypal" sx={{fontSize: 18}}></i>,
-        payment_method_icon_color: 'blue',
-    },
-    {
-        payment_method: 'Paypal',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Success',
-        status_color: 'green',
-        payment_method_icon: <i class="bi bi-paypal" sx={{fontSize: 18}}></i>,
-        payment_method_icon_color: 'blue',
-    },
-    {
-        payment_method: 'Bank',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Pending',
-        status_color: 'orange',
-        payment_method_icon: <AccountBalanceIcon sx={{fontSize: 18}} />,
-        payment_method_icon_color: '#cda307',
-    },
-    {
-        payment_method: 'Paypal',
-        transaction_icon: <ArrowRightIcon />, 
-        transaction_date: '31-03-2024',
-        transaction_time: '9:47 PM',
-        email: 'ranjit@mail.com',
-        currency: 'USD',
-        amount: '78',
-        status: 'Success',
-        status_color: 'green',
-        payment_method_icon: <i class="bi bi-paypal" sx={{fontSize: 18}}></i>,
-        payment_method_icon_color: 'blue',
-    },
-];
 
 // Status Color
 const getStattusColor = (status)=> {
@@ -143,22 +35,64 @@ const getStattusColor = (status)=> {
 
 // Users Withrawal List
 export default function WithdrawalList({open}) {
-    const [withdrawalData, updateWithdrawalData] = useState([]);
+    const [withdrawalData, updateWithdrawalData] = useState([]);  // All withdrawal data
+    const [boxOpen, setBoxOpen] = useState(false);    // Open withdrawal details pop up
+    const [specificWithdrawal, setSpecificWithdrawal] = useState([]);  // Specific Withdrawal data
+    const [paginationCount, setPaginationCount]  = useState(0);
 
+    const CountPagination = Math.ceil(paginationCount ? paginationCount : 0)
+
+    // Method to open Withdrawal detail
+    const handleClickOpen = () => {
+        setBoxOpen(true);
+      };
+
+    // Close the Transaction detail box
+    const handleBoxClose = () => {
+        setBoxOpen(false);
+    };
+
+
+    // Method to handle Click on a specifi Transaction to show transaction details
+    const handleClickWithdrawalTransaction = (withdrawal)=> {
+        setSpecificWithdrawal(withdrawal)
+        handleClickOpen();
+    };
     
+
+    /// Get all withdrawal transactions
     useEffect(() => {
         axiosInstance.get(`/api/v5/user/fiat/withdrawal/`).then((res)=> {
 
             if (res.status === 200 && res.data.success == true) {
+                updateWithdrawalData(res.data.all_fiat_withdrawals);
+                setPaginationCount(res.data.total_row_count)
+            };
+
+        }).catch((error)=> {
+            // console.log(error)
+        })
+    }, []);
+
+
+     // Get the paginated data
+     const handlePaginatedData = (e, value)=> {
+        let limit = 10;
+        let offset = (value - 1) * limit;
+
+        axiosInstance.get(`/api/v5/user/fiat/withdrawal/?limit=${limit}&offset=${offset}`).then((res)=> {
+            // console.log(res)
+            if (res.status === 200 && res.data.success === true) {
                 updateWithdrawalData(res.data.all_fiat_withdrawals)
             };
 
         }).catch((error)=> {
-            console.log(error)
+            // console.log(error);
+
         })
-    }, []);
-    
- 
+    };
+
+
     return (
         <>
          <Main open={open}>
@@ -187,6 +121,7 @@ export default function WithdrawalList({open}) {
                         </IconButton>
                     }
                     className='mb-2 shadow border border-secondary'
+                    onClick={()=> {handleClickWithdrawalTransaction(transaction)}}
                 >
                     <ListItemButton>
                             <ListItemAvatar>
@@ -230,10 +165,18 @@ export default function WithdrawalList({open}) {
             </List>
 
             <div className="my-3">
-                <Pagination count={10} color="primary" />
+                <Pagination 
+                    count={CountPagination} 
+                    onChange={(e, value)=> {handlePaginatedData(e, value)}}
+                    color="primary" />
             </div>
         </Main>
 
+        <FiatWithdrawalDetails
+           handleClose={handleBoxClose}
+           boxOpen={boxOpen}
+           withdrawalDetails={specificWithdrawal}
+        />
         </>
     );
 };

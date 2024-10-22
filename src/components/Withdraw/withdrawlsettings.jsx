@@ -123,6 +123,8 @@ const TransactionData = [
 ];
 
 
+
+// Not in use
 export default function WithdrawalSettings({open}) {
 
     return (
