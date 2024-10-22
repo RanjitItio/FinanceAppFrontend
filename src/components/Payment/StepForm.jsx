@@ -200,14 +200,14 @@ function HeadForm({...props}) {
                 </div>
 
                 <div className="d-flex justify-content-between">
-                  <p><b>{props.formData.send_amount} {props.formData.send_currency}</b></p>
-                  <p><b>{props.chargedFee} {props.formData.send_currency}</b></p>
-                  <p><b>{props.formData.total_amount} {props.formData.send_currency}</b></p>
+                  <p><b>{props?.formData.send_amount || 0} {props.formData?.send_currency || ''}</b></p>
+                  <p><b>{props?.chargedFee.toFixed(2) || 0} {props.formData?.send_currency || ''}</b></p>
+                  <p><b>{props.formData?.total_amount || 0} {props.formData?.send_currency || ''}</b></p>
                 </div>
               </div>
             <br />
 
-            {props.error && <p style={{color:'orange', display:'flex', justifyContent:'center'}}>{props.error}</p>}
+            {props.error && <p style={{color:'red', display:'flex', justifyContent:'center'}}>{props.error}</p>}
       </Form>
 
     </>

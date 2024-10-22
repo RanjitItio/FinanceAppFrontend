@@ -126,7 +126,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
                                       {specificTransactionDetails ? (
                                           <Typography sx={{fontSize:{xs:'0.8rem'}, whiteSpace: 'nowrap'}}>
-                                            {`${specificTransactionDetails?.data?.transaction_fee || ''} ${specificTransactionDetails?.currency?.name || ''}`}
+                                            {`${specificTransactionDetails?.data?.transaction_fee.toFixed(2) || ''} ${specificTransactionDetails?.currency?.name || ''}`}
                                           </Typography>
                                       ) : (
                                         <p className='d-flex justify-content-end'></p>
