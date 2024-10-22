@@ -400,11 +400,11 @@ export default function DepositForm({open}) {
 
   // Calculate the transaction Fee and the Total amount
   React.useEffect(() => {
-    if(transactionFee) {
-      const TotalAmount = parseFloat(amount) + parseFloat(transactionFee)
+    if(transactionFee && amount) {
+      const TotalAmount = (parseFloat(amount) + parseFloat(transactionFee))
       setTotalAmount(TotalAmount)
     }
-  }, [transactionFee]);
+  }, [transactionFee, amount]);
 
 
 
