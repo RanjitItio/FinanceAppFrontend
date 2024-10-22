@@ -68,7 +68,7 @@ export default function FiatTransaction() {
                                         <Box sx={{ maxWidth: '100px', overflow: 'scroll', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                             <Typography variant="body2">
                                                 {item.transaction?.transaction_id ? 
-                                                `${item.transaction?.transaction_id.slice(0, 10)}...` : ''}
+                                                `${item.transaction?.transaction_id.slice(0, 7)}...` : ''}
                                                 </Typography>
                                         </Box>
                                     </TableCell>
