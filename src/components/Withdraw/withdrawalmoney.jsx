@@ -467,13 +467,13 @@ export default function WithdrawalMoneyForm({open}) {
       <DrawerHeader />
 
         <Box sx={{ 
-                width: {xs: '100%', sm: '80%', md: '50%', lg:'40%'}, 
+                width: {xs: '100%', sm: '80%', md:'50%'}, 
                 marginTop: {xs: '40px', sm: '1rem'},
                 borderRadius: '5%',
                 background: '#F0F8FF',
                 backdropFilter: 'blur( 20px )',
                 boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
-                marginLeft: {xs: '0%', sm: '10%', md:'25%'}, 
+                marginLeft: {xs: '0%', sm: '10%', md:'20%'}, 
                 height: {xs:'100%', sm: '120%'}
               }}>
           <p className='fs-3 d-flex justify-content-center my-1'>Withdrawal Money</p> <br />

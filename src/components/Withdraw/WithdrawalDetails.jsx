@@ -100,7 +100,7 @@ export default function FiatWithdrawalDetails({handleClose, boxOpen, withdrawalD
                                             </Typography>
         
                                                 {withdrawalDetails ? (
-                                                <Typography sx={{color:'gray', fontSize: {xs:'0.7rem'}}}>{withdrawalDetails?.transaction_id || ''}</Typography>
+                                                    <Typography sx={{color:'gray', fontSize: {xs:'0.7rem'}, wordWrap:'break-word'}}>{withdrawalDetails?.transaction_id || ''}</Typography>
                                                 ) : (
                                                 <small>Transaction ID</small>
                                                 )

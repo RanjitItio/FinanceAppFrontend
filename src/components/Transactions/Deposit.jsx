@@ -411,9 +411,9 @@ export default function DepositForm({open}) {
     <Main open={open}>
       <DrawerHeader />
       <Box sx={{ 
-              width: {xs: '100%', sm: '50%'},
+              width: {xs: '100%', sm: '80%', md:'50%'},
               marginTop: {xs: '40px', sm: '1rem'},
-              marginLeft: {xs: '0%', sm: '20%'},
+              marginLeft: {xs: '0%', sm: '10%', md:'20%'},
               background: '#F0F8FF',
               backdropFilter: 'blur( 20px )',
               boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',

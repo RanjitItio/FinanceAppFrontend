@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '../Authentication/axios';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import FiatWithdrawalDetails from './WithdrawalDetails';
+import { Box } from '@mui/material';
 
 
 
@@ -140,9 +141,9 @@ export default function WithdrawalList({open}) {
 
                         <ListItemText
                              primary={
-                                <>
+                                <Box sx={{display:{xs:'none', sm:'flex'}}}>
                                   <span><b>{transaction?.user_email || ''}</b></span>
-                                </>
+                                </Box>
                              }
                         />
 
