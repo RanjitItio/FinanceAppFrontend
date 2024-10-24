@@ -22,15 +22,17 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
-
+import Freecurrencyapi from '@everapi/freecurrencyapi-js';
 
 
 const steps = ['Setup Money', 'Confirm Exchange Money'];
-
+const freeCurrencyAPIKey = import.meta.env.VITE_FREE_CURRENCY_API
 
 // First step form
 function ExchangeMoneyForm1({...props}) {
-  const [userWallet, setUserWallet]   = React.useState([]);
+  const [userWallet, setUserWallet]             = React.useState([]); // All available wallets of user
+  const [fromToConversion, setFromToConversion] = React.useState(0);  // Conversion amount
+
 
   // Fetch all the available wallet of the user
   useEffect(() => {
@@ -85,6 +87,48 @@ function ExchangeMoneyForm1({...props}) {
     }
   };
 
+  // Get assigned fee for Fiat Deposit Transaction
+  useEffect(() => {
+    if (props.Amount) {
+      axiosInstance.post(`/api/v2/charged/fee/`, {
+         fee_type: 'Fiat Exchange',
+         amount: parseFloat(props.Amount)
+
+      }).then((res)=> {
+
+         if (res.status === 200 && res.data.success === true){ 
+             props.setTransactionFee(res.data.fee)
+         }
+      })
+    }
+  }, [props.Amount]);
+
+
+    /// Convert from fromCurrency to toCurrency
+    useEffect(()=> {
+      if (props.fromCurrency && props.toCurrency) {
+        const freecurrencyapi = new Freecurrencyapi(freeCurrencyAPIKey);
+          freecurrencyapi.latest({
+            base_currency: props.fromCurrency,
+            currencies: props.toCurrency 
+
+        }).then(response => {
+            // console.log(response);
+            setFromToConversion(response.data[props.toCurrency])
+        });
+      }
+    }, [props.fromCurrency, props.toCurrency]);
+
+
+    // Calucalte The converted Amount
+    useEffect(() => {
+      if (props.Amount && fromToConversion) {
+         const calculateAmount = (parseFloat(fromToConversion) * parseFloat(props.Amount))
+         props.updateconvertedAmount(calculateAmount);
+      }
+     
+    }, [props.Amount, fromToConversion]);
+    
 
   
 
@@ -164,8 +208,9 @@ function ExchangeMoneyForm1({...props}) {
                 sx={{width: '90%', marginLeft: '3%'}}
                 onChange={handleamountChange}
                 error={props.amountError !== ''}
-                helperText={props.amountError !== '' ? props.amountError : 'Fee (5%)'}
+                helperText={props.amountError !== '' ? props.amountError : ''}
                 />
+              <FormHelperText sx={{ml:3}}>Fee: {props.transactionFee ? props.transactionFee.toFixed(0) : 0} {props.fromCurrency}</FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
@@ -175,7 +220,7 @@ function ExchangeMoneyForm1({...props}) {
                 variant="outlined"
                 size='small'
                 disabled
-                value={props.convertedAmount}
+                value={props.convertedAmount ? props.convertedAmount.toFixed(3) : 0}
                 sx={{width: '90%', marginLeft: '3%', marginTop: '5px'}}
                 />
         </Grid>
@@ -188,6 +233,7 @@ function ExchangeMoneyForm1({...props}) {
         </Alert>
         }
     </div>
+    
     </>
   )
 };
@@ -205,33 +251,40 @@ function ExchangeMoneyForm2({...props}) {
     <div style={{marginLeft: '2%', marginRight: '1%'}}>
 
       <p className='text-primary d-flex justify-content-center'><b>Exchanged Amount</b></p>
-      <p className='d-flex justify-content-center mb-4'>{props.toCurrency} {props.convertedAmount}</p>
+      <p className='d-flex justify-content-center mb-4'>{props.toCurrency} {props.convertedAmount ? props.convertedAmount.toFixed(3) : 0}</p>
 
       <div className='mx-4'>
         <div className='d-flex justify-content-between mb-2'>
-          <p>From Currency</p>
+          <p>From Currency: </p>
           <p>{props.fromCurrency} {props.Amount}</p>
         </div>
         <hr className='mb-2' />
 
         <div className='d-flex justify-content-between mb-2'>
-          <p>To Currency</p>
-          <p>{props.toCurrency} {props.convertedAmount}</p>
+          <p>To Currency: </p>
+          <p>{props.toCurrency} {props.convertedAmount ? props.convertedAmount.toFixed(3) : 0}</p>
         </div>
         <hr className='mb-2' />
 
         <div className='d-flex justify-content-between mb-2'>
-          <p>Fee(5%)</p>
+          <p>Fee: </p>
           <p>{props.fromCurrency} {props.fee}</p>
         </div>
         <hr className='mb-2' />
 
         <div className='d-flex justify-content-between mb-2'>
-          <p><b>Total</b></p>
+          <p><b>Total:</b></p>
           <p><b>{props.fromCurrency} {props.totalAmount}</b></p>
         </div>
       </div>
     </div>
+
+    {props.error &&
+      <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+              {props.error}
+      </Alert>
+      }
     </>
   );
 };
@@ -252,6 +305,8 @@ export default function ExchangeMoneyForm({open}) {
   const [fee, updateFee]                         = React.useState(0);  // Fee state
   const [totalAmount, setTotalAmount]            = React.useState(0); // Total Amount
   const [amountError, setAmountError]            = React.useState(''); // Amount Error
+  const [transactionFee, setTransactionFee] = React.useState(0.00);  // Transaction Fee
+
 
   // Total steps
   const totalSteps = () => {
@@ -323,7 +378,7 @@ export default function ExchangeMoneyForm({open}) {
       axiosInstance.post(`/api/v6/fiat/exchange/money/`, {
         exchange_amount: Amount,
         convert_amount: convertedAmount,
-        fee: fee,
+        fee: transactionFee,
         from_currency: fromCurrency,
         to_currency: toCurrency,
 
@@ -337,21 +392,24 @@ export default function ExchangeMoneyForm({open}) {
           }
 
         }).catch((error)=> {
-          console.log(error)
+          // console.log(error)
 
-          if(error.response.data.msg == 'Do not have from wallet'){
+          setTimeout(() => {
+            setError('')
+          }, 2000);
+
+          if(error.response.data.message == 'Do not have from wallet'){
               setError("Do not have existing wallet in From Currency")
-          } else if (error.response.data.msg == 'Do not have sufficient balance in From wallet') {
+          }  else if (error.response.data.message == 'Do not have sufficient balance in From wallet') {
             setError('Insufficient Balance in Wallet')
-          } else {
+          } 
+          else {
             setError('')
           }
-
         })
     };
     
   };
-
 
   // Navigate to Dashboard
   const handleReset = () => {
@@ -370,10 +428,14 @@ export default function ExchangeMoneyForm({open}) {
                 updateToCurrency={updateToCurrency}
                 updateAmount={updateAmount}
                 convertedAmount={convertedAmount}
+                updateconvertedAmount={updateconvertedAmount}
                 error={error}
                 setError={setError}
                 amountError={amountError}
                 setAmountError={setAmountError}
+                setTransactionFee={setTransactionFee}
+                transactionFee={transactionFee}
+                Amount={Amount}
             />;
       case 1:
         return <ExchangeMoneyForm2 
@@ -381,55 +443,26 @@ export default function ExchangeMoneyForm({open}) {
                   toCurrency={toCurrency}
                   fromCurrency={fromCurrency}
                   Amount={Amount}
-                  fee={fee}
+                  fee={transactionFee}
                   totalAmount={totalAmount}
+                  error={error}
                 />;
       default:
         return null;
     }
   };
 
-  // Convert The currency
-  useEffect(()=> {
-    if (Amount && fromCurrency && toCurrency) {
-      setTimeout(() => {
-        axiosInstance.post(`api/v2/convert/currency/`, {
-          from_currency: fromCurrency,
-          to_currency:   toCurrency,
-          amount     :   parseFloat(Amount)
   
-        }).then((res)=> {
-          // console.log('amount', res.data.converted_amount)
-          if (res.status === 200) {
-            updateconvertedAmount(res.data.converted_amount)
-          }
-  
-        }).catch((error)=> {
-            console.log(error)
-  
-            if (error.response.data.message === 'Error calling external API') {
-                alert('Currency Conversion API Limit Exceeded')
-            } else if (error.response.data.message === 'Currency API Error') {
-                alert('Currency Conversion API Limit Exceeded')
-            } else if (error.response.data.message === 'Invalid Curency Converter API response') {
-                alert('Currency Conversion API Limit Exceeded')
-            } 
-        })
-      }, 1500);
-    }
-  }, [fromCurrency, toCurrency, Amount]);
 
-
-  // Calculate Fee and Total Amount
+  // Calculate Total Amount
   useEffect(()=> {
-    if (Amount) {
-      const calc_amount  = (Amount / 100) * 5
-      const exact_fee    = parseFloat(calc_amount)
-      const total_amount = parseFloat(Amount) + exact_fee
-      updateFee(exact_fee)
-      setTotalAmount(total_amount)
+    if (Amount && transactionFee) {
+      const transaction_fee = transactionFee
+      const total_amount    = parseFloat(Amount) + transaction_fee
+      setTotalAmount(total_amount);
+
     }
-  }, [Amount]);
+  }, [Amount, transactionFee]);
 
   
 
@@ -495,9 +528,8 @@ export default function ExchangeMoneyForm({open}) {
                         Step {activeStep + 1} already completed
                       </Typography>
                     ) : (
-                      <Button onClick={handleComplete} variant='outlined'  
-                            sx={{backgroundColor: 'rgba(255, 255, 255, 0.25)', color: '#0081CF',
-                                marginRight: {xs: '4%', lg: '3%'},
+                      <Button onClick={handleComplete} variant='contained'  
+                            sx={{marginRight: {xs: '4%', lg: '3%'},
                                 width: {xs: '50%', lg: '50%'},
                                 '@media (max-width: 500px)': {
                                     fontSize: '0.6rem' 

@@ -375,34 +375,22 @@ export default function WithdrawalMoneyForm({open}) {
         if (error.response.data.message === 'Do not have Sufficient balance in Wallet') {
             setError('Do not have sufficient balance in Wallet')
 
-            setTimeout(() => {
-              setError('')
-            }, 2000);
-
         } else if (error.response.data.message === 'Invalid Wallet Currency') {
             setError('Invalid Wallet Currency') 
-
-            setTimeout(() => {
-              setError('')
-            }, 2000);
 
         } else if (error.response.data.message === 'User wallet does not exists') {
             setError('User wallet does not exist')
 
-            setTimeout(() => {
-              setError('')
-            }, 2000);
-
         } else if (error.response.data.message === 'Invalid withdrawal Currency') {
             setError('Invalid withdrawal Currency')
-
-            setTimeout(() => {
-              setError('')
-            }, 2000);
-
         } else {
           setError('')
         };
+
+        setTimeout(() => {
+          setError('')
+        }, 2000);
+        
       })
     };
   };

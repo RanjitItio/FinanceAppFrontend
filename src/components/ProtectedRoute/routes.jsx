@@ -65,6 +65,7 @@ const CryptoBuy              = React.lazy(()=> import('../CryptoTransactions/Buy
 const CryptoSell             = React.lazy(()=> import('../CryptoTransactions/SellCrypto'));
 const CryptoSwap             = React.lazy(()=> import('../CryptoTransactions/CryptoSwap'));
 const CryptoExchange         = React.lazy(()=> import('../CryptoTransactions/CryptoExchange'));
+const ExchangesList          = React.lazy(()=> import('../Exchange/ExchangeList'));
 
 
 
@@ -137,6 +138,7 @@ const AuthRoutes = () => {
                           <Route exact path='/moneytransfer/' element={<StepWisePaymentForm open={open} />}></Route>
                           <Route exact path='/request-payment/' element={<RequestMoneyForm open={open} />}></Route>
                           <Route exact path='/exchange-currency/' element={<ExchangeMoneyForm open={open} />}></Route>
+                          <Route exact path='/exchange/list/' element={<ExchangesList open={open} />}></Route>
                           <Route exact path='/payout-payment/' element={<WithdrawalMoneyForm open={open} />}></Route>
                           <Route exact path='/withdrawal-history/' element={<WithdrawalList open={open} />}></Route>
                           <Route exact path='/withdrawal-settings/' element={<WithdrawalSettings open={open} />}></Route>

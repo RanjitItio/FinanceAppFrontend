@@ -8,7 +8,6 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ResponsiveDialog from './TransactionDetails';
 import { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
@@ -25,7 +24,7 @@ import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import ExchangeDetails from './ExchangeDetails';
 
 
 
@@ -47,11 +46,7 @@ const getCurrencyIcon = (currency) => {
 
 
 
-
-
-
-// All FIAT Transaction of the user
-export default function AllTransactions({open}) {
+export default function ExchangesList({open}) {
     const [boxOpen, setBoxOpen] = useState(false);  // Open transaction pop up
     const [isfilterItem, setFilterItem] = useState(false);  // Show filters
     const [dateRange, setDateRange] = useState('');    // date range In filter
@@ -59,6 +54,7 @@ export default function AllTransactions({open}) {
     const [transactionStatus, setTransactionStatus] = useState('');  // Transaction status in filter
     const [currency, setCurrency] = useState('');   // Currency of Filter
     const [transactionData, setTransactionData] = useState([]);  // Transaction data from API
+    const [ExchangeData, setExchangeData] = useState([]);  // Exchange data from API
     const [error, setError] = useState('');
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
     const [loader, setLoader] = useState(true);  // Loader
@@ -102,23 +98,21 @@ export default function AllTransactions({open}) {
       };
 
 
-    // Fetch all transaction data
+    // Fetch all Exchange transaction data
     useEffect(() => {
-        try{
-            axiosInstance.get(`/api/v4/users/fiat/transactions/`).then((res)=> {
+        axiosInstance.get(`/api/v6/fiat/exchange/money/`).then((res)=> {
+            // console.log(res)
 
-                if(res.data && res.data.all_fiat_transactions) {
-                    const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
-                        return new Date(b.data.created_At) - new Date(a.data.created_At)
-                    })
-                    setTransactionData(sortedTransaction)
-                    setPaginatedValue(res.data.total_paginated_rows)
-                    setLoader(false)
-                };
-            })
-        } catch(error) {
-            // console.log(error)
-        }
+            if(res.data && res.status === 200) {
+                setExchangeData(res.data.user_fiat_exchange_data)
+                setPaginatedValue(res.data.total_rows)
+                setLoader(false)
+            };
+
+        }).catch((error)=> {
+            console.log(error);
+
+        })
     }, []);
 
     
@@ -126,6 +120,24 @@ export default function AllTransactions({open}) {
     const handleTransactionClick = (transaction)=> {
         handleClickOpen();
         updateSpecificTransactionDetails(transaction)
+    };
+
+
+    // Get paginated data
+    const handleGetPaginatedData = (e, value)=> {
+        let limit  = 10;
+        let offset = (value - 1) * limit;
+
+        axiosInstance.get(`/api/v6/fiat/exchange/money/?limit=${limit}&offset=${offset}`).then((res)=> {
+            // console.log(res)
+            if(res.data && res.status === 200) {
+                setExchangeData(res.data.user_fiat_exchange_data)
+            };
+
+        }).catch((error)=> {
+            // console.log(error)
+
+        })
     };
 
 
@@ -144,37 +156,16 @@ export default function AllTransactions({open}) {
     };
 
 
-    // Get paginated data
-    const handleGetPaginatedData = (e, value)=> {
-        let limit  = 5;
-        let offset = (value - 1) * limit;
-
-        axiosInstance.get(`/api/v4/users/fiat/transactions/?limit=${limit}&offset=${offset}`).then((res)=> {
-            console.log(res)
-            if(res.data && res.data.all_fiat_transactions) {
-                const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
-                    return new Date(b.data.created_At) - new Date(a.data.created_At)
-                })
-                setTransactionData(sortedTransaction)
-            };
-
-        }).catch((error)=> {
-            console.log(error)
-
-        })
-    };
-
-
     // If no transaction available
-    if (transactionData.length === 0) {
+    if (ExchangeData.length === 0) {
         return (
             <Main open={open}>
             <DrawerHeader />
                 <div className="d-flex justify-content-center">
-                    <p className='fs-3'>TRANSACTIONS</p>
+                    <p className='fs-3'>EXCHANGE LIST</p>
                 </div>
                 <div className="d-flex justify-content-center">
-                    <p className='text-muted'>History of transactions in your account</p>
+                    <p className='text-muted'>History of exchanges in your account</p>
                 </div>
                 <br />
 
@@ -184,22 +175,21 @@ export default function AllTransactions({open}) {
         )
     };
 
-    
 
-    return (
+    return( 
         <>
-         <Main open={open}>
+        <Main open={open}>
             <DrawerHeader />
 
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>TRANSACTIONS</p>
+                <p className='fs-3'>EXCHANGE LIST</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>History of transactions in your account</p>
+                <p className='text-muted'>History of exchanges in your account</p>
             </div>
             <br />
             <div className='d-flex justify-content-between'>
-                <p className='text-muted'>All Transactions</p>
+                <p className='text-muted'>All Exchanges</p>
                 {/* <div className='d-flex align-items-center'>
                     <p className='text-muted'>Filter</p>&nbsp;
                     <Button startIcon={<FilterListIcon />} style={{backgroundColor: ''}} variant="outlined" onClick={toggleFilterItemVisibility}></Button>
@@ -328,84 +318,77 @@ export default function AllTransactions({open}) {
                     <Alert severity="warning">{error}</Alert>
                 ) : (
         <List>
-            {transactionData.map((transaction, index) => {
-        
-                // const transactionDate = new Date(transaction.data.created_At.split('T')[0] || '');
-                
-                // const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
-
-                // const transactionTime = new Date(transaction.data.created_At.split('T')[1] || '');
-                // const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
-
+            {ExchangeData.map((transaction, index) => {
                 return(
        
                 <ListItem
-                key={index}
-                disablePadding
-                secondaryAction={
-                    <IconButton edge="end" aria-label="comments">
-                        <ArrowRightIcon />
-                    </IconButton>
-                }
-                onClick={()=> {handleTransactionClick(transaction);}}
-                className='mb-2 shadow border border-secondary'
+                    key={index}
+                    disablePadding
+                    secondaryAction={
+                        <IconButton edge="end" aria-label="comments">
+                            <ArrowRightIcon />
+                        </IconButton>
+                    }
+                    onClick={()=> {handleTransactionClick(transaction);}}
+                    className='mb-2 shadow border border-secondary'
                 >
                 <ListItemButton>
                         <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.currency?.name || '')}</Avatar>
+                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.from_currency || '')}</Avatar>
                         </ListItemAvatar>
                     <ListItemText
-                    primary={transaction.type}
-                    secondary={`${transaction.data?.payment_mode || ''} ${transaction.data.created_At?.split('T')[0] || ''} ${transaction.data.created_At?.split('T')[1] || ''}`}
+                    primary='Exchange'
+                    secondary={`${transaction.created_At?.split('T')[0] || ''} ${transaction.created_At?.split('T')[1] || ''}`}
                     />
                     <ListItemText
                     primary={
                         
-                        transaction.data.status == 'Pending' ? (
+                        transaction.status == 'Pending' ? (
                             <>
                             
                                 <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
+                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                <span>{transaction?.exchange_amount || 0}</span>
                             
                             </>
 
-                        ) : transaction.data.status == 'Approved' ? (
+                        ) : transaction.status == 'Approved' ? (
                             <>
                                 <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
+                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                <span>{transaction?.exchange_amount || 0}</span>
                             </>
                             
-                        ) : transaction.data.status == 'Cancelled' ? (
+                        ) : transaction.status == 'Cancelled' ? (
                             <>
                                 <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
+                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                <span>{transaction?.exchange_amount || 0}</span>
                             </>
                         ) : (
                             <>
                                 <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
+                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                <span>{transaction?.exchange_amount || 0}</span>
                             </>
                         ) 
                     }
+
                     secondary={
-                        transaction.data.status == 'Pending' ? (
-                            <span style={{ color: 'orange' }}>{transaction.data?.status || ''}</span>
+                        transaction.status == 'Pending' ? (
+                            <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
 
-                        ) : transaction.data.status == 'Approved' ? (
-                            <span style={{ color: 'green' }}>{transaction.data?.status || ''}</span>
+                        ) : transaction.status == 'Approved' ? (
+                            <span style={{ color: 'green' }}>{transaction?.status || ''}</span>
 
-                        ) : transaction.data.status === 'Cancelled' ? (
-                            <span style={{ color: 'red' }}>{transaction.data?.status || ''}</span>
+                        ) : transaction.status === 'Cancelled' ? (
+                            <span style={{ color: 'red' }}>{transaction?.status || ''}</span>
 
                         ) : (
-                            <span style={{ color: 'orange' }}>{transaction.data?.status || ''}</span>
+                            <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
                         )
                     }
-                    sx={{ flex: 'auto', textAlign: 'right' }}
+                        sx={{ flex: 'auto', textAlign: 'right' }}
                     />
                 </ListItemButton>
                 </ListItem>
@@ -424,15 +407,7 @@ export default function AllTransactions({open}) {
 
         </Main>
 
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
+        <ExchangeDetails handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
         
-
-        </>
-    )
-};
-
-
-
-
-
-
+    </>
+)};

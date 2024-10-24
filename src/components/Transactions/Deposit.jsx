@@ -220,7 +220,7 @@ export default function DepositForm({open}) {
   const [amount, setAmount]               = React.useState('');    // Amount
   const [error, setError]                 = React.useState('');      // Error Message
   const [totalAamount, setTotalAmount]    = React.useState('');  // Total amount
-  const [transactionFee, setTransactionFee] = React.useState(0.00);
+  const [transactionFee, setTransactionFee] = React.useState(0.00);  // Transaction Fee
 
    
   // Total Steps
