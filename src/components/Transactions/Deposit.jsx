@@ -17,13 +17,15 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import axiosInstance from '../Authentication/axios';
 import { useEffect } from 'react';
+import { Grid } from '@mui/material';
+import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
+import StepLabel from '@mui/material/StepLabel';
 
 
 
-const steps                   = ['Create Deposit', 'Confirm your Deposit'];
+const steps                   = ['Step 1', 'Step 2'];
 const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
 const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
-
 
 
 
@@ -81,7 +83,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         }
 
       }).catch((error)=> {
-        console.log(error.response)
+        // console.log(error.response)
       });
 
     }, []);
@@ -114,27 +116,31 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
       <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
 
-      <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
-          <InputLabel id="currency-label">Currency</InputLabel>
-          <Select
-            labelId="currency-label"
-            id="currency-select"
-            value={currency}
-            label="Currency"
-            onChange={handleCurrencyChange}
-          >
-            {currencies.map((curr)=> (
-                <MenuItem key={curr.id} value={curr.name}>
-                  {curr.name}
-                </MenuItem>
-            ))}
-          </Select>
-          <FormHelperText>Fee: {chargedFee} {currency}</FormHelperText>
-      </FormControl>
+        <Grid container>
+           <Grid item xs={6}>
+              <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
+                  <InputLabel id="currency-label">Currency</InputLabel>
+                  <Select
+                    labelId="currency-label"
+                    id="currency-select"
+                    value={currency}
+                    label="Currency"
+                    onChange={handleCurrencyChange}
+                  >
+                    {currencies.map((curr)=> (
+                        <MenuItem key={curr.id} value={curr.name}>
+                          {curr.name}
+                        </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>Fee: {chargedFee} {currency}</FormHelperText>
+              </FormControl>
+           </Grid>
+        </Grid>
+      
 
         <TextField
           hiddenLabel
-          type='number'
           id="amount"
           variant="filled"
           size="small"
@@ -317,7 +323,7 @@ export default function DepositForm({open}) {
           };
 
         }).catch((error)=> {
-          console.log(error)
+          // console.log(error)
 
           if(error.response.data.msg == 'Invalid currency'){
               setError("Requested Currency is not available")
@@ -421,21 +427,24 @@ export default function DepositForm({open}) {
               height: {xs:'100%', sm: '120%'}
               }}
             >
-        <p className='fs-3 d-flex justify-content-center'>Deposit Money</p> <br />
+        <p className='fs-3 d-flex justify-content-center' style={{paddingTop:15}}>Deposit Money</p> <br />
 
-        <Stepper nonLinear activeStep={activeStep}>
+        {/* <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
-              {/* <StepButton color="inherit" onClick={handleStep(index)}>
-                  {label}
-              </StepButton> */}
               <StepButton color="inherit">
                 {label}
-              </StepButton>
+              </StepButton> 
+            </Step>
+          ))}
+        </Stepper> */}
+        <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
             </Step>
           ))}
         </Stepper>
-
 
         <div>
           {allStepsCompleted() ? (
