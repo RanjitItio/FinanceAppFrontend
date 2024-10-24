@@ -117,7 +117,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
       <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
 
         <Grid container>
-           <Grid item xs={6}>
+           <Grid item xs={12} sm={6}>
               <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
                   <InputLabel id="currency-label">Currency</InputLabel>
                   <Select
