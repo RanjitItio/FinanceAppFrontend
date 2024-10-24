@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -48,6 +49,7 @@ const settings = [
 // Upper side Navbar
 function UpperNavbar({handleDrawerOpen, open}){
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -72,10 +74,10 @@ function UpperNavbar({handleDrawerOpen, open}){
           >
             <MenuIcon />
           </IconButton>
+
           <Typography variant="h6" noWrap component="div">
             Itio Innovex
           </Typography>
-    
     
            {/* Avatar Section */}
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}}>
@@ -101,9 +103,9 @@ function UpperNavbar({handleDrawerOpen, open}){
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting, index) => (
-                <MenuItem key={index} onClick={handleCloseUserMenu}>
-                  <Link to={setting.url}>{setting.text}</Link>
-                </MenuItem>
+                  <MenuItem key={index} onClick={() => {handleCloseUserMenu(); navigate(setting.url)}}>
+                    <Link to={setting.url}>{setting.text}</Link>
+                  </MenuItem>
               ))}
             </Menu>
           </Box>

@@ -126,7 +126,6 @@ function ExchangeMoneyForm1({...props}) {
          const calculateAmount = (parseFloat(fromToConversion) * parseFloat(props.Amount))
          props.updateconvertedAmount(calculateAmount);
       }
-     
     }, [props.Amount, fromToConversion]);
     
 
