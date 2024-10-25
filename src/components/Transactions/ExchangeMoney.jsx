@@ -43,7 +43,7 @@ function ExchangeMoneyForm1({...props}) {
         }
 
       }).catch((error)=> {
-        console.log(error);
+        // console.log(error);
 
       })
   }, []);
@@ -73,17 +73,14 @@ function ExchangeMoneyForm1({...props}) {
 
   // Get typed amount
   const handleamountChange = (event)=> {
-    const value = event.target.value;
+    const {name, value} = event.target;
 
-    if(!event.target.value) {
-      props.setAmountError('Please fill the amount')
-      props.setError('Please fill all the above fields')
-    } else if (isNaN(value)) {
-      props.setAmountError('Please enter a valid number');
-    } else {
+    if(/^\d+$/.test(value) || value === '') {
       props.setError('');
       props.setAmountError('');
-      props.updateAmount(event.target.value);
+      props.updateAmount(value);
+    } else {
+      props.setAmountError('Please enter valid amount')
     }
   };
 
@@ -201,11 +198,12 @@ function ExchangeMoneyForm1({...props}) {
         <Grid item xs={12}>
             <TextField 
                 id="amount" 
-                label="Amount" 
+                value={props.Amount}
+                placeholder='Amount' 
                 variant="outlined" 
                 size='small' 
                 sx={{width: '90%', marginLeft: '3%'}}
-                onChange={handleamountChange}
+                onChange={(e)=> handleamountChange(e)}
                 error={props.amountError !== ''}
                 helperText={props.amountError !== '' ? props.amountError : ''}
                 />

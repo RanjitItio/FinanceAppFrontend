@@ -3,7 +3,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
@@ -20,6 +19,7 @@ import { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
 import StepLabel from '@mui/material/StepLabel';
+import InputAdornment from '@mui/material/InputAdornment';
 
 
 
@@ -27,6 +27,25 @@ const steps                   = ['Step 1', 'Step 2'];
 const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
 const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 
+
+/// Currency Icon inside Amount fileds
+const getCurrencyIcon = (currency)=> {
+     if (currency) {
+      switch (currency) {
+        case 'USD':
+          return '$'
+        case 'INR':
+          return '₹'
+        case 'GBP':
+          return '£'
+        case 'EUR':
+          return '€'
+      
+        default:
+          return '$'
+      }
+     }
+}
 
 
 // First Form
@@ -65,9 +84,14 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
     const handleAmountChange = (event)=> {
       const {name, value} = event.target;
 
-      if(/^\d+$/.test(value) || value === '') {
+      if (value === '') {
         setError('')
-        setAmount(event.target.value)
+        setAmount(value)
+      } else if (Number(value) === 0 || Number(value) < 0){
+          setError('Please type valid number')
+      } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+        setError('');
+        setAmount(value);
       } else {
         setError('Please type valid number')
       }
@@ -102,6 +126,9 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
                setTransactionFee(res.data.fee)
            }
         })
+      } else {
+        SetChargedFee(0)
+        setTransactionFee(0)
       }
    }, [amount]);
 
@@ -121,7 +148,6 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
               <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
                   <InputLabel id="currency-label">Currency</InputLabel>
                   <Select
-                    labelId="currency-label"
                     id="currency-select"
                     value={currency}
                     label="Currency"
@@ -133,22 +159,47 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
                         </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>Fee: {chargedFee} {currency}</FormHelperText>
+                  <FormHelperText>Fee: {chargedFee ? chargedFee.toFixed(3) : 0} {currency}</FormHelperText>
               </FormControl>
            </Grid>
         </Grid>
-      
 
-        <TextField
-          hiddenLabel
-          id="amount"
-          variant="filled"
-          size="small"
-          value={amount}
-          placeholder='Amount'
-          sx={{ marginTop: '10px', width: '95%', marginLeft: '10px'}}
-          onChange={(e)=> handleAmountChange(e)}
-        />
+        <Grid container spacing={0}>
+            <Grid item xs={12} sm={6} md={6} sx={{mt:1.2}}>
+              <Button 
+                fullWidth 
+                variant="contained"
+                disableElevation
+                sx={{
+                  justifyContent:'flex-start',
+                  padding:1.1,
+                  ml:1
+                }}
+                >
+                  Amount:
+              </Button>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={6}>
+                <TextField
+                  hiddenLabel
+                  id="amount"
+                  variant="filled"
+                  size="small"
+                  value={amount}
+                  placeholder='Amount'
+                  sx={{ marginTop: '10px', width: '95%', marginLeft: '10px'}}
+                  onChange={(e)=> handleAmountChange(e)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        {getCurrencyIcon(currency)}
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+            </Grid>
+        </Grid>
 
         <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '30px' }} size="small">
           <InputLabel id="payment-method-label">Payment Method</InputLabel>
@@ -159,9 +210,6 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
             label="Payment Method"
             onChange={handlePaymentMethodChange}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             <MenuItem value={'Stripe'}>Stripe</MenuItem>
             <MenuItem value={'Bank'}>Bank</MenuItem>
             <MenuItem value={'Paypal'}>Paypal</MenuItem>

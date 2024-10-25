@@ -22,12 +22,12 @@ import axiosInstance from '../Authentication/axios'
 // First Step Form
 function HeadForm({...props}) {
 
-  const [currencies, setCurrencies]                          = useState([])
-  const [senderCurrencyValue, updateSenderCurrencyValue]     = useState('')
-  const [receiverCurrencyValue, updateReceiverCurrencyValue] = useState('')
-  const [sourceFundValue, updatesourceFundValue]             = useState('')
-  const [sendingPurposeValue, updateSendingPurposeValue]     = useState('')
-  const [convertedAmount, setConvertedAmount]                = useState('');
+  const [currencies, setCurrencies]                          = useState([])   // All Currencies data
+  const [senderCurrencyValue, updateSenderCurrencyValue]     = useState('');  // Sender Currency
+  const [receiverCurrencyValue, updateReceiverCurrencyValue] = useState('');  // Receiver Currency
+  const [sendingPurposeValue, updateSendingPurposeValue]     = useState('')  // Sending Purpose
+  const [convertedAmount, setConvertedAmount]                = useState('');  // Currency Conversion Value
+  const [amountError, setAmountError]                        = useState('');  // Amount Error
 
 
 
@@ -90,6 +90,31 @@ function HeadForm({...props}) {
       updateSendingPurposeValue(event.target.value)
   };
 
+  // Update typed amount
+  const handleTransferAmountChange = (e)=> {
+    const { name, value } = e.target;
+
+    if (value === '') {
+      props.setError('')
+      props.updateFormData((prevData)=> ({
+        ...prevData,
+        [name]: value
+      }));
+
+    } else if (Number(value) === 0 || Number(value) < 0) {
+        props.setError('Amount should be greater than 0')
+
+    } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0){
+        props.setError('')
+        props.updateFormData((prevData)=> ({
+          ...prevData,
+          [name]: value
+        })) 
+      
+    } else {
+        props.setError('Please enter valid amount')
+    }
+};
   
 
   return (
@@ -98,20 +123,10 @@ function HeadForm({...props}) {
       <Form method='post'>
         <Row className="mb-3" style={{marginTop:20}}>
           <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '>
-            <TextField fullWidth autoFocus 
-                label="Enter Amount" 
-                type="number"  
-                onChange={(event)=>{
-                  const value = event.target.value;
-                  
-                  if (/^\d+$/.test(value)) {
-                     props.setError('')
-                     props.handleFormValueChange(event)
-                  } else {
-                    props.setError('Please type valid Amount')
-                  }
-
-                }}
+            <TextField fullWidth 
+                placeholder="Enter Amount" 
+                value={props.formData.send_amount}
+                onChange={handleTransferAmountChange}
                 variant="outlined"
                 name='send_amount'
                 />
@@ -122,7 +137,6 @@ function HeadForm({...props}) {
               <InputLabel id="send_currency">Currency</InputLabel>
               <Select
                 fullWidth
-                autoFocus
                 label='Currency'
                 value={senderCurrencyValue}
                 name='send_currency'
@@ -132,17 +146,17 @@ function HeadForm({...props}) {
                       <MenuItem value={currency.name} key={index}>{currency.name}</MenuItem>
                 ))}
               </Select>
-            </FormControl>                                                                                                                                                                    
+            </FormControl>                                                                                                                                                           
           </div>
         </Row>
         {/* &nbsp; */}
 
         <Row className="mb-3">
           <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12'>
-
             <TextField 
                 fullWidth 
                 autoFocus
+                disabled
                 type="number" 
                 variant="outlined" 
                 style={{color: 'white'} } 
@@ -427,7 +441,7 @@ export default function StepWisePaymentForm() {
 
   // All Form fields
   const initialFormData = {
-    send_amount: 0,
+    send_amount: '',
     send_currency: '',
     receiver_amount: 0,
     receiver_currency: '',
@@ -447,18 +461,13 @@ export default function StepWisePaymentForm() {
   };
 
 
-  const [activeStep, setActiveStep] = React.useState(0);  // Currenct Step
-  const [skipped, setSkipped]       = React.useState(new Set());
   const theme                       = useTheme();
   const matchesXS                   = useMediaQuery(theme.breakpoints.down('sm'));  
+  const [activeStep, setActiveStep] = React.useState(0);  // Currenct Step
+  const [skipped, setSkipped]       = React.useState(new Set());
   const [formData, updateFormData]  = useState(initialFormData);  // Form Data
   const [error, setError]           = useState('');  // Error Message
   const [chargedFee, SetChargedFee] = React.useState(0);  // Fee for Transfer Transaction
-
-  
-  // const isStepOptional = (step) => {
-  //   return step === 1;
-  // };
 
 
 
@@ -474,7 +483,7 @@ export default function StepWisePaymentForm() {
     // Check the first Step Validation
     if (activeStep === 0) {
           if (formData.send_amount === '' || formData.send_amount === 0) {
-            setError('Please fill send amount field')
+            setError('Please Enter amount')
 
           } else if (formData.send_currency === '') {
             setError('Please select send currency')
@@ -601,7 +610,7 @@ export default function StepWisePaymentForm() {
               };
 
             }).catch((error)=> {
-              console.log(error.response)
+              // console.log(error.response)
 
               if (error.response.data.msg == 'Sender donot have sufficient balance in wallet') {
                 setError('Do not have sufficient wallet in your wallet');
@@ -706,6 +715,7 @@ export default function StepWisePaymentForm() {
                 error={error}
                 setError={setError}
                 chargedFee={chargedFee}
+                updateFormData={updateFormData}
               />;
       case 1:
         return <Step1Form 
