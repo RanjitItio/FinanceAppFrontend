@@ -173,7 +173,8 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
                 sx={{
                   justifyContent:'flex-start',
                   padding:1.1,
-                  ml:1
+                  ml:1,
+                  width:{xs:'95%', sm:'100%'}
                 }}
                 >
                   Amount:
@@ -472,20 +473,12 @@ export default function DepositForm({open}) {
               backdropFilter: 'blur( 20px )',
               boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
               borderRadius: '5%',
-              height: {xs:'100%', sm: '120%'}
+              height: {xs:'100%', sm: '98%'},
+              overflowY:'auto'
               }}
             >
         <p className='fs-3 d-flex justify-content-center' style={{paddingTop:15}}>Deposit Money</p> <br />
 
-        {/* <Stepper nonLinear activeStep={activeStep}>
-          {steps.map((label, index) => (
-            <Step key={label} completed={completed[index]}>
-              <StepButton color="inherit">
-                {label}
-              </StepButton> 
-            </Step>
-          ))}
-        </Stepper> */}
         <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
           {steps.map((label) => (
             <Step key={label}>
@@ -517,7 +510,7 @@ export default function DepositForm({open}) {
 
               {renderForms(activeStep)}
 
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', justifyContent:'center' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', mb: {xs:2, sm:2, md:0}, marginTop:'3%', justifyContent:'center' }}>
                   {activeStep !== steps.length &&
                     (completed[activeStep] ? (
                       <Typography variant="caption" sx={{ display: 'inline-block' }}>
@@ -525,7 +518,7 @@ export default function DepositForm({open}) {
                       </Typography>
                     ) : (
                       <Button onClick={handleComplete} variant='contained' 
-                        sx={{marginRight: '4%', marginTop: '3%'}}
+                        sx={{marginRight: '4%'}}
                       >
                         {completedSteps() === totalSteps() - 1
                           ? 'Confirm & Deposit'

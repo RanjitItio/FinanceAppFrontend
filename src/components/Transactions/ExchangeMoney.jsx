@@ -104,7 +104,7 @@ function ExchangeMoneyForm1({...props}) {
     /// Convert from fromCurrency to toCurrency
     useEffect(()=> {
       if (props.fromCurrency && props.toCurrency) {
-        const freecurrencyapi = new Freecurrencyapi(freeCurrencyAPIKey);
+          const freecurrencyapi = new Freecurrencyapi(freeCurrencyAPIKey);
           freecurrencyapi.latest({
             base_currency: props.fromCurrency,
             currencies: props.toCurrency 
