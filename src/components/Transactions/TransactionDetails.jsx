@@ -105,14 +105,24 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                 </div>
                             </div>
 
-                            <div className="d-flex justify-content-around mb-3">
+                            <div className="d-flex justify-content-between mb-3">
                                 <div>
                                     <Typography variant='p' sx={{fontSize:{xs:'0.8rem'}}}>
                                         Transaction ID
                                     </Typography>
 
                                       {specificTransactionDetails ? (
-                                        <Typography sx={{color:'gray', fontSize: {xs:'0.7rem'}}}>{specificTransactionDetails?.data?.transaction_id || ''}</Typography>
+                                        <Typography 
+                                          sx={{
+                                            color:'gray', 
+                                            fontSize: {xs:'0.7rem'},
+                                            wordBreak: 'break-word',
+                                            maxWidth: '150px',
+                                            overflowWrap: 'break-word'
+                                            }}>
+                                            {specificTransactionDetails?.data?.transaction_id || ''}
+                                        </Typography>
+
                                       ) : (
                                         <small>Transaction Id</small>
                                       )
@@ -135,6 +145,8 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                             </div>
 
                             <div className="d-flex justify-content-between mb-3">
+                              {specificTransactionDetails?.type === 'Deposit' && 
+                              
                                 <div>
                                     <p className='text-muted'>Payment Method</p>
                                     {specificTransactionDetails.data ? (
@@ -143,6 +155,9 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                       <p>Payment Mode</p>
                                     )}
                                 </div>
+                                ||  
+                                ''
+                              }
 
                                 <div>
                                     <p className='text-muted mx-2'>Status</p>
@@ -191,13 +206,13 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                         <>
                                           {specificTransactionDetails.type === 'Transfer' && (
                                             <p>
-                                              {specificTransactionDetails?.data?.payout_amount || ''} {specificTransactionDetails?.currency?.name || ''}
+                                              {specificTransactionDetails.data.payout_amount ? specificTransactionDetails.data.payout_amount.toFixed(3) : ''} {specificTransactionDetails?.currency?.name || ''}
                                             </p>
                                           )}
 
                                           {specificTransactionDetails.type === 'Deposit' && (
                                             <p>
-                                              {parseFloat(specificTransactionDetails?.data?.amount || '') + parseFloat(specificTransactionDetails?.data?.transaction_fee || '')} {specificTransactionDetails?.currency?.name || ''}
+                                              {parseFloat(specificTransactionDetails?.data?.amount || 0).toFixed(3) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0).toFixed(3)} {specificTransactionDetails?.currency?.name || ''}
                                             </p>
                                           )}
                                         </>

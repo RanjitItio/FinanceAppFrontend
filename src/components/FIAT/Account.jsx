@@ -14,7 +14,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
-
+/// ALl Fiat Accounts
 export default function FiatAccount() {
     const [userWallet, updateUserWallet] = useState([]);
     const [error, setError] = useState('');
@@ -133,8 +133,7 @@ export default function FiatAccount() {
                 
                 
                 {/* For large Device */}
-                <Box display="flex" justifyContent="center">
-                    <Box sx={{ display: { xs: 'none', sm: 'inline', md: 'inline', lg: 'inline' } }}>
+                    <Box sx={{ display: { xs: 'none', sm: 'flex'}, justifyContent:'center' }}>
                         <Button variant="contained" startIcon={<ArrowDownwardIcon />} sx={{ mx: 0 }}>
                             Receive
                         </Button>
@@ -144,7 +143,7 @@ export default function FiatAccount() {
                             to="/deposit/"
                             variant="contained"
                             startIcon={<AddIcon />}
-                            sx={{ mx: 1 }}
+                            sx={{ mx: 1, minWidth:'100px' }}
                         >
                             Add
                         </Button>
@@ -154,7 +153,7 @@ export default function FiatAccount() {
                             to="/moneytransfer/"
                             variant="contained"
                             startIcon={<ArrowUpwardIcon />}
-                            sx={{ mx: 0.7 }}
+                            sx={{ mx: 0.3 }}
                         >
                             Send
                         </Button>
@@ -164,21 +163,19 @@ export default function FiatAccount() {
                             to="/exchange-currency/"
                             variant="contained"
                             startIcon={<SwapHorizIcon />}
-                            sx={{ mx: 0.2 }}
+                            sx={{ mx: 0.3 }}
                         >
                             Convert
                         </Button>
 
-                        <Button variant="contained" startIcon={<MoreVertIcon />} sx={{ mx: 0.6 }}>
+                        <Button variant="contained" startIcon={<MoreVertIcon />} sx={{ mx: 0.3 }}>
                             More
                         </Button>
                     </Box>
-                </Box>
 
                 {/* For small devices */}
-                <Box display="flex" justifyContent="center">
                     {/* Visible on small devices, hidden on medium devices */}
-                    <Box sx={{ display: { xs: 'inline', sm: 'none', md: 'none' } }}>
+                    <Box sx={{ display: { xs: 'flex', sm: 'none', md: 'none' }, justifyContent:"center" }}>
                         <IconButton sx={{ mr: '1px' }} color="primary">
                             <ArrowDownwardIcon />
                         </IconButton>
@@ -199,7 +196,6 @@ export default function FiatAccount() {
                             <MoreVertIcon />
                         </IconButton>
                     </Box>
-                </Box>
             </div>
         </div>
     );

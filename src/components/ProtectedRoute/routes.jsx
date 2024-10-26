@@ -53,6 +53,7 @@ import DeveloperDocs from "../Developer/devdocs";
 import DevIntroDoc from "../Developer/intro";
 import CircularProgress from '@mui/joy/CircularProgress';
 import CssBaseline from "@mui/material/CssBaseline";
+import { useMediaQuery, createTheme } from '@mui/material';
 
 
 
@@ -66,11 +67,14 @@ const CryptoSell             = React.lazy(()=> import('../CryptoTransactions/Sel
 const CryptoSwap             = React.lazy(()=> import('../CryptoTransactions/CryptoSwap'));
 const CryptoExchange         = React.lazy(()=> import('../CryptoTransactions/CryptoExchange'));
 const ExchangesList          = React.lazy(()=> import('../Exchange/ExchangeList'));
+const AdminLogin             = React.lazy(()=> import('../Authentication/AdminLogin'));
 
 
-
+// All Routes
 const AuthRoutes = () => {
-    const [open, setOpen] = React.useState(true);
+    const theme           = createTheme(); 
+    const isSmOrBelow     = useMediaQuery(theme.breakpoints.down('sm'));
+    const [open, setOpen] = React.useState(!isSmOrBelow); // Close and open Leftbar
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -91,6 +95,14 @@ const AuthRoutes = () => {
       {
         path: "/about-us",
         element: <div>About Us</div>,
+      },
+      {
+        path: "/admin/user/login/",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+              <AdminLogin />
+          </Suspense>
+        ),
       },
     ];
   

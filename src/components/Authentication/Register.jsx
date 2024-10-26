@@ -67,9 +67,12 @@ function Register() {
                   setEmailOTP(res.data.otp)
                   setVerifiedMail(true);
               }
+          }).catch((error)=> {
+              if(error.response.data.success === false) {
+                setEmailData((current) => ({ ...current, status: 'failure' }));
+              }
           })
       } catch (error) {
-          setEmailData((current) => ({ ...current, status: 'failure' }));
       }
     };
 

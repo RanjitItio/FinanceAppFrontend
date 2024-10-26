@@ -3,7 +3,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,9 +11,7 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
-import Textarea from './TextArea';
 import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -23,10 +20,14 @@ import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
+import StepLabel from '@mui/material/StepLabel';
+import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
 
 
-const steps = ['Setup Money', 'Confirm Exchange Money'];
+
+const steps = ['Step 1', 'Step 2'];
 const freeCurrencyAPIKey = import.meta.env.VITE_FREE_CURRENCY_API
+
 
 // First step form
 function ExchangeMoneyForm1({...props}) {
@@ -44,7 +45,9 @@ function ExchangeMoneyForm1({...props}) {
 
       }).catch((error)=> {
         // console.log(error);
-
+        if (error.response.status === 404) {
+            props.setWalletNotFound(true);
+        }
       })
   }, []);
   
@@ -75,11 +78,20 @@ function ExchangeMoneyForm1({...props}) {
   const handleamountChange = (event)=> {
     const {name, value} = event.target;
 
-    if(/^\d+$/.test(value) || value === '') {
+    if (value === '') {
       props.setError('');
       props.setAmountError('');
       props.updateAmount(value);
-    } else {
+    } 
+    else if (Number(value) === 0 || Number(value) < 0){
+      props.setAmountError('Number should be greater than 0')
+    } 
+    else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+      props.setError('');
+      props.setAmountError('');
+      props.updateAmount(value);
+    } 
+    else {
       props.setAmountError('Please enter valid amount')
     }
   };
@@ -131,7 +143,7 @@ function ExchangeMoneyForm1({...props}) {
   return(
     <>
       <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
-            Enter your payer email address then add an amount with currency to request payment. You may add a note for reference.
+          You can exchange your wallet amount to another waller using our popular payment system. Fill the details correctly & the amount you want to exchange.
       </small>
 
       <div style={{marginLeft: '2%', marginRight: '0%'}}>
@@ -141,10 +153,10 @@ function ExchangeMoneyForm1({...props}) {
             <FormControl size='small' sx={{marginLeft: {xs:'4%', lg: '8%'}, width:{xs:'90%', lg: '100%'}}}>
                 <InputLabel id="from-balance-select-label">Currency</InputLabel>
                 <Select
-                id="from-balance-select"
-                value={props.fromCurrency}
-                label="Currency" 
-                onChange={handleFromCurrencyChange}
+                  id="from-balance-select"
+                  value={props.fromCurrency}
+                  label="Currency" 
+                  onChange={handleFromCurrencyChange}
                 >
                 <MenuItem value={''}>None</MenuItem>
                   {userWallet.map((wallet)=> (
@@ -153,6 +165,7 @@ function ExchangeMoneyForm1({...props}) {
                   </MenuItem>
               ))}
                 </Select>
+
                 <FormHelperText>
                   <b>From</b> Balance: ({userWallet.find((wallet)=> wallet.currency === props.fromCurrency)?.balance.toFixed(2) || 0} {props.fromCurrency}) 
                 </FormHelperText>
@@ -175,20 +188,19 @@ function ExchangeMoneyForm1({...props}) {
                              marginLeft:{xs:'4%', lg:'-30%'}, 
                              marginTop:{xs:'-3%', lg: '0px'}}}>
                 <InputLabel id="to-balance-select-label">Currency</InputLabel>
-                <Select
-                id="to-balance-select"
-                value={props.toCurrency}
-                label="Currency"
-                onChange={handleToCurrencyChange}
-                >
-                    <MenuItem value={""}>None</MenuItem>
-                    {userWallet.filter((wallet)=> wallet.currency !== props.fromCurrency).map((wallet)=> (
-                      <MenuItem key={wallet.id} value={wallet.currency}>
-                        {wallet.currency}
-                      </MenuItem>
-                    ))}
-
-                </Select>
+                  <Select
+                    id="to-balance-select"
+                    value={props.toCurrency}
+                    label="Currency"
+                    onChange={handleToCurrencyChange}
+                    >
+                      <MenuItem value={""}>None</MenuItem>
+                      {userWallet.filter((wallet)=> wallet.currency !== props.fromCurrency).map((wallet)=> (
+                        <MenuItem key={wallet.id} value={wallet.currency}>
+                          {wallet.currency}
+                        </MenuItem>
+                      ))}
+                  </Select>
                 <FormHelperText>
                   <b>To</b> Balance: ({userWallet.find((wallet)=> wallet.currency === props.toCurrency)?.balance || 0} {props.toCurrency})
                 </FormHelperText>
@@ -290,8 +302,8 @@ function ExchangeMoneyForm2({...props}) {
 
 // Exchange Money 
 export default function ExchangeMoneyForm({open}) {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  const [activeStep, setActiveStep] = React.useState(0);  // currenct step
+  const [completed, setCompleted] = React.useState({});   // Completed state
 
   const navigate = useNavigate();
   const [fromCurrency, updateFromCurrency]       = React.useState(''); // From Currency
@@ -299,10 +311,10 @@ export default function ExchangeMoneyForm({open}) {
   const [Amount, updateAmount]                   = React.useState(''); // Amount
   const [convertedAmount, updateconvertedAmount] = React.useState(''); // Converted Amount
   const [error, setError]                        = React.useState(''); // Error Message
-  const [fee, updateFee]                         = React.useState(0);  // Fee state
   const [totalAmount, setTotalAmount]            = React.useState(0); // Total Amount
   const [amountError, setAmountError]            = React.useState(''); // Amount Error
-  const [transactionFee, setTransactionFee] = React.useState(0.00);  // Transaction Fee
+  const [transactionFee, setTransactionFee]      = React.useState(0.00);  // Transaction Fee
+  const [walletNotFound, setWalletNotFound]      = React.useState(false); // 
 
 
   // Total steps
@@ -433,6 +445,7 @@ export default function ExchangeMoneyForm({open}) {
                 setTransactionFee={setTransactionFee}
                 transactionFee={transactionFee}
                 Amount={Amount}
+                setWalletNotFound={setWalletNotFound}
             />;
       case 1:
         return <ExchangeMoneyForm2 
@@ -465,6 +478,7 @@ export default function ExchangeMoneyForm({open}) {
 
 
   return (
+    <>
     <Main open={open}>
       <DrawerHeader />
 
@@ -477,17 +491,16 @@ export default function ExchangeMoneyForm({open}) {
                background: '#F0F8FF',
               height: {xs:'100%', sm: '120%'}
                 }}>
-      <p className='fs-3 d-flex justify-content-center my-2'>Exchange Money</p> <br />
+      <p className='fs-3 d-flex justify-content-center my-1' style={{paddingTop:15}}>Exchange Money</p> <br />
 
-      <Stepper nonLinear activeStep={activeStep} sx={{marginLeft: '4%'}}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
-            <StepButton color="inherit" onClick={handleStep(index)}>
-                {label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
+
+      <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
       <div>
         {allStepsCompleted() ? (
@@ -514,7 +527,6 @@ export default function ExchangeMoneyForm({open}) {
                           flexDirection: 'row', 
                           justifyContent:'center',
                           pt: 2,
-                          // marginLeft: '5%',
                           marginTop: '5%' }}>
                 
                   {/* <Box sx={{ flex: '1 1 auto' }}  /> */}
@@ -542,7 +554,23 @@ export default function ExchangeMoneyForm({open}) {
         )}
       </div>
     </Box>
+
+    {walletNotFound && 
+      <Box 
+        sx={{
+          position:'fixed',
+          zIndex:1000,
+          bottom:16,
+          right:16
+        }}
+        >
+          <Alert sx={{maxWidth:'20rem'}} severity="error">Do not have existing Wallet, Please login using another account</Alert>
+      </Box>
+    }
+
   </Main>
+</>
+
   );
 };
 
