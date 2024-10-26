@@ -482,15 +482,17 @@ export default function ExchangeMoneyForm({open}) {
     <Main open={open}>
       <DrawerHeader />
 
-    <Box sx={{ width: {xs: '100%', sm: '80%', md: '45%'}, 
-               marginTop: {xs: '40px', sm: '1rem'},
-               borderRadius: '20px',
-               backdropFilter: 'blur( 20px )',
-               boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff',
-               marginLeft: {xs: '0%', sm: '25%'},
-               background: '#F0F8FF',
-              height: {xs:'100%', sm: '120%'}
-                }}>
+    <Box sx={{ 
+              width: {xs: '100%', sm: '80%', md: '50%'}, 
+              marginTop: {xs: '40px', sm: '1rem'},
+              borderRadius: '5%',
+              backdropFilter: 'blur( 20px )',
+              boxShadow: '7px 7px 28px #aaaaaa, -7px -7px 28px #ffffff',
+              marginLeft: {xs: '0%', sm: '10%', md:'20%'},
+              background: '#F0F8FF',
+              height: {xs:'100%', sm: '98%'},
+              overflowY:'auto'
+            }}>
       <p className='fs-3 d-flex justify-content-center my-1' style={{paddingTop:15}}>Exchange Money</p> <br />
 
 
@@ -500,7 +502,7 @@ export default function ExchangeMoneyForm({open}) {
               <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
             </Step>
           ))}
-        </Stepper>
+      </Stepper>
 
       <div>
         {allStepsCompleted() ? (
@@ -527,7 +529,7 @@ export default function ExchangeMoneyForm({open}) {
                           flexDirection: 'row', 
                           justifyContent:'center',
                           pt: 2,
-                          marginTop: '5%' }}>
+                          marginTop: '4%' }}>
                 
                   {/* <Box sx={{ flex: '1 1 auto' }}  /> */}
               
@@ -570,6 +572,7 @@ export default function ExchangeMoneyForm({open}) {
 
   </Main>
 </>
+
 
   );
 };

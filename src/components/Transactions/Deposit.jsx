@@ -466,71 +466,71 @@ export default function DepositForm({open}) {
   return (
     <Main open={open}>
       <DrawerHeader />
-      <Box sx={{ 
-              width: {xs: '100%', sm: '80%', md:'50%'},
-              marginTop: {xs: '40px', sm: '1rem'},
-              marginLeft: {xs: '0%', sm: '10%', md:'20%'},
-              background: '#F0F8FF',
-              backdropFilter: 'blur( 20px )',
-              boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
-              borderRadius: '5%',
-              height: {xs:'100%', sm: '98%'},
-              overflowY:'auto'
-              }}
-            >
-        <p className='fs-3 d-flex justify-content-center' style={{paddingTop:15}}>Deposit Money</p> <br />
+        <Box sx={{ 
+                width: {xs: '100%', sm: '80%', md:'50%'},
+                marginTop: {xs: '40px', sm: '1rem'},
+                marginLeft: {xs: '0%', sm: '10%', md:'20%'},
+                background: '#F0F8FF',
+                backdropFilter: 'blur( 20px )',
+                boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
+                borderRadius: '5%',
+                height: {xs:'100%', sm: '98%'},
+                overflowY:'auto'
+                }}
+              >
+          <p className='fs-3 d-flex justify-content-center' style={{paddingTop:15}}>Deposit Money</p> <br />
 
-        <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+          <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
 
-        <div>
-          {allStepsCompleted() ? (
-            <React.Fragment>
-              <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
-                {/* All steps completed - you&apos;re finished */}
-                <Alert severity="success">
-                  <AlertTitle>Success</AlertTitle>
-                      Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
-                      We'll notify you once your deposit has been approved.
-                </Alert>
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Box sx={{ flex: '1 1 auto' }} />
-                {/* <Button onClick={handleReset}>Reset</Button> */}
-                <Button onClick={handleReset}>Go back to dashboard</Button>
-              </Box>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
+          <div>
+            {allStepsCompleted() ? (
+              <React.Fragment>
+                <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
+                  {/* All steps completed - you&apos;re finished */}
+                  <Alert severity="success">
+                    <AlertTitle>Success</AlertTitle>
+                        Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
+                        We'll notify you once your deposit has been approved.
+                  </Alert>
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                  <Box sx={{ flex: '1 1 auto' }} />
+                  {/* <Button onClick={handleReset}>Reset</Button> */}
+                  <Button onClick={handleReset}>Go back to dashboard</Button>
+                </Box>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
 
 
-              {renderForms(activeStep)}
+                {renderForms(activeStep)}
 
-              <Box sx={{ display: 'flex', flexDirection: 'row', mb: {xs:2, sm:2, md:0}, marginTop:'3%', justifyContent:'center' }}>
-                  {activeStep !== steps.length &&
-                    (completed[activeStep] ? (
-                      <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                        Step {activeStep + 1} already completed
-                      </Typography>
-                    ) : (
-                      <Button onClick={handleComplete} variant='contained' 
-                        sx={{marginRight: '4%'}}
-                      >
-                        {completedSteps() === totalSteps() - 1
-                          ? 'Confirm & Deposit'
-                          : 'Confirm & Proceed'}
-                      </Button>
-                    ))}
-              </Box>
-            </React.Fragment>
-          )}
-        </div>
-      </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', mb: {xs:2, sm:2, md:0}, marginTop:'3%', justifyContent:'center' }}>
+                    {activeStep !== steps.length &&
+                      (completed[activeStep] ? (
+                        <Typography variant="caption" sx={{ display: 'inline-block' }}>
+                          Step {activeStep + 1} already completed
+                        </Typography>
+                      ) : (
+                        <Button onClick={handleComplete} variant='contained' 
+                          sx={{marginRight: '4%'}}
+                        >
+                          {completedSteps() === totalSteps() - 1
+                            ? 'Confirm & Deposit'
+                            : 'Confirm & Proceed'}
+                        </Button>
+                      ))}
+                </Box>
+              </React.Fragment>
+            )}
+          </div>
+        </Box>
     </Main>
   );
 };
