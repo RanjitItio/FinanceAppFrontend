@@ -16,6 +16,7 @@ import Row from 'react-bootstrap/Row';
 import { useState, useEffect } from 'react';
 import axiosInstance from '../Authentication/axios'
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
+import CurrencyAPI from '@everapi/currencyapi-js';
 
 
 const freeCurrencyAPIKey = import.meta.env.VITE_FREE_CURRENCY_API
@@ -585,7 +586,7 @@ export default function StepWisePaymentForm({open}) {
   
   
   const isStepSkipped = (step) => {
-    return skipped.has(step);
+     return skipped.has(step);
   };
 
 

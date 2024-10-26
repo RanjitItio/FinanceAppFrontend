@@ -3,8 +3,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
-import Button from '@mui/material/Button';
+// import StepButton from '@mui/material/StepButton';
+// import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,22 +12,25 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
+// import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import ImportExportIcon from '@mui/icons-material/ImportExport';
+// import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+// import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
 import { Button as JoyButton, Divider } from '@mui/joy';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
+import CurrencyAPI from '@everapi/currencyapi-js';
+import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
+import StepLabel from '@mui/material/StepLabel';
 
 
 
 const freeCurrencyAPIKey = import.meta.env.VITE_FREE_CURRENCY_API
-const steps = ['Create Withdrawal', 'Confirm Withdrawal'];
+const steps = ['Step 1', 'Step 2'];
 
 
 
@@ -52,15 +55,17 @@ function WithdrawalForm1({...props}) {
     const { name, value } = event.target;
 
     if (value === '') {
-      props.updateAmount('')
       props.setError('');
+      props.updateAmount('')
 
-    } else if (/^\d+$/.test(value)) {
-       props.setError('')
-       props.updateAmount(value)
+    } else if (Number(value) === 0 || Number(value) < 0){
+        props.setError('Number must be greater than 0')
 
+    } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+      props.setError('')
+      props.updateAmount(value)
     } else {
-       props.setError('Please provide valid amount')
+      props.setError('Please provide valid amount')
     }
   };
 
@@ -74,7 +79,7 @@ function WithdrawalForm1({...props}) {
       }
 
     }).catch((error)=> {
-      console.log(error.response)
+      // console.log(error.response)
     });
 
   }, []);
@@ -83,7 +88,7 @@ function WithdrawalForm1({...props}) {
 
   return(
     <>
-      <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
+      <small className='text-muted d-flex justify-content-center my-2' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
             Accumulated wallet funds can simply be withdrawn at any time, 
             to your paypal ID or bank account. Setting up the withdrawal 
             settings is must before proceeding to make a withdraw. 
@@ -97,11 +102,11 @@ function WithdrawalForm1({...props}) {
                  sx={{
                     width:{xs:'90%', lg: '90%',
                     }}}>
-                <InputLabel id="payment-method-select-label">Wallet Currency</InputLabel>
+                <InputLabel id="payment-method-select-label">Wallet</InputLabel>
                 <Select
                     id="wallet-currency-select"
                     value={props.walletCurrency}
-                    label="Wallet Currency" 
+                    label="Wallet" 
                     onChange={handleWalletCurrencyChange}
                 >
                     {currencies.map((curr)=> (
@@ -143,6 +148,7 @@ function WithdrawalForm1({...props}) {
                 size='small' 
                 sx={{width: '90%'}}
                 onChange={handleAmountChange}
+                value={props.Amount}
                 />
         </Grid>
       </Grid>
@@ -179,13 +185,13 @@ function WithdrawalForm2({...props}) {
           currencies: props.withdrawalCurrency 
 
       }).then(response => {
-          // console.log(response);
+          // console.log(response.data[props.withdrawalCurrency].value);
           setWithdrawalCurrencyConvert(response.data[props.withdrawalCurrency])
       });
     }
-  }, [props.walletCurrency, props.withdrawalCurrency, props.Amount])
-
-
+  }, [props.walletCurrency, props.withdrawalCurrency, props.Amount]);
+   
+   
   // Calculate Withdrawal currency amount
   useEffect(() => {
      if (withdrawalCurrencyConvert && props.Amount) {
@@ -223,7 +229,7 @@ function WithdrawalForm2({...props}) {
 
         <Box sx={{ mx: 4 }}>
           <Box display="flex" justifyContent="space-between" mb={2}>
-            <Typography variant="body2">Received Amount</Typography>
+            <Typography variant="body2">Converted Amount</Typography>
 
             <Typography variant="body2">
               {props?.withdrawalCurrency || ''} {props?.creditedAmount.toFixed(3) || 0}
@@ -233,7 +239,7 @@ function WithdrawalForm2({...props}) {
           <Divider sx={{ mb: 2 }} />
 
           <Box display="flex" justifyContent="space-between" mb={2}>
-            <Typography variant="body2">Withdrawal Amount</Typography>
+            <Typography variant="body2">From Amount</Typography>
 
             <Typography variant="body2">
               {props.walletCurrency} {props.Amount}
@@ -383,6 +389,10 @@ export default function WithdrawalMoneyForm({open}) {
 
         } else if (error.response.data.message === 'Invalid withdrawal Currency') {
             setError('Invalid withdrawal Currency')
+
+        } else if (error.response.data.message === 'Suspended User') {
+          setError('Account has been suspended, Can not perform this action')
+
         } else {
           setError('')
         };
@@ -414,7 +424,10 @@ export default function WithdrawalMoneyForm({open}) {
               SetChargedFee(res.data.fee)
           }
         })
+      } else {
+        SetChargedFee(0)
       }
+      
   }, [Amount]);
 
 
@@ -455,26 +468,30 @@ export default function WithdrawalMoneyForm({open}) {
       <DrawerHeader />
 
         <Box sx={{ 
-                width: {xs: '100%', sm: '80%', md:'50%'}, 
+                width: {xs: '100%', sm: '80%', md:'50%'},
                 marginTop: {xs: '40px', sm: '1rem'},
                 borderRadius: '5%',
                 background: '#F0F8FF',
                 backdropFilter: 'blur( 20px )',
                 boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
-                marginLeft: {xs: '0%', sm: '10%', md:'20%'}, 
-                height: {xs:'100%', sm: '120%'}
+                marginLeft: {xs: '0%', sm: '10%', md:'20%'},
+                height: {xs:'100%', sm: '98%'},
               }}>
-          <p className='fs-3 d-flex justify-content-center my-1'>Withdrawal Money</p> <br />
+          <p className='fs-3 d-flex justify-content-center my-1' style={{paddingTop:15}}>Withdrawal Money</p> <br />
 
-          <Stepper nonLinear activeStep={activeStep} sx={{marginLeft: '4%'}}>
+          {/* <Stepper nonLinear activeStep={activeStep} sx={{marginLeft: '4%'}}>
             {steps.map((label, index) => (
               <Step key={label} completed={completed[index]}>
-                {/* <StepButton color="inherit" onClick={handleStep(index)}>
-                    {label}
-                </StepButton> */}
                 <StepButton color="inherit">
                     {label}
                 </StepButton>
+              </Step>
+            ))}
+          </Stepper> */}
+          <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
@@ -514,7 +531,7 @@ export default function WithdrawalMoneyForm({open}) {
                                 '@media (max-width: 500px)': {
                                     fontSize: '0.6rem' 
                                 }
-                            }} >
+                            }}>
                         {completedSteps() === totalSteps() - 1
                           ? 'Confirm & Proceed'
                           : 'Proceed'}

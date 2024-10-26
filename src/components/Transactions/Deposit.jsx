@@ -401,7 +401,11 @@ export default function DepositForm({open}) {
 
           } else if(error.response.data.msg == 'Error depositing funds') {
               setError("Server Error")
-          } else {
+
+          } else if (error.response.data.message == 'Suspended User') {
+              setError('Account has been suspended, Can not perform this action')
+          }
+          else {
               setError('')
           };
         })

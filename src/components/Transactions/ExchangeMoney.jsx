@@ -20,6 +20,7 @@ import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
+import CurrencyAPI from '@everapi/currencyapi-js';
 import StepLabel from '@mui/material/StepLabel';
 import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
 
@@ -277,13 +278,13 @@ function ExchangeMoneyForm2({...props}) {
 
         <div className='d-flex justify-content-between mb-2'>
           <p>Fee: </p>
-          <p>{props.fromCurrency} {props.fee}</p>
+          <p>{props?.fromCurrency || 0} {props.fee ? props.fee.toFixed(3) : 0}</p>
         </div>
         <hr className='mb-2' />
 
         <div className='d-flex justify-content-between mb-2'>
           <p><b>Total:</b></p>
-          <p><b>{props.fromCurrency} {props.totalAmount}</b></p>
+          <p><b>{props.fromCurrency} {props.totalAmount ? props.totalAmount.toFixed(3) : 0}</b></p>
         </div>
       </div>
     </div>
@@ -411,7 +412,10 @@ export default function ExchangeMoneyForm({open}) {
               setError("Do not have existing wallet in From Currency")
           }  else if (error.response.data.message == 'Do not have sufficient balance in From wallet') {
             setError('Insufficient Balance in Wallet')
-          } 
+
+          } else if (error.response.data.message === 'Suspended User') {
+              setError('Account has been suspended, Can not perform this action')
+          }
           else {
             setError('')
           }
