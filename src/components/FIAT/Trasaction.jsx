@@ -47,7 +47,7 @@ export default function FiatTransaction() {
                     Transaction History
                 </Typography>
 
-                <TableContainer component={Paper} sx={{ maxHeight: '50rem' }}>
+                <TableContainer component={Paper} sx={{ maxHeight: '60rem' }}>
                     <Table stickyHeader sx={{ overflowX: 'auto' }}>
                         <TableHead>
                             <TableRow>
@@ -57,7 +57,7 @@ export default function FiatTransaction() {
                                 <TableCell>Date</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell>Credit/Debit</TableCell>
-                                <TableCell>View</TableCell>
+                                {/* <TableCell>View</TableCell> */}
                             </TableRow>
                         </TableHead>
 
@@ -65,10 +65,10 @@ export default function FiatTransaction() {
                             {FiatTransactionsData.map((item, index) => (
                                 <TableRow key={index} hover>
                                     <TableCell>
-                                        <Box sx={{ maxWidth: '100px', overflow: 'scroll', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                                            <Typography variant="body2">
+                                        <Box sx={{ maxWidth: '100px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                                            <Typography>
                                                 {item.transaction?.transaction_id ? 
-                                                `${item.transaction?.transaction_id.slice(0, 7)}...` : ''}
+                                                `${item.transaction?.transaction_id.slice(0, 9)}..` : ''}
                                                 </Typography>
                                         </Box>
                                     </TableCell>
@@ -82,7 +82,6 @@ export default function FiatTransaction() {
                                     <TableCell>{item.transaction?.created_At.split('T')[0] || ''}</TableCell>
 
                                     <TableCell>
-
                                         {item.transaction.status === 'Approved' ? (
                                             <Typography color="success.main">Approved</Typography>
                                         ) : item.transaction.status === 'Pending' ? (
@@ -92,19 +91,16 @@ export default function FiatTransaction() {
                                         ) : item.transaction.status === 'Hold' ? (
                                             <Typography color="primary">On Hold</Typography>
                                         ) : 'NA'}
-
                                     </TableCell>
                                     
                                     <TableCell className="text-primary">
                                         {item.transaction?.credited_amount ? item.transaction.credited_amount : ''} {item.transaction?.credited_currency ? item.transaction.credited_currency : ''}
                                     </TableCell>
-
-                                    <TableCell>
+                                    {/* <TableCell>
                                         <Button variant="contained" color="primary" onClick={handleRedirectAllTransaction}>
                                             Detail
                                         </Button>
-                                    </TableCell>
-
+                                    </TableCell> */}
                                 </TableRow>
                             ))}
                         </TableBody>
