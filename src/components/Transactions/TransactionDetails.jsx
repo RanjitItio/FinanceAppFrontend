@@ -185,7 +185,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
                             <div className="d-flex justify-content-between mb-2">
                                 <div>
-                                    <p className='text-muted'>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>
                                     {specificTransactionDetails?.type 
                                       ? (specificTransactionDetails?.type === 'Transfer' ? 'Receiver Amount' : 
                                         specificTransactionDetails?.type === 'Deposit' ? 'Received Amount' : '')
@@ -202,7 +202,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                 </div>
 
                                 <div>
-                                    <p className='text-muted'>Total amount</p>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>Total amount</p>
                                     {specificTransactionDetails?.type && (
                                         <>
                                           {specificTransactionDetails.type === 'Transfer' && (
