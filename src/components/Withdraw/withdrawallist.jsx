@@ -103,10 +103,12 @@ export default function WithdrawalList({open}) {
             <div className="d-flex justify-content-center">
                 <p className='fs-3'>Withdrawal List</p>
             </div>
+
             <div className="d-flex justify-content-center">
                 <p className='text-muted'>History of all your withdrawals in your account</p>
             </div>
             <br />
+            
             <div className='d-flex justify-content-between'>
                 <p className='text-muted'>All Withdrawal History</p>
             </div>

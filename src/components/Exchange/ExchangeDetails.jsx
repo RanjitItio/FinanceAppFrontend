@@ -10,6 +10,7 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import PrintIcon from '@mui/icons-material/Print';
 import { Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import { Card, CardContent } from '@mui/material';
 
 
 /// Calculate Total Amount
@@ -43,17 +44,17 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
           <div className="container">
             <div className="row">
                 <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-2">
-                    <div className="card rounded" style={{height: '21rem'}}>
-                        <div className="card-body" style={{backgroundColor: '#c3c2d5'}}>
-                                <Typography className='d-flex justify-content-center mb-3' variant='div'>
+                    <Card style={{height: '24rem', backgroundColor: '#c3c2d5'}}>
+                        <CardContent>
+                                <Typography sx={{display:'flex', justifyContent:'center', mb:2}} variant='div'>
                                   <Avatar sx={{ width: avatarSize, height: avatarSize, backgroundColor: '#a6a3d3'}} >
                                       <ArrowOutwardIcon sx={{fontSize: iconSize, color:'#4f47bc'}}/>
                                   </Avatar>
                                 </Typography>
-
+                                {/* className='d-flex justify-content-center' */}
                                 <React.Fragment >
                                     {specificTransactionDetails ? 
-                                    (<p className='d-flex justify-content-center'>Exchange Amount</p>) : ''
+                                    (<p style={{display:'flex', justifyContent:'center', marginBottom:0.1}}>Exchange Amount</p>) : ''
                                   }
                                     
                                     {specificTransactionDetails ? (
@@ -77,8 +78,8 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                                         </Button>
                                     </div>
                                 </React.Fragment>
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <div className="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
@@ -86,9 +87,9 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                         <div className="card-body">
                             <h5 className="card-title fs-5">Transaction Details</h5>
                             <hr className='mb-3'/>
-                            <div className="d-flex justify-content-between mb-3">
+                            <div className="d-flex justify-content-between mb-1">
                                 <div>
-                                    <p className='text-muted'>From Currency</p>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>From Currency</p>
 
                                     {specificTransactionDetails ? (
                                       <p>{specificTransactionDetails?.from_currency || ''}</p>
@@ -98,7 +99,7 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                                 </div>
 
                                 <div>
-                                    <p className='text-muted'>To Currency</p>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>To Currency</p>
                                     {specificTransactionDetails ? (
                                       <p className='d-flex justify-content-end'>{specificTransactionDetails?.to_currency || ''}</p>
                                     ) : (
@@ -134,10 +135,9 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                                 </div>
                             </div>
 
-                            <div style={{display:'flex', justifyContent:'start', marginTop:10}}>
-
+                            <div style={{display:'flex', justifyContent:'start', marginTop:15}}>
                                 <div>
-                                    <p className='text-muted'>Status</p>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>Status</p>
                                     {specificTransactionDetails ? (
                                         specificTransactionDetails?.status == 'Pending' ? (
                                           <p className='text-warning'>{specificTransactionDetails.status}</p>
@@ -161,7 +161,7 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
 
                             <div className="d-flex justify-content-between mb-2">
                                 <div>
-                                    <p className='text-muted'>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>
                                       Received Amount
                                     </p>
 
@@ -175,7 +175,7 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                                 </div>
 
                                 <div>
-                                    <p className='text-muted'>Total amount</p>
+                                    <p className='text-muted' style={{marginBottom:0.1}}>Total amount</p>
                                         {specificTransactionDetails && (
                                             <p>
                                                 {getTotalAmount(specificTransactionDetails?.exchange_amount || 0, specificTransactionDetails?.transaction_fee || 0)} {specificTransactionDetails?.from_currency}
