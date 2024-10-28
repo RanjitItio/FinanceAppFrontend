@@ -46,7 +46,7 @@ const NavContent = [
   icon: ''
 },
 
-  { text: 'TRANSACTIONS', subItems: [
+  { text: 'FIAT', subItems: [
     {text:'Transactions', icon: <AccountBalanceWalletIcon />, url: '/transactions/'},
     {text: 'Deposit Money', icon: <AddCardIcon />, url: '/deposit/'}, 
     {text: 'Send Money', icon: <SendIcon />, url: '/moneytransfer/'}, 

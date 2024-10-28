@@ -20,7 +20,7 @@ import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Authentication/axios';
 import Freecurrencyapi from '@everapi/freecurrencyapi-js';
-import CurrencyAPI from '@everapi/currencyapi-js';
+// import CurrencyAPI from '@everapi/currencyapi-js';
 import StepLabel from '@mui/material/StepLabel';
 import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
 

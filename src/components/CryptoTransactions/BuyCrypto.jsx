@@ -6,16 +6,12 @@ import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 // import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import axiosInstance from '../Authentication/axios';
 import { useEffect } from 'react';
 import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
@@ -99,7 +95,6 @@ function Form1({cryptoWallets, crypto,setCrypto, paymentType, setPaymentType, wa
                             <Option value="Paypal">Paypal</Option>
                             <Option value="UPI">UPI</Option>
                             <Option value="Stripe">Stripe</Option>
-
                         </Select>
                     </FormControl>
                 </Grid>

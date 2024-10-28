@@ -189,7 +189,6 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
                   variant="filled"
                   size="small"
                   value={amount}
-                  placeholder='Amount'
                   sx={{ marginTop: '10px', width: '95%', marginLeft: '10px'}}
                   onChange={(e)=> handleAmountChange(e)}
                   InputProps={{
@@ -205,19 +204,19 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
         <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '30px' }} size="small">
           <InputLabel id="payment-method-label">Payment Method</InputLabel>
-          <Select
-            labelId="payment-method-label"
-            id="payment-method-select"
-            value={paymentMethod}
-            label="Payment Method"
-            onChange={handlePaymentMethodChange}
-          >
-            <MenuItem value={'Stripe'}>Stripe</MenuItem>
-            <MenuItem value={'Bank'}>Bank</MenuItem>
-            <MenuItem value={'Paypal'}>Paypal</MenuItem>
-          </Select>
-            &nbsp;
-          {error && <Alert severity="error">{error}</Alert>}
+            <Select
+              labelId="payment-method-label"
+              id="payment-method-select"
+              value={paymentMethod}
+              label="Payment Method"
+              onChange={handlePaymentMethodChange}
+            >
+              <MenuItem value={'Stripe'}>Stripe</MenuItem>
+              <MenuItem value={'Bank'}>Bank</MenuItem>
+              <MenuItem value={'Paypal'}>Paypal</MenuItem>
+            </Select>
+              &nbsp;
+            {error && <Alert severity="error">{error}</Alert>}
         </FormControl>
 
       </div>
@@ -227,6 +226,7 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 };
 
 
+/// Second Form
 function Form2({...props}) {
 
   return(

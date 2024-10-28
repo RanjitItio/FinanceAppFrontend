@@ -6,22 +6,32 @@ import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+// import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import axiosInstance from '../Authentication/axios';
 import { useEffect } from 'react';
+import Select, { selectClasses } from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import { Grid } from '@mui/material';
+import Input from '@mui/joy/Input';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import { handleCryptoWallets, handleCryptoWalletAddress, handleFIATWallets, 
+  handleCryptoBuyAssignedFee, handleConvertCryptoToUSD, handleWalletCurrencyConvertToUSD,
+  handleSubmitCryptoData, getCurrencyIcon } from './BuyAPI';
+import { useState } from 'react';
+import axiosInstance from '../Authentication/axios';
+import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
+import StepLabel from '@mui/material/StepLabel';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
 
 
 
 
-const steps                   = ['Provide Input', 'Confirm Details'];
+const steps                   = ['Step 1', 'Step 2'];
 const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
 const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 
@@ -47,70 +57,134 @@ function Form1() {
   
       }, []);
   
-  
+
   
     return(
       <>
-        <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
-          You can deposit to your wallets using our popular 
-          payment methods. Fill the details correctly & the amount you want to deposit.
+         <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
+            Swap Crypto from one Wallet to Another Wallet
         </small>
   
         <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
-  
-        <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '20px' }} size="small">
-            <InputLabel id="currency-label">Currency</InputLabel>
-            <Select
-              labelId="currency-label"
-              id="currency-select"
-              label="Currency"
-              //   value={currency}
-            //   onChange={handleCurrencyChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-  
-              {currencies.map((curr)=> (
-                  <MenuItem key={curr.id} value={curr.name}>
-                    {curr.name}
-                  </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Fee </FormHelperText>
-          </FormControl>
-  
-          <TextField
-            hiddenLabel
-            id="amount"
-            variant="filled"
-            size="small"
-            // value={amount}
-            placeholder='Amount'
-            sx={{marginTop: '10px', width: '95%', marginLeft: '10px'}}
-            // onChange={handleAmountChange}
-          />
-  
-          <FormControl sx={{ m: 1, minWidth: 120, width: '96%', marginTop: '30px' }} size="small">
-            <InputLabel id="payment-method-label">Payment Method</InputLabel>
-            <Select
-              labelId="payment-method-label"
-              id="payment-method-select"
-            //   value={paymentMethod}
-              label="Payment Method"
-            //   onChange={handlePaymentMethodChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'Stripe'}>Stripe</MenuItem>
-              <MenuItem value={'Bank'}>Bank</MenuItem>
-              <MenuItem value={'Paypal'}>Paypal</MenuItem>
-            </Select>
-            &nbsp;
-            {/* {error && <Alert severity="error">{error}</Alert>} */}
-          </FormControl>
-  
+            <Grid container spacing={4}>
+                <Grid item xs={12} sm={5}>
+                    <FormControl fullWidth size="small">
+                        <Select 
+                          placeholder='Crypto Wallet'
+                          // value={crypto}
+                          indicator={<KeyboardArrowDown />}
+                          // onChange={(e, newValue) => setCrypto(newValue)}
+                          sx={{
+                            [`& .${selectClasses.indicator}`]: {
+                              transition: '0.2s',
+                              [`&.${selectClasses.expanded}`]: {
+                                transform: 'rotate(-180deg)',
+                              },
+                            },
+                          }}
+                          >
+                          {/* {cryptoWallets.map((wallet, index)=> (
+                              <Option key={index} value={wallet.id}>{wallet.crypto_name}</Option>
+                          ))} */}
+                          <Option value='BTC'>BTC</Option>
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12} lg={2} 
+                   sx={{marginTop: '1.5%', display: {xs: 'none', sm: 'none', md: 'flex'} }}>
+                    <SwapHorizIcon />
+                </Grid>
+
+                <Grid item xs={12} lg={2} 
+                          sx={{marginTop: '-5%', display: {xs: 'flex', lg: 'none'}, justifyContent: 'center'}}>
+                    <ImportExportIcon />
+                </Grid>
+
+                <Grid item xs={12} sm={5}>
+                    <FormControl fullWidth size="small">
+                        <Select
+                          placeholder='Payment Mode'
+                          // onChange={(e, newValue) => setPaymentType(newValue)}
+                          // value={paymentType}
+                          indicator={<KeyboardArrowDown />}
+                          sx={{
+                            [`& .${selectClasses.indicator}`]: {
+                              transition: '0.2s',
+                              [`&.${selectClasses.expanded}`]: {
+                                transform: 'rotate(-180deg)',
+                              },
+                            },
+                          }}
+                          >
+                            <Option value="Bank Transfer">Bank Transfer</Option>
+                            <Option value="Paypal">Paypal</Option>
+                            <Option value="UPI">UPI</Option>
+                            <Option value="Stripe">Stripe</Option>
+
+                        </Select>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+
+                    <FormControl sx={{ minWidth: 120, width: '96%'}} size="small">
+                        <Select 
+                          placeholder='Wallet Currency'
+                          // value={Walletcurrency}
+                          // onChange={(e, newValue) => setWalletCurrency(newValue)}
+                          indicator={<KeyboardArrowDown />}
+                          sx={{
+                            [`& .${selectClasses.indicator}`]: {
+                              transition: '0.2s',
+                              [`&.${selectClasses.expanded}`]: {
+                                transform: 'rotate(-180deg)',
+                              },
+                            },
+                          }}
+                          >
+                          {/* {userWallets.map((wallet, index)=> (
+                              <Option key={index} value={wallet.id}>
+                                  {wallet.currency}
+                              </Option>
+                          ))} */}
+                           <Option value='BTC'>
+                                BTC
+                            </Option>
+                        </Select>
+                    </FormControl>
+
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                    <Input 
+                      placeholder="Wallet Address" 
+                      // value={walletAddress ? walletAddress : ''}
+                      />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Box sx={{display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <Input 
+                            placeholder="Amount"
+                            // value={exchangeAmount}
+                            // onChange={(e) => {setExchangeAmount(e.target.value)}}
+                            // startDecorator={getCurrencyIcon(findWalletCurrencyName)}
+                            />
+                            
+                            <SwapHorizIcon sx={{ml:1.5}} />
+
+                          <Input 
+                            placeholder="Crypto" 
+                            sx={{ml:2}}
+                            // value={exchangeResult}
+                            />
+                    </Box>
+                    {/* <FormHelperText>Fee Charge: {getCurrencyIcon(findWalletCurrencyName)} {chargedFee}</FormHelperText> */}
+                    <FormHelperText>Fee Charge: {getCurrencyIcon('USD')} 1.0</FormHelperText>
+                </Grid>
+            </Grid>
+                {/* <small style={{color:'red', display:'flex', justifyContent:'center'}}>{error && error}</small> */}
         </div>
       </>
   
@@ -227,16 +301,17 @@ export default function CryptoSwap({open}) {
         const newCompleted = completed;
 
         if (activeStep == 0) {
-        if (!currency || !amount || !paymentMethod) {
-            setError('Please fill all the above fields');
-            return;
 
-        } else {
-            setError('')
-            newCompleted[activeStep] = true;
-            setCompleted(newCompleted);
-            handleNext();
-        };
+          if (!currency || !amount || !paymentMethod) {
+              setError('Please fill all the above fields');
+              return;
+
+          } else {
+              setError('')
+              newCompleted[activeStep] = true;
+              setCompleted(newCompleted);
+              handleNext();
+          };
 
         } else {
 
@@ -291,12 +366,12 @@ export default function CryptoSwap({open}) {
                     backdropFilter: 'blur( 20px )',
                     boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
                     borderRadius: '5%',
-                    height: {xs:'100%', sm: '120%'}
+                    height: {xs:'100%'}
                     }}
                     >
                 <p className='fs-2 d-flex justify-content-center'>Swap Crypto</p> <br />
 
-                <Stepper nonLinear activeStep={activeStep}>
+                {/* <Stepper nonLinear activeStep={activeStep}>
                 {steps.map((label, index) => (
                     <Step key={label} completed={completed[index]}>
                     <StepButton color="inherit">
@@ -304,48 +379,54 @@ export default function CryptoSwap({open}) {
                     </StepButton>
                     </Step>
                 ))}
+                </Stepper> */}
+                <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+                  {steps.map((label) => (
+                    <Step key={label}>
+                      <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+                    </Step>
+                  ))}
                 </Stepper>
 
-
                 <div>
-                {allStepsCompleted() ? (
-                    <React.Fragment>
-                    <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
-                        <Alert severity="success">
-                        <AlertTitle>Success</AlertTitle>
-                            Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
-                            We'll notify you once your deposit has been approved.
-                        </Alert>
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Go back to dashboard</Button>
-                    </Box>
-                    </React.Fragment>
-                ) : (
-                    <React.Fragment>
+                  {allStepsCompleted() ? (
+                      <React.Fragment>
+                      <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
+                          <Alert severity="success">
+                          <AlertTitle>Success</AlertTitle>
+                              Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
+                              We'll notify you once your deposit has been approved.
+                          </Alert>
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                          <Box sx={{ flex: '1 1 auto' }} />
+                          <Button onClick={handleReset}>Go back to dashboard</Button>
+                      </Box>
+                      </React.Fragment>
+                  ) : (
+                      <React.Fragment>
 
 
-                    {renderForms(activeStep)}
+                      {renderForms(activeStep)}
 
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', justifyContent:'center' }}>
-                        {activeStep !== steps.length &&
-                            (completed[activeStep] ? (
-                            <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                                Step {activeStep + 1} already completed
-                            </Typography>
-                            ) : (
-                            <Button onClick={handleComplete} variant='outlined' 
-                                sx={{marginRight: '4%', marginTop: '3%'}}
-                            >
-                                {completedSteps() === totalSteps() - 1
-                                ? 'Confirm & Deposit'
-                                : 'Confirm & Proceed'}
-                            </Button>
-                            ))}
-                    </Box>
-                    </React.Fragment>
-                )}
+                      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, marginTop:'5%', justifyContent:'center' }}>
+                          {activeStep !== steps.length &&
+                              (completed[activeStep] ? (
+                              <Typography variant="caption" sx={{ display: 'inline-block' }}>
+                                  Step {activeStep + 1} already completed
+                              </Typography>
+                              ) : (
+                              <Button onClick={handleComplete} variant='contained' 
+                                  sx={{marginRight: '4%', marginTop: '3%'}}
+                              >
+                                  {completedSteps() === totalSteps() - 1
+                                  ? 'Confirm & Deposit'
+                                  : 'Confirm & Proceed'}
+                              </Button>
+                              ))}
+                      </Box>
+                      </React.Fragment>
+                  )}
             </div>
           </Box>
       </Main>
