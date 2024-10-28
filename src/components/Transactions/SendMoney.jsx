@@ -65,6 +65,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
 
   const handleAmountChange = (event)=> {
     setAmount(event.target.value)
+
     if(!event.target.value) {
       setError('Please fill all the above fields')
     } else {

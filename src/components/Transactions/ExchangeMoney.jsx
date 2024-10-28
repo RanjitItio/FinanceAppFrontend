@@ -83,19 +83,23 @@ function ExchangeMoneyForm1({...props}) {
       props.setError('');
       props.setAmountError('');
       props.updateAmount(value);
-    } 
-    else if (Number(value) === 0 || Number(value) < 0){
+
+    } else if (Number(value) === 0 || Number(value) < 0){
       props.setAmountError('Number should be greater than 0')
-    } 
-    else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+
+    } else if (value.length > 8) {
+      props.setAmountError('Amount must be less than 8 digit')
+
+    } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
       props.setError('');
       props.setAmountError('');
       props.updateAmount(value);
-    } 
-    else {
+
+    } else {
       props.setAmountError('Please enter valid amount')
     }
   };
+
 
   // Get assigned fee for Fiat Deposit Transaction
   useEffect(() => {

@@ -54,12 +54,17 @@ function WithdrawalForm1({...props}) {
   const handleAmountChange = (event)=> {
     const { name, value } = event.target;
 
+    console.log('length', value.length)
+
     if (value === '') {
       props.setError('');
       props.updateAmount('')
 
     } else if (Number(value) === 0 || Number(value) < 0){
         props.setError('Number must be greater than 0')
+
+    } else if (value.length > 8) {
+      props.setError('Amount should be less than 8 digit')
 
     } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
       props.setError('')
@@ -400,7 +405,7 @@ export default function WithdrawalMoneyForm({open}) {
         setTimeout(() => {
           setError('')
         }, 2000);
-        
+
       })
     };
   };

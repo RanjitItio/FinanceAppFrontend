@@ -32,7 +32,8 @@ function HeadForm({...props}) {
   const [sendingPurposeValue, updateSendingPurposeValue]     = useState('')  // Sending Purpose
   const [convertedAmount, setConvertedAmount]                = useState('');  // Currency Conversion Value
   const [currencyConversion, setCurrencyConversion]          = useState(0);  // Currency conversion amount using free API
-
+  
+  
    // Call API to convert the Currency Value
    useEffect(() => {
         if (props.formData.receiver_currency, props.formData.send_currency) {
@@ -48,7 +49,8 @@ function HeadForm({...props}) {
         }
 
    }, [props.formData.receiver_currency, props.formData.send_currency]);
-   
+
+
    // Calculated Converted amount of receiver
    useEffect(() => {
         const amount_to_convert = parseFloat(props.formData.send_amount)
@@ -75,7 +77,7 @@ function HeadForm({...props}) {
     })
   }, []);
 
-
+  
   const handleUpdateSenderCurrencyValue = (event) => {
       updateSenderCurrencyValue(event.target.value)
   };
@@ -92,6 +94,8 @@ function HeadForm({...props}) {
   const handleTransferAmountChange = (e)=> {
     const { name, value } = e.target;
 
+    console.log('length', value.length)
+
     if (value === '') {
       props.setError('')
       props.updateFormData((prevData)=> ({
@@ -101,6 +105,9 @@ function HeadForm({...props}) {
 
     } else if (Number(value) === 0 || Number(value) < 0) {
         props.setError('Amount should be greater than 0')
+
+    } else if (value.length > 8) {
+      props.setError('Amount should be less than 8 digit')
 
     } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0){
         props.setError('')
@@ -113,11 +120,10 @@ function HeadForm({...props}) {
         props.setError('Please enter valid amount')
     }
 };
-  
 
-  return (
+
+return (
     <>
-
       <Form method='post'>
         <Row className="mb-3" style={{marginTop:20}}>
           <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '>
@@ -205,7 +211,7 @@ function HeadForm({...props}) {
 
             <hr />
               <div style={{marginTop:5}}>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between" style={{marginBottom:-15}}>
                   <p className=''><b>Send Amount</b></p>
                   <p className=''><b>Payble Fee</b></p>
                   <p className=''><b>Total Amount</b></p>
@@ -230,7 +236,6 @@ function HeadForm({...props}) {
 
 //// Second Form
 function Step1Form({...props}) {
-
   
   ///// Update Mobile Number
   const handleMobileNumberChange = (event)=> {
@@ -256,7 +261,9 @@ function Step1Form({...props}) {
     }
   };
 
-  return (
+
+
+return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
       <form>
         <Grid container spacing={2} >

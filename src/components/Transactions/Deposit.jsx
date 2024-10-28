@@ -90,6 +90,8 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         setAmount(value)
       } else if (Number(value) === 0 || Number(value) < 0){
           setError('Please type valid number')
+      } else if (value.length > 8) {
+          setError('Amount should be less than 8 digit')
       } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
         setError('');
         setAmount(value);
