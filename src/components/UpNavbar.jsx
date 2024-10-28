@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 
 
@@ -51,10 +52,12 @@ function UpperNavbar({handleDrawerOpen, open}){
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
 
+  /// Open profile section
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  /// Close profile section
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -81,33 +84,34 @@ function UpperNavbar({handleDrawerOpen, open}){
     
            {/* Avatar Section */}
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting, index) => (
-                  <MenuItem key={index} onClick={() => {handleCloseUserMenu(); navigate(setting.url)}}>
-                    <Link to={setting.url}>{setting.text}</Link>
-                  </MenuItem>
-              ))}
-            </Menu>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+
+              <Menu
+                sx={{ mt: '40px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting, index) => (
+                    <MenuItem key={index} onClick={() => {handleCloseUserMenu(); navigate(setting.url)}} sx={{py:0.1}}>
+                      <Button onClick={handleCloseUserMenu}>{setting.text}</Button>
+                    </MenuItem>
+                ))}
+              </Menu>
           </Box>
 
         </Toolbar>

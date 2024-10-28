@@ -89,12 +89,12 @@ const AuthRoutes = () => {
     
     const routesForPublic = [
       {
-        path: "/service",
-        element: <div>Service Page</div>,
+        path: "/kyc/",
+        element: <KYCForm />,
       },
       {
-        path: "/about-us",
-        element: <div>About Us</div>,
+        path: "/kyc-submission-report/",
+        element: <KYCSubmissionReport />,
       },
       {
         path: "/admin/user/login/",
@@ -104,9 +104,17 @@ const AuthRoutes = () => {
           </Suspense>
         ),
       },
+      {
+        path: "/reset/password/",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+              <ResetPassword />
+          </Suspense>
+        ),
+      },
     ];
-  
-   
+
+
     const routesForAuthenticatedOnly = [
       {
         path: "*",
@@ -209,8 +217,12 @@ const AuthRoutes = () => {
         element: <ForgotPassword />,
       },
       {
-        path: "/reset-password/",
-        element: <ResetPassword />,
+        path: "/reset/password/",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+              <ResetPassword />
+          </Suspense>
+        ),
       },
       {
         path: "/kyc/",

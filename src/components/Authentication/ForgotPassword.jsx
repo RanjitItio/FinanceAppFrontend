@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import './tailwind.css';
+import { Box, Container, Grid, Button, Typography, Link } from '@mui/material';
+import { useState, useEffect } from 'react';
 import axiosInstance from './axios';
+import {Input as JoyInput} from '@mui/joy';
+import EmailIcon from '@mui/icons-material/Email';
 
 
 
@@ -9,7 +10,7 @@ import axiosInstance from './axios';
 function ForgotPassword() {
     
     // Initial form data
-    const initialFormData = Object.freeze({
+      const initialFormData = Object.freeze({
         email: ''
     })
 
@@ -20,60 +21,57 @@ function ForgotPassword() {
 
     // Capture the user inputs
     const handleChange = (e)=> {
-        UpdatFormData({
-            ...formData,
-            [e.target.name]: e.target.value.trim()
-        });
-    };
+      UpdatFormData({
+          ...formData,
+          [e.target.name]: e.target.value.trim()
+      });
+  };
 
-     // Method to submit the data through API
+    // Method to submit the data through API
     const handleSubmit = (e)=> {
-        e.preventDefault();
-        let validationError = [];
-		// console.log(formData);
+      e.preventDefault();
+      // let validationError = [];
+      // console.log('formData');
 
-        if(formData.email === '') {
-            validationError.push("Please fillup the Email");
-        } else if (validationError.length > 0) {
-            setError(validationError.join(''));
-            return;
-        } else{
-            setError('');
-            setIsButtonDisabled(true);
+      if(!formData.email) {
+          setError("Please fillup the Email");
 
-        axiosInstance.post(`api/v1/user/reset_passwd/mail/`, {
-            email: formData.email,
-          
-        })
-        .then((res) => {
-            // console.log(res)
-            if (res.data.msg == 'Password reset instructions have been sent to your email address.') {
-              setSuccessMessage('Password reset mail has been sent to the given email, Please check your mail')
-              setIsButtonDisabled(true);
+      } else{
+          setError('');
+          setIsButtonDisabled(true);
 
-            } else{
-              setSuccessMessage('')
-            }
+      axiosInstance.post(`/api/v1/user/fiat/crypto/forgot/password/mail/`, {
+          email: formData.email,
+      })
+      .then((res) => {
+          // console.log(res)
+          if (res.data.msg == 'Password reset instructions have been sent to your email address.') {
+            setSuccessMessage('Password reset mail has been sent to the given email, Please check your mail')
+            setIsButtonDisabled(false);
 
-        }).catch((error)=> {
-          console.log(error)
-
-          if (error.response.data.msg == 'Requested mail ID does not exist') {
-            setError('Requested user does not exist')
-
-          } else if (error.response.data.msg == 'Unable to get the user') {
-            setError('Unable to get The user details please retry')
-
-          } else if (error.response.data.msg == 'Server error') {
-            setError('Unknow error occured please retry after some time')
-
+          } else{
+            setSuccessMessage('')
           }
-        });
 
-      };
-    };
+      }).catch((error)=> {
+        // console.log(error)
+
+        if (error.response.data.msg == 'Requested mail ID does not exist') {
+            setError('Requested user does not exist')
+            setIsButtonDisabled(false);
+        } else if (error.response.data.msg == 'Unable to get the user') {
+            setError('Unable to get The user details please retry')
+            setIsButtonDisabled(false);
+        } else if (error.response.data.msg == 'Server error') {
+            setError('Unknow error occured please retry after some time')
+            setIsButtonDisabled(false);
+        };
+      })
+  }
+};
 
 
+    // Remove the error and success message if any
     useEffect(() => {
 
       if (error || successMessage) {
@@ -89,65 +87,86 @@ function ForgotPassword() {
 
 
     return (
-        <div className="min-h-screen flex bg-blue-300">
-        {/* First flex container with a blue color palette */}
-        <div className="flex-[50%] bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center justify-center">
-        <img src="https://script.viserlab.com/paymenthub/assets/images/frontend/login_register/641872cda99f91679323853.png" alt="Logo" className="h-80 w-80 drop-shadow-2xl " />
-        
-      
-        </div>
-  
-        {/* Second flex container with a green color palette */}
-        <div className="flex-[80%] bg-white-200 flex items-center justify-center  bg-white  ">
-          <div className="max-w-md w-full space-y-8">
-          <div className="col-span-1 shadow-2xl p-4 rounded-md">
-            <div className='col-span-1  rounded-full'>
-              <center>
-            {/* <p className='text-7xl' ><RiUser3Line/>  </p> */}
-            <h2 className="text-2xl font-semibold mb-4 "> Forget password </h2>
-              </center>
-              <p className='font-extralight'>To reset your password please provide the registered email ID to get the link of reset password </p>
-            </div>
-          
-          <form className="space-y-4 ">
-          <div className="grid grid-cols-1 gap-x-4 gap-y-2">
+      <Container component="main" maxWidth="lg">
+      <Grid container spacing={2} alignItems="center" sx={{ minHeight: '100vh' }}>
+        <Grid item xs={12} md={6}>
+          <Box
+            component="img"
+            sx={{
+              width: '100%',
+              display: {xs: 'none', sm:'flex'}
+            }}
+            alt="Image"
+            src="https://python-uat.oyefin.com/media/forgotpassword.png"
+          />
+        </Grid>
 
-    
-            <div>
-              <label className="block text-gray-600 font-medium">Email</label>
-              <input
-                type="email"
-                className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Email"
-                name='email'
-                onChange={handleChange}
-              />
-            </div>
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              p: 2,
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              <b>Forget Password</b>
+            </Typography>
 
-            
-          </div>
-            <button
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 1, mb: 3, width:{xs: '100%', sm: '70%'} }}>
+                Enter the email address associated with your account and we will send you a link to reset your password.
+            </Typography>
+
+            <JoyInput
+              variant="soft"
+              type='email'
+              required
+              id="email"
+              placeholder="Email"
+              name="email"
+              onChange={handleChange}
+              autoComplete="email"
+              autoFocus
+              sx={{width:{xs: '100%', sm: '70%'}}}
+              startDecorator={
+                <EmailIcon color='primary'/>
+              }
+            />
+
+            <Button
               type="submit"
-              className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2, width:{xs: '100%', sm: '70%'} }}
               onClick={handleSubmit}
               disabled={isButtonDisabled}
             >
               Submit
-            </button>
-            {error &&  <p className="text-danger">{error}</p>}
-            {successMessage && <p className="text-success">{successMessage}</p>}
-          </form>
+            </Button>
 
-          <div className='cols col-span-1 flex justify-between items-center'>
+            {/* Error and Success Message if any */}
+            <Box sx={{width:{xs: '100%', sm: '70%'}}}>
+              {error &&  <p className="text-danger">{error}</p>}
+              {successMessage && <p className="text-success">{successMessage}</p>}
+            </Box>
 
-        <p className='font-extralight'>If you don-t have any account <Link to={'/signup/'}>  Signup</Link></p>
-        <p className='font-extralight'> <a href='/forgetpasswdpage'> Forget password</a></p>
-        </div>
-        </div>
-            
-          </div>        
-        </div>
-      </div>
+            <Grid container justifyContent="space-between" sx={{width:'70%'}}>
+
+              <Grid item>
+                <Link href="/signup/" variant="body2">
+                  If you don't have any account Signup
+                </Link>
+              </Grid>
+
+            </Grid>
+
+          </Box>
+        </Grid>
+      </Grid>
+
+    </Container>
+    
     );
 };
 

@@ -10,6 +10,7 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import PrintIcon from '@mui/icons-material/Print';
 import { Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import { Card, CardContent } from '@mui/material';
 
 
 
@@ -22,7 +23,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const iconSize = isSmallScreen ? 32 : 40;
+  const iconSize   = isSmallScreen ? 32 : 40;
   const avatarSize = isSmallScreen ? 48 : 70;
 
   return (
@@ -40,44 +41,46 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
           <div className="container">
             <div className="row">
-                <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-2">
-                    <div className="card rounded" style={{height: '21rem'}}>
-                        <div className="card-body" style={{backgroundColor: '#c3c2d5'}}>
-                                <Typography className='d-flex justify-content-center mb-3' variant='div'>
-                                  <Avatar sx={{ width: avatarSize, height: avatarSize, backgroundColor: '#a6a3d3'}} >
-                                      <ArrowOutwardIcon sx={{fontSize: iconSize, color:'#4f47bc'}}/>
-                                  </Avatar>
-                                </Typography>
+                <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5 mb-2">
 
-                                    <React.Fragment >
-                                    {specificTransactionDetails ? 
+                    <Card sx={{height: {xs:'20rem', sm:'27rem'}, backgroundColor: '#c3c2d5'}}>
+                        <CardContent>
+
+                          <Typography style={{display:'flex', justifyContent:'center', alignItems:'center', marginBottom:20}} variant='div'>
+                            <Avatar sx={{ width: avatarSize, height: avatarSize, backgroundColor: '#a6a3d3'}} >
+                                <ArrowOutwardIcon sx={{fontSize: iconSize, color:'#4f47bc'}}/>
+                            </Avatar>
+                          </Typography>
+
+                            <React.Fragment >
+                                  {specificTransactionDetails ? 
                                     (<p className='d-flex justify-content-center'>{specificTransactionDetails?.type || ''} amount</p>) : (
                                       <p className='d-flex justify-content-center'>amount</p>
                                     )
                                   }
-                                    
-                                    {specificTransactionDetails ? (
-                                        <p className='d-flex justify-content-center mb-3 fs-5'><b>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.data?.amount || ''}</b></p>
-                                    ) : (
-                                        <p className='d-flex justify-content-center mb-3 fs-5'><b></b></p>
-                                    )}
-                                    
-                                    <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginBottom:50}}>
-                                        {specificTransactionDetails ? (
-                                          <p>{specificTransactionDetails?.data?.created_At?.split('T')[0] || ''} {specificTransactionDetails?.data?.created_At?.split('T')[1] || ''}</p>
-                                        ) : (
-                                          <p>Transaction Date & time</p>
-                                        )}
-                                    </div>
-                                    
-                                    <div className='d-flex justify-content-center'>
-                                        <Button variant="outlined" startIcon={<PrintIcon />}>
-                                            Print
-                                        </Button>
-                                    </div>
-                                    </React.Fragment>
-                        </div>
-                    </div>
+                                  
+                                  {specificTransactionDetails ? (
+                                      <p className='d-flex justify-content-center mb-3 fs-5' style={{marginTop:-12}}><b>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.data?.amount || ''}</b></p>
+                                  ) : (
+                                      <p className='d-flex justify-content-center mb-3 fs-5'><b></b></p>
+                                  )}
+                                  
+                                  <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginBottom:50}}>
+                                      {specificTransactionDetails ? (
+                                        <p>{specificTransactionDetails?.data?.created_At?.split('T')[0] || ''} {specificTransactionDetails?.data?.created_At?.split('T')[1] || ''}</p>
+                                      ) : (
+                                        <p>Transaction Date & time</p>
+                                      )}
+                                  </div>
+                                  
+                                  <div className='d-flex justify-content-center'>
+                                      <Button variant="outlined" startIcon={<PrintIcon />}>
+                                          Print
+                                      </Button>
+                                  </div>
+                              </React.Fragment>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <div className="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
@@ -85,9 +88,9 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                         <div className="card-body">
                             <h5 className="card-title fs-5">Transaction Details</h5>
                             <hr className='mb-3'/>
-                            <div className="d-flex justify-content-between mb-3">
+                            <div className="d-flex justify-content-between mb-1">
                                 <div>
-                                    <p className='text-muted'>Sender</p>
+                                    <p className='text-muted' style={{marginBottom:0.2}}>Sender</p>
                                     {specificTransactionDetails.user ? (
                                       <p>{specificTransactionDetails?.user?.first_name || ''} {specificTransactionDetails?.user?.lastname || ''}</p>
                                     ) : (
@@ -96,7 +99,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                 </div>
 
                                 <div>
-                                    <p className='text-muted'>Amount</p>
+                                    <p className='text-muted' style={{marginBottom:0.2}}>Amount</p>
                                     {specificTransactionDetails ? (
                                       <p className='d-flex justify-content-end'>{specificTransactionDetails?.data?.amount || ''} {specificTransactionDetails?.currency?.name || ''}</p>
                                     ) : (
@@ -212,7 +215,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
                                           {specificTransactionDetails.type === 'Deposit' && (
                                             <p>
-                                              {parseFloat(specificTransactionDetails?.data?.amount || 0).toFixed(3) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0).toFixed(3)} {specificTransactionDetails?.currency?.name || ''}
+                                              {(parseFloat(specificTransactionDetails?.data?.amount || 0) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0)).toFixed(3)} {specificTransactionDetails?.currency?.name || ''}
                                             </p>
                                           )}
                                         </>

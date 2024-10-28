@@ -17,6 +17,7 @@ const IS_DEVELOPMENT = import.meta.env.VITE_IS_DEVELOPMENT;
 let kycRedirectUrl = '';
 
 
+
 // URL according to the environment
 if (IS_DEVELOPMENT === 'True') {
   kycRedirectUrl = 'http://localhost:5173'
@@ -71,14 +72,14 @@ function Login(){
 
       // Call signin API
       await axiosInstance.post(`api/v1/crypto/user/login/`, {
-      email: formData.email,
-      password: formData.password,
-    })
-    .then((res) => {
+           email: formData.email,
+           password: formData.password
+
+          }).then((res) => {
               if(res.status == 200) {
                   
                   setSuccessMessage(`Login Successfull`)
-                 
+                
                   localStorage.setItem('is_merchant', res.data.is_merchant)
                   
                   localStorage.setItem('access_token', res.data.access_token);
@@ -93,9 +94,8 @@ function Login(){
                   }, 1000);
               }
 
-    }).catch((error)=> {
-              console.log(error)
-
+          }).catch((error)=> {
+              // console.log(error)
               if (error.response.data.msg == 'Your account is not active. Please contact the administrator'){
                   setError("Your account is not active yet please contact the Administrator");
               }
@@ -117,6 +117,11 @@ function Login(){
               } else {
                   setError('')
               }
+
+              setTimeout(() => {
+                setDisableButton(false);
+                setError('')
+              }, 2000);
           })
     };
   
@@ -153,6 +158,7 @@ function Login(){
                   <Grid item xs={12}>
                     <JoyInput
                       variant="soft"
+                      type='email'
                       required
                       id="email"
                       placeholder="Email"
