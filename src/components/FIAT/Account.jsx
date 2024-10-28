@@ -122,7 +122,7 @@ export default function FiatAccount() {
                         <React.Fragment key={index}>
                             {selectedCurrency == wallet.currency && (
                                 <React.Fragment>
-                                    <h2 className="d-flex justify-content-center my-2"><span className="mx-1">{wallet.currency}</span> <b>{wallet.balance.toFixed(4)}</b></h2>
+                                    <h5 className="d-flex justify-content-center my-2"><span className="mx-1">{wallet.currency}</span> <b>{wallet.balance.toFixed(4)}</b></h5>
                                     <p className="d-flex justify-content-center text-muted">{wallet.wallet_id ? wallet.wallet_id : '9999-8888-1111'}</p>
                                     <br />
                                 </React.Fragment>
