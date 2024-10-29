@@ -161,7 +161,7 @@ export default function SellCrypto({open, setOpen}) {
     }, [userWallets, Walletcurrency]);
 
 
-    // Get assigned fee for Crypto Buy Transaction
+    // Get assigned fee for Crypto Sell Transaction
     useEffect(() => {
        if (exchangeAmount) {
          axiosInstance.post(`/api/v2/charged/fee/`, {
@@ -179,7 +179,7 @@ export default function SellCrypto({open, setOpen}) {
 
 
     
-    // Bet The USD value of crypto from CoinGecko
+    // Get The USD value of crypto from CoinGecko
     useEffect(() => {
         if (cryptoName) {
           const crypto_ids = handleGetCryptoIds(cryptoName);
@@ -264,7 +264,6 @@ export default function SellCrypto({open, setOpen}) {
                         setSuccessMessag('')
                         handleClose();
                     }, 2000);
-
                 }
     
             }).catch((error)=> {

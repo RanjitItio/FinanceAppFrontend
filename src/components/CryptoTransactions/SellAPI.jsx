@@ -8,7 +8,7 @@ const Coin_Gecko_API_URL = import.meta.env.VITE_COIN_GECKO_API_URL
 const Free_currency_api  = import.meta.env.VITE_FREE_CURRENCY_API
 
 
-
+//// Currency Icon
 export const getCurrencyIcon = (currency)=> {
     switch (currency){
        case 'USD':
@@ -20,9 +20,10 @@ export const getCurrencyIcon = (currency)=> {
        case 'GBP':
            return '£'
        default:
-           return '$'
+           return ''
     }
 };
+
 
 
 /// Get Crypoto Icons
@@ -53,7 +54,6 @@ export const getCryptoIcons = (icon)=> {
             return ''
     }
 };
-
 
 // Convert the Crypto name according to coin gecko Ids
 const handleGetCryptoIds = (cryptoName)=> {
@@ -133,10 +133,10 @@ export const handleFIATWallets = ({setUserWallets})=> {
 
 
 // Fetch Assigned Fee for Crypto Buy Transaction
-export const handleCryptoBuyAssignedFee = ({exchangeAmount, SetChargedFee})=> {
+export const handleCryptoSellAssignedFee = ({exchangeAmount, SetChargedFee})=> {
     axiosInstance.post(`/api/v2/charged/fee/`, {
-        fee_type: 'Crypto Buy',
-        amount: exchangeAmount
+        fee_type: 'Crypto Sell',
+        amount: parseFloat(exchangeAmount ? exchangeAmount : 0)
 
       }).then((res)=> {
 
@@ -146,42 +146,29 @@ export const handleCryptoBuyAssignedFee = ({exchangeAmount, SetChargedFee})=> {
       })
 };
 
-export const handleCryptoSwapAssignedFee = ({convertToFloat, setChargedFee})=> {
 
-    axiosInstance.post(`/api/v2/charged/fee/`, {
-        fee_type: 'Crypto Swap',
-        amount: convertToFloat
-
-      }).then((res)=> {
-
-        if (res.status === 200 && res.data.success === true){ 
-            setChargedFee(res.data.fee)
-        }
-      })
-};
 
 
 // Convert Crypto to usd using CoinGecko
-export const handleConvertCryptoToUSD = ({cryptoName, setConvertedUSDValue})=> {
+export const handleConvertCryptoToUSD = ({cryptoName, setConvertedUSDValue, setError})=> {
     const crypto_ids = handleGetCryptoIds(cryptoName);
 
     axiosInstance.get(`${Coin_Gecko_API_URL}/api/v3/simple/price/?ids=${crypto_ids}&vs_currencies=usd&x_cg_demo_api_key=${Coin_Gecko_API}`).then(
         (res)=> {
-            // console.log(res.data)
-            // console.log('crypto', res.data[crypto_ids].usd)
             if ( res.status === 200) {
                 setConvertedUSDValue(res.data[crypto_ids].usd)
             }
         }
     ).catch((error)=> {
         // console.log(error)
+        setError('Crypto Conversion API limit Exceeded')
     })
 
 };
 
 
 // Convert Wallet Currency against USD
-export const handleWalletCurrencyConvertToUSD = ({findWalletCurrencyName, setCurrencyConversionAmount})=> {
+export const handleWalletCurrencyConvertToUSD = ({findWalletCurrencyName, setCurrencyConversionAmount, setError})=> {
     const freecurrencyapi = new Freecurrencyapi(Free_currency_api);
 
     setTimeout(() => {
@@ -192,52 +179,13 @@ export const handleWalletCurrencyConvertToUSD = ({findWalletCurrencyName, setCur
         }).then(response => {
             // console.log(response.data[findWalletCurrencyName]);
             setCurrencyConversionAmount(response.data[findWalletCurrencyName])
+
+        }).catch((error)=> {
+            setError('Currency Conversion API Limit Exceeded')
         });
+        
     }, 1500);
 };
 
 
-// Submit Crypto Data
-export const handleSubmitCryptoData = ({crypto, paymentType, Walletcurrency, exchangeAmount, exchangeResult, setSuccessMessag, handleClose, setError})=> {
-
-    axiosInstance.post(`/api/v2/user/crypto/buy/`, {
-        crypto_wallet_id: parseInt(crypto),
-        payment_type: paymentType,
-        wallet_id: parseInt(Walletcurrency),
-        buy_amount: parseFloat(exchangeAmount),
-        converted_crypto_quantity: parseFloat(exchangeResult)
-
-    }).then((res)=> {
-        // console.log(res)
-
-        if (res.status === 200 && res.data.success === true) {
-            setSuccessMessag('Crypto purchased successfully, Please wait for admin approval')
-
-            setTimeout(() => {
-                setSuccessMessag('')
-                handleClose();
-            }, 2500);
-        };
-
-    }).catch((error)=> {
-        // console.log(error)
-
-        if (error.response.data.message === 'Invalid Crypto Wallet') {
-            setError('Invalid Crypto wallet')
-        } else if (error.response.data.message === 'Invalid Wallet') {
-            setError('Invalid user wallet')
-        } else if (error.response.data.message === 'Insufficient fund') {
-            setError('Insufficient fund in wallet')
-        } else if (error.response.data.message === 'Crypto wallet has not approved') {
-            setError('Crypto wallet has not Approved yet')
-        } else {
-            setError('')
-        };
-
-        setTimeout(() => {
-            setError('');
-        }, 2500);
-
-    });
-}
 

@@ -19,7 +19,7 @@ import Input from '@mui/joy/Input';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { handleCryptoWallets, handleCryptoWalletAddress, handleFIATWallets, 
   handleCryptoBuyAssignedFee, handleConvertCryptoToUSD, handleWalletCurrencyConvertToUSD,
-  handleSubmitCryptoData, getCurrencyIcon } from './BuyAPI';
+  handleSubmitCryptoData, getCurrencyIcon, getCryptoIcons } from './BuyAPI';
 import { useState } from 'react';
 import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
 import StepLabel from '@mui/material/StepLabel';
@@ -35,9 +35,9 @@ const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
 
 
 // First Form
-function Form1({cryptoWallets, crypto,setCrypto, paymentType, setPaymentType, walletAddress,
+function Form1({cryptoWallets, crypto,setCrypto, walletAddress,
   Walletcurrency, setWalletCurrency, userWallets, exchangeAmount, setExchangeAmount,
-  exchangeResult, findWalletCurrencyName, chargedFee, error, setError
+  exchangeResult, findWalletCurrencyName, chargedFee, error, setError, cryptoName
 }) {
 
 
@@ -105,25 +105,6 @@ function Form1({cryptoWallets, crypto,setCrypto, paymentType, setPaymentType, wa
                           placeholder="Wallet Address" 
                           value={walletAddress ? walletAddress : ''}
                           />
-                        {/* <Select
-                          placeholder='Payment Mode'
-                          onChange={(e, newValue) => setPaymentType(newValue)}
-                          value={paymentType}
-                          indicator={<KeyboardArrowDown />}
-                          sx={{
-                            [`& .${selectClasses.indicator}`]: {
-                              transition: '0.2s',
-                              [`&.${selectClasses.expanded}`]: {
-                                transform: 'rotate(-180deg)',
-                              },
-                            },
-                          }}
-                          >
-                            <Option value="Bank Transfer">Bank Transfer</Option>
-                            <Option value="Paypal">Paypal</Option>
-                            <Option value="UPI">UPI</Option>
-                            <Option value="Stripe">Stripe</Option>
-                        </Select> */}
                     </FormControl>
                 </Grid>
 
@@ -172,6 +153,7 @@ function Form1({cryptoWallets, crypto,setCrypto, paymentType, setPaymentType, wa
                           placeholder="Crypto" 
                           sx={{ml:0}}
                           value={exchangeResult}
+                          startDecorator={getCryptoIcons(cryptoName)}
                           />
                     </FormControl>
 
@@ -249,12 +231,12 @@ export default function CryptoBuy({open}) {
     const [completed, setCompleted]   = React.useState({}); // Completed step
 
     const [crypto, setCrypto]                  = useState('');    // Selected Crypto
-    const [cryptoWallets, updateCryptoWallets] = useState([]);    // Crypto Wallet from API
+    const [cryptoWallets, updateCryptoWallets] = useState([]);    // Crypto Wallet of user from API
     const [paymentType, setPaymentType]        = useState('');    // Payment Type state
     const [walletAddress, setWalletAddress]    = useState('');    // Wallet Address state
     const [userWallets, setUserWallets]        = useState([]);    // user Wallets from API
     const [Walletcurrency, setWalletCurrency]  = useState('');    // Wallet ID state
-    const [findWalletCurrencyName, setFindWalletCurrencyName] = useState('');  // Currency Name
+    const [findWalletCurrencyName, setFindWalletCurrencyName] = useState('');  // Wallet Currency Name
     const [chargedFee, SetChargedFee]          = useState(0);  // Fee charged for Crypto Buy Transactions state
     const [exchangeAmount, setExchangeAmount]  = useState(0);   // Buying Amount
     const [exchangeResult, setExchangeResult]  = useState(0); // Converted Crypto
@@ -351,7 +333,8 @@ export default function CryptoBuy({open}) {
                         newCompleted[activeStep] = true;
                         setCompleted(newCompleted);
                         handleNext();
-                        setDisableButton(false)
+                        setDisableButton(false);
+
                     }, 2500);
                 };
         
@@ -406,6 +389,7 @@ export default function CryptoBuy({open}) {
                     chargedFee={chargedFee}
                     error={error}
                     setError={setError}
+                    cryptoName={cryptoName}
                 />;
         case 1:
             return <Form2 
@@ -439,7 +423,7 @@ export default function CryptoBuy({open}) {
 
              axiosInstance.post(`/api/v1/user/wallet/balance/check/`, {
                 sender_currency: findWalletCurrencyName,
-                send_amount: parseInt(exchangeAmount ? exchangeAmount : 0)
+                send_amount: parseFloat(exchangeAmount ? exchangeAmount : 0)
 
              }).then((res)=> {
                 // console.log(res)
@@ -461,7 +445,7 @@ export default function CryptoBuy({open}) {
                   }
              })
         }
-    }, [exchangeAmount, findWalletCurrencyName])
+    }, [exchangeAmount, findWalletCurrencyName]);
     
 
   // Fetch wallet address according to the selected Crypto
@@ -485,7 +469,7 @@ export default function CryptoBuy({open}) {
           setFindWalletCurrencyName(findWalletCurrency.currency)
         }
 
-  }, [userWallets, Walletcurrency])
+  }, [userWallets, Walletcurrency]);
 
 
   /// Get Crypto currency name from user wallets
@@ -495,7 +479,7 @@ export default function CryptoBuy({open}) {
           setCryptoName(findCryptoCurrencyName.crypto_name)
         }
 
-  }, [cryptoWallets, crypto])
+  }, [cryptoWallets, crypto]);
 
 
   // Get assigned fee for Crypto Buy Transaction
@@ -530,7 +514,7 @@ export default function CryptoBuy({open}) {
         console.log('Wallet Currency not available to convert')
     };
 
-}, [findWalletCurrencyName]);
+  }, [findWalletCurrencyName]);
 
 
 // Calculate Crypto value
@@ -545,7 +529,7 @@ useEffect(() => {
       }
 
   }, 1000);
-}, [exchangeAmount, currencyConversionAmount, convertedUSDValue]);
+  }, [exchangeAmount, currencyConversionAmount, convertedUSDValue]);
 
 
   // Submit Crypto Buy Data
@@ -569,18 +553,21 @@ useEffect(() => {
                       overflow:'scroll'
                     }}
                   >
-                <p style={{display:'flex', justifyContent:'center', fontSize:'30px'}}>Buy Crypto</p> <br />
+                  <p 
+                    style={{display:'flex', justifyContent:'center', fontSize:'30px', paddingTop:20, marginBottom:-8}}>
+                      Buy Crypto
+                  </p> <br />
 
-                <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
-                  {steps.map((label) => (
-                    <Step key={label}>
-                      <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </Stepper>
+                  <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+                    {steps.map((label) => (
+                      <Step key={label}>
+                        <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
 
                 <div>
-                {allStepsCompleted() ? (
+                  {allStepsCompleted() ? (
                     <React.Fragment>
                     <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
                         {/* All steps completed - you&apos;re finished */}

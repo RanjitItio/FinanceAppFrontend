@@ -6,9 +6,6 @@ import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-// import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
@@ -24,36 +21,49 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Input from '@mui/joy/Input';
 import { useState } from 'react';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import { QontoConnector, QontoStepIcon } from '../MUIComponents/Stepper';
+import StepLabel from '@mui/material/StepLabel';
+import { handleCryptoWallets, handleCryptoWalletAddress, handleFIATWallets, handleCryptoSellAssignedFee,
+  handleConvertCryptoToUSD, handleWalletCurrencyConvertToUSD, getCryptoIcons, getCurrencyIcon
+ } from './SellAPI';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 
-const steps = ['Provide Input', 'Confirm Details'];
+const steps = ['Step 1', 'Step 2'];
 
 
 
 // First Form
-function Form1() {
+function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Walletcurrency, setWalletCurrency, 
+    exchangeAmount, error, setError, setExchangeAmount, exchangeResult, cryptoName, findWalletCurrencyName
+}) {
+   
 
-    const [currencies, setCurrencies] = React.useState([]);
-  
-  
-      // Fetch all the available currency from API
-      useEffect(() => {
-        axiosInstance.get(`api/v2/currency/`).then((res)=> {
-          // console.log(res.data.currencies)
-          if (res.data && res.data.currencies){
-              setCurrencies(res.data.currencies)
-          }
-  
-        }).catch((error)=> {
-          console.log(error.response)
-        });
-  
-      }, []);
-  
-  
-  
-    return(
+  /// Update Exchange amount value
+  const handleChangeExchangeAmount = (e)=> {
+      const { name, value } = e.target;
+
+      if (value === '') {
+        setError('')
+        setExchangeAmount(value)
+      } else if (Number(value) === 0 || Number(value) < 0) {
+        setError('Amount should be greater than 0')
+
+      } else if (value.length > 8) {
+        setError('Amount should be less than 8 digit')
+
+      } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+        setError('')
+        setExchangeAmount(value)
+
+      } else {
+        setError('Please type valid amount')
+      }
+  };
+
+
+  return(
       <>
         <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
             Sell Crypto Manually from comfort of your home, Quickly and Safely with Minimal Fees
@@ -62,10 +72,10 @@ function Form1() {
         <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={6}>
-
-                    <FormControl sx={{minWidth: 120, width: '96%' }} size="small">
+                      <FormControl fullWidth size="small">
                         <Select 
-                          // value={crypto}
+                          placeholder='Crypto Wallet'
+                          value={crypto}
                           indicator={<KeyboardArrowDown />}
                           onChange={(e, newValue) => setCrypto(newValue)}
                           sx={{
@@ -77,23 +87,33 @@ function Form1() {
                             },
                           }}
                           >
-                          {/* {cryptoWallets.map((wallet, index)=> (
+                          {cryptoWallets.map((wallet, index)=> (
                               <Option key={index} value={wallet.id}>{wallet.crypto_name}</Option>
                           ))}
-                           */}
                         </Select>
-                    </FormControl>
+                      </FormControl>
+
                     <FormHelperText sx={{ml:1}}>Select Crypto Wallet</FormHelperText>
-
                 </Grid>
 
 
                 <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth size="small">
+                        <Input 
+                            placeholder="Wallet Address" 
+                            value={walletAddress ? walletAddress : ''}
+                            />
+                      </FormControl>
+                      <FormHelperText sx={{ml:1}}>Wallet Address</FormHelperText>
+                </Grid>
 
-                    <FormControl sx={{ minWidth: 120, width: '96%'}} size="small">
+                <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth size="small">
                         <Select 
-                          defaultValue="Bank Transfer" 
+                          placeholder="Wallet Currency"
                           indicator={<KeyboardArrowDown />}
+                          value={Walletcurrency}
+                          onChange={(e, newValue)=> setWalletCurrency(newValue)}
                           sx={{
                             [`& .${selectClasses.indicator}`]: {
                               transition: '0.2s',
@@ -102,57 +122,41 @@ function Form1() {
                               },
                             },
                           }}
-                          >
-                            <Option value="Bank Transfer">Bank Transfer</Option>
-                            <Option value="Paypal">Paypal</Option>
-                            <Option value="UPI">UPI</Option>
-                            <Option value="Stripe">Stripe</Option>
-
-                        </Select>
-                    </FormControl>
-                    <FormHelperText sx={{ml:1}}>Select Payment Type</FormHelperText>
-
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-
-                    <FormControl sx={{ minWidth: 120, width: '96%'}} size="small">
-                        <Select 
-                          defaultValue="USD" 
-                          indicator={<KeyboardArrowDown />}
-                          sx={{
-                            [`& .${selectClasses.indicator}`]: {
-                              transition: '0.2s',
-                              [`&.${selectClasses.expanded}`]: {
-                                transform: 'rotate(-180deg)',
-                              },
-                            },
-                          }}
-                          >
-                          {currencies.map((curr)=> (
-                              <Option key={curr.id} value={curr.name}>
-                                {curr.name}
+                          > 
+                          {userWallets.map((wallet, index)=> (
+                              <Option key={index} value={wallet.id}>
+                                  {wallet.currency}
                               </Option>
                           ))}
                         </Select>
                     </FormControl>
                     <FormHelperText sx={{ml:1}}>Select Wallet Currency</FormHelperText>
+                </Grid>
 
+
+                <Grid item xs={12} sm={6}>
+                      <Input 
+                        placeholder="Sell Quantity"
+                        value={exchangeAmount}
+                        onChange={handleChangeExchangeAmount}
+                        startDecorator={getCryptoIcons(cryptoName)}
+                      />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    <Input placeholder="Type in here…" />
-                    <FormHelperText sx={{ml:1}}>Wallet Address</FormHelperText>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Box sx={{display: 'flex', alignItems: 'center', mb: 2 }}>
-                          <Input placeholder="Amount"/>
-                          <SwapHorizIcon sx={{ml:1}} />
-                          <Input placeholder="Crypto" sx={{ml:2}}/>
-                    </Box>
-                </Grid>
+                    {/* <SwapHorizIcon sx={{ml:1}} /> */}
+                    <Input 
+                        placeholder="You Get" 
+                        sx={{ml:0}}
+                        value={exchangeResult ? exchangeResult : ''}
+                        startDecorator={getCurrencyIcon(findWalletCurrencyName)}
+                      />
+                </Grid> 
             </Grid>
+
+            {error && 
+              <Alert severity="error" sx={{mt:2}}>{error}.</Alert>
+            }
         </div>
       </>
   
@@ -168,31 +172,45 @@ function Form2({...props}) {
     return(
       <>
         <small className='text-muted d-flex justify-content-center my-3'>
-          Check your deposit information before confirmation.
+            Check your Sell Information before confirmation.
         </small>
   
         <div style={{marginLeft: '6%', marginRight: '6%', marginTop: '8%'}}>
           <div className="my-4">
             <div className="d-flex justify-content-between">
-                <p>Deposit Amount</p> 
-                <p>5 USD</p>
+                <p>Sell Quantity</p> 
+                <p>{props.exchangeAmount} {props.cryptoName}</p>
             </div>
             <hr className='mb-3'/>
           </div>
+
+          <div className="my-4">
+            <div className="d-flex justify-content-between">
+                <p>Amount Receive</p> 
+                <p>{props.exchangeResult} {props.findWalletCurrencyName}</p>
+            </div>
+            <hr className='mb-3' />
+          </div>
   
           <div className="d-flex justify-content-between">
-              <p>Fee(10%)</p> 
-              <p>1 USD</p>
+              <p>Fee: </p> 
+              <p>{props.chargedFee} {props.cryptoName}</p>
           </div>
           <hr className='mb-4'/>
   
           <div className="d-flex justify-content-between">
-            <p><b>Total</b></p> <p><b>6 USD</b></p>
+            <p><b>Total</b></p> 
+            <p><b>{(parseFloat(props?.exchangeAmount || 0) + parseFloat(props?.chargedFee || 0)).toFixed(3)} USD</b></p>
           </div>
           <hr className='mb-4'/>
         </div>
-  
-        <Alert severity="error">Error</Alert>
+
+        {props.error && 
+          <Alert severity="error">{props.error}</Alert>
+        }
+        {props.successMessage && 
+          <Alert severity="success">{props.successMessage}</Alert>
+        }
       </>
   
     );
@@ -206,14 +224,25 @@ export default function CryptoSell({open}) {
     const [activeStep, setActiveStep] = React.useState(0);  // Currenct step
     const [completed, setCompleted]   = React.useState({}); // Completed step
 
-    const [currency, setCurrency]             = React.useState('');     // Selected Currency value
-    const [paymentMethod, setPaymentMethod]   = React.useState('');  // Payment Mode
-    const [amount, setAmount]                 = React.useState('');    // Amount
-    const [error, setError]                   = React.useState('');      // Error Message
-    const [totalAamount, setTotalAmount]      = React.useState('');  // Total amount
-    const [transactionFee, setTransactionFee] = React.useState(0.00);
+    const [cryptoWallets, updateCryptoWallets]    = useState([]);   // Crypto Wallet of user from API
+    const [crypto, setCrypto]                     = useState('');  // Selected Crypto
+    const [exchangeAmount, setExchangeAmount]     = useState(0);   // Selling Crypto Quantity
+    const [exchangeResult, setExchangeResult]     = useState(0);   // Converted Crypto
+    const [error, setError]                       = useState('');  // Error Message
+    const [successMessage, setSuccessMessage]     = useState('');  // Success Message
+    const [inSufficientFund, setInsufficientFund] = useState(false); // Insufficient Fund
+    const [walletAddress, setWalletAddress]       = useState('');    // Wallet Address state
+    const [userWallets, setUserWallets]           = useState([]);    // user Wallets from API
+    const [Walletcurrency, setWalletCurrency]     = useState('');    // Wallet ID state
+    const [cryptoName, setCryptoName]             = useState('');
+    const [chargedFee, SetChargedFee]             = useState(0);  // Fee charged for Crypto Sell Transactions state
+    const [disablebutton, setDisableButton]       = useState(false);
+    const [findWalletCurrencyName, setFindWalletCurrencyName] = useState('');  // Wallet Currency Name
 
-    
+    const [convertedUSDValue, setConvertedUSDValue]           = useState(0);  // Value after crypto conversion
+    const [currencyConversionAmount, setCurrencyConversionAmount] = useState(0); // From Crypto usd to Wallet currency
+
+
     // Total Steps
     const totalSteps = () => {
         return steps.length;
@@ -239,17 +268,9 @@ export default function CryptoSell({open}) {
     const handleNext = () => {
         const newActiveStep =
         isLastStep() && !allStepsCompleted()
-            ? // It's the last step, but not all steps have been completed,
-            // find the first step that has been completed
+            ? 
             steps.findIndex((step, i) => !(i in completed))
             : activeStep + 1;
-
-            if (activeStep == 0) {
-            if (!currency || !amount || !paymentMethod) {
-                setError('Please fill all the above fields');
-                return;
-            }
-            };
         setActiveStep(newActiveStep);
     };
 
@@ -258,7 +279,7 @@ export default function CryptoSell({open}) {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    
+    /// Current step 
     const handleStep = (step) => () => {
         setActiveStep(step);
     };
@@ -268,39 +289,74 @@ export default function CryptoSell({open}) {
         const newCompleted = completed;
 
         if (activeStep == 0) {
-        if (!currency || !amount || !paymentMethod) {
-            setError('Please fill all the above fields');
-            return;
+            if (!crypto) {
+                setError('Please Select Crypto Wallet');
+
+            } else if (!walletAddress) {
+                setError('Wallet has not activated yet.')
+
+            } else if (!Walletcurrency) {
+                setError('Please select Fiat wallet');
+
+            } else if (!exchangeAmount) {
+                setError('Enter Quantity to sell')
+
+            } else if (inSufficientFund) {
+                setError(error)
+
+            } else {
+                setError('')
+                newCompleted[activeStep] = true;
+                setCompleted(newCompleted);
+                handleNext();
+            };
 
         } else {
-            setError('')
-            newCompleted[activeStep] = true;
-            setCompleted(newCompleted);
-            handleNext();
-        };
+            setDisableButton(true);
 
-        } else {
-        // console.log(totalAamount)
-        // console.log(amount)
-        axiosInstance.post(`api/v1/user/deposit/`, {
-            currency: currency,
-            deposit_amount: amount,
-            fee: transactionFee,
-            total_amount: totalAamount,
-            selected_wallet: user_selected_wallet_id,
-            payment_mode: paymentMethod,
+            axiosInstance.post(`/api/v2/user/crypto/sell/`, {
+                  crypto_wallet_id: parseInt(crypto),
+                  wallet_id: parseInt(Walletcurrency),
+                  selling_qty: parseFloat(exchangeAmount),
+                  converted_amount: parseFloat(exchangeResult)
 
-        }).then((res)=> {
-            // console.log(res)
+            }).then((res)=> {
+                // console.log(res)
+                
+                if (res.status === 200 && res.data.success === true) {
+                  setSuccessMessage('Crypto Sold successfully Please wait for Admin Approval')
 
-            }).catch((error)=> {
-            console.log(error)
+                  setTimeout(() => {
+                    setSuccessMessage('');
+                    setError('')
+                    newCompleted[activeStep] = true;
+                    setCompleted(newCompleted);
+                    handleNext();
+                    setDisableButton(false)
 
-           
-            })
+                  }, 2000);
+                }
+
+              }).catch((error)=> {
+                // console.log(error)
+                setDisableButton(false);
+
+                if (error.response.data.message === 'Invalid Crypto Wallet') {
+                  setError('Invalid Crypto Wallet')
+                } else if (error.response.data.message === 'Insufficient fund') {
+                    setError('Insufficient Funds')
+                } else if (error.response.data.message === 'Crypto wallet has not approved') {
+                    setError('Crypto wallet has not approved yet')
+                } else if (error.response.data.message === 'Invalid Wallet') {
+                    setError('Invalid Wallet')
+                } else {
+                    setError('')
+                };
+              })
         };
     };
 
+    /// Reset the state
     const handleReset = () => {
         navigate('/')
     };
@@ -311,24 +367,30 @@ export default function CryptoSell({open}) {
         switch(step){
         case 0:
             return <Form1
-                    // currency={currency}
-                    // setCurrency={setCurrency}
-                    // paymentMethod={paymentMethod}
-                    // setPaymentMethod={setPaymentMethod}
-                    // amount={amount}
-                    // setAmount={setAmount}
-                    // error={error}
-                    // setError={setError}
-                    // transactionFee={transactionFee}
+                    cryptoWallets={cryptoWallets}
+                    crypto={crypto}
+                    setCrypto={setCrypto}
+                    walletAddress={walletAddress}
+                    userWallets={userWallets}
+                    setWalletCurrency={setWalletCurrency}
+                    Walletcurrency={Walletcurrency}
+                    exchangeAmount={exchangeAmount}
+                    setExchangeAmount={setExchangeAmount}
+                    error={error}
+                    setError={setError}
+                    exchangeResult={exchangeResult}
+                    cryptoName={cryptoName}
+                    findWalletCurrencyName={findWalletCurrencyName}
                 />;
         case 1:
-            return <Form2 
-                    // error={error}
-                    // setError={setError}
-                    // totalAamount={totalAamount}
-                    // amount={amount}
-                    // currency={currency}
-                    // transactionFee={transactionFee}
+            return <Form2
+                    exchangeAmount={exchangeAmount}
+                    cryptoName={cryptoName}
+                    chargedFee={chargedFee}
+                    exchangeResult={exchangeResult}
+                    findWalletCurrencyName={findWalletCurrencyName}
+                    error={error}
+                    successMessage={successMessage}
                     />;
         default:
             return null;
@@ -336,7 +398,127 @@ export default function CryptoSell({open}) {
     };
 
 
-    return (
+    //////////////////////////
+    // Crypto Conversion API Calls
+    ///////////////////////////////
+
+    // Fetch all the available crypto wallet of user
+    useEffect(() => {
+      handleCryptoWallets({updateCryptoWallets})
+    }, []);
+
+     // Check user crypto Wallet balance
+     useEffect(() => {
+      if (exchangeAmount && crypto) {
+
+           axiosInstance.post(`/api/v1/user/crypto/wallet/balance/check/`, {
+                wallet_id: crypto,
+                amount: parseFloat(exchangeAmount ? exchangeAmount : 0)
+
+           }).then((res)=> {
+              // console.log(res)
+              if (res.status === 200) {
+                  setInsufficientFund(false);
+              }
+
+           }).catch((error)=> {
+                if (error.response.data.message === 'Wallet not found') {
+                    setError('Invalid Wallet')
+                    setInsufficientFund(true)
+
+                } else if (error.response.data.message === 'Donot have sufficient balance in Wallet') {
+                    setError('Insuficient balance in Wallet')
+                    setInsufficientFund(true)
+                } else {
+                  setInsufficientFund(false)
+                  setError('')
+                }
+           })
+      }
+  }, [exchangeAmount, crypto]);
+
+
+    // Fetch wallet address according to the selected Crypto
+      useEffect(() => {
+        if (crypto) {
+          handleCryptoWalletAddress({setWalletAddress, crypto})
+        }
+    }, [crypto]);
+
+
+    // Fetch available wallet of the User
+    useEffect(() => {
+        handleFIATWallets({setUserWallets})
+    }, []);
+
+
+    /// Get currency name from user wallets
+    useEffect(() => {
+      if (userWallets && Walletcurrency) {
+        const findWalletCurrency = userWallets.find((wallet)=> wallet.id === Walletcurrency)
+        setFindWalletCurrencyName(findWalletCurrency.currency)
+      }
+
+    }, [userWallets, Walletcurrency]);
+
+    /// Get Crypto currency name from user wallets
+    useEffect(() => {
+      if (cryptoWallets && crypto) {
+        const findCryptoCurrencyName = cryptoWallets.find((wallet)=> wallet.id === crypto)
+        setCryptoName(findCryptoCurrencyName.crypto_name)
+      }
+
+    }, [cryptoWallets, crypto]);
+
+    // Get assigned fee for Crypto Buy Transaction
+    useEffect(() => {
+      if (exchangeAmount) {
+        handleCryptoSellAssignedFee({exchangeAmount, SetChargedFee})
+      } else {
+        SetChargedFee(0)
+      }
+    }, [exchangeAmount]);
+
+
+    // Get usd value of crypto from CoinGecko
+    useEffect(() => {
+      if (cryptoName) {
+          handleConvertCryptoToUSD({cryptoName, setConvertedUSDValue, setError});
+      } else {
+        console.log('Crypto not available to convert')
+      }
+    }, [cryptoName]);
+
+
+    // Convert Wallet currency value against USD
+    useEffect(() => {
+      if (findWalletCurrencyName) {
+            handleWalletCurrencyConvertToUSD({findWalletCurrencyName, setCurrencyConversionAmount, setError});
+      } else {
+          console.log('Wallet Currency not available to convert')
+      };
+
+    }, [findWalletCurrencyName]);
+
+
+    
+    // Calculate Crypto Value
+    useEffect(() => {
+      setTimeout(() => {
+          if (currencyConversionAmount && convertedUSDValue && exchangeAmount) {
+              const AmountToBeConvert = (parseFloat(currencyConversionAmount) * parseFloat(convertedUSDValue)) * parseFloat(exchangeAmount)
+              setExchangeResult(AmountToBeConvert)
+
+          } else {
+              console.log('Not able to calculate crypto value')
+          }
+      }, 1000);
+
+    }, [currencyConversionAmount, convertedUSDValue, exchangeAmount]);
+
+
+
+return (
     <Main open={open}>
         <DrawerHeader />
 
@@ -351,18 +533,25 @@ export default function CryptoSell({open}) {
                     height: {xs:'100%', sm: '100%'}
                     }}
                     >
-                <p className='fs-2 d-flex justify-content-center'>Sell Crypto</p> <br />
+                <p
+                  style={{
+                    display:'flex',
+                    justifyContent:'center',
+                    fontSize:30,
+                    paddingTop:10,
+                    marginBottom:-10
+                  }}
+                >
+                    Sell Crypto
+                </p> <br />
 
-                <Stepper nonLinear activeStep={activeStep}>
-                {steps.map((label, index) => (
-                    <Step key={label} completed={completed[index]}>
-                    <StepButton color="inherit">
-                        {label}
-                    </StepButton>
+                <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+                  {steps.map((label) => (
+                    <Step key={label}>
+                      <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
                     </Step>
-                ))}
+                  ))}
                 </Stepper>
-
 
                 <div>
                 {allStepsCompleted() ? (
@@ -371,8 +560,8 @@ export default function CryptoSell({open}) {
                         {/* All steps completed - you&apos;re finished */}
                         <Alert severity="success">
                         <AlertTitle>Success</AlertTitle>
-                            Thank you for your deposit! Your transaction is currently in pending, After approval from admin your amount will get deposited to your account. 
-                            We'll notify you once your deposit has been approved.
+                            Your transaction is currently in pending, After approval from admin your amount will be deposited to your account. 
+                            We'll notify you once your Sell has been approved.
                         </Alert>
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
