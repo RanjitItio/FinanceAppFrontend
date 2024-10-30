@@ -2,13 +2,11 @@ import {Main, DrawerHeader} from '../Content';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
+import Step from '@mui/material/Step';;
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -17,7 +15,6 @@ import { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Input from '@mui/joy/Input';
 import { useState } from 'react';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
@@ -26,7 +23,6 @@ import StepLabel from '@mui/material/StepLabel';
 import { handleCryptoWallets, handleCryptoWalletAddress, handleFIATWallets, handleCryptoSellAssignedFee,
   handleConvertCryptoToUSD, handleWalletCurrencyConvertToUSD, getCryptoIcons, getCurrencyIcon
  } from './SellAPI';
-import CircularProgress from '@mui/material/CircularProgress';
 
 
 
@@ -40,27 +36,28 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
 }) {
    
 
-  /// Update Exchange amount value
+  /// Update Sell amount value
   const handleChangeExchangeAmount = (e)=> {
       const { name, value } = e.target;
-
+      
       if (value === '') {
         setError('')
         setExchangeAmount(value)
-      } else if (Number(value) === 0 || Number(value) < 0) {
+      } else if (Number(value) < 0) {
         setError('Amount should be greater than 0')
 
       } else if (value.length > 8) {
         setError('Amount should be less than 8 digit')
 
-      } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+      } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) >= 0) {  
         setError('')
         setExchangeAmount(value)
 
       } else {
-        setError('Please type valid amount')
+        setError('Please type valid amount');
       }
   };
+
 
 
   return(
@@ -144,7 +141,6 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    {/* <SwapHorizIcon sx={{ml:1}} /> */}
                     <Input 
                         placeholder="You Get" 
                         sx={{ml:0}}
@@ -168,7 +164,8 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
 
 // Second Form
 function Form2({...props}) {
-
+    
+    
     return(
       <>
         <small className='text-muted d-flex justify-content-center my-3'>
@@ -194,7 +191,7 @@ function Form2({...props}) {
   
           <div className="d-flex justify-content-between">
               <p>Fee: </p> 
-              <p>{props.chargedFee} {props.cryptoName}</p>
+              <p>{props.chargedFee ? props.chargedFee.toFixed(5) : 0} {props.cryptoName}</p>
           </div>
           <hr className='mb-4'/>
   
@@ -301,6 +298,9 @@ export default function CryptoSell({open}) {
             } else if (!exchangeAmount) {
                 setError('Enter Quantity to sell')
 
+            } else if (parseFloat(exchangeAmount) === 0) {
+                setError('Amount should be greater than zero')
+                
             } else if (inSufficientFund) {
                 setError(error)
 

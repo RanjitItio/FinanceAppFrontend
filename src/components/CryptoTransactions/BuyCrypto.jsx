@@ -16,7 +16,6 @@ import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { Grid } from '@mui/material';
 import Input from '@mui/joy/Input';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { handleCryptoWallets, handleCryptoWalletAddress, handleFIATWallets, 
   handleCryptoBuyAssignedFee, handleConvertCryptoToUSD, handleWalletCurrencyConvertToUSD,
   handleSubmitCryptoData, getCurrencyIcon, getCryptoIcons } from './BuyAPI';
@@ -47,7 +46,7 @@ function Form1({cryptoWallets, crypto,setCrypto, walletAddress,
        if (value === '') {
           setError('')
           setExchangeAmount(value)
-       } else if (Number(value) === 0 || Number(value) < 0) {
+       } else if (Number(value) < 0) {
           setError('Amount should be greater than 0')
 
        } else if (value.length > 8) {
@@ -297,6 +296,9 @@ export default function CryptoBuy({open}) {
 
             } else if (!exchangeAmount) {
               setError('Please type amount to Buy');
+
+            } else if (parseFloat(exchangeAmount) === 0) {
+                setError('Amount should be greater than 0')
 
             } else if (!Walletcurrency) {
               setError('Please select Wallet')

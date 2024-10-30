@@ -146,19 +146,6 @@ export const handleCryptoBuyAssignedFee = ({exchangeAmount, SetChargedFee})=> {
       })
 };
 
-export const handleCryptoSwapAssignedFee = ({convertToFloat, setChargedFee})=> {
-
-    axiosInstance.post(`/api/v2/charged/fee/`, {
-        fee_type: 'Crypto Swap',
-        amount: convertToFloat
-
-      }).then((res)=> {
-
-        if (res.status === 200 && res.data.success === true){ 
-            setChargedFee(res.data.fee)
-        }
-      })
-};
 
 
 // Convert Crypto to usd using CoinGecko

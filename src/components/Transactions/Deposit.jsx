@@ -83,21 +83,25 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
 
     // Selected Amount
     const handleAmountChange = (event)=> {
-      const {name, value} = event.target;
+        const {name, value} = event.target;
 
-      if (value === '') {
-        setError('')
-        setAmount(value)
-      } else if (Number(value) === 0 || Number(value) < 0){
-          setError('Please type valid number')
-      } else if (value.length > 8) {
-          setError('Amount should be less than 8 digit')
-      } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
-        setError('');
-        setAmount(value);
-      } else {
-        setError('Please type valid number')
-      }
+        if (value === '') {
+            setError('')
+            setAmount(value)
+        } else if (Number(value) === 0 || Number(value) < 0){
+            setError('Please type valid number');
+
+        } else if (value.length > 8) {
+            setError('Amount should be less than 8 digit');
+
+        } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) > 0) {
+            setError('');
+            setAmount(value);
+
+        } else {
+            setError('Please type valid number');
+
+        }
     };
 
 
@@ -125,14 +129,15 @@ function Form1({currency, setCurrency, paymentMethod, setPaymentMethod, amount, 
         }).then((res)=> {
 
            if (res.status === 200 && res.data.success === true){ 
-               SetChargedFee(res.data.fee)
-               setTransactionFee(res.data.fee)
+               SetChargedFee(res.data.fee);
+               setTransactionFee(res.data.fee);
            }
         })
       } else {
-        SetChargedFee(0)
-        setTransactionFee(0)
-      }
+          SetChargedFee(0);
+          setTransactionFee(0);
+
+      };
    }, [amount]);
 
 

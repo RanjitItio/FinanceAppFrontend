@@ -70,7 +70,7 @@ const NavContent = [
     {text: 'Wallet', icon: <AccountBalanceWalletIcon />, url: '/crypto/wallets/'},
     {text: 'Crypto Buy', icon: <ShoppingCartIcon />, url: '/crypto/buy/'},
     {text: 'Crypto Sell', icon: <SellIcon />, url: '/crypto/sell/'},
-    {text: '-Crypto Swap', icon: <SwapHorizIcon />, url: '/crypto/swap/'},
+    {text: 'Crypto Swap', icon: <SwapHorizIcon />, url: '/crypto/swap/'},
     {text: '-Crypto Exchange', icon: <SwapHorizontalCircleIcon />, url: '/crypto/exchange/'},
     // {text: '-Investments', icon: <StorageIcon />, url: '/investment/invest/'},
     // {text: '-Investment Plans', icon: <StorageIcon />, url: '/investment/plan/'},
