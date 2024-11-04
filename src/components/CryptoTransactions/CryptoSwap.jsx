@@ -31,9 +31,7 @@ import { InputLabel, MenuItem, TextField } from '@mui/material';
 
 
 
-const steps                   = ['Step 1', 'Step 2'];
-const user_selected_wallet    = localStorage.getItem('UserSelectedWalletID')
-const user_selected_wallet_id = parseInt(user_selected_wallet, 10)
+const steps = ['Step 1', 'Step 2'];
 
 
 
@@ -68,8 +66,8 @@ function Form1({cryptoWallets, fromCrypto, updateFromCrypto, toCrypto, updateToC
           } else if (Number(value) < 0){
               setCryptoQtyError('Please type valid number');
 
-          } else if (value.length > 8) {
-              setCryptoQtyError('Amount should be less than 8 digit');
+          } else if (value.length > 17) {
+              setCryptoQtyError('Amount should be less than 17 digit');
 
           } else if (/^\d*\.?\d*$/.test(value)) {
               setCryptoQtyError('');

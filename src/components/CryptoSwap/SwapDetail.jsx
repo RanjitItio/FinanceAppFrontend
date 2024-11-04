@@ -52,7 +52,7 @@ export default function CryptoSwapDetail({handleClose, boxOpen, specificTransact
                     <div className="row">
                         <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5 mb-2">
 
-                            <Card sx={{height: {xs:'20rem', sm:'22rem'}, backgroundColor: '#c3c2d5'}}>
+                            <Card sx={{height: {xs:'20rem', sm:'24.5rem'}, backgroundColor: '#c3c2d5'}}>
                                 <CardContent>
 
                                 <Typography style={{display:'flex', justifyContent:'center', alignItems:'center', marginBottom:20}} variant='div'>
@@ -71,7 +71,7 @@ export default function CryptoSwapDetail({handleClose, boxOpen, specificTransact
                                         {specificTransactionDetails ? (
 
                                             <p className='d-flex justify-content-center mb-3 fs-5' style={{marginTop:-12}}>
-                                                <b>{specificTransactionDetails?.from_crypto_name || ''} {specificTransactionDetails?.swap_quantity || ''}</b>
+                                                <b>{specificTransactionDetails?.from_crypto_name || ''} {specificTransactionDetails.swap_quantity ? parseFloat(specificTransactionDetails.swap_quantity).toFixed(7) : 0 }</b>
                                             </p>
 
                                         ) : (
@@ -107,7 +107,7 @@ export default function CryptoSwapDetail({handleClose, boxOpen, specificTransact
                                             <p className='text-muted' style={{marginBottom:0.2}}>From Crypto</p>
                                             {specificTransactionDetails ? (
 
-                                                <p>{specificTransactionDetails?.from_crypto_name || ''} {specificTransactionDetails?.swap_quantity || ''}</p>
+                                                <p>{specificTransactionDetails?.from_crypto_name || ''} {specificTransactionDetails.swap_quantity ? parseFloat(specificTransactionDetails.swap_quantity).toFixed(9) : 0 }</p>
 
                                             ) : (
 
@@ -168,7 +168,7 @@ export default function CryptoSwapDetail({handleClose, boxOpen, specificTransact
                                         </div>
                                     </div>
 
-                                    <div style={{display:'flex', justifyContent:'space-between', marginBottom:1}}>
+                                    <div style={{display:'flex', justifyContent:'space-between', marginBottom:0, marginTop:'5%'}}>
 
                                         <div>
                                             <p className='text-muted mx-2' style={{marginBottom:0.1}}>Status</p>
