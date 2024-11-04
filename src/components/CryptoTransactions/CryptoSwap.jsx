@@ -650,7 +650,7 @@ export default function CryptoSwap({open}) {
                                   sx={{marginRight: '4%', marginTop: '3%'}}
                                 >
                                     {completedSteps() === totalSteps() - 1
-                                    ? 'Confirm & Deposit'
+                                    ? 'Confirm & Submit'
                                     : 'Confirm & Proceed'}
                                 </Button>
                               ))}
