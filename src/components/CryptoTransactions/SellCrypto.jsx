@@ -32,7 +32,7 @@ const steps = ['Step 1', 'Step 2'];
 
 // First Form
 function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Walletcurrency, setWalletCurrency, 
-    exchangeAmount, error, setError, setExchangeAmount, exchangeResult, cryptoName, findWalletCurrencyName
+    exchangeAmount, error, setError, setExchangeAmount, exchangeResult, cryptoName, findWalletCurrencyName, chargedFee
 }) {
    
 
@@ -90,7 +90,7 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
                         </Select>
                       </FormControl>
 
-                    <FormHelperText sx={{ml:1}}>Select Crypto Wallet</FormHelperText>
+                    {/* <FormHelperText sx={{ml:1}}>Select Crypto Wallet</FormHelperText> */}
                 </Grid>
 
 
@@ -101,7 +101,7 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
                             value={walletAddress ? walletAddress : ''}
                             />
                       </FormControl>
-                      <FormHelperText sx={{ml:1}}>Wallet Address</FormHelperText>
+                      {/* <FormHelperText sx={{ml:1}}>Wallet Address</FormHelperText> */}
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -127,7 +127,7 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
                           ))}
                         </Select>
                     </FormControl>
-                    <FormHelperText sx={{ml:1}}>Select Wallet Currency</FormHelperText>
+                    {/* <FormHelperText sx={{ml:1}}>Select Wallet Currency</FormHelperText> */}
                 </Grid>
 
 
@@ -147,12 +147,14 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
                         value={exchangeResult ? exchangeResult : ''}
                         startDecorator={getCurrencyIcon(findWalletCurrencyName)}
                       />
+                      <FormHelperText sx={{ml:1}}>Fee: {chargedFee ? parseFloat(chargedFee).toFixed(5) : 0}</FormHelperText>
                 </Grid> 
             </Grid>
 
             {error && 
               <Alert severity="error" sx={{mt:2}}>{error}.</Alert>
             }
+
         </div>
       </>
   
@@ -184,14 +186,14 @@ function Form2({...props}) {
           <div className="my-4">
             <div className="d-flex justify-content-between">
                 <p>Amount Receive</p> 
-                <p>{props.exchangeResult} {props.findWalletCurrencyName}</p>
+                <p>{parseFloat(props.exchangeResult).toFixed(4)} {props.findWalletCurrencyName}</p>
             </div>
             <hr className='mb-3' />
           </div>
   
           <div className="d-flex justify-content-between">
               <p>Fee: </p> 
-              <p>{props.chargedFee ? props.chargedFee.toFixed(5) : 0} {props.cryptoName}</p>
+              <p>{props.chargedFee ? parseFloat(props.chargedFee).toFixed(5) : 0} {props.cryptoName}</p>
           </div>
           <hr className='mb-4'/>
   
@@ -381,6 +383,7 @@ export default function CryptoSell({open}) {
                     exchangeResult={exchangeResult}
                     cryptoName={cryptoName}
                     findWalletCurrencyName={findWalletCurrencyName}
+                    chargedFee={chargedFee}
                 />;
         case 1:
             return <Form2

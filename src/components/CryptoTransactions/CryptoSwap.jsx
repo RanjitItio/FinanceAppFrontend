@@ -241,13 +241,13 @@ function Form2({...props}) {
   
           <div className="d-flex justify-content-between">
               <p>Fee: </p> 
-              <p>{props.chargedFee ? props.chargedFee.toFixed(9) : 0} {props.fromWalletCryptoName}</p>
+              <p>{props.chargedFee ? props.chargedFee.toFixed(6) : 0} {props.fromWalletCryptoName}</p>
           </div>
           <hr className='mb-4'/>
   
           <div className="d-flex justify-content-between">
-            <p><b>Total</b></p> 
-            <p><b>{(parseFloat(props.SwapQuantity) + parseFloat(props.chargedFee)).toFixed(7)} {props.fromWalletCryptoName}</b></p>
+            <p><b>Total: </b></p> 
+            <p><b>{(parseFloat(props.SwapQuantity) + parseFloat(props.chargedFee)).toFixed(5)} {props.fromWalletCryptoName}</b></p>
 
           </div>
           <hr className='mb-4'/>
@@ -579,7 +579,7 @@ export default function CryptoSwap({open}) {
                       <Typography variant='div' sx={{ mt: 2, mb: 1 }}>
                           <Alert severity="success">
                           <AlertTitle>Success</AlertTitle>
-                              Thank you for the transaction! Your transaction is currently in pending, After approval from admin your amount will get deposited to your wallet. 
+                              Thank you for the transaction! Your transaction is currently in pending, After approval from admin your Crypto will get deposited to your wallet. 
                               We'll notify you once your Transaction has been approved.
                           </Alert>
                       </Typography>

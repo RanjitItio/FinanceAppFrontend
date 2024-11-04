@@ -20,7 +20,7 @@ export const getCurrencyIcon = (currency)=> {
        case 'GBP':
            return '£'
        default:
-           return '$'
+           return ''
     }
 };
 

@@ -156,7 +156,7 @@ function Form1({cryptoWallets, crypto,setCrypto, walletAddress,
                           />
                     </FormControl>
 
-                    <FormHelperText>Fee Charge: {getCurrencyIcon(findWalletCurrencyName)} {chargedFee}</FormHelperText>
+                    <FormHelperText>Fee Charge: {getCurrencyIcon(findWalletCurrencyName)} {chargedFee ? parseFloat(chargedFee).toFixed(6) : 0}</FormHelperText>
                 </Grid>
             </Grid>
                 <small style={{color:'red', display:'flex', justifyContent:'center'}}>{error && error}</small>

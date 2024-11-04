@@ -241,7 +241,7 @@ export default function UserCryptoTransactions({open}) {
                     <TableRow>
                         <TableCell>Date</TableCell>
                         <TableCell>Crypto</TableCell>
-                        <TableCell>Payment Mode</TableCell>
+                        {/* <TableCell>Payment Mode</TableCell> */}
                         <TableCell>Quantity</TableCell>
                         <TableCell>Transaction Type</TableCell>
                         <TableCell>Amount</TableCell>
@@ -271,15 +271,15 @@ export default function UserCryptoTransactions({open}) {
                             </Tooltip>
                         </TableCell>
 
-                        <TableCell>{transaction?.payment_mode || ''}</TableCell>
+                        {/* <TableCell>{transaction?.payment_mode || ''}</TableCell> */}
 
-                        <TableCell>{transaction?.crypto_name || ''} {transaction?.crypto_qty || ''}</TableCell>
+                        <TableCell>{transaction?.crypto_name || ''} {transaction.crypto_qty ? parseFloat(transaction.crypto_qty).toFixed(3) : 0 }</TableCell>
 
                         <TableCell align='center'>
                             <Chip label={transaction?.type || ''} color={getTransactionTypeColor(transaction?.type || '')} />
                         </TableCell>
 
-                        <TableCell>{transaction?.amount} {transaction?.currency}</TableCell>
+                        <TableCell>{transaction.amount ? parseFloat(transaction.amount).toFixed(4) : 0} {transaction?.currency}</TableCell>
 
                         <TableCell>
                             <Chip label={transaction?.status || ''} color={getStatusColor(transaction?.status || '')} variant="outlined"  />
