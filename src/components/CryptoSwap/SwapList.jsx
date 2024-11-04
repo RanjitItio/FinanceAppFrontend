@@ -29,14 +29,16 @@ import CryptoSwapDetail from './SwapDetail';
 // Currency Icon
 const getCurrencyIcon = (currency) => {
     switch (currency) {
-        case 'USD':
-            return '$'
-        case 'EUR':
-            return '€'
-        case 'INR':
-            return '₹'
-        case 'GBP':
-            return '£'
+        case 'BTC':
+            return '₿'
+        case 'XRP':
+            return 'X'
+        case 'LTC':
+            return 'Ł'
+        case 'SOL':
+            return 'S'
+        case 'ETH':
+            return 'E'
         default:
             '$'
     }
@@ -53,6 +55,7 @@ export default function UserCryptoSwapList({open}) {
     const [transactionStatus, setTransactionStatus] = useState('');  // Transaction status in filter
     const [currency, setCurrency]                   = useState('');   // Currency of Filter
     const [transactionData, setTransactionData]     = useState([]);  // Transaction data from API
+    const [swapTransaction, setSwapTransaction]     = useState([]);  // Transaction data from API
     const [error, setError]                         = useState('');
     const [paginatedValue, setPaginatedValue]       = useState(0);  // Pagination number
     const [loader, setLoader]                       = useState(true);  // Loader
@@ -94,14 +97,12 @@ export default function UserCryptoSwapList({open}) {
     // Fetch all transaction data
     useEffect(() => {
         try{
-            axiosInstance.get(`/api/v4/users/fiat/transactions/`).then((res)=> {
+            axiosInstance.get(`/api/v2/user/crypto/swap/`).then((res)=> {
 
-                if(res.data && res.data.all_fiat_transactions) {
-                    const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
-                        return new Date(b.data.created_At) - new Date(a.data.created_At)
-                    })
-                    setTransactionData(sortedTransaction)
-                    setPaginatedValue(res.data.total_paginated_rows)
+                if(res.data && res.data.success === true) {
+
+                    setSwapTransaction(res.data.user_crypto_swap_transactions)
+                    setPaginatedValue(res.data.paginated_rows)
                     setLoader(false)
                 };
             })
@@ -116,19 +117,6 @@ export default function UserCryptoSwapList({open}) {
     const handleTransactionClick = (transaction)=> {
         handleClickOpen();
         updateSpecificTransactionDetails(transaction)
-    };
-    // Until API data has not fetched
-    if (loader) {
-        return (
-            <Main open={open}>
-            <DrawerHeader />
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20%'}}>
-                    <CircularProgress />
-                </Box>
-
-            </Main>
-        )
-        
     };
 
 
@@ -152,9 +140,23 @@ export default function UserCryptoSwapList({open}) {
         })
     };
 
+    // Until API data has not fetched
+    if (loader) {
+        return (
+            <Main open={open}>
+            <DrawerHeader />
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20%'}}>
+                    <CircularProgress />
+                </Box>
+
+            </Main>
+        )
+        
+    };
+
 
      // If no transaction available
-     if (transactionData.length === 0) {
+     if (swapTransaction.length === 0) {
         return (
             <Main open={open}>
             <DrawerHeader />
@@ -171,6 +173,8 @@ export default function UserCryptoSwapList({open}) {
             </Main>
         )
     };
+
+
     return (
         <>
          <Main open={open}>
@@ -184,7 +188,7 @@ export default function UserCryptoSwapList({open}) {
             </div>
             <br />
             <div className='d-flex justify-content-between'>
-                <p className='text-muted'>All Transactions</p>
+                <p className='text-muted'>All Crypto Swaps</p>
                 {/* <div className='d-flex align-items-center'>
                     <p className='text-muted'>Filter</p>&nbsp;
                     <Button startIcon={<FilterListIcon />} style={{backgroundColor: ''}} variant="outlined" onClick={toggleFilterItemVisibility}></Button>
@@ -307,99 +311,95 @@ export default function UserCryptoSwapList({open}) {
                     
                 </>
                 )}
+
             </div>
 
                 {error ? (
                     <Alert severity="warning">{error}</Alert>
                 ) : (
-        <List>
-            {transactionData.map((transaction, index) => {
+
+            <List>
+                {swapTransaction.map((transaction, index) => {
+            
+                    return(
         
-                // const transactionDate = new Date(transaction.data.created_At.split('T')[0] || '');
-                
-                // const formatDate = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`
-
-                // const transactionTime = new Date(transaction.data.created_At.split('T')[1] || '');
-                // const formattedTime = `${String(transactionTime.getHours()).padStart(2, '0')}:${String(transactionTime.getMinutes()).padStart(2, '0')}:${String(transactionTime.getSeconds()).padStart(2, '0')}`;
-
-                return(
-       
-                <ListItem
-                key={index}
-                disablePadding
-                secondaryAction={
-                    <IconButton edge="end" aria-label="comments">
-                        <ArrowRightIcon />
-                    </IconButton>
-                }
-                onClick={()=> {handleTransactionClick(transaction);}}
-                className='mb-2 shadow border border-secondary'
-                >
-                <ListItemButton>
-                        <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.currency?.name || '')}</Avatar>
-                        </ListItemAvatar>
-                    <ListItemText
-                    primary={transaction.type}
-                    secondary={`${transaction.data?.payment_mode || ''} ${transaction.data.created_At?.split('T')[0] || ''} ${transaction.data.created_At?.split('T')[1] || ''}`}
-                    />
-                    <ListItemText
-                    primary={
-                        
-                        transaction.data.status == 'Pending' ? (
-                            <>
-                            
-                                <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
-                            
-                            </>
-
-                        ) : transaction.data.status == 'Approved' ? (
-                            <>
-                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
-                            </>
-                            
-                        ) : transaction.data.status == 'Cancelled' ? (
-                            <>
-                                <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
-                            </>
-                        ) : (
-                            <>
-                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction.currency.name}</span>
-                                <span>{transaction.data.amount}</span>
-                            </>
-                        ) 
+                    <ListItem
+                    key={index}
+                    disablePadding
+                    secondaryAction={
+                        <IconButton edge="end" aria-label="comments">
+                            <ArrowRightIcon />
+                        </IconButton>
                     }
-                    secondary={
-                        transaction.data.status == 'Pending' ? (
-                            <span style={{ color: 'orange' }}>{transaction.data?.status || ''}</span>
+                    onClick={()=> {handleTransactionClick(transaction);}}
+                    className='mb-2 shadow border border-secondary'
+                    >
+                    <ListItemButton>
+                            <ListItemAvatar>
+                                <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.from_crypto_name || '')}</Avatar>
+                            </ListItemAvatar>
+                        <ListItemText
+                        primary='Crypto Swap'
+                        secondary={`${transaction.created_at?.split('T')[0] || ''} ${transaction.created_at?.split('T')[1] || ''}`}
+                        />
+                        <ListItemText
+                        primary={
+                            
+                            transaction.status == 'Pending' ? (
+                                <>
+                                
+                                    <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
+                                    <span className='mx-1'>{transaction.from_crypto_name}</span>
+                                    <span>{transaction.swap_quantity}</span>
+                                
+                                </>
 
-                        ) : transaction.data.status == 'Approved' ? (
-                            <span style={{ color: 'green' }}>{transaction.data?.status || ''}</span>
+                            ) : transaction.status == 'Approved' ? (
+                                <>
+                                    <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                    <span className='mx-1'>{transaction.from_crypto_name}</span>
+                                    <span>{transaction.swap_quantity}</span>
+                                </>
+                                
+                            ) : transaction.status == 'Cancelled' ? (
+                                <>
+                                    <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
+                                    <span className='mx-1'>{transaction.from_crypto_name}</span>
+                                    <span>{transaction.swap_quantity}</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                    <span className='mx-1'>{transaction.from_crypto_name}</span>
+                                    <span>{transaction.swap_quantity}</span>
+                                </>
+                            ) 
+                        }
+                        secondary={
+                            transaction.status == 'Pending' ? (
+                                <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
 
-                        ) : transaction.data.status === 'Cancelled' ? (
-                            <span style={{ color: 'red' }}>{transaction.data?.status || ''}</span>
+                            ) : transaction.status == 'Approved' ? (
+                                <span style={{ color: 'green' }}>{transaction?.status || ''}</span>
 
-                        ) : (
-                            <span style={{ color: 'orange' }}>{transaction.data?.status || ''}</span>
-                        )
-                    }
-                    sx={{ flex: 'auto', textAlign: 'right' }}
-                    />
-                </ListItemButton>
-                </ListItem>
-                )
-                
-            })}
-            </List>
+                            ) : transaction.status === 'Cancelled' ? (
+                                <span style={{ color: 'red' }}>{transaction?.status || ''}</span>
+
+                            ) : (
+                                <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
+                            )
+                        }
+                        sx={{ flex: 'auto', textAlign: 'right' }}
+                        />
+                    </ListItemButton>
+                    </ListItem>
+                    )
+                    
+                })}
+                </List>
         
-    )}
+        )}
+
             <div className="my-3">
                 <Pagination 
                     count={countPaginationNumber} 

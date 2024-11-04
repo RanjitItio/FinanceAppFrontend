@@ -289,8 +289,10 @@ export default function CryptoSwap({open}) {
     const [toCryptoUSDValue, setToCryptoUSDValue]         = useState(0);  /// To Crypto USD Value
     const [disableButton, setDisableButton]               = useState(false);  // Disable Confirm Button
     const [inSufficientFund, setInsufficientFund]         = useState(false); // Insufficient Fund
+    const [toWalletActive, setToWalletActive]             = useState(false); // To Wallet Active status
+    const [toWalletError, setToWalletError]               = useState('');
 
-  
+
 
     // Total Steps
     const totalSteps = () => {
@@ -353,6 +355,9 @@ export default function CryptoSwap({open}) {
 
           } else if (inSufficientFund) {
               setError(error);
+
+          } else if (toWalletActive) {
+            setError(toWalletError);
 
           } else {
               setError('')
@@ -467,7 +472,7 @@ export default function CryptoSwap({open}) {
                     setInsufficientFund(true);
 
                 } else if (error.response.data.message === 'Inactive Wallet') {
-                    setError('Inactive Wallet')
+                    setError('Inactive From Wallet')
                     setInsufficientFund(true);
 
                 } else {
@@ -478,6 +483,41 @@ export default function CryptoSwap({open}) {
             })
         }
     }, [SwapQuantity, fromCrypto]);
+    
+
+    /// Check To Crypto Wallet is Approved Status
+    useEffect(() => {
+      if (toCrypto) {
+
+        axiosInstance.post(`/api/v1/user/crypto/wallet/active/status/`, {
+            wallet_id: toCrypto
+
+        }).then((res)=> {
+          // console.log(res)
+          
+          if (res.status === 200) {
+            setToWalletActive(false);
+            setToWalletError('');
+          }
+
+        }).catch((error)=> {
+            // console.log(error)
+
+            if (error.response.data.message === 'Wallet not found') {
+                setToWalletError('Invalid Wallet');
+                setToWalletActive(true);
+            } else if (error.response.data.message === 'Inactive Wallet') {
+                setToWalletError('Inactive Transferred Wallet')
+                setToWalletActive(true);
+
+            } else {
+                setToWalletError('');
+                setToWalletActive(false);
+            };
+        })
+    }
+
+    }, [toCrypto]);
     
     
     
