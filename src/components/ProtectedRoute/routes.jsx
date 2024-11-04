@@ -68,6 +68,8 @@ const CryptoSwap             = React.lazy(()=> import('../CryptoTransactions/Cry
 const CryptoExchange         = React.lazy(()=> import('../CryptoTransactions/CryptoExchange'));
 const ExchangesList          = React.lazy(()=> import('../Exchange/ExchangeList'));
 const AdminLogin             = React.lazy(()=> import('../Authentication/AdminLogin'));
+const UserCryptoSwapList     = React.lazy(()=> import('../CryptoSwap/SwapList'));
+
 
 
 // All Routes
@@ -186,6 +188,8 @@ const AuthRoutes = () => {
                           <Route exact path='/crypto/sell/' element={<CryptoSell open={open} />}></Route>
                           <Route exact path='/crypto/swap/' element={<CryptoSwap open={open} />}></Route>
                           <Route exact path='/crypto/exchange/' element={<CryptoExchange open={open} />}></Route>
+                          <Route exact path='/crypto/swap/list/' element={<UserCryptoSwapList open={open} />}></Route>
+
 
                       </Routes>
                     </Box>

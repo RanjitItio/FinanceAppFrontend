@@ -68,6 +68,7 @@ const NavContent = [
   { text: 'CRYPTO', subItems: [
     {text: 'Transactions', icon: <ReceiptLongIcon />, url: '/crypto/transactions/'},
     {text: 'Wallet', icon: <AccountBalanceWalletIcon />, url: '/crypto/wallets/'},
+    {text: 'Swap List', icon: <FormatListBulletedIcon />, url: '/crypto/swap/list/'},
     {text: 'Crypto Buy', icon: <ShoppingCartIcon />, url: '/crypto/buy/'},
     {text: 'Crypto Sell', icon: <SellIcon />, url: '/crypto/sell/'},
     {text: 'Crypto Swap', icon: <SwapHorizIcon />, url: '/crypto/swap/'},

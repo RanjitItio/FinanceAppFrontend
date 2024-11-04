@@ -8,11 +8,9 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ResponsiveDialog from './TransactionDetails';
 import { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
-// import FilterListIcon from '@mui/icons-material/FilterList';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -25,8 +23,7 @@ import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-
-
+import CryptoSwapDetail from './SwapDetail';
 
 
 // Currency Icon
@@ -47,22 +44,19 @@ const getCurrencyIcon = (currency) => {
 
 
 
-
-
-
-// All FIAT Transaction of the user
-export default function AllTransactions({open}) {
-    const [boxOpen, setBoxOpen] = useState(false);  // Open transaction pop up
-    const [isfilterItem, setFilterItem] = useState(false);  // Show filters
-    const [dateRange, setDateRange] = useState('');    // date range In filter
-    const [transactionType, setTransactionType] = useState('');  // Transaction type in filter
+//// All Crypti Swap transactions List of the user
+export default function UserCryptoSwapList({open}) {
+    const [boxOpen, setBoxOpen]                     = useState(false);  // Open transaction pop up
+    const [isfilterItem, setFilterItem]             = useState(false);  // Show filters
+    const [dateRange, setDateRange]                 = useState('');    // date range In filter
+    const [transactionType, setTransactionType]     = useState('');  // Transaction type in filter
     const [transactionStatus, setTransactionStatus] = useState('');  // Transaction status in filter
-    const [currency, setCurrency] = useState('');   // Currency of Filter
-    const [transactionData, setTransactionData] = useState([]);  // Transaction data from API
-    const [error, setError] = useState('');
+    const [currency, setCurrency]                   = useState('');   // Currency of Filter
+    const [transactionData, setTransactionData]     = useState([]);  // Transaction data from API
+    const [error, setError]                         = useState('');
+    const [paginatedValue, setPaginatedValue]       = useState(0);  // Pagination number
+    const [loader, setLoader]                       = useState(true);  // Loader
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
-    const [loader, setLoader] = useState(true);  // Loader
-    const [paginatedValue, setPaginatedValue] = useState(0);  // Pagination number
 
     const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0)
 
@@ -89,19 +83,14 @@ export default function AllTransactions({open}) {
     // Method to open Transaction detail
     const handleClickOpen = () => {
         setBoxOpen(true);
-      };
+    };
 
     // Close the Transaction detail box
     const handleClose = () => {
         setBoxOpen(false);
-      };
-
-
-    const toggleFilterItemVisibility = () => {
-        setFilterItem(!isfilterItem);
-      };
-
-
+    };
+    
+    
     // Fetch all transaction data
     useEffect(() => {
         try{
@@ -121,14 +110,13 @@ export default function AllTransactions({open}) {
         }
     }, []);
 
-    
+
+
     // Clicked on a specific transaction
     const handleTransactionClick = (transaction)=> {
         handleClickOpen();
         updateSpecificTransactionDetails(transaction)
     };
-
-
     // Until API data has not fetched
     if (loader) {
         return (
@@ -165,8 +153,8 @@ export default function AllTransactions({open}) {
     };
 
 
-    // If no transaction available
-    if (transactionData.length === 0) {
+     // If no transaction available
+     if (transactionData.length === 0) {
         return (
             <Main open={open}>
             <DrawerHeader />
@@ -183,9 +171,6 @@ export default function AllTransactions({open}) {
             </Main>
         )
     };
-
-    
-
     return (
         <>
          <Main open={open}>
@@ -424,14 +409,8 @@ export default function AllTransactions({open}) {
 
         </Main>
 
-        <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
+        <CryptoSwapDetail handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
         
         </>
     )
-};
-
-
-
-
-
-
+}
