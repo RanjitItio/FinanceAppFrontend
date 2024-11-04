@@ -2,21 +2,13 @@ import React from 'react';
 import { Main, DrawerHeader } from '../Content';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar, Typography, Chip,
-  Box, Tabs, Tab, IconButton
+  Box
 } from '@mui/material';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SellIcon from '@mui/icons-material/Sell';
-import WalletIcon from '@mui/icons-material/Wallet';
 import Pagination from '@mui/material/Pagination';
-import RaiseWalletRequest from './WalletRequest';
-import BuyCrypto from './Buy';
-import SellCrypto from './Sell';
 import axiosInstance from '../Authentication/axios';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Tooltip from '@mui/material/Tooltip';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 
 
@@ -88,30 +80,12 @@ const getTransactionTypeColor = (type)=> {
 
 // But and Sell Crypto
 export default function UserCryptoTransactions({open}) {
-    const [walletPopup, setWalletPopup] = useState(false);
-    const [openBuy, setOpenBuy]         = useState(false);
-    const [openSell, setOpenSell]       = useState(false);
     const [cryptoTransactions, setCryptoTransactions] = useState([]);   // User Crypto Transaction data
     const [emptyData, setEmptyData]     = useState(false); // Empty data
     const [paginationCount, setPaginationCount] = useState(0);
 
     const countPagination = paginationCount ? Math.ceil(paginationCount) : 0
  
-
-   // Open Wallet Popup
-   const handleOpenWalletPopup = ()=> {
-        setWalletPopup(true);
-   };
-
-   // Open Buy Modal
-   const handleOpenBuy = ()=> {
-        setOpenBuy(true);
-   };
-
-   // Open Buy Modal
-   const handleOpenSell = ()=> {
-        setOpenSell(true);
-   };
 
    // Fetch all crypto transactions related to user
    useEffect(() => {
@@ -168,11 +142,6 @@ export default function UserCryptoTransactions({open}) {
                     <DrawerHeader />
 
                 <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
-                    <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />} onClick={handleOpenBuy}>Buy</Button>
-                    <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button>
-                    <Button variant="contained" sx={{mx:1}} startIcon={<SwapHorizIcon />} onClick={handleOpenSell}>Swap</Button>
-                    <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
-
 
                     <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
                         <Table aria-label="User table">
@@ -202,21 +171,6 @@ export default function UserCryptoTransactions({open}) {
                 </Box>
                 </Main>
 
-                <RaiseWalletRequest
-                open={walletPopup}
-                setOpen={setWalletPopup}
-                />
-
-                <BuyCrypto 
-                open={openBuy}
-                setOpen={setOpenBuy}
-                />
-
-                <SellCrypto 
-                open={openSell}
-                setOpen={setOpenSell}
-                />
-
         </>
             );
         };
@@ -230,10 +184,6 @@ export default function UserCryptoTransactions({open}) {
 
         <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
             
-            {/* <Button variant="contained" sx={{mx:1}} startIcon={<ShoppingCartIcon />} onClick={handleOpenBuy}>Buy</Button>
-            <Button variant="contained" sx={{mx:1}} startIcon={<SellIcon />} onClick={handleOpenSell}>Sell</Button> */}
-            <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
-
             <TableContainer component={Paper} sx={{mt:1, maxHeight:'70rem'}}>
                 <Table aria-label="User table">
                 <TableHead sx={{backgroundColor:'#E1EBEE'}}>
@@ -299,21 +249,6 @@ export default function UserCryptoTransactions({open}) {
             </Box>
     </Box>
     </Main>
-
-    <RaiseWalletRequest
-       open={walletPopup}
-       setOpen={setWalletPopup}
-    />
-
-    <BuyCrypto 
-       open={openBuy}
-       setOpen={setOpenBuy}
-    />
-
-    <SellCrypto 
-       open={openSell}
-       setOpen={setOpenSell}
-    />
 </>
 
     );

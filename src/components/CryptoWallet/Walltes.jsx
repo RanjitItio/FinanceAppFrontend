@@ -9,6 +9,10 @@ import Pagination from '@mui/material/Pagination';
 import axiosInstance from '../Authentication/axios';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import WalletIcon from '@mui/icons-material/Wallet';
+import RaiseWalletRequest from './WalletRequest';
+import Button from '@mui/material/Button';
+
 
 
 // Change status color according to the status label
@@ -20,10 +24,9 @@ const getStatusColor = (status)=> {
             return 'success'
         case 'Rejected':
             return 'error'
-
         default:
-            break;
-    }
+            '';
+    };
 };
 
 
@@ -67,8 +70,15 @@ export default function UserCryptoWallets({open}) {
     const [userWallets, setUserWallets] = useState([]);    // User Wallet state
     const [emptyData, setEmptyData]     = useState(false); // Empty data state
     const [PaginationCount, setPaginationCount] = useState(0);
+    const [walletPopup, setWalletPopup] = useState(false);  // Open Wallet Popup
 
     const CountPagination = Math.ceil(PaginationCount ? PaginationCount : 0);
+
+    // Open Wallet Popup
+    const handleOpenWalletPopup = ()=> {
+        setWalletPopup(true);
+    };
+
 
     // Fetch all users wallet
     useEffect(() => {
@@ -110,11 +120,15 @@ export default function UserCryptoWallets({open}) {
 
     };
 
-
+    
+    /// For Empty data
     if (emptyData) {
         return (
             <Main open={open}>
                 <DrawerHeader />
+                <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
+                <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
+
 
                 <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
                     <Table aria-label="User table">
@@ -141,6 +155,7 @@ export default function UserCryptoWallets({open}) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                </Box>
             </Main>
         );
     };
@@ -148,11 +163,13 @@ export default function UserCryptoWallets({open}) {
 
 
     return (
+        <>
         <Main open={open}>
         <DrawerHeader />
     
             <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
-    
+            <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
+
                 <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
                     <Table aria-label="User table">
                     <TableHead sx={{backgroundColor:'#E1EBEE'}}>
@@ -208,5 +225,12 @@ export default function UserCryptoWallets({open}) {
                 </Box>
             </Box>
         </Main>
+
+        <RaiseWalletRequest
+            open={walletPopup}
+            setOpen={setWalletPopup}
+            />
+
+        </>
     );
 };

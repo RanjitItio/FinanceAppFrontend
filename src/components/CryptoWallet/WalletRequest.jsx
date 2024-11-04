@@ -27,6 +27,7 @@ const style = {
   };
 
 
+
 // Raise wallet request
 export default function RaiseWalletRequest({open, setOpen}) {
     const handleClose = () => setOpen(false);
@@ -41,6 +42,7 @@ export default function RaiseWalletRequest({open, setOpen}) {
         setSelectedCrypto(e.target.value);
     };
 
+    /// Submit Wallet Request
     const handleSubmitWalletRequest = ()=> {
         if (selectedCrypto === '') {
             setError(true)
@@ -54,6 +56,7 @@ export default function RaiseWalletRequest({open, setOpen}) {
 
             axiosInstance.post(`/api/v1/user/crypto/wallet/`, {
                 crypto: selectedCrypto
+                
             }).then((res)=> {
                 // console.log(res)
                 
