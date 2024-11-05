@@ -30,7 +30,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Dispute from "../Dispute/dispute";
 import DisputeReply from "../Dispute/disputereply";
-import CryptoList from "../CryptoExchange/cryptoexchangelist";
+// import CryptoList from "../CryptoExchange/cryptoexchangelist";
 import Plan from "../Invesment/Plan";
 import Invest from "../Invesment/Invest";
 // import CryptoSwap from "../CryptoTransactions/CryptoSwap";
@@ -65,10 +65,12 @@ const UserCryptoWallets      = React.lazy(()=> import('../CryptoWallet/Walltes')
 const CryptoBuy              = React.lazy(()=> import('../CryptoTransactions/BuyCrypto'));
 const CryptoSell             = React.lazy(()=> import('../CryptoTransactions/SellCrypto'));
 const CryptoSwap             = React.lazy(()=> import('../CryptoTransactions/CryptoSwap'));
-const CryptoExchange         = React.lazy(()=> import('../CryptoTransactions/CryptoExchange'));
 const ExchangesList          = React.lazy(()=> import('../Exchange/ExchangeList'));
 const AdminLogin             = React.lazy(()=> import('../Authentication/AdminLogin'));
 const UserCryptoSwapList     = React.lazy(()=> import('../CryptoSwap/SwapList'));
+const ExchangeCrypto         = React.lazy(()=> import('../CryptoExchange/CryptoExchange'));
+const UserCryptoExchageList  = React.lazy(()=> import('../CryptoExchange/cryptoexchangelist'));
+
 
 
 
@@ -182,14 +184,13 @@ const AuthRoutes = () => {
 
                           {/* Crypto Section */}
                           <Route exact path='/crypto/transactions/' element={<UserCryptoTransactions open={open} />}></Route>
-                          <Route exact path='/crypto-list/' element={<CryptoList open={open} />}></Route>
                           <Route exact path='/crypto/wallets/' element={<UserCryptoWallets open={open} />}></Route>
                           <Route exact path='/crypto/buy/' element={<CryptoBuy open={open} />}></Route>
                           <Route exact path='/crypto/sell/' element={<CryptoSell open={open} />}></Route>
                           <Route exact path='/crypto/swap/' element={<CryptoSwap open={open} />}></Route>
-                          <Route exact path='/crypto/exchange/' element={<CryptoExchange open={open} />}></Route>
+                          <Route exact path='/crypto/exchange/' element={<ExchangeCrypto open={open} />}></Route>
                           <Route exact path='/crypto/swap/list/' element={<UserCryptoSwapList open={open} />}></Route>
-
+                          <Route exact path='/crypto/exchange/list/' element={<UserCryptoExchageList open={open} />}></Route>
 
                       </Routes>
                     </Box>

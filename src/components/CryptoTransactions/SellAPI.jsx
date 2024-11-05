@@ -161,9 +161,8 @@ export const handleConvertCryptoToUSD = ({cryptoName, setConvertedUSDValue, setE
         }
     ).catch((error)=> {
         // console.log(error)
-        setError('Crypto Conversion API limit Exceeded')
+        setError('Crypto Conversion API limit Exceeded');
     })
-
 };
 
 

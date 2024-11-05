@@ -3,22 +3,16 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-// import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useEffect } from 'react';
-// import Select, { selectClasses } from '@mui/joy/Select';
 import Select from '@mui/material/Select';
-import Option from '@mui/joy/Option';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { Grid } from '@mui/material';
-import Input from '@mui/joy/Input';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { handleCryptoSwapAssignedFee, handleCryptoWallets, handleConvertToCrypto, handleConvertFromCrypto } from './SwapAPI';
 import { useState } from 'react';
@@ -483,7 +477,7 @@ export default function CryptoSwap({open}) {
     }, [SwapQuantity, fromCrypto]);
     
 
-    /// Check To Crypto Wallet is Approved Status
+    /// Check To Crypto Wallet Status
     useEffect(() => {
       if (toCrypto) {
 
@@ -555,7 +549,7 @@ export default function CryptoSwap({open}) {
     }, [toCrypto, cryptoWallets]);
 
 
-    /// Convert From Crypto to its USD Value
+    // / Convert From Crypto to its USD Value
     useEffect(() => {
         if (fromWalletCryptoName) {
           handleConvertFromCrypto({fromWalletCryptoName, setFromCryptoUSDValue, setError})

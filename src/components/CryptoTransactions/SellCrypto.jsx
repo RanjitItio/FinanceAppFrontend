@@ -421,6 +421,7 @@ export default function CryptoSell({open}) {
            }).then((res)=> {
               // console.log(res)
               if (res.status === 200) {
+                  setError('')
                   setInsufficientFund(false);
               }
 
@@ -437,7 +438,8 @@ export default function CryptoSell({open}) {
                   setError('')
                 }
            })
-      }
+      };
+
   }, [exchangeAmount, crypto]);
 
 
@@ -473,7 +475,7 @@ export default function CryptoSell({open}) {
 
     }, [cryptoWallets, crypto]);
 
-    // Get assigned fee for Crypto Buy Transaction
+    // Get assigned fee for Crypto Sell Transaction
     useEffect(() => {
       if (exchangeAmount) {
         handleCryptoSellAssignedFee({exchangeAmount, SetChargedFee})

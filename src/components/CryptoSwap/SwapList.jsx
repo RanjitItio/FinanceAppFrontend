@@ -122,23 +122,21 @@ export default function UserCryptoSwapList({open}) {
 
     // Get paginated data
     const handleGetPaginatedData = (e, value)=> {
-        let limit  = 5;
+        let limit  = 10;
         let offset = (value - 1) * limit;
 
-        axiosInstance.get(`/api/v4/users/fiat/transactions/?limit=${limit}&offset=${offset}`).then((res)=> {
-            console.log(res)
-            if(res.data && res.data.all_fiat_transactions) {
-                const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
-                    return new Date(b.data.created_At) - new Date(a.data.created_At)
-                })
-                setTransactionData(sortedTransaction)
+        axiosInstance.get(`/api/v2/user/crypto/swap/?limit=${limit}&offset=${offset}`).then((res)=> {
+            // console.log(res)
+            if(res.data && res.data.success === true) {
+                setSwapTransaction(res.data.user_crypto_swap_transactions)
             };
 
         }).catch((error)=> {
-            console.log(error)
-
+            // console.log(error)
         })
     };
+
+
 
     // Until API data has not fetched
     if (loader) {
@@ -151,8 +149,8 @@ export default function UserCryptoSwapList({open}) {
 
             </Main>
         )
-        
     };
+
 
 
      // If no transaction available
@@ -175,6 +173,7 @@ export default function UserCryptoSwapList({open}) {
     };
 
 
+    
     return (
         <>
          <Main open={open}>

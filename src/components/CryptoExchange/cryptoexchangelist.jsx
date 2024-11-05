@@ -1,186 +1,193 @@
-import { Main,DrawerHeader } from '../Content';
-
+import {Main, DrawerHeader} from '../Content';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-// import ResponsiveDialog from './TransactionDetails';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import Pagination from '@mui/material/Pagination';
 import { Button } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
-
-// import { makeStyles } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from  '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from  '@mui/material/TableContainer';
-import TableHead from  '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from   '@mui/material/Paper';
-
+import axiosInstance from '../Authentication/axios';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import HistoryIcon from '@mui/icons-material/History';
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import CryptoExchangeTransactionDetail from './CryptoExchangeDetail';
 
 
 
-
-const TransactionData = [
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashin',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Exchange From',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '75',
-        status: 'cancelled',
-        status_color: 'red',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'red',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashin',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-04-2024',
-        time: '9:37 PM',
-        currency: '$',
-        amount: '10',
-        status: 'Pending',
-        status_color: 'orange',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'orange',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-    {
-        title: 'Cashout',
-        transaction_icon: <ArrowRightIcon />, 
-        date: '31-03-2024',
-        time: '9:47 PM',
-        currency: '$',
-        amount: '78',
-        status: 'success',
-        status_color: 'green',
-        status_icon: <ArrowDropUpIcon />,
-        status_icon_color: 'green',
-        currency_icon: <CurrencyPoundIcon sx={{fontSize: 18}} />
-    },
-]
-const rows = [
-    { date: '2024-05-10', txnId: '123456', type: 'Payment', sendAmount: '$100', getAmount: '$95', fee: '$5', status: 'Completed' },
-    { date: '2024-05-09', txnId: '789012', type: 'Withdrawal', sendAmount: '$200', getAmount: '$190', fee: '$10', status: 'Pending' },
-    // Add more rows as needed
-  ];
+// Currency Icon
+const getCurrencyIcon = (currency) => {
+    switch (currency) {
+        case 'BTC':
+            return '₿'
+        case 'XRP':
+            return 'X'
+        case 'LTC':
+            return 'Ł'
+        case 'SOL':
+            return 'S'
+        case 'ETH':
+            return '⧫'
+        default:
+            '$'
+    }
+};
 
 
-export default function CryptoList({open}) {
-    const [boxOpen, setBoxOpen] = useState(false);
-    const [isfilterItem, setFilterItem] = useState(false);
-    const [dateRange, setDateRange] = useState('');
-    const [transactionType, setTransactionType] = useState('');
-    const [transactionStatus, setTransactionStatus] = useState('');
-    const [currency, setCurrency] = useState('');
-     
 
 
+/// Users all Crypto Exchange History
+export default function UserCryptoExchageList({open}) {
+    const [boxOpen, setBoxOpen]                     = useState(false);  // Open transaction pop up
+    const [isfilterItem, setFilterItem]             = useState(false);  // Show filters
+    const [dateRange, setDateRange]                 = useState('');    // date range In filter
+    const [transactionType, setTransactionType]     = useState('');  // Transaction type in filter
+    const [transactionStatus, setTransactionStatus] = useState('');  // Transaction status in filter
+    const [currency, setCurrency]                   = useState('');   // Currency of Filter
+    const [exchangeTransaction, setExchangeTransaction] = useState([]);  // Transaction data from API
+    const [error, setError]                         = useState('');
+    const [paginatedValue, setPaginatedValue]       = useState(0);  // Pagination number
+    const [loader, setLoader]                       = useState(true);  // Loader
+    const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
+
+    const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0)
+
+    // Date value change
     const handleDateChange = (event) => {
         setDateRange(event.target.value);
     };  
+
+    // Transaction change
     const handleTransactionChange = (event) => {
         setTransactionType(event.target.value);
-    };  
+    };
+
+    // Get filter selected status 
     const handleTransactionStatusChange = (event) => {
         setTransactionStatus(event.target.value);
     };  
+
+    // Get Filter selected currency
     const handleCurrencyChange = (event) => {
         setCurrency(event.target.value);
     };   
 
+    // Method to open Transaction detail
     const handleClickOpen = () => {
         setBoxOpen(true);
-      };
-    
+    };
+
+
+    // Close the Transaction detail box
     const handleClose = () => {
         setBoxOpen(false);
-      };
+    };
+    
+    
+    // Fetch all Crypto Exchange Data
+    useEffect(() => {
+        try{
+            axiosInstance.get(`/api/v6/user/crypto/exchange/`).then((res)=> {
 
-    const toggleFilterItemVisibility = () => {
-        setFilterItem(!isfilterItem);
-      };
+                if(res.data && res.data.success === true) {
+                    setExchangeTransaction(res.data.user_crypto_exchange_data)
+                    setPaginatedValue(res.data.paginated_rows)
+                    setLoader(false)
+                };
+            })
+        } catch(error) {
+            // console.log(error)
+        }
+    }, []);
+
+
+
+    // Clicked on a specific transaction
+    const handleTransactionClick = (transaction)=> {
+        handleClickOpen();
+        updateSpecificTransactionDetails(transaction)
+    };
+
+
+    // Get paginated data
+    const handleGetPaginatedData = (e, value)=> {
+        let limit  = 10;
+        let offset = (value - 1) * limit;
+
+        axiosInstance.get(`/api/v6/user/crypto/exchange/?limit=${limit}&offset=${offset}`).then((res)=> {
+            // console.log(res)
+            if(res.data && res.data.success === true) {
+                setExchangeTransaction(res.data.user_crypto_exchange_data)
+            };
+
+        }).catch((error)=> {
+            // console.log(error)
+
+        })
+    };
+
+    // Until API data has not fetched
+    if (loader) {
+        return (
+            <Main open={open}>
+            <DrawerHeader />
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20%'}}>
+                    <CircularProgress />
+                </Box>
+
+            </Main>
+        )
+        
+    };
+
+
+     // If no transaction available
+     if (exchangeTransaction.length === 0) {
+        return (
+            <Main open={open}>
+            <DrawerHeader />
+                <div className="d-flex justify-content-center">
+                    <p className='fs-3'>TRANSACTIONS</p>
+                </div>
+                <div className="d-flex justify-content-center">
+                    <p className='text-muted'>History of all Crypto Exchange transactions of your account</p>
+                </div>
+                <br />
+
+                <p className='fs-5 d-flex justify-content-center my-5'><b>Nothing to show</b></p>
+                <CloseIcon sx={{marginLeft: {lg: '45%', md: '45%', sm: '39%', xs: '39%'}, fontSize: '100px'}} />
+            </Main>
+        )
+    };
+
 
     return (
         <>
          <Main open={open}>
             <DrawerHeader />
 
-
             <div className="d-flex justify-content-center">
-                <p className='fs-3'>Crypto Exchange</p>
+                <p className='fs-3'>TRANSACTIONS</p>
             </div>
             <div className="d-flex justify-content-center">
-                <p className='text-muted'>List of all the payments you received from customers</p>
+                <p className='text-muted'>History of all Crypto Exchange transactions of your account</p>
             </div>
             <br />
             <div className='d-flex justify-content-between'>
-                <p className='text-muted'>All Crypto Exchange Transaction</p>
-                <div className='d-flex align-items-center'>
-                    <p className='text-muted'>Filter</p>&nbsp;
-                    <Button startIcon={<FilterListIcon />} style={{backgroundColor: ''}} variant="outlined" onClick={toggleFilterItemVisibility}></Button>
-                </div>
+                <p className='text-muted'>All Crypto Exchange</p>
+               
             </div>
 
             <div className='d-flex justify-content-between'>   
@@ -294,48 +301,115 @@ export default function CryptoList({open}) {
                             <Button variant="text">Reset</Button>
                             <Button variant="contained">Apply Filter</Button>
                         </div>
-                        
                     </div>
                 </div>
                     
                 </>
                 )}
+
             </div>
-            <TableContainer component={Paper}>
-      <Table aria-label="transaction table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Tnx ID</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Send Amount</TableCell>
-            <TableCell>Get Amount</TableCell>
-            <TableCell>Fee</TableCell>
-            <TableCell>Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.txnId}>
-              <TableCell component="th" scope="row">
-                {row.date}
-              </TableCell>
-              <TableCell>{row.txnId}</TableCell>
-              <TableCell>{row.type}</TableCell>
-              <TableCell>{row.sendAmount}</TableCell>
-              <TableCell>{row.getAmount}</TableCell>
-              <TableCell>{row.fee}</TableCell>
-              <TableCell>{row.status}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-           
+
+                {error ? (
+                    <Alert severity="warning">{error}</Alert>
+                ) : (
+
+            <List>
+                {exchangeTransaction.map((transaction, index) => {
+            
+                    return(
+        
+                    <ListItem
+                        key={index}
+                        disablePadding
+                        secondaryAction={
+                            <IconButton edge="end" aria-label="comments">
+                                <ArrowRightIcon />
+                            </IconButton>
+                        }
+                        onClick={()=> {handleTransactionClick(transaction);}}
+                        className='mb-2 shadow border border-secondary'
+                    >
+
+                    <ListItemButton>
+                            <ListItemAvatar>
+                                <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.crypto_name || '')}</Avatar>
+                            </ListItemAvatar>
+
+                        <ListItemText
+                            primary='Crypto Exchange'
+                            secondary={`${transaction.created_at?.split('T')[0] || ''} ${transaction.created_at?.split('T')[1] || ''}`}
+                        />
+
+
+                        <ListItemText
+                        primary={
+                            
+                            transaction.status == 'Pending' ? (
+                                <>
+                                
+                                    <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
+                                    <span className='mx-1'>{transaction.crypto_name}</span>
+                                    <span>{transaction.exchange_crypto_amount ? parseFloat(transaction.exchange_crypto_amount).toFixed(9) : 0}</span>
+                                
+                                </>
+
+                            ) : transaction.status == 'Approved' ? (
+                                <>
+                                    <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                    <span className='mx-1'>{transaction.crypto_name}</span>
+                                    <span>{transaction.exchange_crypto_amount ? parseFloat(transaction.exchange_crypto_amount).toFixed(5) : 0}</span>
+                                </>
+                                
+                            ) : transaction.status == 'Cancelled' ? (
+                                <>
+                                    <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
+                                    <span className='mx-1'>{transaction.crypto_name}</span>
+                                    <span>{transaction.exchange_crypto_amount ? parseFloat(transaction.exchange_crypto_amount).toFixed(5) : 0}</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                    <span className='mx-1'>{transaction.crypto_name}</span>
+                                    <span>{transaction.exchange_crypto_amount ? parseFloat(transaction.exchange_crypto_amount).toFixed(5) : 0}</span>
+                                </>
+                            ) 
+                        }
+
+                        secondary={
+                            transaction.status == 'Pending' ? (
+                                <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
+
+                            ) : transaction.status == 'Approved' ? (
+                                <span style={{ color: 'green' }}>{transaction?.status || ''}</span>
+
+                            ) : transaction.status === 'Cancelled' ? (
+                                <span style={{ color: 'red' }}>{transaction?.status || ''}</span>
+
+                            ) : (
+                                <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
+                            )
+                        }
+                        sx={{ flex: 'auto', textAlign: 'right' }}
+                        />
+
+                    </ListItemButton>
+                    </ListItem>
+                    )
+                })}
+            </List>
+        )}
+
+            <div className="my-3">
+                <Pagination 
+                    count={countPaginationNumber} 
+                    onChange={(e, value)=> handleGetPaginatedData(e, value)}
+                    color="primary" />
+            </div>
 
         </Main>
-        {/* <ResponsiveDialog handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} /> */}
 
+        <CryptoExchangeTransactionDetail handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />
+        
         </>
-    )
-}
+    );
+};
