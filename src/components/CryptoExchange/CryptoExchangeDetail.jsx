@@ -209,7 +209,7 @@ export default function CryptoExchangeTransactionDetail({handleClose, boxOpen, s
 
                                         <div>
                                             <p className='text-muted' style={{marginBottom:0.1}}>Total amount</p>
-                                            <p>{CalculateTotalAmount(specificTransactionDetails.exchange_crypto_amount, specificTransactionDetails.fee_value)}</p>
+                                            <p>{CalculateTotalAmount(specificTransactionDetails.exchange_crypto_amount, specificTransactionDetails.fee_value)} {specificTransactionDetails?.crypto_name || ''}</p>
                                         </div>
                                     </div>
                                 </div>
