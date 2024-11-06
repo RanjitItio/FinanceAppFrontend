@@ -249,7 +249,7 @@ function Form2({...props}) {
   
           <div className="d-flex justify-content-between">
               <p>Fee: </p> 
-              <p>{props.chargedFee ? parseFloat(props.chargedFee).toFixed(4) : 0} {props.CryptoWalletName}</p>
+              <p>{props.chargedFee ? parseFloat(props.chargedFee).toFixed(7) : 0} {props.CryptoWalletName}</p>
           </div>
           <hr/>
   
