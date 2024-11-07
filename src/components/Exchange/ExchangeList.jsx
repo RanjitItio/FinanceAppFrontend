@@ -10,8 +10,6 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
-import { Button } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -22,9 +20,12 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import HistoryIcon from '@mui/icons-material/History';
 import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import ExchangeDetails from './ExchangeDetails';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+
+
 
 
 
@@ -110,7 +111,7 @@ export default function ExchangesList({open}) {
             };
 
         }).catch((error)=> {
-            console.log(error);
+            // console.log(error);
 
         })
     }, []);
@@ -190,221 +191,188 @@ export default function ExchangesList({open}) {
             <br />
             <div className='d-flex justify-content-between'>
                 <p className='text-muted'>All Exchanges</p>
-                {/* <div className='d-flex align-items-center'>
-                    <p className='text-muted'>Filter</p>&nbsp;
-                    <Button startIcon={<FilterListIcon />} style={{backgroundColor: ''}} variant="outlined" onClick={toggleFilterItemVisibility}></Button>
-                </div> */}
+                <Button variant="contained" startIcon={<FilterAltIcon />} onClick={()=> {setFilterItem(!isfilterItem)}}>Filter</Button>
             </div>
 
-            <div className='d-flex justify-content-between'>   
-            {isfilterItem && (
-                <>
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-12 col-md-10">
-                            <FormControl sx={{ m: 1, minWidth: 100, width: {xs: '80%', sm: '16.5%'}}}>
-                                <InputLabel id="demo-simple-select-helper-label">Pick a Date Range</InputLabel>
-                                <Select
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                value={dateRange}
-                                label="Age"
-                                onChange={handleDateChange}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Today</MenuItem>
-                                    <MenuItem value={20}>Yesterday</MenuItem>
-                                    <MenuItem value={30}>Last 7 Days</MenuItem>
-                                    <MenuItem value={40}>Last 30 Days</MenuItem>
-                                    <MenuItem value={50}>This month</MenuItem>
-                                    <MenuItem value={60}>Last month</MenuItem>
-                                </Select>
-                                <FormHelperText>Pick a date range</FormHelperText>
-                            </FormControl>
-                        
-                            <FormControl sx={{ m: 1, minWidth: 120,  width: {xs: '80%', sm: '9%'}}}>
-                                <InputLabel id="demo-simple-select-helper-label">Transaction</InputLabel>
-                                <Select
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                value={transactionType}
-                                label="Age"
-                                onChange={handleTransactionChange}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>All Type</MenuItem>
-                                    <MenuItem value={20}>Deposit</MenuItem>
-                                    <MenuItem value={30}>Withdrawl</MenuItem>
-                                    <MenuItem value={30}>Transferred</MenuItem>
-                                    <MenuItem value={30}>Received</MenuItem>
-                                    <MenuItem value={30}>Exchange form</MenuItem>
-                                    <MenuItem value={30}>Exchange To</MenuItem>
-                                    <MenuItem value={30}>Request Sent</MenuItem>
-                                    <MenuItem value={30}>Request Received</MenuItem>
-                                    <MenuItem value={30}>Payment Sent</MenuItem>
-                                    <MenuItem value={30}>Payment Received</MenuItem>
-                                    <MenuItem value={30}>Crypto Received</MenuItem>
-                                    <MenuItem value={30}>Crypto Sent</MenuItem>
-                                    <MenuItem value={30}>Crypto Swap</MenuItem>
-                                    <MenuItem value={30}>Crypto Buy</MenuItem>
-                                    <MenuItem value={30}>Crypto Sell</MenuItem>
-                                    <MenuItem value={30}>Investment</MenuItem>
-                                    <MenuItem value={30}>Cashin</MenuItem>
-                                    <MenuItem value={30}>Cashout</MenuItem>
-                                </Select>
-                                <FormHelperText>Transaction Type</FormHelperText>
-                            </FormControl>
-                       
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="demo-simple-select-helper-label">Status</InputLabel>
-                                <Select
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                value={transactionStatus}
-                                label="Age"
-                                onChange={handleTransactionStatusChange}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>All Status</MenuItem>
-                                    <MenuItem value={20}>Success</MenuItem>
-                                    <MenuItem value={30}>Pending</MenuItem>
-                                    <MenuItem value={40}>Cancelled</MenuItem>
-                                    <MenuItem value={50}>Refunded</MenuItem>
-                                </Select>
-                                <FormHelperText>Trasaction Status</FormHelperText>
-                            </FormControl>
-                        
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="demo-simple-select-helper-label">Currency</InputLabel>
-                                <Select
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                value={currency}
-                                label="Age"
-                                onChange={handleCurrencyChange}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>All Currency</MenuItem>
-                                    <MenuItem value={20}>EUR</MenuItem>
-                                    <MenuItem value={30}>USD</MenuItem>
-                                    <MenuItem value={40}>INR</MenuItem>
-                                    <MenuItem value={50}>GBP</MenuItem>
-                                    <MenuItem value={60}>BTC</MenuItem>
-                                    <MenuItem value={70}>Dodge</MenuItem>
-                                </Select>
-                                <FormHelperText>Currency</FormHelperText>
-                            </FormControl>
-                        </div>
-                        <div className="col-xs-12 col-sm-12 col-md-2 my-3">
-                            <Button variant="text">Reset</Button>
+            <div className="d-flex justify-content-between">
+                {isfilterItem && (
+                    <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
+                        <Grid item xs={12} md={9}>
+                            <Grid container spacing={2}>
+
+                                {/* Date Range Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Date Range</InputLabel>
+                                        <Select value={dateRange} onChange={handleDateChange} label='Date Range'>
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>Today</MenuItem>
+                                            <MenuItem value={20}>Yesterday</MenuItem>
+                                            <MenuItem value={30}>Last 7 Days</MenuItem>
+                                            <MenuItem value={40}>Last 30 Days</MenuItem>
+                                            <MenuItem value={50}>This month</MenuItem>
+                                            <MenuItem value={60}>Last month</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                {/* Transaction Type Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Transaction</InputLabel>
+                                        <Select value={transactionType} onChange={handleTransactionChange} label='Transaction'>
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>All Type</MenuItem>
+                                            <MenuItem value={20}>Deposit</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                {/* Transaction Status Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Status</InputLabel>
+                                        <Select 
+                                            value={transactionStatus}
+                                            onChange={handleTransactionStatusChange}
+                                            label='Status'
+                                            >
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>All Status</MenuItem>
+                                            <MenuItem value={20}>Success</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                {/* Currency Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Currency</InputLabel>
+                                        <Select 
+                                            value={currency} 
+                                            onChange={handleCurrencyChange}
+                                            label='Currency'
+                                            >
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>All Currency</MenuItem>
+                                            <MenuItem value={20}>EUR</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        {/* Action Buttons */}
+                        <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
                             <Button variant="contained">Apply Filter</Button>
-                        </div>
-                    </div>
-                </div>
-                    
-                </>
+                        </Grid>
+
+                        <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
+                            <Button variant="contained">Reset</Button>
+                        </Grid>
+                    </Grid>
                 )}
             </div>
 
                 {error ? (
                     <Alert severity="warning">{error}</Alert>
                 ) : (
-        <List>
-            {ExchangeData.map((transaction, index) => {
-                return(
-       
-                <ListItem
-                    key={index}
-                    disablePadding
-                    secondaryAction={
-                        <IconButton edge="end" aria-label="comments">
-                            <ArrowRightIcon />
-                        </IconButton>
-                    }
-                    onClick={()=> {handleTransactionClick(transaction);}}
-                    className='mb-2 shadow border border-secondary'
-                >
-                <ListItemButton>
-                        <ListItemAvatar>
-                            <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.from_currency || '')}</Avatar>
-                        </ListItemAvatar>
-                    <ListItemText
-                    primary='Exchange'
-                    secondary={`${transaction.created_At?.split('T')[0] || ''} ${transaction.created_At?.split('T')[1] || ''}`}
-                    />
-                    <ListItemText
-                    primary={
-                        
-                        transaction.status == 'Pending' ? (
-                            <>
-                            
-                                <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
-                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
-                                <span>{transaction?.exchange_amount || 0}</span>
-                            
-                            </>
 
-                        ) : transaction.status == 'Approved' ? (
-                            <>
-                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
-                                <span>{transaction?.exchange_amount || 0}</span>
-                            </>
-                            
-                        ) : transaction.status == 'Cancelled' ? (
-                            <>
-                                <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
-                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
-                                <span>{transaction?.exchange_amount || 0}</span>
-                            </>
-                        ) : (
-                            <>
-                                <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
-                                <span className='mx-1'>{transaction?.from_currency || ''}</span>
-                                <span>{transaction?.exchange_amount || 0}</span>
-                            </>
-                        ) 
-                    }
-
-                    secondary={
-                        transaction.status == 'Pending' ? (
-                            <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
-
-                        ) : transaction.status == 'Approved' ? (
-                            <span style={{ color: 'green' }}>{transaction?.status || ''}</span>
-
-                        ) : transaction.status === 'Cancelled' ? (
-                            <span style={{ color: 'red' }}>{transaction?.status || ''}</span>
-
-                        ) : (
-                            <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
-                        )
-                    }
-                        sx={{ flex: 'auto', textAlign: 'right' }}
-                    />
-                </ListItemButton>
-                </ListItem>
-                )
+                    <List>
+                        {ExchangeData.map((transaction, index) => {
+                            return(
                 
-            })}
-            </List>
-        
-    )}
-            <div className="my-3">
-                <Pagination 
-                    count={countPaginationNumber} 
-                    onChange={(e, value)=> handleGetPaginatedData(e, value)}
-                    color="primary" />
-            </div>
+                            <ListItem
+                                key={index}
+                                disablePadding
+                                secondaryAction={
+                                    <IconButton edge="end" aria-label="comments">
+                                        <ArrowRightIcon />
+                                    </IconButton>
+                                }
+                                onClick={()=> {handleTransactionClick(transaction);}}
+                                className='mb-2 shadow border border-secondary'
+                            >
+                            <ListItemButton>
+                                    <ListItemAvatar>
+                                        <Avatar style={{backgroundColor: '#d5d4ed'}}>{getCurrencyIcon(transaction.from_currency || '')}</Avatar>
+                                    </ListItemAvatar>
+                                <ListItemText
+                                primary='Exchange'
+                                secondary={`${transaction.created_At?.split('T')[0] || ''} ${transaction.created_At?.split('T')[1] || ''}`}
+                                />
+                                <ListItemText
+                                primary={
+                                    
+                                    transaction.status == 'Pending' ? (
+                                        <>
+                                        
+                                            <span style={{color: 'orange'}} className='mx-1'><HistoryIcon /></span>
+                                            <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                            <span>{transaction?.exchange_amount || 0}</span>
+                                        
+                                        </>
 
+                                    ) : transaction.status == 'Approved' ? (
+                                        <>
+                                            <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                            <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                            <span>{transaction?.exchange_amount || 0}</span>
+                                        </>
+                                        
+                                    ) : transaction.status == 'Cancelled' ? (
+                                        <>
+                                            <span style={{color: 'red'}}  className='mx-1'><ArrowDropDownIcon /></span>
+                                            <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                            <span>{transaction?.exchange_amount || 0}</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span style={{color: 'green'}} className='mx-1'><ArrowDropUpIcon /></span>
+                                            <span className='mx-1'>{transaction?.from_currency || ''}</span>
+                                            <span>{transaction?.exchange_amount || 0}</span>
+                                        </>
+                                    ) 
+                                }
+
+                                secondary={
+                                    transaction.status == 'Pending' ? (
+                                        <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
+
+                                    ) : transaction.status == 'Approved' ? (
+                                        <span style={{ color: 'green' }}>{transaction?.status || ''}</span>
+
+                                    ) : transaction.status === 'Cancelled' ? (
+                                        <span style={{ color: 'red' }}>{transaction?.status || ''}</span>
+
+                                    ) : (
+                                        <span style={{ color: 'orange' }}>{transaction?.status || ''}</span>
+                                    )
+                                }
+                                    sx={{ flex: 'auto', textAlign: 'right' }}
+                                />
+                            </ListItemButton>
+                            </ListItem>
+                            )
+                            
+                        })}
+                    </List>
+                )}
+
+                <div className="my-3">
+                    <Pagination 
+                        count={countPaginationNumber} 
+                        onChange={(e, value)=> handleGetPaginatedData(e, value)}
+                        color="primary" />
+                </div>
         </Main>
 
         <ExchangeDetails handleClickOpen={handleClickOpen} handleClose={handleClose} boxOpen={boxOpen} specificTransactionDetails={specificTransactionDetails} />

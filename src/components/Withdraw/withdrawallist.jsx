@@ -12,7 +12,8 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '../Authentication/axios';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import FiatWithdrawalDetails from './WithdrawalDetails';
-import { Box } from '@mui/material';
+import { Box, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 
 
@@ -40,6 +41,7 @@ export default function WithdrawalList({open}) {
     const [boxOpen, setBoxOpen] = useState(false);    // Open withdrawal details pop up
     const [specificWithdrawal, setSpecificWithdrawal] = useState([]);  // Specific Withdrawal data
     const [paginationCount, setPaginationCount]  = useState(0);
+    const [isfilterItem, setFilterItem]             = useState(false);  // Show filters
 
     const CountPagination = Math.ceil(paginationCount ? paginationCount : 0)
 
@@ -111,7 +113,94 @@ export default function WithdrawalList({open}) {
             
             <div className='d-flex justify-content-between'>
                 <p className='text-muted'>All Withdrawal History</p>
+                <Button variant="contained" startIcon={<FilterAltIcon />} onClick={()=> {setFilterItem(!isfilterItem)}}>Filter</Button>
             </div>
+
+
+            <div className="d-flex justify-content-between">
+                {isfilterItem && (
+                    <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
+                        <Grid item xs={12} md={9}>
+                            <Grid container spacing={2}>
+
+                                {/* Date Range Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Date Range</InputLabel>
+                                        <Select label='Date Range'>
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>Today</MenuItem>
+                                            <MenuItem value={20}>Yesterday</MenuItem>
+                                            <MenuItem value={30}>Last 7 Days</MenuItem>
+                                            <MenuItem value={40}>Last 30 Days</MenuItem>
+                                            <MenuItem value={50}>This month</MenuItem>
+                                            <MenuItem value={60}>Last month</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                {/* Transaction Type Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Transaction</InputLabel>
+                                        <Select label='Transaction'>
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>All Type</MenuItem>
+                                            <MenuItem value={20}>Deposit</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                {/* Transaction Status Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Status</InputLabel>
+                                        <Select 
+                                            label='Status'
+                                            >
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>All Status</MenuItem>
+                                            <MenuItem value={20}>Success</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                {/* Currency Filter */}
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Currency</InputLabel>
+                                        <Select 
+                                            label='Currency'
+                                            >
+                                            <MenuItem value="">
+                                            <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>All Currency</MenuItem>
+                                            <MenuItem value={20}>EUR</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        {/* Action Buttons */}
+                        <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
+                            <Button variant="contained">Apply Filter</Button>
+                        </Grid>
+
+                        <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
+                            <Button variant="contained">Reset</Button>
+                        </Grid>
+                    </Grid>
+                )}
+            </div>
+
 
             <List>
             {withdrawalData.map((transaction, index) => (
