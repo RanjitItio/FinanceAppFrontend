@@ -11,10 +11,9 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
+import { Select } from '@mui/material';
 import axiosInstance from '../Authentication/axios';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import HistoryIcon from '@mui/icons-material/History';
@@ -24,7 +23,12 @@ import { Box, Button, Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import CryptoSwapDetail from './SwapDetail';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { DatePicker } from 'antd';
 
+
+const { RangePicker } = DatePicker;
 
 
 // Currency Icon
@@ -49,40 +53,48 @@ const getCurrencyIcon = (currency) => {
 
 //// All Crypti Swap transactions List of the user
 export default function UserCryptoSwapList({open}) {
+    const theme         = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     const [boxOpen, setBoxOpen]                     = useState(false);  // Open transaction pop up
     const [isfilterItem, setFilterItem]             = useState(false);  // Show filters
-    const [dateRange, setDateRange]                 = useState('');    // date range In filter
-    const [transactionType, setTransactionType]     = useState('');  // Transaction type in filter
-    const [transactionStatus, setTransactionStatus] = useState('');  // Transaction status in filter
-    const [currency, setCurrency]                   = useState('');   // Currency of Filter
-    const [transactionData, setTransactionData]     = useState([]);  // Transaction data from API
     const [swapTransaction, setSwapTransaction]     = useState([]);  // Transaction data from API
-    const [error, setError]                         = useState('');
+    const [error, setError]                         = useState('');  // Error Message
     const [paginatedValue, setPaginatedValue]       = useState(0);  // Pagination number
     const [loader, setLoader]                       = useState(true);  // Loader
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
+    const [LgStartDateRange, setLgStartDateRange]   = useState('');  // Large Screen Start date
+    const [LgEndDateRange, setLgEndDateRange]       = useState('');  // Large Screen End Date
+    const [ShStartDateRange, setShStartDateRange]   = useState('');  // Small screen Start date
+    const [ShEndDateRange, setShEndDateRange]       = useState('');  // Small Screen End date
+    const [filterDate, setFilterDate]        = useState('');  // Filter date state field
+    const [filterError, setFilterError]      = useState('');  // Error message of filter
+    const [filterFromCrypto, setFilterFromCrypto] = useState('');
+    const [filterToCrypto, setFilterToCrypto]     = useState('');
+    const [filterStatus, setFilterStatus]         = useState('');
+    const [filterActive, setFilterActive]         = useState(false);
+
 
     const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0)
 
-    // Date value change
-    const handleDateChange = (event) => {
-        setDateRange(event.target.value);
-    };  
 
-    // Transaction change
-    const handleTransactionChange = (event) => {
-        setTransactionType(event.target.value);
+    /// Filter Date Range Selected in Large Screen
+    const handelLargeScreenCustomDateRange = (date, dateString)=> {
+        setLgStartDateRange(dateString[0])
+        setLgEndDateRange(dateString[1])
     };
 
-    // Get filter selected status 
-    const handleTransactionStatusChange = (event) => {
-        setTransactionStatus(event.target.value);
-    };  
 
-    // Get Filter selected currency
-    const handleCurrencyChange = (event) => {
-        setCurrency(event.target.value);
-    };   
+    /// Filter Small Screen Start date range
+    const handleSmallScreenStartDateRange = (date, dateString)=> {
+        setShStartDateRange(dateString)
+    };
+
+
+    /// Filter Small Screen End Date Range
+    const handleSmallScreenEndDateRange = (date, dateString)=> {
+        setShEndDateRange(dateString)
+    }; 
 
     // Method to open Transaction detail
     const handleClickOpen = () => {
@@ -126,14 +138,159 @@ export default function UserCryptoSwapList({open}) {
         let limit  = 10;
         let offset = (value - 1) * limit;
 
-        axiosInstance.get(`/api/v2/user/crypto/swap/?limit=${limit}&offset=${offset}`).then((res)=> {
-            // console.log(res)
-            if(res.data && res.data.success === true) {
-                setSwapTransaction(res.data.user_crypto_swap_transactions)
-            };
+        if (filterActive) {
+            if (isSmallScreen && filterDate === 'CustomRange') {
+                if (!ShStartDateRange) {
+                    setFilterError('Please Select Start Date');
+    
+                } else if (!ShEndDateRange) {
+                    setFilterError('Please Select End Date');
+    
+                } else {
+                    setFilterError('');
+                    GetFilteredPaginatedData(ShStartDateRange, ShEndDateRange, limit, offset);
+                }
+    
+            } else if (!isSmallScreen && filterDate === 'CustomRange') {
+                if (!LgStartDateRange) {
+                    setFilterError('Please Select Date Range');
+    
+                } else if (!LgEndDateRange) {
+                    setFilterError('Please Select Date Range');
+    
+                } else {
+                    setFilterError('');
+                    GetFilteredPaginatedData(LgStartDateRange, LgEndDateRange, limit, offset);
+                }
+    
+            } else {
+                setFilterError('');
+                GetFilteredPaginatedData(LgStartDateRange, LgEndDateRange, limit, offset);
+            }
+
+        } else {
+            axiosInstance.get(`/api/v2/user/crypto/swap/?limit=${limit}&offset=${offset}`).then((res)=> {
+                // console.log(res)
+                if(res.data && res.data.success === true) {
+                    setSwapTransaction(res.data.user_crypto_swap_transactions)
+                };
+    
+            }).catch((error)=> {
+                // console.log(error)
+            })
+        };
+    };
+
+    //// Reset Filter Selected data
+   const handleFilterReset = ()=> {
+        setFilterActive(false);
+        setFilterDate('');
+        setFilterFromCrypto('');
+        setFilterStatus('');
+        setFilterToCrypto('');
+        setFilterError('');
+    };
+
+     //// Call default pagination after filter mode off
+    useEffect(() => {
+        if (!filterActive) {
+            handleGetPaginatedData('e', 1);
+        }
+    }, [!filterActive]);
+
+
+    
+   // Get filtered data
+    const handleFilterData = ()=> {
+        if (isSmallScreen && filterDate === 'CustomRange') {
+            if (!ShStartDateRange) {
+                setFilterError('Please Select Start Date');
+
+            } else if (!ShEndDateRange) {
+                setFilterError('Please Select End Date');
+
+            } else {
+                setFilterError('');
+                GetFilteredData(ShStartDateRange, ShEndDateRange);
+            }
+
+        } else if (!isSmallScreen && filterDate === 'CustomRange') {
+            if (!LgStartDateRange) {
+                setFilterError('Please Select Date Range');
+
+            } else if (!LgEndDateRange) {
+                setFilterError('Please Select Date Range');
+
+            } else {
+                setFilterError('');
+                GetFilteredData(LgStartDateRange, LgEndDateRange);
+            }
+
+        } else {
+            setFilterError('');
+            GetFilteredData();
+        }
+    };
+
+
+
+    //// Get filtered data from API
+    const GetFilteredData = (startDate, endDate)=> {
+        axiosInstance.post(`/api/v2/user/filter/crypto/swap/`, {
+            dateRange: filterDate,
+            status: filterStatus,
+            from_crypto: filterFromCrypto,
+            to_crypto: filterToCrypto,
+            start_date: startDate ? startDate : LgStartDateRange,
+            end_date: endDate ? endDate : LgEndDateRange
+
+        }).then((res)=> {
+            console.log(res);
+            if (res.status === 200 && res.data.success === true) {
+                const sortedTransactions = res.data.user_filter_crypto_swap_transactions.sort((a,b)=> {
+                    return new Date(b.created_at) - new Date(a.created_at)
+                })
+                setSwapTransaction(sortedTransactions)
+                setFilterActive(true);
+                setPaginatedValue(res.data.paginated_count);
+            }
 
         }).catch((error)=> {
-            // console.log(error)
+            // console.log(error);
+            if (error.response.data.message === 'No data found') {
+                setFilterError('No Data Found')
+            } 
+        })
+    };
+
+
+    
+    //// Get filtered data from API
+    const GetFilteredPaginatedData = (startDate, endDate, limit, offset)=> {
+        axiosInstance.post(`/api/v2/user/filter/crypto/swap/?limit=${limit}&offset=${offset}`, {
+            dateRange: filterDate,
+            status: filterStatus,
+            from_crypto: filterFromCrypto,
+            to_crypto: filterToCrypto,
+            start_date: startDate ? startDate : LgStartDateRange,
+            end_date: endDate ? endDate : LgEndDateRange
+
+        }).then((res)=> {
+            // console.log(res);
+            if (res.status === 200 && res.data.success === true) {
+                const sortedTransactions = res.data.user_filter_crypto_swap_transactions.sort((a,b)=> {
+                    return new Date(b.created_at) - new Date(a.created_at)
+                })
+                setSwapTransaction(sortedTransactions)
+                setFilterActive(true);
+                setPaginatedValue(res.data.paginated_count);
+            }
+
+        }).catch((error)=> {
+            // console.log(error);
+            if (error.response.data.message === 'No data found') {
+                setFilterError('No Data Found')
+            } 
         })
     };
 
@@ -203,30 +360,50 @@ export default function UserCryptoSwapList({open}) {
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
                                         <InputLabel>Date Range</InputLabel>
-                                        <Select value={dateRange} onChange={handleDateChange} label='Date Range'>
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>Today</MenuItem>
-                                            <MenuItem value={20}>Yesterday</MenuItem>
-                                            <MenuItem value={30}>Last 7 Days</MenuItem>
-                                            <MenuItem value={40}>Last 30 Days</MenuItem>
-                                            <MenuItem value={50}>This month</MenuItem>
-                                            <MenuItem value={60}>Last month</MenuItem>
+                                        <Select 
+                                            value={filterDate} 
+                                            onChange={(e)=> setFilterDate(e.target.value)} 
+                                            label='Date Range'
+                                            >
+                                            <MenuItem value="Today">Today</MenuItem>
+                                            <MenuItem value="Yesterday">Yesterday</MenuItem>
+                                            <MenuItem value="ThisWeek">ThisWeek</MenuItem>
+                                            <MenuItem value="ThisMonth">This Month</MenuItem>
+                                            <MenuItem value="LastMonth">Last month</MenuItem>
+                                            <MenuItem value="CustomRange">Custom Range</MenuItem>
                                         </Select>
                                     </FormControl>
+
+                                    {filterDate === "CustomRange" && (
+                                        isSmallScreen ? (
+                                            <>
+                                                <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenStartDateRange} />
+                                                <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenEndDateRange} />
+                                            </>
+                                        ) : (
+                                            <RangePicker 
+                                                style={{ width: '100%', marginTop:5 }} onChange={handelLargeScreenCustomDateRange} 
+                                                />
+                                        )
+                                    )}
                                 </Grid>
 
-                                {/* Transaction Type Filter */}
+                                {/* From Crypto Filter */}
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Transaction</InputLabel>
-                                        <Select value={transactionType} onChange={handleTransactionChange} label='Transaction'>
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>All Type</MenuItem>
-                                            <MenuItem value={20}>Deposit</MenuItem>
+                                        <InputLabel>From Crypto</InputLabel>
+                                        <Select 
+                                            value={filterFromCrypto} 
+                                            onChange={(e)=> setFilterFromCrypto(e.target.value)} 
+                                            label='From Crypto'
+                                            >
+                                            <MenuItem value="BTC">BTC</MenuItem>
+                                            <MenuItem value="XRP">XRP</MenuItem>
+                                            <MenuItem value="ETH">ETH</MenuItem>
+                                            <MenuItem value="SOL">SOL</MenuItem>
+                                            <MenuItem value="LTC">LTC</MenuItem>
+                                            <MenuItem value="DOGE">DOGE</MenuItem>
+                                            <MenuItem value="BNB">BNB</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -234,57 +411,66 @@ export default function UserCryptoSwapList({open}) {
                                 {/* Transaction Status Filter */}
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Status</InputLabel>
+                                        <InputLabel>To Crypto</InputLabel>
                                         <Select 
-                                            value={transactionStatus}
-                                            onChange={handleTransactionStatusChange}
-                                            label='Status'
+                                            value={filterToCrypto} 
+                                            onChange={(e)=> setFilterToCrypto(e.target.value)} 
+                                            label='To Crypto'
                                             >
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>All Status</MenuItem>
-                                            <MenuItem value={20}>Success</MenuItem>
+                                            <MenuItem value="BTC">BTC</MenuItem>
+                                            <MenuItem value="XRP">XRP</MenuItem>
+                                            <MenuItem value="ETH">ETH</MenuItem>
+                                            <MenuItem value="SOL">SOL</MenuItem>
+                                            <MenuItem value="LTC">LTC</MenuItem>
+                                            <MenuItem value="DOGE">DOGE</MenuItem>
+                                            <MenuItem value="BNB">BNB</MenuItem>
                                         </Select>
                                     </FormControl>
+
                                 </Grid>
 
                                 {/* Currency Filter */}
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Currency</InputLabel>
+                                        <InputLabel>Status</InputLabel>
                                         <Select 
-                                            value={currency} 
-                                            onChange={handleCurrencyChange}
-                                            label='Currency'
+                                            value={filterStatus} 
+                                            onChange={(e)=> setFilterStatus(e.target.value)} 
+                                            label='Status'
                                             >
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>All Currency</MenuItem>
-                                            <MenuItem value={20}>EUR</MenuItem>
+                                            <MenuItem value="Approved">Approved</MenuItem>
+                                            <MenuItem value="Pending">Pending</MenuItem>
+                                            <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                            <MenuItem value="Hold">On Hold</MenuItem>
                                         </Select>
                                     </FormControl>
+
                                 </Grid>
                             </Grid>
                         </Grid>
 
                         {/* Action Buttons */}
                         <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
-                            <Button variant="contained">Apply Filter</Button>
+                            <Button variant="contained" onClick={handleFilterData}>Apply Filter</Button>
                         </Grid>
 
                         <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
-                            <Button variant="contained">Reset</Button>
+                            <Button variant="contained" onClick={handleFilterReset}>Reset</Button>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            {filterError && 
+                                <p style={{color:'red'}}>{filterError}</p>
+                            }
                         </Grid>
                     </Grid>
                 )}
             </div>
 
 
-                {error ? (
-                    <Alert severity="warning">{error}</Alert>
-                ) : (
+            {error ? (
+                <Alert severity="warning">{error}</Alert>
+            ) : (
 
             <List>
                 {swapTransaction.map((transaction, index) => {
