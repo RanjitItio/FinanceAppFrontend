@@ -23,6 +23,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { DatePicker } from 'antd';
+
+
+const { RangePicker } = DatePicker;
 
 
 
@@ -50,39 +56,49 @@ const getCurrencyIcon = (currency) => {
 
 // All FIAT Transaction of the user
 export default function AllTransactions({open}) {
+    const theme         = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     const [boxOpen, setBoxOpen] = useState(false);  // Open transaction pop up
-    const [isfilterItem, setFilterItem] = useState(false);  // Show filters
-    const [dateRange, setDateRange] = useState('');    // date range In filter
-    const [transactionType, setTransactionType] = useState('');  // Transaction type in filter
-    const [transactionStatus, setTransactionStatus] = useState('');  // Transaction status in filter
-    const [currency, setCurrency] = useState('');   // Currency of Filter
     const [transactionData, setTransactionData] = useState([]);  // Transaction data from API
     const [error, setError] = useState('');
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
     const [loader, setLoader] = useState(true);  // Loader
     const [paginatedValue, setPaginatedValue] = useState(0);  // Pagination number
 
-    const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0)
+    const [filterDate, setFilterDate]                       = useState('');  // Filter date state field
+    const [filterError, setFilterError]                     = useState('');  // Error message of filter
+    const [filterStatus, setFilterStatus]                   = useState('');  // Status in Filter Section
+    const [filterActive, setFilterActive]                   = useState(false);  // Filter state active
+    const [LgStartDateRange, setLgStartDateRange]           = useState('');  // Large Screen Start date
+    const [LgEndDateRange, setLgEndDateRange]               = useState('');  // Large Screen End Date
+    const [ShStartDateRange, setShStartDateRange]           = useState('');  // Small screen Start date
+    const [ShEndDateRange, setShEndDateRange]               = useState('');  // Small Screen End date
+    const [isfilterItem, setFilterItem]                     = useState(false);  // Show filters
+    const [filterTransactionType, setFilterTransactionType] = useState('');   //// Selected Filter Transaction Type
+    const [filterCurrency, setFilterCurrency]               = useState('');
 
-    // Date value change
-    const handleDateChange = (event) => {
-        setDateRange(event.target.value);
-    };  
+    const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0);
 
-    // Transaction change
-    const handleTransactionChange = (event) => {
-        setTransactionType(event.target.value);
+    
+     /// Filter Date Range Selected in Large Screen
+     const handelLargeScreenCustomDateRange = (date, dateString)=> {
+        setLgStartDateRange(dateString[0])
+        setLgEndDateRange(dateString[1])
     };
 
-    // Get filter selected status 
-    const handleTransactionStatusChange = (event) => {
-        setTransactionStatus(event.target.value);
-    };  
 
-    // Get Filter selected currency
-    const handleCurrencyChange = (event) => {
-        setCurrency(event.target.value);
-    };   
+    /// Filter Small Screen Start date range
+    const handleSmallScreenStartDateRange = (date, dateString)=> {
+        setShStartDateRange(dateString)
+    };
+
+
+    /// Filter Small Screen End Date Range
+    const handleSmallScreenEndDateRange = (date, dateString)=> {
+        setShEndDateRange(dateString)
+    }; 
+
 
     // Method to open Transaction detail
     const handleClickOpen = () => {
@@ -93,11 +109,6 @@ export default function AllTransactions({open}) {
     const handleClose = () => {
         setBoxOpen(false);
       };
-
-
-    const toggleFilterItemVisibility = () => {
-        setFilterItem(!isfilterItem);
-    };
 
 
     // Fetch all transaction data
@@ -127,6 +138,179 @@ export default function AllTransactions({open}) {
     };
 
 
+    /// ResetFilter
+    //// Reset Filter Selected data
+    const handleFilterReset = ()=> {
+        setFilterActive(false);
+        setFilterDate('');
+        setFilterTransactionType('');
+        setFilterStatus('');
+        setFilterCurrency('');
+        setFilterError('');
+    };
+
+     //// Call default pagination after filter mode off
+     useEffect(() => {
+        if (!filterActive) {
+            handleGetPaginatedData('e', 1);
+        }
+    }, [!filterActive]);
+
+
+
+    // Get paginated data
+    const handleGetPaginatedData = (e, value)=> {
+        let limit  = 5;
+        let offset = (value - 1) * limit;
+
+        if (filterActive) {
+            if (isSmallScreen && filterDate === 'CustomRange') {
+                if (!ShStartDateRange) {
+                    setFilterError('Please Select Start Date');
+    
+                } else if (!ShEndDateRange) {
+                    setFilterError('Please Select End Date');
+    
+                } else {
+                    setFilterError('');
+                    GetFilteredPaginatedData(ShStartDateRange, ShEndDateRange, limit, offset);
+                };
+    
+            } else if (!isSmallScreen && filterDate === 'CustomRange') {
+                if (!LgStartDateRange) {
+                    setFilterError('Please Select Date Range');
+    
+                } else if (!LgEndDateRange) {
+                    setFilterError('Please Select Date Range');
+    
+                } else {
+                    setFilterError('');
+                    GetFilteredPaginatedData(LgStartDateRange, LgEndDateRange, limit, offset);
+                };
+    
+            } else {
+                setFilterError('');
+                GetFilteredPaginatedData(LgStartDateRange, LgEndDateRange, limit, offset);
+            }
+
+        } else {
+
+            axiosInstance.get(`/api/v4/users/fiat/transactions/?limit=${limit}&offset=${offset}`).then((res)=> {
+                // console.log(res)
+                if(res.data && res.data.all_fiat_transactions) {
+                    const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
+                        return new Date(b.data.created_At) - new Date(a.data.created_At)
+                    })
+                    setTransactionData(sortedTransaction)
+                };
+    
+            }).catch((error)=> {
+                // console.log(error)
+            })
+        };
+    };
+
+
+      
+
+   // Get filtered data
+    const handleFilterData = ()=> {
+        if (isSmallScreen && filterDate === 'CustomRange') {
+            if (!ShStartDateRange) {
+                setFilterError('Please Select Start Date');
+
+            } else if (!ShEndDateRange) {
+                setFilterError('Please Select End Date');
+
+            } else {
+                setFilterError('');
+                GetFilteredData(ShStartDateRange, ShEndDateRange);
+            }
+
+        } else if (!isSmallScreen && filterDate === 'CustomRange') {
+            if (!LgStartDateRange) {
+                setFilterError('Please Select Date Range');
+
+            } else if (!LgEndDateRange) {
+                setFilterError('Please Select Date Range');
+
+            } else {
+                setFilterError('');
+                GetFilteredData(LgStartDateRange, LgEndDateRange);
+            }
+
+        } else {
+            setFilterError('');
+            GetFilteredData();
+        }
+    };
+
+
+    //// fetch all filter data
+    const GetFilteredData = (startDate, endDate)=> {
+         axiosInstance.post(`/api/v4/users/filter/fiat/transactions/`, {
+            dateRange: filterDate,
+            transaction_type: filterTransactionType,
+            currency: filterCurrency,
+            status: filterStatus,
+            start_date: startDate ? startDate : LgStartDateRange,
+            end_date: endDate ? endDate : LgEndDateRange
+
+        }).then((res)=> {
+            // console.log(res);
+            if (res.status === 200 && res.data.success === true) {
+                const sortedTransaction = res.data.filtered_user_fiat_transaction.sort((a,b)=> {
+                    return new Date(b.data.created_At) - new Date(a.data.created_At)
+                })
+                setTransactionData(sortedTransaction)
+                setPaginatedValue(res.data.paginated_count)
+                setFilterActive(true);
+            }
+
+        }).catch((error)=> {
+            // console.log(error);
+            if (error.response.data.message === 'No data found') {
+                setFilterError('No Data Found')
+            } else if (error.response.data.message === 'Invalid Currency') {
+                setFilterError('Invalid Currency')
+            }
+
+        })
+    };
+
+
+    
+    //// Get filtered data from API
+    const GetFilteredPaginatedData = (startDate, endDate, limit, offset)=> {
+        axiosInstance.post(`/api/v4/users/filter/fiat/transactions/?limit=${limit}&offset=${offset}`, {
+            dateRange: filterDate,
+            transaction_type: filterTransactionType,
+            currency: filterCurrency,
+            status: filterStatus,
+            start_date: startDate ? startDate : LgStartDateRange,
+            end_date: endDate ? endDate : LgEndDateRange
+
+        }).then((res)=> {
+            // console.log(res);
+            if (res.status === 200 && res.data.success === true) {
+                const sortedTransaction = res.data.filtered_user_fiat_transaction.sort((a,b)=> {
+                    return new Date(b.data.created_At) - new Date(a.data.created_At)
+                })
+                setTransactionData(sortedTransaction)
+                setFilterActive(true);
+                // setPaginatedValue(res.data.paginated_count)
+            }
+
+        }).catch((error)=> {
+            // console.log(error);
+            if (error.response.data.message === 'No data found') {
+                setFilterError('No Data Found')
+            } 
+        })
+    };
+
+
+
     // Until API data has not fetched
     if (loader) {
         return (
@@ -138,27 +322,6 @@ export default function AllTransactions({open}) {
 
             </Main>
         )
-    };
-
-
-    // Get paginated data
-    const handleGetPaginatedData = (e, value)=> {
-        let limit  = 5;
-        let offset = (value - 1) * limit;
-
-        axiosInstance.get(`/api/v4/users/fiat/transactions/?limit=${limit}&offset=${offset}`).then((res)=> {
-            console.log(res)
-            if(res.data && res.data.all_fiat_transactions) {
-                const sortedTransaction = res.data.all_fiat_transactions.sort((a,b)=> {
-                    return new Date(b.data.created_At) - new Date(a.data.created_At)
-                })
-                setTransactionData(sortedTransaction)
-            };
-
-        }).catch((error)=> {
-            // console.log(error)
-
-        })
     };
 
 
@@ -196,95 +359,122 @@ export default function AllTransactions({open}) {
             </div>
             <br />
 
-            <div className='d-flex justify-content-between'>
-                <p className='text-muted'>All Transactions</p>
+            <div style={{display:'flex', justifyContent:'space-between'}}>
+                <p className='text-muted'>All FIAT Transaction History</p>
                 <Button variant="contained" startIcon={<FilterAltIcon />} onClick={()=> {setFilterItem(!isfilterItem)}}>Filter</Button>
             </div>
 
-            <div className="d-flex justify-content-between">
+
+            <div style={{display:'flex', justifyContent:'space-between', marginTop:4}}>
                 {isfilterItem && (
-                    <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
-                        <Grid item xs={12} md={9}>
-                            <Grid container spacing={2}>
+                    <Grid container spacing={2}>
+                        {/* Date Range Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>Date Range</InputLabel>
+                                <Select 
+                                    value={filterDate} 
+                                    onChange={(e)=> setFilterDate(e.target.value)} 
+                                    label='Date Range'
+                                    >
+                                    <MenuItem value="Today">Today</MenuItem>
+                                    <MenuItem value="Yesterday">Yesterday</MenuItem>
+                                    <MenuItem value="ThisWeek">ThisWeek</MenuItem>
+                                    <MenuItem value="ThisMonth">This Month</MenuItem>
+                                    <MenuItem value="LastMonth">Last month</MenuItem>
+                                    <MenuItem value="CustomRange">Custom Range</MenuItem>
+                                </Select>
+                            </FormControl>
 
-                                {/* Date Range Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Date Range</InputLabel>
-                                        <Select value={dateRange} onChange={handleDateChange} label='Date Range'>
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>Today</MenuItem>
-                                            <MenuItem value={20}>Yesterday</MenuItem>
-                                            <MenuItem value={30}>Last 7 Days</MenuItem>
-                                            <MenuItem value={40}>Last 30 Days</MenuItem>
-                                            <MenuItem value={50}>This month</MenuItem>
-                                            <MenuItem value={60}>Last month</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                            {filterDate === "CustomRange" && (
+                                isSmallScreen ? (
+                                    <>
+                                        <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenStartDateRange} />
+                                        <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenEndDateRange} />
+                                    </>
+                                ) : (
+                                    <RangePicker 
+                                        style={{ width: '100%', marginTop:5 }} onChange={handelLargeScreenCustomDateRange} 
+                                        />
+                                )
+                            )}
+                        </Grid>
 
-                                {/* Transaction Type Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Transaction</InputLabel>
-                                        <Select value={transactionType} onChange={handleTransactionChange} label='Transaction'>
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>All Type</MenuItem>
-                                            <MenuItem value={20}>Deposit</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                             
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>Transaction Type</InputLabel>
+                                <Select 
+                                    label='Transaction Type'
+                                    value={filterTransactionType}
+                                    onChange={(e)=> setFilterTransactionType(e.target.value)}
+                                    >
+                                    <MenuItem value='Deposit'>Deposit</MenuItem>
+                                    <MenuItem value='Transfer'>Transfer</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
 
-                                {/* Transaction Status Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Status</InputLabel>
-                                        <Select 
-                                            value={transactionStatus}
-                                            onChange={handleTransactionStatusChange}
-                                            label='Status'
-                                            >
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>All Status</MenuItem>
-                                            <MenuItem value={20}>Success</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                        {/* Transaction Status Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>Currency</InputLabel>
+                                <Select 
+                                    label='Currency'
+                                    value={filterCurrency}
+                                    onChange={(e)=> setFilterCurrency(e.target.value)}
+                                    >
+                                    <MenuItem value='USD'>USD</MenuItem>
+                                    <MenuItem value='INR'>INR</MenuItem>
+                                    <MenuItem value='EUR'>EUR</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
 
-                                {/* Currency Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Currency</InputLabel>
-                                        <Select 
-                                            value={currency} 
-                                            onChange={handleCurrencyChange}
-                                            label='Currency'
-                                            >
-                                            <MenuItem value="">
-                                            <em>None</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>All Currency</MenuItem>
-                                            <MenuItem value={20}>EUR</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
+                        {/* Currency Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>Status</InputLabel>
+                                <Select 
+                                    label='Status'
+                                    value={filterStatus}
+                                    onChange={(e)=> setFilterStatus(e.target.value)}
+                                    >
+                                    <MenuItem value="Approved">Approved</MenuItem>
+                                    <MenuItem value="Pending">Pending</MenuItem>
+                                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                    <MenuItem value="Hold">On Hold</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         {/* Action Buttons */}
-                        <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
-                            <Button variant="contained">Apply Filter</Button>
+                        <Grid item xs={6} sm={6} md={1} sx={{mt:'0.7%'}}>
+                            <Button 
+                                size='medium'
+                                variant="contained" 
+                                onClick={handleFilterData}
+                                >
+                                    Submit
+                            </Button>
                         </Grid>
 
-                        <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
-                            <Button variant="contained">Reset</Button>
+                        <Grid item xs={6} sm={6} md={1} sx={{mt:'0.7%'}}>
+                            <Button 
+                                size='medium'
+                                variant="contained" 
+                                onClick={handleFilterReset}
+                                >
+                                    Reset
+                            </Button>
                         </Grid>
+
+                        <Grid item xs={12}>
+                            {filterError && 
+                                <p style={{color:'red'}}>{filterError}</p>
+                            }
+                        </Grid>
+
                     </Grid>
                 )}
             </div>

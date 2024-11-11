@@ -221,8 +221,8 @@ export default function ExchangesList({open}) {
                                 {/* Transaction Type Filter */}
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Transaction</InputLabel>
-                                        <Select value={transactionType} onChange={handleTransactionChange} label='Transaction'>
+                                        <InputLabel>From Currency</InputLabel>
+                                        <Select value={transactionType} onChange={handleTransactionChange} label='From Currency'>
                                             <MenuItem value="">
                                             <em>None</em>
                                             </MenuItem>
@@ -235,11 +235,11 @@ export default function ExchangesList({open}) {
                                 {/* Transaction Status Filter */}
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Status</InputLabel>
+                                        <InputLabel>To Currency</InputLabel>
                                         <Select 
                                             value={transactionStatus}
                                             onChange={handleTransactionStatusChange}
-                                            label='Status'
+                                            label='To Currency'
                                             >
                                             <MenuItem value="">
                                             <em>None</em>
@@ -253,11 +253,11 @@ export default function ExchangesList({open}) {
                                 {/* Currency Filter */}
                                 <Grid item xs={12} sm={6} md={3}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Currency</InputLabel>
+                                        <InputLabel>Status</InputLabel>
                                         <Select 
                                             value={currency} 
                                             onChange={handleCurrencyChange}
-                                            label='Currency'
+                                            label='Status'
                                             >
                                             <MenuItem value="">
                                             <em>None</em>

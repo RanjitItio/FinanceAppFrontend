@@ -62,6 +62,7 @@ export default function WithdrawalList({open}) {
     const [filterFromCurrency, setFilterFromCurrency] = useState('');
     const [filterToCurrency, setFilterToCurrency]     = useState('');
 
+
     const CountPagination = Math.ceil(paginationCount ? paginationCount : 0);
 
 
@@ -87,7 +88,7 @@ export default function WithdrawalList({open}) {
     // Method to open Withdrawal detail
     const handleClickOpen = () => {
         setBoxOpen(true);
-      };
+    };
 
 
     // Close the Transaction detail box
@@ -177,6 +178,7 @@ export default function WithdrawalList({open}) {
         setFilterToCurrency('');
         setFilterError('');
     };
+
 
      //// Call default pagination after filter mode off
      useEffect(() => {
@@ -285,22 +287,22 @@ export default function WithdrawalList({open}) {
             <DrawerHeader />
 
 
-            <div className="d-flex justify-content-center">
+            <div style={{display:'flex', justifyContent:'center'}}>
                 <p className='fs-3'>Withdrawal List</p>
             </div>
 
-            <div className="d-flex justify-content-center">
+            <div style={{display:'flex', justifyContent:'center'}}>
                 <p className='text-muted'>History of all your withdrawals in your account</p>
             </div>
             <br />
             
-            <div className='d-flex justify-content-between'>
+            <div style={{display:'flex', justifyContent:'space-between'}}>
                 <p className='text-muted'>All Withdrawal History</p>
                 <Button variant="contained" startIcon={<FilterAltIcon />} onClick={()=> {setFilterItem(!isfilterItem)}}>Filter</Button>
             </div>
 
 
-            <div className="d-flex justify-content-between">
+            <div style={{display:'flex', justifyContent:'space-between'}}>
                 {isfilterItem && (
                     <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
                         <Grid item xs={12} md={9}>
