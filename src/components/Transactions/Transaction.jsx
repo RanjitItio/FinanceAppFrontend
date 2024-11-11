@@ -381,7 +381,7 @@ export default function AllTransactions({open}) {
                                     <MenuItem value="Yesterday">Yesterday</MenuItem>
                                     <MenuItem value="ThisWeek">ThisWeek</MenuItem>
                                     <MenuItem value="ThisMonth">This Month</MenuItem>
-                                    <MenuItem value="LastMonth">Last month</MenuItem>
+                                    <MenuItem value="PreviousMonth">Last month</MenuItem>
                                     <MenuItem value="CustomRange">Custom Range</MenuItem>
                                 </Select>
                             </FormControl>
