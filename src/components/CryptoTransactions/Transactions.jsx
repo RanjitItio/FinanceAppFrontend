@@ -378,127 +378,135 @@ return (
             <div className="d-flex justify-content-between">
                 {isfilterItem && (
                     <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
-                        <Grid item xs={12} md={9}>
-                            <Grid container spacing={2}>
 
-                                {/* Date Range Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <Select
-                                        placeholder="Date Range"
-                                        indicator={<KeyboardArrowDown />}
-                                        name='filterDate'
-                                        value={filterDate}
-                                        onChange={(e, newValue)=> {setFilterDate(newValue)}}
-                                        sx={{
-                                            [`& .${selectClasses.indicator}`]: {
-                                            transition: '0.2s',
-                                            [`&.${selectClasses.expanded}`]: {
-                                                transform: 'rotate(-180deg)',
-                                            },
-                                            },
-                                        }}
-                                        >
-                                        <Option value="Today">Today</Option>
-                                        <Option value="Yesterday">Yesterday</Option>
-                                        <Option value="ThisWeek">ThisWeek</Option>
-                                        <Option value="ThisMonth">This Month</Option>
-                                        <Option value="LastMonth">Last month</Option>
-                                        <Option value="CustomRange">Custom Range</Option>
-                                    </Select>
+                        {/* Date Range Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <Select
+                                placeholder="Date Range"
+                                indicator={<KeyboardArrowDown />}
+                                name='filterDate'
+                                value={filterDate}
+                                onChange={(e, newValue)=> {setFilterDate(newValue)}}
+                                sx={{
+                                    [`& .${selectClasses.indicator}`]: {
+                                    transition: '0.2s',
+                                    [`&.${selectClasses.expanded}`]: {
+                                        transform: 'rotate(-180deg)',
+                                    },
+                                    },
+                                }}
+                                >
+                                <Option value="Today">Today</Option>
+                                <Option value="Yesterday">Yesterday</Option>
+                                <Option value="ThisWeek">ThisWeek</Option>
+                                <Option value="ThisMonth">This Month</Option>
+                                <Option value="LastMonth">Last month</Option>
+                                <Option value="CustomRange">Custom Range</Option>
+                            </Select>
 
-                                    {filterDate === "CustomRange" && (
-                                        isSmallScreen ? (
-                                            <>
-                                                <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenStartDateRange} />
-                                                <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenEndDateRange} />
-                                            </>
-                                        ) : (
-                                            <RangePicker 
-                                                style={{ width: '100%', marginTop:5 }} onChange={handelLargeScreenCustomDateRange} 
-                                                />
-                                        )
-                                    )}
-                                </Grid>
+                            {filterDate === "CustomRange" && (
+                                isSmallScreen ? (
+                                    <>
+                                        <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenStartDateRange} />
+                                        <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenEndDateRange} />
+                                    </>
+                                ) : (
+                                    <RangePicker 
+                                        style={{ width: '100%', marginTop:5 }} onChange={handelLargeScreenCustomDateRange} 
+                                        />
+                                )
+                            )}
+                        </Grid>
 
-                                {/* Transaction Type Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                        <Select
-                                            placeholder="Transaction Type"
-                                            indicator={<KeyboardArrowDown />}
-                                            value={filterTransactionType}
-                                            onChange={(e, newValue)=> setFilterTransactionType(newValue)}
-                                            sx={{
-                                                [`& .${selectClasses.indicator}`]: {
-                                                transition: '0.2s',
-                                                [`&.${selectClasses.expanded}`]: {
-                                                    transform: 'rotate(-180deg)',
-                                                },
-                                                },
-                                            }}
-                                            >
-                                            <Option value="Buy">Buy</Option>
-                                            <Option value="Sell">Sell</Option>
-                                        </Select>
-                                </Grid>
+                        {/* Transaction Type Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <Select
+                                placeholder="Transaction Type"
+                                indicator={<KeyboardArrowDown />}
+                                value={filterTransactionType}
+                                onChange={(e, newValue)=> setFilterTransactionType(newValue)}
+                                sx={{
+                                    [`& .${selectClasses.indicator}`]: {
+                                    transition: '0.2s',
+                                    [`&.${selectClasses.expanded}`]: {
+                                        transform: 'rotate(-180deg)',
+                                    },
+                                    },
+                                }}
+                                >
+                                <Option value="Buy">Buy</Option>
+                                <Option value="Sell">Sell</Option>
+                            </Select>
+                        </Grid>
 
-                                {/* Transaction Status Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                        <Select
-                                            placeholder="Status"
-                                            indicator={<KeyboardArrowDown />}
-                                            value={filterStatus}
-                                            onChange={(e, newValue)=> {setFilterStatus(newValue)}}
-                                            sx={{
-                                                [`& .${selectClasses.indicator}`]: {
-                                                transition: '0.2s',
-                                                [`&.${selectClasses.expanded}`]: {
-                                                    transform: 'rotate(-180deg)',
-                                                },
-                                                },
-                                            }}
-                                            >
-                                            <Option value="Approved">Approved</Option>
-                                            <Option value="Pending">Pending</Option>
-                                            <Option value="Cancelled">Cancelled</Option>
-                                            <Option value="Hold">On Hold</Option>
-                                        </Select>
-                                </Grid>
+                        {/* Transaction Status Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <Select
+                                placeholder="Status"
+                                indicator={<KeyboardArrowDown />}
+                                value={filterStatus}
+                                onChange={(e, newValue)=> {setFilterStatus(newValue)}}
+                                sx={{
+                                    [`& .${selectClasses.indicator}`]: {
+                                    transition: '0.2s',
+                                    [`&.${selectClasses.expanded}`]: {
+                                        transform: 'rotate(-180deg)',
+                                    },
+                                    },
+                                }}
+                                >
+                                <Option value="Approved">Approved</Option>
+                                <Option value="Pending">Pending</Option>
+                                <Option value="Cancelled">Cancelled</Option>
+                                <Option value="Hold">On Hold</Option>
+                            </Select>
+                        </Grid>
 
-                                {/* Crypto Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <Select
-                                        placeholder="Crypto"
-                                        indicator={<KeyboardArrowDown />}
-                                        value={filterCrypto}
-                                        onChange={(e, newValue)=> {setFilterCrypto(newValue)}}
-                                        sx={{
-                                            [`& .${selectClasses.indicator}`]: {
-                                            transition: '0.2s',
-                                            [`&.${selectClasses.expanded}`]: {
-                                                transform: 'rotate(-180deg)',
-                                            },
-                                            },
-                                        }}
-                                        >
-                                        <Option value="BTC">BTC</Option>
-                                        <Option value="XRP">XRP</Option>
-                                        <Option value="ETH">ETH</Option>
-                                        <Option value="SOL">SOL</Option>
-                                        <Option value="LTC">LTC</Option>
-                                        <Option value="DOGE">DOGE</Option>
-                                        <Option value="BNB">BNB</Option>
-                                    </Select>
-                                </Grid>
-                            </Grid>
+                        {/* Crypto Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <Select
+                                placeholder="Crypto"
+                                indicator={<KeyboardArrowDown />}
+                                value={filterCrypto}
+                                onChange={(e, newValue)=> {setFilterCrypto(newValue)}}
+                                sx={{
+                                    [`& .${selectClasses.indicator}`]: {
+                                    transition: '0.2s',
+                                    [`&.${selectClasses.expanded}`]: {
+                                        transform: 'rotate(-180deg)',
+                                    },
+                                    },
+                                }}
+                                >
+                                <Option value="BTC">BTC</Option>
+                                <Option value="XRP">XRP</Option>
+                                <Option value="ETH">ETH</Option>
+                                <Option value="SOL">SOL</Option>
+                                <Option value="LTC">LTC</Option>
+                                <Option value="DOGE">DOGE</Option>
+                                <Option value="BNB">BNB</Option>
+                            </Select>
                         </Grid>
 
                         {/* Action Buttons */}
-                        <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
-                            <Button variant="contained" onClick={()=> {handleFilterData();}}>Apply Filter</Button>
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.1%'}}>
+                            <Button 
+                                variant="contained" 
+                                size='medium'
+                                onClick={()=> {handleFilterData();}}
+                                >
+                                    Submit
+                            </Button>
                         </Grid>
 
-                        <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
-                            <Button variant="contained" onClick={()=> {setFilterActive(false); handleFilterReset();}}>Reset</Button>
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.1%'}}>
+                            <Button 
+                                variant="contained" 
+                                size='medium'
+                                onClick={()=> {setFilterActive(false); handleFilterReset();}}
+                                >
+                                    Reset
+                            </Button>
                         </Grid>
 
                         <Grid item xs={12}>

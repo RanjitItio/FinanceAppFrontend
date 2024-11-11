@@ -59,12 +59,12 @@ export default function AllTransactions({open}) {
     const theme         = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const [boxOpen, setBoxOpen] = useState(false);  // Open transaction pop up
+    const [boxOpen, setBoxOpen]                 = useState(false);  // Open transaction pop up
     const [transactionData, setTransactionData] = useState([]);  // Transaction data from API
-    const [error, setError] = useState('');
+    const [error, setError]                     = useState('');
+    const [loader, setLoader]                   = useState(true);  // Loader
+    const [paginatedValue, setPaginatedValue]   = useState(0);  // Pagination number
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
-    const [loader, setLoader] = useState(true);  // Loader
-    const [paginatedValue, setPaginatedValue] = useState(0);  // Pagination number
 
     const [filterDate, setFilterDate]                       = useState('');  // Filter date state field
     const [filterError, setFilterError]                     = useState('');  // Error message of filter
@@ -76,7 +76,7 @@ export default function AllTransactions({open}) {
     const [ShEndDateRange, setShEndDateRange]               = useState('');  // Small Screen End date
     const [isfilterItem, setFilterItem]                     = useState(false);  // Show filters
     const [filterTransactionType, setFilterTransactionType] = useState('');   //// Selected Filter Transaction Type
-    const [filterCurrency, setFilterCurrency]               = useState('');
+    const [filterCurrency, setFilterCurrency]               = useState('');  // Selected Filter Currency
 
     const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0);
 
@@ -450,7 +450,7 @@ export default function AllTransactions({open}) {
                         </Grid>
 
                         {/* Action Buttons */}
-                        <Grid item xs={6} sm={6} md={1} sx={{mt:'0.7%'}}>
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.7%'}}>
                             <Button 
                                 size='medium'
                                 variant="contained" 
@@ -460,7 +460,7 @@ export default function AllTransactions({open}) {
                             </Button>
                         </Grid>
 
-                        <Grid item xs={6} sm={6} md={1} sx={{mt:'0.7%'}}>
+                        <Grid item xs={4} sm={2} md={1} sx={{mt:'0.7%'}}>
                             <Button 
                                 size='medium'
                                 variant="contained" 

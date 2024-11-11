@@ -353,109 +353,114 @@ export default function UserCryptoSwapList({open}) {
             <div className="d-flex justify-content-between">
                 {isfilterItem && (
                     <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
-                        <Grid item xs={12} md={9}>
-                            <Grid container spacing={2}>
+                        {/* Date Range Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>Date Range</InputLabel>
+                                <Select 
+                                    value={filterDate} 
+                                    onChange={(e)=> setFilterDate(e.target.value)} 
+                                    label='Date Range'
+                                    >
+                                    <MenuItem value="Today">Today</MenuItem>
+                                    <MenuItem value="Yesterday">Yesterday</MenuItem>
+                                    <MenuItem value="ThisWeek">ThisWeek</MenuItem>
+                                    <MenuItem value="ThisMonth">This Month</MenuItem>
+                                    <MenuItem value="LastMonth">Last month</MenuItem>
+                                    <MenuItem value="CustomRange">Custom Range</MenuItem>
+                                </Select>
+                            </FormControl>
 
-                                {/* Date Range Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Date Range</InputLabel>
-                                        <Select 
-                                            value={filterDate} 
-                                            onChange={(e)=> setFilterDate(e.target.value)} 
-                                            label='Date Range'
-                                            >
-                                            <MenuItem value="Today">Today</MenuItem>
-                                            <MenuItem value="Yesterday">Yesterday</MenuItem>
-                                            <MenuItem value="ThisWeek">ThisWeek</MenuItem>
-                                            <MenuItem value="ThisMonth">This Month</MenuItem>
-                                            <MenuItem value="LastMonth">Last month</MenuItem>
-                                            <MenuItem value="CustomRange">Custom Range</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                            {filterDate === "CustomRange" && (
+                                isSmallScreen ? (
+                                    <>
+                                        <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenStartDateRange} />
+                                        <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenEndDateRange} />
+                                    </>
+                                ) : (
+                                    <RangePicker 
+                                        style={{ width: '100%', marginTop:5 }} onChange={handelLargeScreenCustomDateRange} 
+                                        />
+                                )
+                            )}
+                        </Grid>
 
-                                    {filterDate === "CustomRange" && (
-                                        isSmallScreen ? (
-                                            <>
-                                                <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenStartDateRange} />
-                                                <DatePicker style={{ width: '100%', marginTop:5 }} onChange={handleSmallScreenEndDateRange} />
-                                            </>
-                                        ) : (
-                                            <RangePicker 
-                                                style={{ width: '100%', marginTop:5 }} onChange={handelLargeScreenCustomDateRange} 
-                                                />
-                                        )
-                                    )}
-                                </Grid>
+                        {/* From Crypto Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>From Crypto</InputLabel>
+                                <Select 
+                                    value={filterFromCrypto} 
+                                    onChange={(e)=> setFilterFromCrypto(e.target.value)} 
+                                    label='From Crypto'
+                                    >
+                                    <MenuItem value="BTC">BTC</MenuItem>
+                                    <MenuItem value="XRP">XRP</MenuItem>
+                                    <MenuItem value="ETH">ETH</MenuItem>
+                                    <MenuItem value="SOL">SOL</MenuItem>
+                                    <MenuItem value="LTC">LTC</MenuItem>
+                                    <MenuItem value="DOGE">DOGE</MenuItem>
+                                    <MenuItem value="BNB">BNB</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
 
-                                {/* From Crypto Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>From Crypto</InputLabel>
-                                        <Select 
-                                            value={filterFromCrypto} 
-                                            onChange={(e)=> setFilterFromCrypto(e.target.value)} 
-                                            label='From Crypto'
-                                            >
-                                            <MenuItem value="BTC">BTC</MenuItem>
-                                            <MenuItem value="XRP">XRP</MenuItem>
-                                            <MenuItem value="ETH">ETH</MenuItem>
-                                            <MenuItem value="SOL">SOL</MenuItem>
-                                            <MenuItem value="LTC">LTC</MenuItem>
-                                            <MenuItem value="DOGE">DOGE</MenuItem>
-                                            <MenuItem value="BNB">BNB</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                        {/* Transaction Status Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>To Crypto</InputLabel>
+                                <Select 
+                                    value={filterToCrypto} 
+                                    onChange={(e)=> setFilterToCrypto(e.target.value)} 
+                                    label='To Crypto'
+                                    >
+                                    <MenuItem value="BTC">BTC</MenuItem>
+                                    <MenuItem value="XRP">XRP</MenuItem>
+                                    <MenuItem value="ETH">ETH</MenuItem>
+                                    <MenuItem value="SOL">SOL</MenuItem>
+                                    <MenuItem value="LTC">LTC</MenuItem>
+                                    <MenuItem value="DOGE">DOGE</MenuItem>
+                                    <MenuItem value="BNB">BNB</MenuItem>
+                                </Select>
+                            </FormControl>
 
-                                {/* Transaction Status Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>To Crypto</InputLabel>
-                                        <Select 
-                                            value={filterToCrypto} 
-                                            onChange={(e)=> setFilterToCrypto(e.target.value)} 
-                                            label='To Crypto'
-                                            >
-                                            <MenuItem value="BTC">BTC</MenuItem>
-                                            <MenuItem value="XRP">XRP</MenuItem>
-                                            <MenuItem value="ETH">ETH</MenuItem>
-                                            <MenuItem value="SOL">SOL</MenuItem>
-                                            <MenuItem value="LTC">LTC</MenuItem>
-                                            <MenuItem value="DOGE">DOGE</MenuItem>
-                                            <MenuItem value="BNB">BNB</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                        </Grid>
 
-                                </Grid>
+                        {/* Currency Filter */}
+                        <Grid item xs={12} sm={6} md={2.5}>
+                            <FormControl fullWidth>
+                                <InputLabel>Status</InputLabel>
+                                <Select 
+                                    value={filterStatus} 
+                                    onChange={(e)=> setFilterStatus(e.target.value)} 
+                                    label='Status'
+                                    >
+                                    <MenuItem value="Approved">Approved</MenuItem>
+                                    <MenuItem value="Pending">Pending</MenuItem>
+                                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                    <MenuItem value="Hold">On Hold</MenuItem>
+                                </Select>
+                            </FormControl>
 
-                                {/* Currency Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Status</InputLabel>
-                                        <Select 
-                                            value={filterStatus} 
-                                            onChange={(e)=> setFilterStatus(e.target.value)} 
-                                            label='Status'
-                                            >
-                                            <MenuItem value="Approved">Approved</MenuItem>
-                                            <MenuItem value="Pending">Pending</MenuItem>
-                                            <MenuItem value="Cancelled">Cancelled</MenuItem>
-                                            <MenuItem value="Hold">On Hold</MenuItem>
-                                        </Select>
-                                    </FormControl>
-
-                                </Grid>
-                            </Grid>
                         </Grid>
 
                         {/* Action Buttons */}
-                        <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
-                            <Button variant="contained" onClick={handleFilterData}>Apply Filter</Button>
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.5%'}}>
+                            <Button 
+                                variant="contained" 
+                                onClick={handleFilterData}
+                                >
+                                    Submit
+                            </Button>
                         </Grid>
 
-                        <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
-                            <Button variant="contained" onClick={handleFilterReset}>Reset</Button>
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.5%'}}>
+                            <Button 
+                                variant="contained" 
+                                onClick={handleFilterReset}
+                                >
+                                    Reset
+                            </Button>
                         </Grid>
 
                         <Grid item xs={12}>
@@ -463,6 +468,7 @@ export default function UserCryptoSwapList({open}) {
                                 <p style={{color:'red'}}>{filterError}</p>
                             }
                         </Grid>
+
                     </Grid>
                 )}
             </div>
