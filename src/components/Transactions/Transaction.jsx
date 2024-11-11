@@ -202,6 +202,7 @@ export default function AllTransactions({open}) {
                         return new Date(b.data.created_At) - new Date(a.data.created_At)
                     })
                     setTransactionData(sortedTransaction)
+                    setPaginatedValue(res.data.total_paginated_rows)
                 };
     
             }).catch((error)=> {
