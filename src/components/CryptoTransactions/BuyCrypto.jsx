@@ -421,11 +421,12 @@ export default function CryptoBuy({open}) {
 
     // Check user Wallet balance
     useEffect(() => {
-        if (exchangeAmount && findWalletCurrencyName) {
+        if (exchangeAmount && findWalletCurrencyName && chargedFee) {
+             const totalBalance = parseFloat(exchangeAmount) + parseFloat(chargedFee)
 
              axiosInstance.post(`/api/v1/user/wallet/balance/check/`, {
                 sender_currency: findWalletCurrencyName,
-                send_amount: parseFloat(exchangeAmount ? exchangeAmount : 0)
+                send_amount: totalBalance
 
              }).then((res)=> {
                 // console.log(res)
@@ -447,7 +448,7 @@ export default function CryptoBuy({open}) {
                   }
              })
         }
-    }, [exchangeAmount, findWalletCurrencyName]);
+    }, [exchangeAmount, findWalletCurrencyName, chargedFee]);
     
 
   // Fetch wallet address according to the selected Crypto
