@@ -69,39 +69,38 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
         <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth size="small">
-                        <Select 
-                          placeholder='Crypto Wallet'
-                          value={crypto}
-                          indicator={<KeyboardArrowDown />}
-                          onChange={(e, newValue) => setCrypto(newValue)}
-                          sx={{
-                            [`& .${selectClasses.indicator}`]: {
-                              transition: '0.2s',
-                              [`&.${selectClasses.expanded}`]: {
-                                transform: 'rotate(-180deg)',
-                              },
+                    <FormControl fullWidth size="small">
+                      <Select 
+                        placeholder='Crypto Wallet'
+                        value={crypto}
+                        indicator={<KeyboardArrowDown />}
+                        onChange={(e, newValue) => setCrypto(newValue)}
+                        sx={{
+                          [`& .${selectClasses.indicator}`]: {
+                            transition: '0.2s',
+                            [`&.${selectClasses.expanded}`]: {
+                              transform: 'rotate(-180deg)',
                             },
-                          }}
-                          >
-                          {cryptoWallets.map((wallet, index)=> (
-                              <Option key={index} value={wallet.id}>{wallet.crypto_name}</Option>
-                          ))}
-                        </Select>
-                      </FormControl>
+                          },
+                        }}
+                        >
+                        {cryptoWallets.map((wallet, index)=> (
+                            <Option key={index} value={wallet.id}>{wallet.crypto_name}</Option>
+                        ))}
+                      </Select>
+                    </FormControl>
 
-                    {/* <FormHelperText sx={{ml:1}}>Select Crypto Wallet</FormHelperText> */}
+                  {/* <FormHelperText sx={{ml:1}}>Select Crypto Wallet</FormHelperText> */}
                 </Grid>
 
-
                 <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth size="small">
-                        <Input 
-                            placeholder="Wallet Address" 
-                            value={walletAddress ? walletAddress : ''}
-                            />
-                      </FormControl>
-                      {/* <FormHelperText sx={{ml:1}}>Wallet Address</FormHelperText> */}
+                    <FormControl fullWidth size="small">
+                      <Input 
+                          placeholder="Wallet Address" 
+                          value={walletAddress ? walletAddress : ''}
+                          />
+                    </FormControl>
+                    {/* <FormHelperText sx={{ml:1}}>Wallet Address</FormHelperText> */}
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -412,11 +411,12 @@ export default function CryptoSell({open}) {
 
      // Check user crypto Wallet balance
      useEffect(() => {
-      if (exchangeAmount && crypto) {
+      if (exchangeAmount && crypto && chargedFee) {
+           const totalBalance = parseFloat(exchangeAmount) + parseFloat(chargedFee)
 
            axiosInstance.post(`/api/v1/user/crypto/wallet/balance/check/`, {
                 wallet_id: crypto,
-                amount: parseFloat(exchangeAmount ? exchangeAmount : 0)
+                amount: totalBalance
 
            }).then((res)=> {
               // console.log(res)
@@ -440,7 +440,7 @@ export default function CryptoSell({open}) {
            })
       };
 
-  }, [exchangeAmount, crypto]);
+  }, [exchangeAmount, crypto, chargedFee]);
 
 
     // Fetch wallet address according to the selected Crypto
