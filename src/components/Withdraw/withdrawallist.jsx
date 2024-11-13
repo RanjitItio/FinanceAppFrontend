@@ -305,11 +305,9 @@ export default function WithdrawalList({open}) {
             <div style={{display:'flex', justifyContent:'space-between'}}>
                 {isfilterItem && (
                     <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
-                        <Grid item xs={12} md={9}>
-                            <Grid container spacing={2}>
 
                                 {/* Date Range Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid item xs={12} sm={6} md={2.5}>
                                     <FormControl fullWidth>
                                         <InputLabel>Date Range</InputLabel>
                                         <Select 
@@ -341,7 +339,7 @@ export default function WithdrawalList({open}) {
                                 </Grid>
 
                              
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid item xs={12} sm={6} md={2.5}>
                                     <FormControl fullWidth>
                                         <InputLabel>From Currency</InputLabel>
                                         <Select 
@@ -357,7 +355,7 @@ export default function WithdrawalList({open}) {
                                 </Grid>
 
                                 {/* Transaction Status Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid item xs={12} sm={6} md={2.5}>
                                     <FormControl fullWidth>
                                         <InputLabel>To Currency</InputLabel>
                                         <Select 
@@ -373,7 +371,7 @@ export default function WithdrawalList({open}) {
                                 </Grid>
 
                                 {/* Currency Filter */}
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid item xs={12} sm={6} md={2.5}>
                                     <FormControl fullWidth>
                                         <InputLabel>Status</InputLabel>
                                         <Select 
@@ -388,15 +386,13 @@ export default function WithdrawalList({open}) {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                            </Grid>
-                        </Grid>
 
                         {/* Action Buttons */}
-                        <Grid item xs={6} md={2} container justifyContent="center" alignItems="center">
-                            <Button variant="contained" onClick={handleFilterData}>Apply Filter</Button>
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.5%'}}>
+                            <Button variant="contained" onClick={handleFilterData}>Submit</Button>
                         </Grid>
 
-                        <Grid item xs={6} md={1} container justifyContent="center" alignItems="center">
+                        <Grid item xs={8} sm={2} md={1} sx={{mt:'0.5%'}}>
                             <Button variant="contained" onClick={handleFilterReset}>Reset</Button>
                         </Grid>
 
