@@ -337,13 +337,13 @@ export default function UserCryptoSwapList({open}) {
          <Main open={open}>
             <DrawerHeader />
 
-            <div className="d-flex justify-content-center">
+            <div style={{display:'flex', justifyContent:'center', marginTop:-21}}>
                 <p className='fs-3'>TRANSACTIONS</p>
             </div>
             <div className="d-flex justify-content-center">
                 <p className='text-muted'>History of Crypto Swap transactions History</p>
             </div>
-            <br />
+            {/* <br /> */}
 
             <div style={{display:'flex', justifyContent:'space-between'}}>
                 <p className='text-muted'>All Crypto Swaps</p>

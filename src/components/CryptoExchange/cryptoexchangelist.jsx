@@ -76,7 +76,7 @@ export default function UserCryptoExchageList({open}) {
     const [filterFiat, setFilterFiat]             = useState('');  /// Selected Fiat in filter
     const [filterStatus, setFilterStatus]         = useState('');
     const [filterError, setFilterError]           = useState('');  // Error message of filter
-    const [filterActive, setFilterActive] = useState(false);
+    const [filterActive, setFilterActive] = useState(false); /// Filter active state
 
 
     const countPaginationNumber = Math.ceil(paginatedValue ? paginatedValue : 0)
@@ -182,7 +182,6 @@ export default function UserCryptoExchageList({open}) {
     
             }).catch((error)=> {
                 // console.log(error)
-    
             });
         };
     };
@@ -334,13 +333,13 @@ export default function UserCryptoExchageList({open}) {
          <Main open={open}>
             <DrawerHeader />
 
-            <div className="d-flex justify-content-center">
+            <div style={{display:'flex', justifyContent:'center', marginTop:-21}}>
                 <p className='fs-3'>TRANSACTIONS</p>
             </div>
             <div className="d-flex justify-content-center">
                 <p className='text-muted'>History of all Crypto Exchange transactions of your account</p>
             </div>
-            <br />
+            {/* <br /> */}
             <div style={{display:'flex', justifyContent:'space-between'}}>
                 <p className='text-muted'>All Crypto Exchange</p>
                 <Button variant="contained" startIcon={<FilterAltIcon />} onClick={()=> {setFilterItem(!isfilterItem)}}>Filter</Button>

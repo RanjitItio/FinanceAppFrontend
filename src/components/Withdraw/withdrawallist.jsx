@@ -287,14 +287,14 @@ export default function WithdrawalList({open}) {
             <DrawerHeader />
 
 
-            <div style={{display:'flex', justifyContent:'center'}}>
+            <div style={{display:'flex', justifyContent:'center', marginTop:-21}}>
                 <p className='fs-3'>Withdrawal List</p>
             </div>
 
             <div style={{display:'flex', justifyContent:'center'}}>
                 <p className='text-muted'>History of all your withdrawals in your account</p>
             </div>
-            <br />
+            {/* <br /> */}
             
             <div style={{display:'flex', justifyContent:'space-between'}}>
                 <p className='text-muted'>All Withdrawal History</p>

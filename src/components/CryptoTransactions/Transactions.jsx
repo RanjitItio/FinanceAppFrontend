@@ -96,6 +96,7 @@ export default function UserCryptoTransactions({open}) {
     const [cryptoTransactions, setCryptoTransactions] = useState([]);   // User Crypto Transaction data
     const [emptyData, setEmptyData]               = useState(false); // Empty data
     const [paginationCount, setPaginationCount]   = useState(0);
+
     const [isfilterItem, setFilterItem]           = useState(false);  // Show filters
     const [LgStartDateRange, setLgStartDateRange] = useState('');  // Large Screen Start date
     const [LgEndDateRange, setLgEndDateRange]     = useState('');  // Large Screen End Date
@@ -111,7 +112,6 @@ export default function UserCryptoTransactions({open}) {
 
     const countPagination = paginationCount ? Math.ceil(paginationCount) : 0
  
-
 
     /// Filter Date Range Selected in Large Screen
     const handelLargeScreenCustomDateRange = (date, dateString)=> {
@@ -210,6 +210,7 @@ export default function UserCryptoTransactions({open}) {
         }
    };
 
+
    //// Reset Filter Selected data
    const handleFilterReset = ()=> {
         setFilterActive(false);
@@ -218,7 +219,12 @@ export default function UserCryptoTransactions({open}) {
         setFilterStatus('');
         setFilterCrypto('');
         setFilterError('');
+        setLgStartDateRange('');
+        setLgEndDateRange('');
+        setShStartDateRange('');
+        setShEndDateRange('');
    };
+
 
    //// Call default pagination after filter mode off
    useEffect(() => {

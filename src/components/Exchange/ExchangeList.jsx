@@ -337,19 +337,20 @@ export default function ExchangesList({open}) {
         <Main open={open}>
             <DrawerHeader />
 
-            <div className="d-flex justify-content-center">
+            <div style={{display:'flex', justifyContent:'center', marginTop:-21}}>
                 <p className='fs-3'>EXCHANGE LIST</p>
             </div>
-            <div className="d-flex justify-content-center">
+
+            <div style={{display:'flex', justifyContent:'center'}}>
                 <p className='text-muted'>History of exchanges in your account</p>
             </div>
-            <br />
-            <div className='d-flex justify-content-between'>
+
+            <div style={{display:'flex', justifyContent:'space-between'}}>
                 <p className='text-muted'>All Exchanges</p>
                 <Button variant="contained" startIcon={<FilterAltIcon />} onClick={()=> {setFilterItem(!isfilterItem)}}>Filter</Button>
             </div>
 
-            <div className="d-flex justify-content-between">
+            <div style={{display:'flex', justifyContent:'space-between'}}>
                 {isfilterItem && (
                     <Grid container spacing={2} sx={{mt:{xs:1, sm:0}, mb:{xs:1, sm:0.3}}}>
                         {/* Date Range Filter */}
