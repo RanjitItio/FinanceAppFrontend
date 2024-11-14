@@ -53,16 +53,36 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                           </Typography>
 
                             <React.Fragment >
-                                  {specificTransactionDetails ? 
-                                    (<p className='d-flex justify-content-center'>{specificTransactionDetails?.type || ''} amount</p>) : (
-                                      <p className='d-flex justify-content-center'>amount</p>
-                                    )
-                                  }
-                                  
-                                  {specificTransactionDetails ? (
-                                      <p className='d-flex justify-content-center mb-3 fs-5' style={{marginTop:-12}}><b>{specificTransactionDetails?.currency?.name || ''} {specificTransactionDetails?.data?.amount || ''}</b></p>
+                                {specificTransactionDetails ? (
+                                    <p style={{display:'flex', justifyContent:'center'}}>
+                                      {
+                                        specificTransactionDetails.type === 'Deposit' ? 'Deposit' :
+                                        specificTransactionDetails.type === 'Transfer' ? 'Transfer' :
+                                        specificTransactionDetails.type === 'CryptoExchange' ? 'Exchange' : ''}
+                                      {' '} amount
+                                    </p>
                                   ) : (
-                                      <p className='d-flex justify-content-center mb-3 fs-5'><b></b></p>
+                                    <p className="d-flex justify-content-center">amount</p>
+                                )}
+                                  
+                                 
+                                  {specificTransactionDetails?.type === 'CryptoExchange' ? (
+
+                                    <p className='d-flex justify-content-center mb-3 fs-5' style={{marginTop:-12}}>
+                                      <b>
+                                          {specificTransactionDetails?.data?.crypto_name || ''}  &nbsp;
+                                          {specificTransactionDetails?.data?.amount ? parseFloat(specificTransactionDetails?.data?.amount).toFixed(3) : 0}
+                                      </b>
+                                    </p>
+
+                                  ) : (
+
+                                    <p className='d-flex justify-content-center mb-3 fs-5' style={{marginTop:-12}}>
+                                      <b>
+                                          {specificTransactionDetails?.currency?.name || ''}  &nbsp;
+                                          {specificTransactionDetails?.data?.amount ? parseFloat(specificTransactionDetails?.data?.amount).toFixed(2) : 0}
+                                      </b>
+                                    </p>
                                   )}
                                   
                                   <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginBottom:50}}>
@@ -88,25 +108,70 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                         <div className="card-body">
                             <h5 className="card-title fs-5">Transaction Details</h5>
                             <hr className='mb-3'/>
-                            <div className="d-flex justify-content-between mb-1">
-                                <div>
-                                    <p className='text-muted' style={{marginBottom:0.2}}>Sender</p>
-                                    {specificTransactionDetails.user ? (
-                                      <p>{specificTransactionDetails?.user?.first_name || ''} {specificTransactionDetails?.user?.lastname || ''}</p>
-                                    ) : (
-                                      <p className='d-flex justify-content-end'></p>
-                                    )}
-                                </div>
+                            <div style={{display:'flex', justifyContent:'space-between', marginBottom:1}}>
 
-                                <div>
-                                    <p className='text-muted' style={{marginBottom:0.2}}>Amount</p>
-                                    {specificTransactionDetails ? (
-                                      <p className='d-flex justify-content-end'>{specificTransactionDetails?.data?.amount || ''} {specificTransactionDetails?.currency?.name || ''}</p>
-                                    ) : (
-                                      <p className='d-flex justify-content-end'></p>
-                                    )}
-                                </div>
-                            </div>
+                                {specificTransactionDetails.type === 'CryptoExchange' ? (
+                                  <div>
+                                      <p className='text-muted' style={{marginBottom:0.2}}>
+                                        Crypto Amount
+                                      </p>
+
+                                      {specificTransactionDetails.data ? (
+                                        <p>
+                                          {specificTransactionDetails?.data?.amount ? parseFloat(specificTransactionDetails?.data?.amount).toFixed(5) : 0} &nbsp;
+                                          {specificTransactionDetails?.data?.crypto_name || ''}
+                                        </p>
+
+                                      ) : (
+                                        <p className='d-flex justify-content-end'></p>
+                                      )}
+                                  </div>
+                                ) : (
+                                  
+                                  <div>
+                                      <p className='text-muted' style={{marginBottom:0.2}}>
+                                        Sender
+                                      </p>
+
+                                      {specificTransactionDetails.user ? (
+                                        <p>
+                                          {specificTransactionDetails?.user?.first_name || ''} 
+                                          {specificTransactionDetails?.user?.lastname || ''}
+                                        </p>
+
+                                      ) : (
+                                        <p className='d-flex justify-content-end'></p>
+                                      )}
+                                  </div>
+                                )}
+
+                              {specificTransactionDetails.type === 'CryptoExchange' ? (
+                                  <div>
+                                      <p className='text-muted' style={{marginBottom:0.2}}>FIAT Amount</p>
+                                      {specificTransactionDetails ? (
+
+                                        <p className='d-flex justify-content-end'>
+                                          {specificTransactionDetails?.data?.credited_amount.toFixed(4) || ''} &nbsp;
+                                          {specificTransactionDetails?.data?.credited_currency || ''}
+                                        </p>
+
+                                      ) : (
+                                        <p className='d-flex justify-content-end'></p>
+                                      )}
+                                  </div>
+
+                              ) : (
+                                  <div>
+                                      <p className='text-muted' style={{marginBottom:0.2}}>Amount</p>
+                                      {specificTransactionDetails ? (
+                                        <p className='d-flex justify-content-end'>{specificTransactionDetails?.data?.amount || ''} {specificTransactionDetails?.currency?.name || ''}</p>
+                                      ) : (
+                                        <p className='d-flex justify-content-end'></p>
+                                      )}
+                                  </div>
+                                  
+                              )}
+                          </div>
 
                             <div className="d-flex justify-content-between mb-3">
                                 <div>
@@ -139,7 +204,8 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
 
                                       {specificTransactionDetails ? (
                                           <Typography sx={{fontSize:{xs:'0.8rem'}, whiteSpace: 'nowrap'}}>
-                                            {`${specificTransactionDetails?.data?.transaction_fee.toFixed(2) || ''} ${specificTransactionDetails?.currency?.name || ''}`}
+                                            {`${specificTransactionDetails?.data?.transaction_fee.toFixed(4) || ''} 
+                                            ${specificTransactionDetails?.data?.crypto_name || ''}`}
                                           </Typography>
                                       ) : (
                                         <p className='d-flex justify-content-end'></p>
@@ -154,7 +220,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                     {specificTransactionDetails.data ? (
                                       <p>{specificTransactionDetails?.data?.payment_mode || ''}</p>
                                     ) : (
-                                      <p>Payment Mode</p>
+                                      <p></p>
                                     )}
                                 </div>
                                 ||  
@@ -165,16 +231,16 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                     <p className='text-muted mx-2' style={{marginBottom:0.1}}>Status</p>
                                       {specificTransactionDetails.data ? (
                                           specificTransactionDetails?.data.status == 'Pending' ? (
-                                            <p className='text-warning' >{specificTransactionDetails.data.status}</p>
+                                            <p className='text-warning' >{specificTransactionDetails?.data?.status}</p>
 
-                                          ) : specificTransactionDetails.data.status == 'Approved' ? (
-                                          <p className='text-success'>{specificTransactionDetails.data.status}</p>
+                                          ) : specificTransactionDetails.data?.status == 'Approved' ? (
+                                          <p className='text-success'>{specificTransactionDetails?.data?.status}</p>
 
-                                          ) : specificTransactionDetails.data.status == 'Cancelled' ? (
-                                          <p className='text-danger'>{specificTransactionDetails.data.status}</p>
+                                          ) : specificTransactionDetails.data?.status == 'Cancelled' ? (
+                                          <p className='text-danger'>{specificTransactionDetails?.data?.status}</p>
 
                                           ) : (
-                                          <p className='text-success'>{specificTransactionDetails.data.status}</p>
+                                          <p className='text-success'>{specificTransactionDetails?.data?.status}</p>
                                           )
                                       ) : (
                                         <>Transaction Status</>
@@ -187,8 +253,11 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                 <div>
                                     <p className='text-muted' style={{marginBottom:0.1}}>
                                     {specificTransactionDetails?.type 
-                                      ? (specificTransactionDetails?.type === 'Transfer' ? 'Receiver Amount' : 
-                                        specificTransactionDetails?.type === 'Deposit' ? 'Received Amount' : '')
+                                      ? (
+                                        specificTransactionDetails?.type === 'Transfer' ? 'Receiver Amount' : 
+                                        specificTransactionDetails?.type === 'Deposit' ? 'Received Amount' : 
+                                        specificTransactionDetails?.type === 'CryptoExchange' ? 'FIAT Amount' : ''
+                                      )
                                       : ''}
                                     </p>
 
@@ -216,13 +285,15 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                               {(parseFloat(specificTransactionDetails?.data?.amount || 0) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0)).toFixed(3)} {specificTransactionDetails?.currency?.name || ''}
                                             </p>
                                           )}
+
+                                          {specificTransactionDetails.type === 'CryptoExchange' && (
+                                            <p>
+                                              {(parseFloat(specificTransactionDetails?.data?.amount || 0) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0)).toFixed(3)} {specificTransactionDetails?.data?.crypto_name || ''}
+                                            </p>
+                                          )}
                                         </>
                                       )}
-                                      {/* {specificTransactionDetails ? (
-                                          <p>{specificTransactionDetails?.data?.payout_amount || ''} {specificTransactionDetails?.currency?.name || ''}</p>
-                                      ) : (
-                                        <p className='d-flex justify-content-end'></p>
-                                      )} */}
+                                    
                                 </div>
                             </div>
                         </div>

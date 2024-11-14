@@ -46,7 +46,7 @@ function Form1({cryptoWallets, crypto, setCrypto, walletAddress, userWallets, Wa
       } else if (Number(value) < 0) {
         setError('Amount should be greater than 0')
 
-      } else if (value.length > 8) {
+      } else if (value.length > 9) {
         setError('Amount should be less than 8 digit')
 
       } else if (/^\d*\.?\d*$/.test(value) || value === '' || Number(value) >= 0) {  
