@@ -1,99 +1,205 @@
-
-
+import React, { useState } from 'react';
+import { Box, Card, CardContent, CardHeader, Typography, Button, IconButton, Divider, Avatar, ButtonBase,
+} from '@mui/material';
+import { Add, ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import ReactCardFlip from 'react-card-flip';
 
 
 export default function FiatMyCard() {
+    const [isFlipped, setIsFlipped] = useState(false);
+
+      const handleClick = (e) => {
+        e.preventDefault();
+        setIsFlipped(!isFlipped);
+      };
+      
+
     return (
-        <div className="card">
-            <div className="card-body">
-                <h5 className="card-title">My Card</h5>
-                <div className="d-flex justify-content-between">
-                    <div className="my-2">
-                        <h6 className="card-subtitle mb-2 text-muted">
-                        <i className="bi bi-credit-card"></i>&nbsp;
-                            429 **** *** 963
-                        </h6>
-                    </div>
+        <Card variant="outlined" sx={{borderRadius:4 }}>
+            <CardContent>
+                <CardHeader
+                    title="My Card"
+                    titleTypographyProps={{ variant: 'h5' }}
+                    action={
+                        <>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ display: { xs: 'none', md: 'inline-flex' }, maxHeight: 35 }}
+                        >
+                            Add Card
+                        </Button>
+                        <IconButton color="primary" sx={{ display: { xs: 'inline-flex', md: 'none' } }}>
+                            <Add />
+                        </IconButton>
+                        </>
+                    }
+                />
 
-                    <button type="submit" className="btn btn-primary d-none d-sm-none d-xs-none d-md-inline d-lg-inline" style={{maxHeight: '35px'}}>Add Card</button>
-                    <a href="" className="btn btn-primary d-md-none d-lg-none"><i className="bi bi-plus-lg"></i></a>
-                </div>
+                <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+                        
+                        <Card onClick={handleClick}
+                            sx={{
+                                background: 'linear-gradient(to bottom right, yellow, green)',
+                                color: 'white',
+                                maxWidth: 400,
+                                ml: 2,
+                                boxShadow: 3,
+                                borderRadius:5,
+                                height:'11.1rem',
+                                margin:0,
+                                cursor:'pointer'
+                            }}
+                        >
+                        <CardContent>
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography variant="h6">INR</Typography>
 
+                                <Box>
+                                    <img src='/card/chip.png' style={{width:'30px', height:'30px'}} />
+                                    <IconButton color="inherit">
+                                        <VisibilityIcon  style={{fontSize:'16px'}} />
+                                    </IconButton>
+                                </Box>
+                            </Box>
 
-                {/* Card Section */}
-                <a href="#" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <div className="card my-2 shadow-lg" style={{backgroundImage: 'linear-gradient(to bottom right, yellow, green)', color: "white", maxWidth: '20rem', marginLeft: '20px'}}>
-                        <div className="card-body">
-                            <div className="d-flex justify-content-between">
-                                <h6 className="card-title" >VISA</h6>
-                                <i className="bi bi-three-dots-vertical"></i>
-                            </div>&nbsp;
+                            <Box display="flex" justifyContent="space-around" my={0.4}>
+                                <Typography variant="h6">123</Typography>
+                                <Typography variant="h6">***</Typography>
+                                <Typography variant="h6">***</Typography>
+                                <Typography variant="h6">*12</Typography>
+                            </Box>
 
-                            <h6 className="card-subtitle d-flex justify-content-around">
-                                <b><p style={{fontSize: '20px'}}>123</p></b> 
-                                <b><p style={{fontSize: '20px'}}>456</p></b>  
-                                <b><p style={{fontSize: '20px'}}>789</p></b>  
-                                <b><p style={{fontSize: '20px'}}>012</p></b> 
-                            </h6>
+                            <Box display="flex" justifyContent="space-between" my={1.8}>
+                                <Box>
+                                    <Typography variant="caption"><small>Valid From</small></Typography>
+                                    <Typography color="text.secondary">02/12</Typography>
+                                </Box>
 
-                            <div className="d-flex justify-content-between my-2">
-                                <p className="card-text" >Kh.Rasel</p><br/>
-                                <div>
-                                    <small>VALID FROM</small>
-                                    <h6 className="text-muted">02/12</h6>
-                                </div>
-                                <div>
-                                    <small>VALID THRU</small>
-                                    <h6 className="text-muted">01/23</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                                <Box>
+                                    <Typography variant="caption"><small>Valid Thru</small></Typography>
+                                    <Typography color="text.secondary">01/23</Typography>
+                                </Box>
+                            </Box>
+
+                        </CardContent>
+                    </Card>
+
+                  
+                    <Card onClick={handleClick}
+                        sx={{
+                            maxWidth: 400,
+                            height:'11.1rem',
+                            backgroundColor: '#e0dddd',
+                            borderRadius: 5,
+                            padding: 2,
+                            position: 'relative',
+                            cursor:'pointer'
+                        }}
+                    >
+                       
+                       {/* Magnetic Line */}
+                        <Box
+                            sx={{
+                            backgroundColor: 'black',
+                            height: 30,
+                            width: '100%',
+                            borderRadius: 1,
+                            marginBottom: 2,
+                            }}
+                        />
+
+                        {/* Signature Lines */}
+                        <Box
+                            sx={{
+                            backgroundColor: '#fdf4ca', // light yellow background for signature area
+                            height: 50,
+                            padding: '4px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-around',
+                            marginBottom: 2,
+                            }}
+                        >
+                            {/* Yellow Strip */}
+                            {Array.from({ length: 5 }).map((_, index) => (
+                            <Box
+                                key={index}
+                                sx={{
+                                height: 0.04,
+                                backgroundColor: '#ffd700', 
+                                width: '80%',
+                                marginLeft: 1,
+                                }}
+                            />
+                            ))}
+                        </Box>
+
+                        {/* Security Code */}
+                        <Typography
+                            sx={{
+                            position: 'absolute',
+                            top: '76px',
+                            right: '25px',
+                            fontWeight: 'bold',
+                            }}
+                        >
+                            123
+                        </Typography>
+
+                        {/* Set PIN Button */}
+                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                            <Button variant="contained" color="secondary" sx={{ backgroundColor: '#8a2be2', color: 'white' }}>
+                            SET PIN
+                            </Button>
+                        </Box>
+                    </Card>
+                    
+                </ReactCardFlip>
 
 
                 {/* Total Balance Section */}
-                <div className="my-4"> 
-                    <h6 className="text-muted">Total Balance</h6>
-                    <h5><b>$32,909</b></h5>
+                <Box my={4}>
+                    <Typography variant="subtitle1" color="text.secondary">Total Balance</Typography>
+                    <Typography variant="h5" fontWeight="bold">$32,909</Typography>
 
-                    <div className="d-flex justify-content-between my-4" >
-                        <div className='d-flex justify-content-start'>
-                            <div className='d-flex align-items-center justify-content-center rounded-circle' style={{width: '30px', height: '30px', backgroundColor: '#a5d391'}}>
-                                <i className="bi bi-arrow-up-right" style={{color: 'white', fontSize: '15px'}}></i>
-                            </div>
-                            &nbsp;
-                            <div className='mb-2'>
-                                <p className="card-subtitle"  style={{textOverflow: 'ellipsis', overflow:'hidden' }}>Income</p>
-                                <small className="card-subtitle mb-2 text-muted" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>$745,90</small>
-                            </div>
-                        </div>
+                    <Box display="flex" justifyContent="space-between" my={4}>
+                        <Box display="flex" alignItems="center">
+                            <Avatar sx={{ width: 30, height: 30, bgcolor: '#a5d391' }}>
+                                <ArrowUpward fontSize="small" sx={{ color: 'white' }} />
+                            </Avatar>
+                            
+                            <Box ml={1}>
+                                <Typography variant="subtitle2">Income</Typography>
+                                <Typography variant="body2" color="text.secondary">$745.90</Typography>
+                            </Box>
+                        </Box>
 
-                        <div className='mb-2'>
-                            <p className="card-subtitle"  style={{textOverflow: 'ellipsis', overflow:'hidden' }}>Taxes</p>
-                            <small className="card-subtitle mb-2 text-muted" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>$745,90</small>
-                        </div>
-                    </div>
+                        <Box>
+                            <Typography variant="subtitle2">Taxes</Typography>
+                            <Typography variant="body2" color="text.secondary">$745.90</Typography>
+                        </Box>
+                    </Box>
 
-                    <div className="d-flex justify-content-between" >
-                        <div className='d-flex justify-content-start'>
-                            <div className='d-flex align-items-center justify-content-center rounded-circle' style={{width: '30px', height: '30px', backgroundColor: '#FFA500'}}>
-                                <i className="bi bi-arrow-down-left" style={{color: 'white', fontSize: '15px'}}></i>
-                            </div>
-                            &nbsp;
-                            <div className='mb-2'>
-                                <p className="card-subtitle"  style={{textOverflow: 'ellipsis', overflow:'hidden' }}>Expenses</p>
-                                <small className="card-subtitle mb-2 text-muted" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>$745,90</small>
-                            </div>
-                        </div>
+                    <Box display="flex" justifyContent="space-between">
+                        <Box display="flex" alignItems="center">
+                            <Avatar sx={{ width: 30, height: 30, bgcolor: '#FFA500' }}>
+                                <ArrowDownward fontSize="small" sx={{ color: 'white' }} />
+                            </Avatar>
+                            <Box ml={1}>
+                                <Typography variant="subtitle2">Expenses</Typography>
+                                <Typography variant="body2" color="text.secondary">$745.90</Typography>
+                            </Box>
+                        </Box>
 
-                        <div className='mb-2'>
-                            <p className="card-subtitle"  style={{textOverflow: 'ellipsis', overflow:'hidden' }}>Fees</p>
-                            <small className="card-subtitle mb-2 text-muted" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>$745,90</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <Box>
+                            <Typography variant="subtitle2">Fees</Typography>
+                            <Typography variant="body2" color="text.secondary">$745.90</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </CardContent>
+        </Card>
     )
 };
