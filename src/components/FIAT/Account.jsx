@@ -12,14 +12,16 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import FiatMyCard from "../FIATCard/Mycard";
+
 
 
 /// ALl Fiat Accounts
-export default function FiatAccount() {
+export default function FiatAccount({selectedCurrency, setSelectedCurrency}) {
     const [userWallet, updateUserWallet] = useState([]);
     const [error, setError] = useState('');
-    const [selectedCurrency, setSelectedCurrency] = useState(localStorage.getItem('UserSelectedDefaultCurrency') || 'USD');
     const [selectedWalletId, setSelectedWalletId] = useState(localStorage.getItem('UserSelectedWalletID') || '');
+    const [showMyCard, setShowMyCard] = useState(false);  /// 
 
 
     useEffect(() => {
@@ -39,7 +41,7 @@ export default function FiatAccount() {
                 };
              }
         }).catch((error)=> {
-            console.log(error.response)
+            // console.log(error.response)
 
             if (error.response.data.msg == 'User Wallet not available') {
                 setError("User wallet is not available")
@@ -57,7 +59,7 @@ export default function FiatAccount() {
         });
     }, [])
 
-
+    //// Get Selected Currency of Wallet
     const handleCurrencyClick = (currency) => {
         setSelectedCurrency(currency);
 
@@ -73,6 +75,7 @@ export default function FiatAccount() {
     
 
     return (
+    <>
         <div className="card" style={{backgroundColor: '#95b02f'}}>
             <div className="card-body">
 
@@ -198,5 +201,6 @@ export default function FiatAccount() {
                     </Box>
             </div>
         </div>
+    </>
     );
 };
