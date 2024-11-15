@@ -341,10 +341,10 @@ export default function UserCryptoTransactions({open}) {
                             <TableHead sx={{backgroundColor:'#E1EBEE'}}>
                                 <TableRow>
                                     <TableCell>Date</TableCell>
-                                    <TableCell>Time</TableCell>
                                     <TableCell>Crypto</TableCell>
-                                    <TableCell>Balance</TableCell>
-                                    <TableCell>Wallet Address</TableCell>
+                                    <TableCell>Quantity</TableCell>
+                                    <TableCell>Transaction Type</TableCell>
+                                    <TableCell>Amount</TableCell>
                                     <TableCell>Status</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -561,7 +561,7 @@ return (
 
                         {/* <TableCell>{transaction?.payment_mode || ''}</TableCell> */}
 
-                        <TableCell>{transaction?.crypto_name || ''} {transaction.crypto_qty ? parseFloat(transaction.crypto_qty).toFixed(3) : 0 }</TableCell>
+                        <TableCell>{transaction?.crypto_name || ''} {transaction.crypto_qty ? parseFloat(transaction.crypto_qty).toFixed(7) : 0 }</TableCell>
 
                         <TableCell align='center'>
                             <Chip label={transaction?.type || ''} color={getTransactionTypeColor(transaction?.type || '')} />

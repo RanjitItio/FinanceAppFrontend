@@ -58,7 +58,8 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                       {
                                         specificTransactionDetails.type === 'Deposit' ? 'Deposit' :
                                         specificTransactionDetails.type === 'Transfer' ? 'Transfer' :
-                                        specificTransactionDetails.type === 'CryptoExchange' ? 'Exchange' : ''}
+                                        specificTransactionDetails.type === 'CryptoExchange' ? 'Exchange' : 
+                                        specificTransactionDetails.type === 'CryptoSell' ? 'Sell' : ''}
                                       {' '} amount
                                     </p>
                                   ) : (
@@ -66,9 +67,9 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                 )}
                                   
                                  
-                                  {specificTransactionDetails?.type === 'CryptoExchange' ? (
+                                  {specificTransactionDetails?.type === 'CryptoExchange' || specificTransactionDetails?.type === 'CryptoSell' ? (
 
-                                    <p className='d-flex justify-content-center mb-3 fs-5' style={{marginTop:-12}}>
+                                    <p className='mb-3 fs-5' style={{marginTop:-12, display:'flex', justifyContent:'center'}}>
                                       <b>
                                           {specificTransactionDetails?.data?.crypto_name || ''}  &nbsp;
                                           {specificTransactionDetails?.data?.amount ? parseFloat(specificTransactionDetails?.data?.amount).toFixed(3) : 0}
@@ -110,7 +111,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                             <hr className='mb-3'/>
                             <div style={{display:'flex', justifyContent:'space-between', marginBottom:1}}>
 
-                                {specificTransactionDetails.type === 'CryptoExchange' ? (
+                                {specificTransactionDetails.type === 'CryptoExchange' || specificTransactionDetails?.type === 'CryptoSell' ? (
                                   <div>
                                       <p className='text-muted' style={{marginBottom:0.2}}>
                                         Crypto Amount
@@ -145,7 +146,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                   </div>
                                 )}
 
-                              {specificTransactionDetails.type === 'CryptoExchange' ? (
+                              {specificTransactionDetails.type === 'CryptoExchange' || specificTransactionDetails?.type === 'CryptoSell' ? (
                                   <div>
                                       <p className='text-muted' style={{marginBottom:0.2}}>FIAT Amount</p>
                                       {specificTransactionDetails ? (
@@ -208,7 +209,7 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                             ${specificTransactionDetails?.data?.crypto_name || ''}`}
                                           </Typography>
                                       ) : (
-                                        <p className='d-flex justify-content-end'></p>
+                                        <></>
                                       )}
                                 </div>
                             </div>
@@ -256,7 +257,8 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                       ? (
                                         specificTransactionDetails?.type === 'Transfer' ? 'Receiver Amount' : 
                                         specificTransactionDetails?.type === 'Deposit' ? 'Received Amount' : 
-                                        specificTransactionDetails?.type === 'CryptoExchange' ? 'FIAT Amount' : ''
+                                        specificTransactionDetails?.type === 'CryptoExchange' ? 'FIAT Amount' : 
+                                        specificTransactionDetails?.type === 'CryptoSell' ? 'FIAT Amount' : ''
                                       )
                                       : ''}
                                     </p>
@@ -287,6 +289,12 @@ export default function ResponsiveDialog({handleClose, boxOpen, specificTransact
                                           )}
 
                                           {specificTransactionDetails.type === 'CryptoExchange' && (
+                                            <p>
+                                              {(parseFloat(specificTransactionDetails?.data?.amount || 0) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0)).toFixed(3)} {specificTransactionDetails?.data?.crypto_name || ''}
+                                            </p>
+                                          )}
+
+                                          {specificTransactionDetails.type === 'CryptoSell' && (
                                             <p>
                                               {(parseFloat(specificTransactionDetails?.data?.amount || 0) + parseFloat(specificTransactionDetails?.data?.transaction_fee || 0)).toFixed(3)} {specificTransactionDetails?.data?.crypto_name || ''}
                                             </p>

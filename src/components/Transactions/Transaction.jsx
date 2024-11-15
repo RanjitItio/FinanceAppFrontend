@@ -61,7 +61,7 @@ export default function AllTransactions({open}) {
 
     const [boxOpen, setBoxOpen]                 = useState(false);  // Open transaction pop up
     const [transactionData, setTransactionData] = useState([]);  // Transaction data from API
-    const [error, setError]                     = useState('');
+    const [error, setError]                     = useState('');  //// 
     const [loader, setLoader]                   = useState(true);  // Loader
     const [paginatedValue, setPaginatedValue]   = useState(0);  // Pagination number
     const [specificTransactionDetails, updateSpecificTransactionDetails] = useState([]);  // Transaction Data
@@ -108,7 +108,7 @@ export default function AllTransactions({open}) {
     // Close the Transaction detail box
     const handleClose = () => {
         setBoxOpen(false);
-      };
+    };
 
 
     // Fetch all transaction data
@@ -412,7 +412,8 @@ export default function AllTransactions({open}) {
                                     >
                                     <MenuItem value='Deposit'>Deposit</MenuItem>
                                     <MenuItem value='Transfer'>Transfer</MenuItem>
-                                    <MenuItem value='CryptoExchange'>Exchange</MenuItem>
+                                    <MenuItem value='CryptoExchange'>Crypto Exchange</MenuItem>
+                                    <MenuItem value='CryptoSell'>Crypto Sell</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
