@@ -203,7 +203,7 @@ export default function FiatMyCard({selectedCurrency}) {
                         onClick={handleCardFlipClick}
                         sx={{
                             maxWidth: 400,
-                            height: '11.1rem',
+                            height: '11.4rem',
                             backgroundColor: '#e0dddd',
                             borderRadius: 5,
                             padding: 2,
