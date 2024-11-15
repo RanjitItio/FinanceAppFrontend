@@ -453,10 +453,10 @@ export default function ExchangeCrypto({open}) {
 
     //// Check Crypto Wallet balance of the user
     useEffect(() => {
-       if (cryptoWallet && exchangeAmount) {
-            handleCheckCryptoWallet({exchangeAmount, cryptoWallet, setError, setInsufficientFund})
+       if (cryptoWallet && exchangeAmount && chargedFee) {
+            handleCheckCryptoWallet({exchangeAmount, cryptoWallet, setError, setInsufficientFund, chargedFee})
        }
-    }, [exchangeAmount, cryptoWallet]);
+    }, [exchangeAmount, cryptoWallet, chargedFee]);
 
     
     /// Get Crypto Exchange Assigned Fee

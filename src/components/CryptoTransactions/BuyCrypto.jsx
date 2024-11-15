@@ -535,7 +535,7 @@ useEffect(() => {
   }, [exchangeAmount, currencyConversionAmount, convertedUSDValue]);
 
 
-  // Submit Crypto Buy Data
+  // // Submit Crypto Buy Data
   const handleSubmitCryptoBuyData = () => {
       handleSubmitCryptoData({crypto, paymentType, Walletcurrency, exchangeAmount, exchangeResult, setSuccessMessag, handleClose, setError})
   };

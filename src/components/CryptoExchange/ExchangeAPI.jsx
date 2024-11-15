@@ -55,10 +55,12 @@ export const handleUserCryptoWallets = ({updateUserCryptoWallets})=> {
 
 
 // Check Wallet balance and inactive wallet
-export const handleCheckCryptoWallet = ({exchangeAmount, cryptoWallet, setInsufficientFund, setError})=> {
+export const handleCheckCryptoWallet = ({exchangeAmount, cryptoWallet, setInsufficientFund, setError, chargedFee})=> {
+    const totalAmount = parseFloat(exchangeAmount || 0) + parseFloat(chargedFee || 0)
+
     axiosInstance.post(`/api/v1/user/crypto/wallet/balance/check/`, {
         wallet_id: cryptoWallet,
-        amount: parseFloat(exchangeAmount ? exchangeAmount : 0)
+        amount: totalAmount
 
    }).then((res)=> {
       // console.log(res)

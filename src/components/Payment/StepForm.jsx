@@ -59,7 +59,7 @@ function HeadForm({...props}) {
            const calculatedAmount = parseFloat(currencyConversion) * amount_to_convert
            setConvertedAmount(calculatedAmount)
        }
-   }, [props.formData.send_amount, currencyConversion])
+   }, [props.formData.send_amount, currencyConversion]);
 
    
 
@@ -444,45 +444,7 @@ function Step3Form({...props}) {
       </form>
     </Container>
   );
-}
-
-
-
-// Fifth step form
-// function Step4Form() {
-//   const [payvia, setPayvia] = React.useState('');
-
-//   const handleChange = (event) => {
-//     setPayvia(event.target.value);
-//   };
-
-//   return (
-//     <Container maxWidth="md" style={{ marginTop: '50px' }}>
-//       <form>
-//         <Grid container spacing={2} >
-
-//           <Grid item xs={12} sm={12} md={12}>
-//             <InputLabel id="demo-simple-select-label">Payment Via</InputLabel>
-//             <Select labelId="demo-simple-select-label" id="demo-simple-select" value={payvia} label="age" fullWidth size='small' onChange={handleChange} >
-//               <MenuItem value={'USD Wallet'}>USD Wallet</MenuItem>
-//               <MenuItem value={'Bank Transfer'}>Bank Transfer</MenuItem>
-//               <MenuItem value={'Swift'}>Swift</MenuItem>
-//               <MenuItem value={'Sepa'}>Sepa</MenuItem>
-//             </Select>
-//           </Grid>
-
-//           Button
-//           <Grid item xs={3}>
-//                 <Button variant="contained" color="primary" fullWidth>
-//                 Submit
-//                 </Button>
-//             </Grid>
-
-//         </Grid>
-//       </form>
-//     </Container>
-//   );
-// }
+};
 
 
 
@@ -559,6 +521,7 @@ export default function StepWisePaymentForm({open}) {
   }, [formData.receiver_email, formData.receiver_currency])
   
   
+
   /// Check user Wallet balance in first step
   useEffect(() => {
 
@@ -665,7 +628,8 @@ export default function StepWisePaymentForm({open}) {
              setError('Please type receiver bank account number')
 
            } else if (formData.rec_bank_ifsc_code === '') {
-            setError('Please type receiver IFSC Code')
+              setError('Please type receiver IFSC Code')
+
            } else {
               setError('')
 

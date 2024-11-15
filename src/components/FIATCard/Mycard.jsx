@@ -116,15 +116,16 @@ export default function FiatMyCard({selectedCurrency}) {
                             Update Card
                         </Button> 
                         ) : (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{ display: { xs: 'none', md: 'inline-flex' }, maxHeight: 35 }}
-                                onClick={handleOpenAddNewCard}
-                                size='small'
-                            >
-                                Add Card
-                            </Button> 
+                            // <Button
+                            //     variant="contained"
+                            //     color="primary"
+                            //     sx={{ display: { xs: 'none', md: 'inline-flex' }, maxHeight: 35 }}
+                            //     onClick={handleOpenAddNewCard}
+                            //     size='small'
+                            // >
+                            //     Add Card
+                            // </Button> 
+                            <></>
                         )}
 
                         <IconButton color="primary" sx={{ display: { xs: 'inline-flex', md: 'none' } }} onClick={handleOpenAddNewCard}>
@@ -134,7 +135,7 @@ export default function FiatMyCard({selectedCurrency}) {
                     }
                 />
 
-            {!noCard && availableCard && (
+            {!noCard && availableCard ? (
                 <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
                     <Card
                         onClick={handleCardFlipClick}
@@ -276,6 +277,44 @@ export default function FiatMyCard({selectedCurrency}) {
                         </Box>
                     </Card>
                 </ReactCardFlip>
+            ) : (
+                <Card
+                    sx={{
+                        background: 'linear-gradient(to top, #37ecba 0%, #72afd3 100%)',
+                        color: 'white',
+                        maxWidth: 400,
+                        ml: 2,
+                        boxShadow: 3,
+                        borderRadius: 5,
+                        height: '11.4rem',
+                        margin: 0,
+                        cursor: 'pointer',
+                    }}
+                >
+                    <CardContent>
+                        <Box sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                            <Typography variant="h6" sx={{ml:1}}>Demo Card</Typography>
+                        </Box>
+
+                      
+                        <Box display="flex" justifyContent="space-around" my={1.2}>
+                            <Button variant='contained' size='small' onClick={handleOpenAddNewCard}>Generate Card</Button>
+                        </Box>
+
+                        {/* <small style={{ textTransform: "uppercase", wordWrap:'break-word', marginLeft:4 }}>Card Name</small> */}
+                        
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: "center", my:0.2, ml:0.2 }}>
+                            <Box>
+                                <Typography variant="caption"><small>Valid From</small></Typography>
+                                <Typography color="text.secondary">01/12</Typography>
+                            </Box>
+                            <Box>
+                                <Typography variant="caption"><small>Valid Thru</small></Typography>
+                                <Typography color="text.secondary">01/12</Typography>
+                            </Box>
+                        </Box>
+                    </CardContent>
+                </Card>
             )}
 
 
