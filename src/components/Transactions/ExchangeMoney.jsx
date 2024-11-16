@@ -141,7 +141,41 @@ function ExchangeMoneyForm1({...props}) {
          props.updateconvertedAmount(calculateAmount);
       }
     }, [props.Amount, fromToConversion]);
-    
+
+
+      //// Check wallet balance of the user
+      useEffect(()=> {
+
+        if (props.transactionFee && props.Amount && props.fromCurrency) {
+            const totalAmount = parseFloat(props.Amount) + parseFloat(props.transactionFee)
+
+          axiosInstance.post(`/api/v1/user/wallet/balance/check/`, {
+              sender_currency: props.fromCurrency,
+              send_amount: totalAmount
+      
+          }).then((res)=> {
+              // console.log(res)
+      
+              if (res.status === 200) {
+                props.setWalletBalanceCheck(false)
+                props.setError('')
+              }
+      
+          }).catch((error)=> {
+              //  console.log(error)
+              if (error.response.data.message === 'Wallet does not exists for given currency') {
+                  props.setWalletBalanceCheck(true)
+                  props.setError('Wallet does not exists in Selected currency')
+
+              } else if (error.response.data.message === 'Donot have sufficient balance in Wallet') {
+                  props.setWalletBalanceCheck(true)
+                  props.setError('Do not have sufficient balance in Wallet')
+              }
+          });
+
+        }
+      
+      }, [props.fromCurrency, props.Amount, props.transactionFee]);
 
   
 
@@ -224,7 +258,7 @@ function ExchangeMoneyForm1({...props}) {
                 error={props.amountError !== ''}
                 helperText={props.amountError !== '' ? props.amountError : ''}
                 />
-              <FormHelperText sx={{ml:3}}>Fee: {props.transactionFee ? props.transactionFee.toFixed(0) : 0} {props.fromCurrency}</FormHelperText>
+              <FormHelperText sx={{ml:3}}>Fee: {props.transactionFee ? props.transactionFee.toFixed(3) : 0} {props.fromCurrency}</FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
@@ -320,6 +354,8 @@ export default function ExchangeMoneyForm({open}) {
   const [amountError, setAmountError]            = React.useState(''); // Amount Error
   const [transactionFee, setTransactionFee]      = React.useState(0.00);  // Transaction Fee
   const [walletNotFound, setWalletNotFound]      = React.useState(false); // 
+  const [WalletBalanceChecK, setWalletBalanceCheck] = React.useState(false);  /// Wallet balance check status
+
 
 
   // Total steps
@@ -380,6 +416,9 @@ export default function ExchangeMoneyForm({open}) {
       } else if (amountError) {
         setError('Please provide valid amount')
 
+      } else if (WalletBalanceChecK) {
+          setError(error);
+          
       } else {
         setError('')
         newCompleted[activeStep] = true;
@@ -454,6 +493,7 @@ export default function ExchangeMoneyForm({open}) {
                 transactionFee={transactionFee}
                 Amount={Amount}
                 setWalletNotFound={setWalletNotFound}
+                setWalletBalanceCheck={setWalletBalanceCheck}
             />;
       case 1:
         return <ExchangeMoneyForm2 

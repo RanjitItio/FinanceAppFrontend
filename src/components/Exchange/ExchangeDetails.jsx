@@ -92,7 +92,9 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                                     <p className='text-muted' style={{marginBottom:0.1}}>From Currency</p>
 
                                     {specificTransactionDetails ? (
-                                      <p>{specificTransactionDetails?.from_currency || ''}</p>
+                                      <p>{specificTransactionDetails?.from_currency || ''}  &nbsp;
+                                          {specificTransactionDetails?.exchange_amount || 0}
+                                      </p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}
@@ -101,7 +103,10 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
                                 <div>
                                     <p className='text-muted' style={{marginBottom:0.1}}>To Currency</p>
                                     {specificTransactionDetails ? (
-                                      <p className='d-flex justify-content-end'>{specificTransactionDetails?.to_currency || ''}</p>
+                                      <p className='d-flex justify-content-end'>
+                                        {specificTransactionDetails?.to_currency || ''} &nbsp;
+                                        {specificTransactionDetails.converted_amount ? parseFloat(specificTransactionDetails.converted_amount).toFixed(3) : ''}
+                                      </p>
                                     ) : (
                                       <p className='d-flex justify-content-end'></p>
                                     )}
@@ -167,7 +172,7 @@ export default function ExchangeDetails({handleClose, boxOpen, specificTransacti
 
                                       {specificTransactionDetails ? (
                                           <p>
-                                            {specificTransactionDetails.converted_amount ? specificTransactionDetails.converted_amount.toFixed(3) : ''} {specificTransactionDetails?.to_currency || ''}
+                                            {specificTransactionDetails.converted_amount ? parseFloat(specificTransactionDetails.converted_amount).toFixed(3) : ''} {specificTransactionDetails?.to_currency || ''}
                                           </p>
                                       ) : (
                                         <p className='d-flex justify-content-end'></p>

@@ -94,8 +94,6 @@ function HeadForm({...props}) {
   const handleTransferAmountChange = (e)=> {
     const { name, value } = e.target;
 
-    console.log('length', value.length)
-
     if (value === '') {
       props.setError('')
       props.updateFormData((prevData)=> ({
@@ -126,6 +124,7 @@ return (
     <>
       <Form method='post'>
         <Row className="mb-3" style={{marginTop:20}}>
+
           <div className='col-md-6 col-lg-6 col-sm-12 col-xs-12 '>
             <TextField fullWidth 
                 placeholder="Enter Amount" 
@@ -525,11 +524,13 @@ export default function StepWisePaymentForm({open}) {
   /// Check user Wallet balance in first step
   useEffect(() => {
 
-    if (formData.send_currency && formData.send_amount)  {
+    if (formData.send_currency && formData.send_amount && chargedFee)  {
+
+      const totalAmount = parseFloat(formData.send_amount) + parseFloat(chargedFee)
 
       axiosInstance.post(`/api/v1/user/wallet/balance/check/`, {
          sender_currency: formData.send_currency,
-         send_amount: parseFloat(formData.send_amount)
+         send_amount: totalAmount
  
       }).then((res)=> {
          // console.log(res)
@@ -537,22 +538,26 @@ export default function StepWisePaymentForm({open}) {
          if (res.status === 200) {
            setWalletBalanceCheck(false);
            setWalletBalanceCheckMsg('');
+           setError('');
          }
  
       }).catch((error)=> {
          //  console.log(error)
          if (error.response.data.message === 'Wallet does not exists for given currency') {
              setWalletBalanceCheck(true)
-             setWalletBalanceCheckMsg('Wallet does not exists in Selected currency')
+            //  setWalletBalanceCheckMsg('Wallet does not exists in Selected currency')
+             setError('Wallet does not exists in Selected currency')
          } else if (error.response.data.message === 'Donot have sufficient balance in Wallet') {
              setWalletBalanceCheck(true)
-             setWalletBalanceCheckMsg('Do not have sufficient balance in Wallet')
+            //  setWalletBalanceCheckMsg('Do not have sufficient balance in Wallet')
+             setError('Do not have sufficient balance in Wallet')
          }
  
       });
       
     }
-  }, [formData.send_currency, formData.send_amount]);
+
+  }, [formData.send_currency, formData.send_amount, chargedFee]);
   
   
   const isStepSkipped = (step) => {
@@ -579,7 +584,7 @@ export default function StepWisePaymentForm({open}) {
             setError('Please select sending purpose')
 
           } else if(WalletBalanceChecK) {
-            setError(WalletbalanceCheckMsg);
+            setError(error);
 
           } else {
               setError('')

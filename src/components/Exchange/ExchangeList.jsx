@@ -109,7 +109,6 @@ export default function ExchangesList({open}) {
       };
 
 
-
     // Fetch all Exchange transaction data
     useEffect(() => {
         axiosInstance.get(`/api/v6/fiat/exchange/money/`).then((res)=> {
