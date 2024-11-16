@@ -94,8 +94,9 @@ export default function DeleteFiatCard({open, setOpen, availableCardDetail}) {
                Are you sure, You want to delete the Card?
             </Typography>
 
-            <Box sx={{display:'flex', justifyContent:'flex-end', mt:5}}>
-                <Button variant="contained" onClick={handleDeleteFIATCard}>Confirm</Button>
+            <Box sx={{display:'flex', justifyContent:'space-between', mt:5}}>
+                <Button variant="contained" onClick={()=> setOpen(false)}>Cancel</Button>
+                <Button variant="contained" color='error' onClick={handleDeleteFIATCard}>Confirm</Button>
             </Box>
           </Box>
         </Modal>
