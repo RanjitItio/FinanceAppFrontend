@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Card, CardContent, IconButton, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { IconButton, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axiosInstance from '../Authentication/axios';
 import Snackbar from '@mui/material/Snackbar';
@@ -42,8 +42,7 @@ export default function UpdateFiatCard({open, setOpen, availableCardDetail}) {
     const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
     const [formData, updateFormData] = React.useState({
-        card_name: availableCardDetail?.card_name || '', 
-        cvv: availableCardDetail?.cvv || '' , 
+        card_name: availableCardDetail?.card_name || '',  
         status: availableCardDetail?.status || ''
     }); //// Fomr data
 
@@ -52,7 +51,6 @@ export default function UpdateFiatCard({open, setOpen, availableCardDetail}) {
     useEffect(() => {
         updateFormData({
             card_name: availableCardDetail?.card_name || '',
-            cvv: availableCardDetail?.cvv || '',
             status: availableCardDetail?.status || ''
         })
     }, [availableCardDetail]);
@@ -63,15 +61,7 @@ export default function UpdateFiatCard({open, setOpen, availableCardDetail}) {
     const handleChangeFormData = (e)=> {
         const { name, value } = e.target;
 
-        if (name === 'cvv' && value.length > 3) {
-            setError('Must be three digit')
-            setOpenSnackBar(true);
-
-        } else if (name === 'cvv' && !/^\d*$/.test(value)) {
-            setError('Please provide number');
-            setOpenSnackBar(true);
-
-        } else if (name === 'card_name' && value.length > 25) {
+        if (name === 'card_name' && value.length > 25) {
             setError('Name should not greate than 20 letters');
             setOpenSnackBar(true);
 
@@ -95,9 +85,6 @@ export default function UpdateFiatCard({open, setOpen, availableCardDetail}) {
             setError('Please provide card name')
             setOpenSnackBar(true);
 
-        } else if (!formData.cvv) {
-            setError('Please provide card CVV')
-            setOpenSnackBar(true);
         } else if (!formData.status){
             setError('Please select card status')
             setOpenSnackBar(true);
@@ -108,7 +95,6 @@ export default function UpdateFiatCard({open, setOpen, availableCardDetail}) {
 
             axiosInstance.put(`/api/v7/user/fiat/card/`, {
                 card_name: formData.card_name,
-                cvv: formData.cvv,
                 status: formData.status,
                 card_id: availableCardDetail.id
 
@@ -239,8 +225,7 @@ export default function UpdateFiatCard({open, setOpen, availableCardDetail}) {
                                 variant="outlined"
                                 sx={{ marginBottom: 2 }}
                                 size='medium'
-                                value={formData.cvv}
-                                onChange={handleChangeFormData}
+                                value={availableCardDetail.cvv}
                             />
 
                             <TextField

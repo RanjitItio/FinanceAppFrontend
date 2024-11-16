@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, CardHeader, Typography, Button, IconButton, Divider, Avatar, ButtonBase,
 } from '@mui/material';
-import { Add, ArrowUpward, ArrowDownward, Air } from '@mui/icons-material';
+import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ReactCardFlip from 'react-card-flip';
 import axiosInstance from '../Authentication/axios';
 import AddNewFiatCard from './AddCard';
 import UpdateFiatCard from './UpdateCard';
 import UpdateFiatCardPIN from './UpdatePIN';
+import DeleteIcon from '@mui/icons-material/Delete';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import Tooltip from '@mui/material/Tooltip';
+import DeleteFiatCard from './DeleteCard';
+
 
 
 
@@ -21,15 +26,18 @@ const DateTimeFormat = (dateString)=> {
 
 
 //// Card Color
-const handleChangeCardColor = (currency)=> {
-     if (currency === 'USD') {
+const handleChangeCardColor = (currency, status)=> {
+    if (status === 'Inactive') {
+        return 'linear-gradient(to left, #BDBBBE 0%, #9D9EA3 100%)'
+    } else if (currency === 'USD') {
         return 'linear-gradient(to top, #37ecba 0%, #72afd3 100%)'
      } else if (currency === 'EUR') {
         return 'linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)'
      } else if (currency === 'INR') {
-        return 'linear-gradient(to left, #BDBBBE 0%, #9D9EA3 100%)'
+        return 'linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%)'
      }
 };
+
 
 //// User FIAT Card section
 export default function FiatMyCard({selectedCurrency}) {
@@ -42,6 +50,7 @@ export default function FiatMyCard({selectedCurrency}) {
     const [showCardNumber, setShowCardNumber] = useState(false);
     const [openUpdateCard, setOpenUpdateCard] = useState(false);   /// Update Card Modal
     const [openUpdatePIN, setOpenUpdatePIN]   = useState(false);  /// Update PIN Modal
+    const [openDeleteCard, setOpenDeleteCard] = useState(false);
 
     
 
@@ -93,7 +102,6 @@ export default function FiatMyCard({selectedCurrency}) {
        })
     }, []);
 
-
       
 
     return (
@@ -105,42 +113,33 @@ export default function FiatMyCard({selectedCurrency}) {
                     titleTypographyProps={{ variant: 'h5' }}
                     action={
                         <>
-                        {availableCard ? (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{ display: { xs: 'none', md: 'inline-flex' }, maxHeight: 35 }}
-                            onClick={()=> setOpenUpdateCard(true)}
-                            size='small'
-                        >
-                            Update Card
-                        </Button> 
-                        ) : (
-                            // <Button
-                            //     variant="contained"
-                            //     color="primary"
-                            //     sx={{ display: { xs: 'none', md: 'inline-flex' }, maxHeight: 35 }}
-                            //     onClick={handleOpenAddNewCard}
-                            //     size='small'
-                            // >
-                            //     Add Card
-                            // </Button> 
-                            <></>
-                        )}
+                            {availableCard && (
+                                <>
+                                    <Tooltip title="Update">
+                                        <IconButton onClick={()=> setOpenUpdateCard(true)}>
+                                            <BorderColorIcon color='primary' />
+                                        </IconButton>
+                                    </Tooltip>
 
-                        <IconButton color="primary" sx={{ display: { xs: 'inline-flex', md: 'none' } }} onClick={handleOpenAddNewCard}>
-                            <Add />
-                        </IconButton>
+                                    <Tooltip title="Delete">
+                                        <IconButton onClick={()=> setOpenDeleteCard(true)}>
+                                            <DeleteIcon color='primary' />
+                                        </IconButton>
+                                    </Tooltip>
+                                </>
+                            )}
                         </>
                     }
                 />
+
+                
 
             {!noCard && availableCard ? (
                 <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
                     <Card
                         onClick={handleCardFlipClick}
                         sx={{
-                            background: `${handleChangeCardColor(selectedCurrency)}`,
+                            background: `${handleChangeCardColor(selectedCurrency, availableCardDetail.status)}`,
                             color: 'white',
                             maxWidth: 400,
                             ml: 2,
@@ -379,6 +378,12 @@ export default function FiatMyCard({selectedCurrency}) {
             open={openUpdatePIN}
             setOpen={setOpenUpdatePIN}
             availableCardDetail={availableCardDetail}
+        />
+
+        <DeleteFiatCard 
+           open={openDeleteCard}
+           setOpen={setOpenDeleteCard}
+           availableCardDetail={availableCardDetail}
         />
     </>
     )
