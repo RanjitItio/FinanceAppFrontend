@@ -31,11 +31,11 @@ const style = {
 // Raise wallet request
 export default function RaiseWalletRequest({open, setOpen}) {
     const handleClose = () => setOpen(false);
-    const [selectedCrypto, setSelectedCrypto] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [error, setError]     = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    
+    const [selectedCrypto, setSelectedCrypto] = useState('');  ///// Selected Crypto for Wallet
+    const [success, setSuccess] = useState(false);  //// Success Message
+    const [error, setError]     = useState(false);  ///// Error Message
+    const [errorMessage, setErrorMessage] = useState('');  //// Error Message
+
 
     // Get selected Crypto Value
     const handleChangeSelectedCrypto = (e)=> {

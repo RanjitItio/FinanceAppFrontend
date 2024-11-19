@@ -97,12 +97,12 @@ export default function UserCryptoWallets({open}) {
           }
 
       }).catch((error)=> {
-        console.log(error);
+        // console.log(error);
 
       })
     }, []);
 
-
+    /////  Paginated Data
     const handlePagination = (e, value)=> {
         let limit = 6;
         let offset = (value - 1) * limit;
@@ -124,11 +124,11 @@ export default function UserCryptoWallets({open}) {
     /// For Empty data
     if (emptyData) {
         return (
+            <>
             <Main open={open}>
                 <DrawerHeader />
                 <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
                 <Button variant="contained" startIcon={<WalletIcon />} onClick={handleOpenWalletPopup}>Request Wallet</Button>
-
 
                 <TableContainer component={Paper} sx={{mt:1, maxHeight:'30rem'}}>
                     <Table aria-label="User table">
@@ -157,6 +157,13 @@ export default function UserCryptoWallets({open}) {
                 </TableContainer>
                 </Box>
             </Main>
+
+            <RaiseWalletRequest
+                open={walletPopup}
+                setOpen={setWalletPopup}
+            />
+
+        </>
         );
     };
     
@@ -229,7 +236,7 @@ export default function UserCryptoWallets({open}) {
         <RaiseWalletRequest
             open={walletPopup}
             setOpen={setWalletPopup}
-            />
+        />
 
         </>
     );

@@ -155,12 +155,12 @@ export default function FiatMyCard({selectedCurrency}) {
                                 <Typography variant="h6" sx={{ml:1}}>{selectedCurrency}</Typography>
                                 <Box>
                                     <img src="/card/chip.png" style={{ width: '30px', height: '30px' }} />
-                                    <IconButton color="inherit" onClick={(e)=> {
-                                            e.stopPropagation()
-                                            setShowCardNumber(!showCardNumber); 
-                                        }}>
-                                        <VisibilityIcon style={{ fontSize: '16px' }} />
-                                    </IconButton>
+                                        <IconButton color="inherit" onClick={(e)=> {
+                                                e.stopPropagation()
+                                                setShowCardNumber(!showCardNumber); 
+                                            }}>
+                                            <VisibilityIcon style={{ fontSize: '16px' }} />
+                                        </IconButton>
                                 </Box>
                             </Box>
 
