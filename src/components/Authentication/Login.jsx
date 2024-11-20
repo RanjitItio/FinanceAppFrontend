@@ -14,6 +14,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 
 const IS_DEVELOPMENT = import.meta.env.VITE_IS_DEVELOPMENT;
+const DomanName      = import.meta.env.VITE_DOMAIN_NAME
 let kycRedirectUrl = '';
 
 
@@ -22,8 +23,9 @@ let kycRedirectUrl = '';
 if (IS_DEVELOPMENT === 'True') {
   kycRedirectUrl = 'http://localhost:5173'
 } else {
-  kycRedirectUrl = 'https://react-payment.oyefin.com'
+  kycRedirectUrl = DomanName
 };
+
 
 // User Login
 function Login(){
