@@ -159,16 +159,20 @@ function Register() {
             }
           })
           .catch((error) => {
-            console.log(error)
+            // console.log(error)
 
-            if (error.response.status === 400) {
-              setError(error.response.data.msg)
+            if (error.response.data.msg === "Email address already exists") {
+                setError("Email address already exists");
 
             } else if (error.response.data.msg === 'Password is not same Please try again') {
-              setError('Password did not match please try again')
+                setError('Password did not match please try again');
               
+            } else if (error.response.data.msg === 'Mobile number already exists') {
+                setError('Mobile number already exists');
+
             } else {
-              setError('')
+                setError('');
+
             }
         })
       }};
