@@ -109,7 +109,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
 
   return(
     <>
-      <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
+      {/* <small className='text-muted d-flex justify-content-center my-3' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
         Enter your recipients email address & then add an amount with currency.
         You can also provide a note for reference.
       </small>
@@ -150,7 +150,6 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
 
             </Select>
             <FormHelperText>Fee (2.5%+3) Total Fee: {totalFee}</FormHelperText>
-            {/* {error && <FormHelperText sx={{ color: 'red' }}>{error}</FormHelperText>} */}
         </FormControl>
         </Grid>
 
@@ -159,7 +158,6 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
             <TextField
               hiddenLabel
               id="amount-field"
-              // variant="filled"
               size="small"
               value={amount}
               placeholder='Amount'
@@ -173,7 +171,7 @@ function Form1({currency, setCurrency, usersEmail, setUsersemail, amount, setAmo
       <Textarea aria-label="minimum height" onChange={handleNoteChange} minRows={4} sx={{marginTop: '20px', width: '97%',m:1}} placeholder="Note" value={note} />
 
         {error && <Alert severity="error">{error}</Alert>}
-      </div>
+      </div> */}
 
     </>
   )
@@ -204,7 +202,7 @@ function Form2({...props}) {
   // console.log(props.error)
   return(
     <>
-    <small className='text-muted d-flex justify-content-center my-4' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
+    {/* <small className='text-muted d-flex justify-content-center my-4' style={{ textAlign: 'center', margin: '0 auto', maxWidth: '80%' }}>
       Take a look before you send. Do not worry,
       if the recipient does not have an account, we will get them set up for free.
     </small>
@@ -233,7 +231,7 @@ function Form2({...props}) {
       <hr className='mb-4'/>
     </div>
 
-    {props.error && <Alert severity="error">{props.error}</Alert>}
+    {props.error && <Alert severity="error">{props.error}</Alert>} */}
     </>
   )
 }
@@ -434,94 +432,81 @@ export default function SendMoneyForm({open}) {
 
 
   return (
-    <Main open={open}>
-    <DrawerHeader />
+    <></>
+    // <Main open={open}>
+    // <DrawerHeader />
 
-    {/* <Paper elevation={8}  sx={{height: '150%', display: 'flex', justifyContent: 'center', border: '1px solid #808080', marginLeft: {xs: '0%', sm: '7%'}, width: {xs: '100%', sm: '80%'}}}> */}
+    
       
-    <Box sx={{ 
-              width: {xs: '100%', sm: '40%'}, 
-              marginTop: {xs: '40px', sm: '1rem'}, 
-              marginLeft: {xs: '0%', sm: '25%'},
-              // background: 'url("/formBackgroundImage.jpg")',
-              // backgroundColor: 'rgba( 255, 255, 255, 0.3 )',
-              backgroundColor: '#E5E4E2',
-              backdropFilter: 'blur( 20px )',
-              boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
-              borderRadius: '20px',
-              height: {xs:'100%', sm: '120%'}
-              }}>
-      <p className='fs-3 d-flex justify-content-center'>Send Money</p> <br />
+    // <Box sx={{ 
+    //           width: {xs: '100%', sm: '40%'}, 
+    //           marginTop: {xs: '40px', sm: '1rem'}, 
+    //           marginLeft: {xs: '0%', sm: '25%'},
+    //           backgroundColor: '#E5E4E2',
+    //           backdropFilter: 'blur( 20px )',
+    //           boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
+    //           borderRadius: '20px',
+    //           height: {xs:'100%', sm: '120%'}
+    //           }}>
+    //   <p className='fs-3 d-flex justify-content-center'>Send Money</p> <br />
 
-      <Stepper nonLinear activeStep={activeStep}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
-            <StepButton color="inherit" onClick={handleStep(index)}>
-              {label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
-        {allStepsCompleted() ? (
-          <React.Fragment>
-            <Typography variant='h1' sx={{ mt: 2, mb: 1 }}>
-              <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                 Congatulation Your amount has been transferred successfully
-              </Alert>
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Dashboard</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
+    //   <Stepper nonLinear activeStep={activeStep}>
+    //     {steps.map((label, index) => (
+    //       <Step key={label} completed={completed[index]}>
+    //         <StepButton color="inherit" onClick={handleStep(index)}>
+    //           {label}
+    //         </StepButton>
+    //       </Step>
+    //     ))}
+    //   </Stepper>
+    //   <div>
+    //     {allStepsCompleted() ? (
+    //       <React.Fragment>
+    //         <Typography variant='h1' sx={{ mt: 2, mb: 1 }}>
+    //           <Alert severity="success">
+    //             <AlertTitle>Success</AlertTitle>
+    //              Congatulation Your amount has been transferred successfully
+    //           </Alert>
+    //         </Typography>
+    //         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+    //           <Box sx={{ flex: '1 1 auto' }} />
+    //           <Button onClick={handleReset}>Dashboard</Button>
+    //         </Box>
+    //       </React.Fragment>
+    //     ) : (
+    //       <React.Fragment>
 
-            {/* <Typography sx={{ mt: 2, mb: 1, py: 1 }}>Step {activeStep + 1}</Typography> */}
 
-            {renderForms(activeStep)}
+    //         {renderForms(activeStep)}
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              {/* <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button> */}
-              <Box sx={{ flex: '1 1 auto' }}  />
-              {/* sx={{ flex: '1 1 auto' }} */}
-              {/* <Button onClick={handleNext} >
-                Next
-              </Button> */}
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete} variant='outlined'  
-                          sx={{
-                                backgroundColor: 'rgba(255, 255, 255, 0.25)', 
-                                color: '#0081CF',
-                                marginRight: '2%'
-                              }}>
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Confirm & Transfer'
-                      : 'Confirm & Proceed'}
-                  </Button>
-                ))}
-            </Box>
-          </React.Fragment>
-        )}
-      </div>
-    </Box>
-    {/* </Paper> */}
+    //         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          
+    //           <Box sx={{ flex: '1 1 auto' }}  />
+       
+    //           {activeStep !== steps.length &&
+    //             (completed[activeStep] ? (
+    //               <Typography variant="caption" sx={{ display: 'inline-block' }}>
+    //                 Step {activeStep + 1} already completed
+    //               </Typography>
+    //             ) : (
+    //               <Button onClick={handleComplete} variant='outlined'  
+    //                       sx={{
+    //                             backgroundColor: 'rgba(255, 255, 255, 0.25)', 
+    //                             color: '#0081CF',
+    //                             marginRight: '2%'
+    //                           }}>
+    //                 {completedSteps() === totalSteps() - 1
+    //                   ? 'Confirm & Transfer'
+    //                   : 'Confirm & Proceed'}
+    //               </Button>
+    //             ))}
+    //         </Box>
+    //       </React.Fragment>
+    //     )}
+    //   </div>
+    // </Box>
 
-    </Main>
+    // </Main>
 
   );
 }
