@@ -70,7 +70,7 @@ function Form1({cryptoWallets, crypto,setCrypto, walletAddress,
         </small>
   
         <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '6%'}}>
-            <Grid container spacing={4}>
+            <Grid container spacing={4} >
                 <Grid item xs={12} sm={6}>
 
                     <FormControl sx={{minWidth: 120, width: '96%' }} size="small">
@@ -553,7 +553,7 @@ useEffect(() => {
                       boxShadow: '7px 7px 9px #5a5a5a, -7px -7px 9px #ffffff',
                       borderRadius: '5%',
                       height: {xs:'100%', sm: '100%'},
-                      overflow:'scroll'
+                      overflow:'auto'
                     }}
                   >
                   <p 
@@ -606,7 +606,7 @@ useEffect(() => {
                                 sx={{marginRight: '4%', mb:{xs:3, sm:3, md:0}}}
                             >
                                 {completedSteps() === totalSteps() - 1
-                                ? 'Confirm & Deposit'
+                                ? 'Confirm & Buy'
                                 : 'Confirm & Proceed'}
                             </Button>
                             ))}

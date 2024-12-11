@@ -141,7 +141,7 @@ export default function LeftNavbar({handleDrawerClose, open}) {
         </DrawerHeader>
         <Divider />
 
-        <List style={{backgroundColor: '#0f3785', color: '#e7ebf2'}}>
+        <List style={{backgroundColor: '#0f3785', color: '#e7ebf2', scrollbarWidth:'none', '&::-webkit-scrollbar': {display:'none'}, overflow:'auto'}}>
           {NavContent.map((item, index) => (
           <React.Fragment key={item.text}>
             <ListItem disablePadding>

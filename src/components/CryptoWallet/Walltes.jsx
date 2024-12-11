@@ -72,7 +72,7 @@ export default function UserCryptoWallets({open}) {
     const [PaginationCount, setPaginationCount] = useState(0);
     const [walletPopup, setWalletPopup] = useState(false);  // Open Wallet Popup
 
-    const CountPagination = Math.ceil(PaginationCount ? PaginationCount : 0);
+    const CountPagination = Math.floor(PaginationCount ? PaginationCount : 0);
 
     // Open Wallet Popup
     const handleOpenWalletPopup = ()=> {

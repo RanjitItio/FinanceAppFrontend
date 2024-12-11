@@ -374,7 +374,7 @@ return (
     <Main open={open}>
         <DrawerHeader />
 
-        <Box sx={{ width: '100%', overflowX: 'auto', mt: 2}}>
+        <Box sx={{ width: '100%', overflowX: 'auto', mt: 2, scrollbarWidth:'none', '&::-webkit-scrollbar': {display:'none'}}}>
             
             <Box sx={{display:'flex', justifyContent:'space-between'}}>
                 <p className='text-muted'>All Crypto Transactions</p>

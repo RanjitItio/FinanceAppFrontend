@@ -216,6 +216,8 @@ function Form2({...props}) {
 
 
 
+
+
 // Sell Crypto
 export default function CryptoSell({open}) {
     const navigate = useNavigate()  
@@ -537,7 +539,7 @@ return (
                     borderRadius: '5%',
                     height: {xs:'100%', sm: '100%'}
                     }}
-                    >
+                  >
                 <p
                   style={{
                     display:'flex',
@@ -592,7 +594,7 @@ return (
                                 sx={{marginRight: '4%', mb:{xs:3, sm:3, md:0}}}
                             >
                                 {completedSteps() === totalSteps() - 1
-                                ? 'Confirm & Deposit'
+                                ? 'Confirm & Sell'
                                 : 'Confirm & Proceed'}
                             </Button>
                             ))}
